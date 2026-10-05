@@ -91,6 +91,6 @@ enum TimeOfDay
     TIMES_OF_DAY_COUNT,
 };
 
-#define TIME_OF_DAY_DEFAULT    0
+#define TIME_OF_DAY_DEFAULT    1 // TREY: TIME_DAY (was 0, TIME_MORNING)
 
 #endif // GUARD_CONSTANTS_RTC_H
