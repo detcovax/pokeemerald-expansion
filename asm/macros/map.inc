@@ -153,6 +153,19 @@
 	.space 2  @ Padding
 	.endm
 
+	@ TREY: one layer link (struct LayerLink, TREY_PLAN.md 5.2). Emitted by tools/mapjson.
+	.macro layer_link type:req, x:req, y:req, width:req, height:req, dest_x:req, dest_y:req, map:req
+	.byte \type
+	map \map
+	.space 1  @ Padding
+	.2byte \x
+	.2byte \y
+	.2byte \width
+	.2byte \height
+	.2byte \dest_x
+	.2byte \dest_y
+	.endm
+
 	@ Defines the flags for a map header. Mirrors the layout of the bitfield in struct MapHeader in include/global.fieldmap.h
 	.macro map_header_flags allow_cycling:req, allow_escaping:req, allow_running:req, show_map_name:req
 	.byte ((\show_map_name & 1) << 3) | ((\allow_running & 1) << 2) | ((\allow_escaping & 1) << 1) | \allow_cycling

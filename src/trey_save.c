@@ -58,7 +58,15 @@ STATIC_ASSERT(TREY_FLAG_BADGES_END <= TREY_FLAGS_END, TreyBadgeFlagsOutOfRange);
 STATIC_ASSERT(PLAYER_AVATAR_FLAG_COUNT <= 16, TreyTooManyAvatarFlags);
 
 // The map header layout must match what tools/mapjson emits (header.inc files).
-STATIC_ASSERT(sizeof(struct MapHeader) == 0x1C, TreyMapHeaderSizeChanged);
+STATIC_ASSERT(sizeof(struct MapHeader) == 0x20, TreyMapHeaderSizeChanged);
+STATIC_ASSERT(offsetof(struct MapHeader, trey) == 0x1C, TreyMapHeaderTreyOffset);
+// Per-map TREY data and layer links, as emitted by tools/mapjson and the layer_link macro (asm/macros/map.inc).
+STATIC_ASSERT(sizeof(struct MapHeaderTrey) == 0x10, TreyMapHeaderTreySize);
+STATIC_ASSERT(offsetof(struct MapHeaderTrey, seasonLayoutIds) == 0x06, TreyMapHeaderTreySeasonOffset);
+STATIC_ASSERT(sizeof(struct LayerLink) == 0x10, TreyLayerLinkSize);
+STATIC_ASSERT(offsetof(struct LayerLink, x) == 0x04, TreyLayerLinkXOffset);
+STATIC_ASSERT(offsetof(struct LayerLink, destY) == 0x0E, TreyLayerLinkDestYOffset);
+STATIC_ASSERT(TREY_SEASONS_COUNT == 4, TreyMapjsonEmitsFourSeasons);
 STATIC_ASSERT(offsetof(struct MapHeader, regionMapSectionId) == 0x14, TreyMapHeaderMapsecOffset);
 STATIC_ASSERT(offsetof(struct MapHeader, mapType) == 0x18, TreyMapHeaderMapTypeOffset);
 STATIC_ASSERT(offsetof(struct MapHeader, battleType) == 0x1B, TreyMapHeaderBattleTypeOffset);

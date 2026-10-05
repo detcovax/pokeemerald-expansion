@@ -182,7 +182,58 @@ string generate_map_header_text(Json map_data, Json layouts_data) {
     if (version == "firered")
         text << "\t.byte " << json_to_string(map_data, "floor_number") << "\n";
 
-     text << "\t.byte " << json_to_string(map_data, "battle_scene") << "\n\n";
+     text << "\t.byte " << json_to_string(map_data, "battle_scene") << "\n";
+
+    // TREY (TREY_PLAN.md 5.2, 5.5): per-map TREY data, see struct MapHeaderTrey in include/global.fieldmap.h.
+    // map.json fields (both optional):
+    //   "trey_layer_links": [ { "type": "LAYER_LINK_SKY_UP", "x": 0, "y": 0, "width": 10, "height": 10,
+    //                           "dest_x": 0, "dest_y": 0, "map": "MAP_ROUTE101_SKY" }, ... ]
+    //   "trey_season_layouts": { "spring": "LAYOUT_X", "summer": ..., "autumn": ..., "winter": ... }
+    const Json &layerLinks = map_data["trey_layer_links"];
+    const Json &seasonLayouts = map_data["trey_season_layouts"];
+    bool hasLinks = layerLinks.is_array() && !layerLinks.array_items().empty();
+    bool hasSeasons = seasonLayouts.is_object() && !seasonLayouts.object_items().empty();
+
+    if (!hasLinks && !hasSeasons) {
+        text << "\t.4byte NULL @ TREY data\n\n";
+        return text.str();
+    }
+
+    if (hasLinks && layerLinks.array_items().size() > 255)
+        FATAL_ERROR("%s has more than 255 trey_layer_links.\n", mapName.c_str());
+
+    text << "\t.4byte " << mapName << "_TreyHeader\n\n";
+    text << "\t.align 2\n" << mapName << "_TreyHeader:\n";
+    if (hasLinks)
+        text << "\t.4byte " << mapName << "_LayerLinks\n"
+             << "\t.byte " << layerLinks.array_items().size() << "\n";
+    else
+        text << "\t.4byte NULL\n"
+             << "\t.byte 0\n";
+    text << "\t.byte 0 @ padding\n";
+
+    static const char *const seasonNames[] = { "spring", "summer", "autumn", "winter" };
+    for (const char *season : seasonNames) {
+        string layoutId = hasSeasons ? json_to_string(seasonLayouts, season, true) : "";
+        text << "\t.2byte " << (layoutId.empty() ? "0" : layoutId) << " @ " << season << " layout\n";
+    }
+    text << "\t.2byte 0 @ padding\n";
+
+    if (hasLinks) {
+        text << "\n\t.align 2\n" << mapName << "_LayerLinks:\n";
+        for (auto &link : layerLinks.array_items()) {
+            text << "\tlayer_link "
+                 << json_to_string(link, "type") << ", "
+                 << json_to_string(link, "x") << ", "
+                 << json_to_string(link, "y") << ", "
+                 << json_to_string(link, "width") << ", "
+                 << json_to_string(link, "height") << ", "
+                 << json_to_string(link, "dest_x") << ", "
+                 << json_to_string(link, "dest_y") << ", "
+                 << json_to_string(link, "map") << "\n";
+        }
+    }
+    text << "\t.align 2\n\n";
 
     return text.str();
 }

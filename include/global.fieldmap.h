@@ -1,6 +1,8 @@
 #ifndef GUARD_GLOBAL_FIELDMAP_H
 #define GUARD_GLOBAL_FIELDMAP_H
 
+#include "constants/trey_seasons.h" // TREY: TREY_SEASONS_COUNT
+
 // Masks/shifts for blocks in the map grid
 // Map grid blocks consist of a 10 bit metatile id, a 2 bit collision value, and a 4 bit elevation value
 // This is the data stored in each data/layouts/*/map.bin file
@@ -52,6 +54,14 @@ enum {
 
 typedef void (*TilesetCB)(void);
 
+// TREY (TREY_PLAN.md 5.5, E16): one season's graphics for a tileset. Seasonal variants share the
+// base tileset's metatiles and attributes; only the tiles and palettes change. NULL = use the base.
+struct TilesetSeasonGfx
+{
+    const u32 *tiles;
+    const u16 (*palettes)[16];
+};
+
 struct Tileset
 {
     /*0x00*/ u8 isCompressed:1;
@@ -64,6 +74,7 @@ struct Tileset
     /*0x0C*/ const u16 *metatiles;
     /*0x10*/ const u16 *metatileAttributes;
     /*0x14*/ TilesetCB callback;
+    /*0x18*/ const struct TilesetSeasonGfx *seasonal; // TREY (E16): NULL, or TREY_SEASONS_COUNT entries. Loader arrives in Phase 4.
 };
 
 struct MapLayout
@@ -161,6 +172,34 @@ struct MapConnections
     const struct MapConnection *connections;
 };
 
+// TREY (TREY_PLAN.md 5.2, E10): a layer link. Standing inside (x, y, width, height) on this map,
+// the move for `type` (LAYER_LINK_*) takes the player to (destX + dx, destY + dy) on the target map,
+// where (dx, dy) is the player's offset inside the rectangle.
+struct LayerLink
+{
+    /*0x00*/ u8 type;
+    /*0x01*/ u8 mapGroup;
+    /*0x02*/ u8 mapNum;
+    /*0x03*/ u8 padding;
+    /*0x04*/ s16 x;
+    /*0x06*/ s16 y;
+    /*0x08*/ u16 width;
+    /*0x0A*/ u16 height;
+    /*0x0C*/ s16 destX;
+    /*0x0E*/ s16 destY;
+};
+
+// TREY: per-map TREY data, emitted by tools/mapjson from the "trey_*" fields of map.json.
+// New per-map TREY data goes here, so struct MapHeader never has to change again.
+struct MapHeaderTrey
+{
+    /*0x00*/ const struct LayerLink *layerLinks;
+    /*0x04*/ u8 layerLinkCount;
+    /*0x05*/ u8 padding;
+    /*0x06*/ u16 seasonLayoutIds[TREY_SEASONS_COUNT]; // 0 = use the normal layout that season
+    /*0x0E*/ u16 padding2;
+};
+
 struct MapHeader
 {
     /* 0x00 */ const struct MapLayout *mapLayout;
@@ -183,6 +222,7 @@ struct MapHeader
                bool8 showMapName:5; // the last 4 bits are unused
                                     // but the 5 bit sized bitfield is required to match
     /* 0x1B */ u8 battleType;
+    /* 0x1C */ const struct MapHeaderTrey *trey; // TREY: NULL if the map has no TREY data
 };
 
 
