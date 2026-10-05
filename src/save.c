@@ -13,6 +13,7 @@
 #include "trainer_hill.h"
 #include "link.h"
 #include "constants/game_stat.h"
+#include "trey_save.h" // TREY
 
 static u16 CalculateChecksum(void *, u16);
 static bool8 ReadFlashSector(u8, struct SaveSector *);
@@ -896,6 +897,9 @@ u8 LoadGameSave(u8 saveType)
     default:
         status = TryLoadSaveSlot(FULL_SAVE_SLOT, gRamSaveSectorLocations);
         CopyPartyAndObjectsFromSave();
+        // TREY: a save from an older save layout is treated as no save at all, so it is never loaded as garbage.
+        if (status == SAVE_STATUS_OK && !TreySave_IsHeaderValid())
+            status = SAVE_STATUS_EMPTY;
         gSaveFileStatus = status;
         gGameContinueCallback = 0;
         break;

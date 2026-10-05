@@ -236,6 +236,8 @@ struct NPCFollower
 #include "constants/items.h"
 #define ITEM_FLAGS_COUNT ((ITEMS_COUNT / 8) + ((ITEMS_COUNT % 8) ? 1 : 0))
 
+#include "trey_save_types.h" // TREY
+
 struct SaveBlock3
 {
 #if OW_USE_FAKE_RTC
@@ -251,6 +253,7 @@ struct SaveBlock3
     u8 dexNavSearchLevels[NUM_SPECIES];
 #endif
     u8 dexNavChain;
+    struct TreySaveData trey; // TREY: must stay last
 }; /* max size 1624 bytes */
 
 extern struct SaveBlock3 *gSaveBlock3Ptr;
@@ -602,6 +605,8 @@ struct SaveBlock2
 #endif //FREE_RECORD_MIXING_HALL_RECORDS
     /*0x624*/ u16 contestLinkResults[CONTEST_CATEGORIES_COUNT][CONTESTANT_COUNT];
     /*0x64C*/ struct BattleFrontier frontier;
+    struct TreySaveHeader treyHeader;          // TREY
+    u8 treyReserved[TREY_SB2_RESERVED];        // TREY: new SaveBlock2 fields go directly above this, shrinking it. Must stay last.
 }; // sizeof=0xF2C
 
 extern struct SaveBlock2 *gSaveBlock2Ptr;
@@ -1159,6 +1164,7 @@ struct SaveBlock1
     /*0x3???*/ struct TrainerHillSave trainerHill;
 #endif //FREE_TRAINER_HILL
     /*0x3???*/ struct WaldaPhrase waldaPhrase;
+    u8 treyReserved[TREY_SB1_RESERVED]; // TREY: new SaveBlock1 fields go directly above this, shrinking it. Must stay last.
     // sizeof: 0x3???
 };
 

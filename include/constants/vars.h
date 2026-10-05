@@ -274,7 +274,10 @@
 #define VAR_UNUSED_0x40FE                                0x40FE // Unused Var
 #define VAR_UNUSED_0x40FF                                0x40FF // Unused Var
 
-#define VARS_END                                         0x40FF
+// TREY vars (TREY_PLAN.md E5): 0x4100-0x41FF. New TREY vars are defined as (TREY_VARS_START + n).
+#define TREY_VARS_START                                  0x4100
+
+#define VARS_END                                         0x41FF // TREY: was 0x40FF
 #define VARS_COUNT                                       (VARS_END - VARS_START + 1)
 
 #define SPECIAL_VARS_START            0x8000
