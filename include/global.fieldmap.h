@@ -291,6 +291,11 @@ enum {
 #define PLAYER_AVATAR_FLAG_CONTROLLABLE (1 << 5)
 #define PLAYER_AVATAR_FLAG_FORCED_MOVE  (1 << 6)
 #define PLAYER_AVATAR_FLAG_DASH         (1 << 7)
+// TREY (TREY_PLAN.md E8): avatar flags widened to u16. Behaviour for these arrives in Phase 3.
+#define PLAYER_AVATAR_FLAG_SOARING      (1 << 8)  // on a Sky map (Fly -> Soar)
+#define PLAYER_AVATAR_FLAG_UNDERGROUND  (1 << 9)  // on an Underground layer map (Dig)
+#define PLAYER_AVATAR_FLAG_CLIMBING     (1 << 10) // Rock Climb
+#define PLAYER_AVATAR_FLAG_COUNT        11        // number of avatar/transition flag bits in use
 
 #define PLAYER_AVATAR_FLAG_BIKE        (PLAYER_AVATAR_FLAG_MACH_BIKE | PLAYER_AVATAR_FLAG_ACRO_BIKE)
 // Player avatar flags for which follower Pokémon are hidden
@@ -347,9 +352,9 @@ enum
 
 struct PlayerAvatar
 {
-    /*0x00*/ u8 flags;
-    /*0x01*/ u8 transitionFlags; // used to be named bike, but its definitely not that. seems to be some transition flags
-    /*0x02*/ u8 runningState:7; // this is a static running state. 00 is not moving, 01 is turn direction, 02 is moving.
+    /*0x00*/ u16 flags; // TREY: avatar flags are u16 (TREY_PLAN.md E8)
+    /*0x02*/ u16 transitionFlags; // used to be named bike, but its definitely not that. seems to be some transition flags. TREY: u16
+    /*0x04*/ u8 runningState:7; // this is a static running state. 00 is not moving, 01 is turn direction, 02 is moving.
              u8 creeping:1;
     /*0x03*/ u8 tileTransitionState; // this is a transition running state: 00 is not moving, 01 is transition between tiles, 02 means you are on the frame in which you have centered on a tile but are about to keep moving, even if changing directions. 2 is also used for a ledge hop, since you are transitioning.
     /*0x04*/ u8 spriteId;

@@ -1646,6 +1646,16 @@
 #define TREY_FLAGS_START (DAILY_FLAGS_END + 1)
 #define TREY_FLAGS_END   0x1FFF
 
+// TREY badges (TREY_PLAN.md E6). Hoenn keeps FLAG_BADGE01_GET-FLAG_BADGE08_GET above.
+// Each region gets a block of 8 flags; use the helpers in include/trey_regions.h rather than these directly.
+#define TREY_FLAG_BADGES_START          (TREY_FLAGS_START + 0x00)
+#define TREY_FLAG_BADGES_KANTO_START    (TREY_FLAG_BADGES_START + 0x00) // 8 badges
+#define TREY_FLAG_BADGES_ORANGE_START   (TREY_FLAG_BADGES_START + 0x08) // 4 badges + Winner's Trophy (index 4)
+#define TREY_FLAG_BADGES_JOHTO_START    (TREY_FLAG_BADGES_START + 0x10) // 8 badges
+#define TREY_FLAG_BADGES_SINNOH_START   (TREY_FLAG_BADGES_START + 0x18) // 8 badges
+#define TREY_FLAG_BADGES_END            (TREY_FLAG_BADGES_START + 0x1F)
+#define TREY_FLAG_NEXT_FREE             (TREY_FLAG_BADGES_END + 1) // next unused TREY flag
+
 #define FLAGS_COUNT (TREY_FLAGS_END + 1) // TREY: was (DAILY_FLAGS_END + 1)
 
 // Special Flags (Stored in EWRAM (sSpecialFlags), not in the SaveBlock)

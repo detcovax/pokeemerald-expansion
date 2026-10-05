@@ -15,6 +15,8 @@ enum Region
     REGION_GALAR,
     REGION_HISUI,
     REGION_PALDEA,
+    REGION_ORANGE,   // TREY (TREY_PLAN.md E7): Orange Islands. Sevii maps count as Kanto for gameplay; they only sit on the Orange region MAP (D16).
+    REGION_KITAKAMI, // TREY
     REGIONS_COUNT,
 };
 

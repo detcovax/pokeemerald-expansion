@@ -262,6 +262,10 @@ static void (*const sPlayerAvatarTransitionFuncs[])(struct ObjectEvent *) =
     [PLAYER_AVATAR_STATE_FIELD_MOVE] = PlayerAvatarTransition_ReturnToField,
     [PLAYER_AVATAR_STATE_FISHING]    = PlayerAvatarTransition_Dummy,
     [PLAYER_AVATAR_STATE_WATERING]   = PlayerAvatarTransition_Dummy,
+    // TREY: one entry per avatar flag bit. Soaring, Underground and Climbing transitions arrive in Phase 3.
+    [8]                              = PlayerAvatarTransition_Dummy, // PLAYER_AVATAR_FLAG_SOARING
+    [9]                              = PlayerAvatarTransition_Dummy, // PLAYER_AVATAR_FLAG_UNDERGROUND
+    [10]                             = PlayerAvatarTransition_Dummy, // PLAYER_AVATAR_FLAG_CLIMBING
 };
 
 static bool8 (*const sArrowWarpMetatileBehaviorChecks[])(u8) =
@@ -310,7 +314,7 @@ static const u8 sRSAvatarGfxIds[GENDER_COUNT] =
     [FEMALE] = OBJ_EVENT_GFX_LINK_RS_MAY
 };
 
-static const u8 sPlayerAvatarGfxToStateFlag[GENDER_COUNT][5][2] =
+static const u16 sPlayerAvatarGfxToStateFlag[GENDER_COUNT][5][2] = // TREY: avatar flags are u16 (TREY_PLAN.md E8)
 {
     [MALE] =
     {
@@ -1050,7 +1054,7 @@ void SetPlayerAvatarTransitionFlags(u16 transitionFlags)
 static void DoPlayerAvatarTransition(void)
 {
     u8 i;
-    u8 flags = gPlayerAvatar.transitionFlags;
+    u16 flags = gPlayerAvatar.transitionFlags; // TREY: avatar flags are u16 (TREY_PLAN.md E8)
 
     if (flags != 0)
     {
@@ -1457,12 +1461,12 @@ void MovePlayerToMapCoords(s16 x, s16 y)
     MoveObjectEventToMapCoords(&gObjectEvents[gPlayerAvatar.objectEventId], x, y);
 }
 
-u8 TestPlayerAvatarFlags(u8 flag)
+u16 TestPlayerAvatarFlags(u16 flag) // TREY: avatar flags are u16 (TREY_PLAN.md E8)
 {
     return gPlayerAvatar.flags & flag;
 }
 
-u8 GetPlayerAvatarFlags(void)
+u16 GetPlayerAvatarFlags(void) // TREY: avatar flags are u16 (TREY_PLAN.md E8)
 {
     return gPlayerAvatar.flags;
 }
@@ -1578,13 +1582,13 @@ void ClearPlayerAvatarInfo(void)
     memset(&gPlayerAvatar, 0, sizeof(struct PlayerAvatar));
 }
 
-void SetPlayerAvatarStateMask(u8 flags)
+void SetPlayerAvatarStateMask(u16 flags) // TREY: avatar flags are u16 (TREY_PLAN.md E8)
 {
     gPlayerAvatar.flags &= (PLAYER_AVATAR_FLAG_DASH | PLAYER_AVATAR_FLAG_FORCED_MOVE | PLAYER_AVATAR_FLAG_CONTROLLABLE);
     gPlayerAvatar.flags |= flags;
 }
 
-static u8 GetPlayerAvatarStateTransitionByGraphicsId(u16 graphicsId, u8 gender)
+static u16 GetPlayerAvatarStateTransitionByGraphicsId(u16 graphicsId, u8 gender) // TREY: avatar flags are u16 (TREY_PLAN.md E8)
 {
     u8 i;
 
@@ -1599,7 +1603,7 @@ static u8 GetPlayerAvatarStateTransitionByGraphicsId(u16 graphicsId, u8 gender)
 u16 GetPlayerAvatarGraphicsIdByCurrentState(void)
 {
     u8 i;
-    u8 flags = gPlayerAvatar.flags;
+    u16 flags = gPlayerAvatar.flags; // TREY: avatar flags are u16 (TREY_PLAN.md E8)
 
     for (i = 0; i < ARRAY_COUNT(sPlayerAvatarGfxToStateFlag[0]); i++)
     {
@@ -1609,9 +1613,9 @@ u16 GetPlayerAvatarGraphicsIdByCurrentState(void)
     return 0;
 }
 
-void SetPlayerAvatarExtraStateTransition(u16 graphicsId, u8 transitionFlag)
+void SetPlayerAvatarExtraStateTransition(u16 graphicsId, u16 transitionFlag) // TREY: avatar flags are u16 (TREY_PLAN.md E8)
 {
-    u8 stateFlag = GetPlayerAvatarStateTransitionByGraphicsId(graphicsId, gPlayerAvatar.gender);
+    u16 stateFlag = GetPlayerAvatarStateTransitionByGraphicsId(graphicsId, gPlayerAvatar.gender);
 
     gPlayerAvatar.transitionFlags |= stateFlag | transitionFlag;
     DoPlayerAvatarTransition();

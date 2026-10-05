@@ -33,7 +33,7 @@
 
 struct InitialPlayerAvatarState
 {
-    u8 transitionFlags;
+    u16 transitionFlags; // TREY: avatar flags are u16 (TREY_PLAN.md E8)
     u8 direction;
 };
 

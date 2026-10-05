@@ -9,6 +9,7 @@
 #include "constants/trainers.h"
 #include "constants/region_map_sections.h"
 #include "constants/rtc.h"
+#include "constants/heal_locations.h"
 #include "pokemon.h"
 
 // ---------------------------------------------------------------------------
@@ -46,6 +47,15 @@ STATIC_ASSERT(MAPSEC_MAX_ID < (1 << 10), TreyMetLocationIsTenBits);
 // A table WITHOUT a time suffix is generated into slot 0 (TIME_MORNING) only, so never add one.
 STATIC_ASSERT(OW_TIME_OF_DAY_DISABLE_FALLBACK == TRUE, TreyEncounterFallbackMustBeOff);
 STATIC_ASSERT(TIME_OF_DAY_DEFAULT == TIME_MORNING, TreyTimeOfDayDefaultMustBeMorning);
+
+// Heal location IDs are passed around as u8 (SetLastHealLocationWarp etc.). ~150 are planned (TREY_PLAN.md E11).
+STATIC_ASSERT(NUM_HEAL_LOCATIONS <= 0xFF, TreyTooManyHealLocations);
+
+// Region badge flags must stay inside the TREY flag range (TREY_PLAN.md E6).
+STATIC_ASSERT(TREY_FLAG_BADGES_END <= TREY_FLAGS_END, TreyBadgeFlagsOutOfRange);
+
+// Avatar flag bits must fit the u16 avatar flags (TREY_PLAN.md E8).
+STATIC_ASSERT(PLAYER_AVATAR_FLAG_COUNT <= 16, TreyTooManyAvatarFlags);
 
 // The map header layout must match what tools/mapjson emits (header.inc files).
 STATIC_ASSERT(sizeof(struct MapHeader) == 0x1C, TreyMapHeaderSizeChanged);
