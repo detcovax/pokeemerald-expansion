@@ -46,6 +46,13 @@
 #include "constants/moves.h"
 #include "constants/region_map_sections.h"
 
+// TREY: MAPSECs are u16, but TV show save data stores locations as u8.
+// Shows that would record a location above 0xFF are simply not created.
+static inline bool32 TreyTv_LocationFits(void)
+{
+    return gMapHeader.regionMapSectionId <= 0xFF;
+}
+
 #define LAST_TVSHOW_IDX (TV_SHOWS_COUNT - 1)
 
 #define rbernoulli(num, den) BernoulliTrial(0xFFFF * (num) / (den))
@@ -969,6 +976,8 @@ void GabbyAndTyBeforeInterview(void)
 
 void GabbyAndTyAfterInterview(void)
 {
+    if (!TreyTv_LocationFits()) // TREY: TV shows store locations as u8 (TREY_PLAN.md 4.5)
+        return;
     gSaveBlock1Ptr->gabbyAndTyData.battleTookMoreThanOneTurn2 = gSaveBlock1Ptr->gabbyAndTyData.battleTookMoreThanOneTurn;
     gSaveBlock1Ptr->gabbyAndTyData.playerLostAMon2 = gSaveBlock1Ptr->gabbyAndTyData.playerLostAMon;
     gSaveBlock1Ptr->gabbyAndTyData.playerUsedHealingItem2 = gSaveBlock1Ptr->gabbyAndTyData.playerUsedHealingItem;
@@ -1151,6 +1160,8 @@ void TryPutPokemonTodayOnAir(void)
 // either triggered or deleted at the end of the day by ResolveWorldOfMastersShow
 static void InitWorldOfMastersShowAttempt(void)
 {
+    if (!TreyTv_LocationFits()) // TREY: TV shows store locations as u8 (TREY_PLAN.md 4.5)
+        return;
     TVShow *show = &gSaveBlock1Ptr->tvShows[LAST_TVSHOW_IDX];
     if (show->common.kind != TVSHOW_WORLD_OF_MASTERS)
     {
@@ -1166,6 +1177,8 @@ static void InitWorldOfMastersShowAttempt(void)
 
 static void TryPutPokemonTodayFailedOnTheAir(void)
 {
+    if (!TreyTv_LocationFits()) // TREY: TV shows store locations as u8 (TREY_PLAN.md 4.5)
+        return;
     u16 ballsUsed;
     u8 i;
     TVShow *show;
@@ -1489,6 +1502,8 @@ static void InterviewAfter_BravoTrainerBattleTowerProfile(void)
 
 void TryPutSmartShopperOnAir(void)
 {
+    if (!TreyTv_LocationFits()) // TREY: TV shows store locations as u8 (TREY_PLAN.md 4.5)
+        return;
     TVShow *show;
     u8 i;
 
@@ -1817,6 +1832,8 @@ static void TryPutWorldOfMastersOnAir(void)
 
 void TryPutTodaysRivalTrainerOnAir(void)
 {
+    if (!TreyTv_LocationFits()) // TREY: TV shows store locations as u8 (TREY_PLAN.md 4.5)
+        return;
     TVShow *show;
     u32 i;
     u8 nBadges;
@@ -1878,6 +1895,8 @@ void TryPutTrendWatcherOnAir(const u16 *words)
 
 void TryPutTreasureInvestigatorsOnAir(void)
 {
+    if (!TreyTv_LocationFits()) // TREY: TV shows store locations as u8 (TREY_PLAN.md 4.5)
+        return;
     TVShow *show;
 
     sCurTVShowSlot = FindFirstEmptyRecordMixTVShowSlot(gSaveBlock1Ptr->tvShows);
@@ -2096,6 +2115,8 @@ void TryPutSecretBaseVisitOnAir(void)
 
 void TryPutBreakingNewsOnAir(void)
 {
+    if (!TreyTv_LocationFits()) // TREY: TV shows store locations as u8 (TREY_PLAN.md 4.5)
+        return;
     TVShow *show;
     u8 i;
     u16 balls;

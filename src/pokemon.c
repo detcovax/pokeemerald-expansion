@@ -2604,8 +2604,8 @@ u32 GetBoxMonData3(struct BoxPokemon *boxMon, s32 field, u8 *data)
         case MON_DATA_POKERUS:
             retVal = substruct3->pokerus;
             break;
-        case MON_DATA_MET_LOCATION:
-            retVal = substruct3->metLocation;
+        case MON_DATA_MET_LOCATION: // TREY: 10-bit met location
+            retVal = substruct3->metLocation | (substruct3->metLocationHigh << 8);
             break;
         case MON_DATA_MET_LEVEL:
             retVal = substruct3->metLevel;
@@ -2673,14 +2673,10 @@ u32 GetBoxMonData3(struct BoxPokemon *boxMon, s32 field, u8 *data)
         case MON_DATA_EFFORT_RIBBON:
             retVal = substruct3->effortRibbon;
             break;
-        case MON_DATA_MARINE_RIBBON:
-            retVal = substruct3->marineRibbon;
-            break;
+        case MON_DATA_MARINE_RIBBON: // TREY: these ribbons no longer exist; their bits hold other data
         case MON_DATA_LAND_RIBBON:
-            retVal = substruct3->landRibbon;
-            break;
         case MON_DATA_SKY_RIBBON:
-            retVal = substruct3->skyRibbon;
+            retVal = 0;
             break;
         case MON_DATA_COUNTRY_RIBBON:
             retVal = substruct3->countryRibbon;
@@ -2742,9 +2738,6 @@ u32 GetBoxMonData3(struct BoxPokemon *boxMon, s32 field, u8 *data)
                 retVal += substruct3->victoryRibbon;
                 retVal += substruct3->artistRibbon;
                 retVal += substruct3->effortRibbon;
-                retVal += substruct3->marineRibbon;
-                retVal += substruct3->landRibbon;
-                retVal += substruct3->skyRibbon;
                 retVal += substruct3->countryRibbon;
                 retVal += substruct3->nationalRibbon;
                 retVal += substruct3->earthRibbon;
@@ -2765,9 +2758,6 @@ u32 GetBoxMonData3(struct BoxPokemon *boxMon, s32 field, u8 *data)
                     | (substruct3->victoryRibbon << 17)
                     | (substruct3->artistRibbon << 18)
                     | (substruct3->effortRibbon << 19)
-                    | (substruct3->marineRibbon << 20)
-                    | (substruct3->landRibbon << 21)
-                    | (substruct3->skyRibbon << 22)
                     | (substruct3->countryRibbon << 23)
                     | (substruct3->nationalRibbon << 24)
                     | (substruct3->earthRibbon << 25)
@@ -2821,6 +2811,9 @@ u32 GetBoxMonData3(struct BoxPokemon *boxMon, s32 field, u8 *data)
             evoTracker.asField.b = substruct1->evolutionTracker2;
             evoTracker.asField.unused = 0;
             retVal = evoTracker.value;
+            break;
+        case MON_DATA_ORANGE_VARIANT: // TREY
+            retVal = substruct3->isOrangeVariant;
             break;
         default:
             break;
@@ -3099,9 +3092,14 @@ void SetBoxMonData(struct BoxPokemon *boxMon, s32 field, const void *dataArg)
         case MON_DATA_POKERUS:
             SET8(substruct3->pokerus);
             break;
-        case MON_DATA_MET_LOCATION:
-            SET8(substruct3->metLocation);
+        case MON_DATA_MET_LOCATION: // TREY: 10-bit met location, passed as a u16
+        {
+            u16 metLocation;
+            SET16(metLocation);
+            substruct3->metLocation = metLocation & 0xFF;
+            substruct3->metLocationHigh = (metLocation >> 8) & 0x3;
             break;
+        }
         case MON_DATA_MET_LEVEL:
             SET8(substruct3->metLevel);
             break;
@@ -3172,14 +3170,9 @@ void SetBoxMonData(struct BoxPokemon *boxMon, s32 field, const void *dataArg)
         case MON_DATA_EFFORT_RIBBON:
             SET8(substruct3->effortRibbon);
             break;
-        case MON_DATA_MARINE_RIBBON:
-            SET8(substruct3->marineRibbon);
-            break;
+        case MON_DATA_MARINE_RIBBON: // TREY: these ribbons no longer exist; their bits hold other data
         case MON_DATA_LAND_RIBBON:
-            SET8(substruct3->landRibbon);
-            break;
         case MON_DATA_SKY_RIBBON:
-            SET8(substruct3->skyRibbon);
             break;
         case MON_DATA_COUNTRY_RIBBON:
             SET8(substruct3->countryRibbon);
@@ -3248,6 +3241,9 @@ void SetBoxMonData(struct BoxPokemon *boxMon, s32 field, const void *dataArg)
             substruct1->evolutionTracker2 = evoTracker.asField.b;
             break;
         }
+        case MON_DATA_ORANGE_VARIANT: // TREY
+            SET8(substruct3->isOrangeVariant);
+            break;
         default:
             break;
         }

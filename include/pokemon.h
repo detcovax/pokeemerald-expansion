@@ -119,6 +119,7 @@ enum {
     MON_DATA_GIGANTAMAX_FACTOR,
     MON_DATA_TERA_TYPE,
     MON_DATA_EVOLUTION_TRACKER,
+    MON_DATA_ORANGE_VARIANT, // TREY: Orange Islands tinted variant (TREY_PLAN.md 5.8)
 };
 
 struct PokemonSubstruct0
@@ -178,7 +179,7 @@ struct PokemonSubstruct2
 struct PokemonSubstruct3
 {
     u8 pokerus;
-    u8 metLocation;
+    u8 metLocation; // TREY: low 8 bits only. Use MON_DATA_MET_LOCATION, which adds metLocationHigh.
     u16 metLevel:7;
     u16 metGame:4;
     u16 dynamaxLevel:4;
@@ -201,9 +202,9 @@ struct PokemonSubstruct3
     u32 victoryRibbon:1;  // Given at the Battle Tower's Level 100 challenge by winning a set of seven battles that extends the current streak to 56 or more.
     u32 artistRibbon:1;   // Given at the Contest Hall by winning a Master Rank contest with at least 800 points, and agreeing to have the Pokémon's portrait placed in the museum after being offered.
     u32 effortRibbon:1;   // Given at Slateport's market to Pokémon with maximum EVs.
-    u32 marineRibbon:1;   // Never distributed.
-    u32 landRibbon:1;     // Never distributed.
-    u32 skyRibbon:1;      // Never distributed.
+    // TREY: the Marine, Land and Sky ribbons were never distributed. Their 3 bits are reused (TREY_PLAN.md E2):
+    u32 metLocationHigh:2; // TREY: bits 8-9 of the met location (10-bit met locations). Was marineRibbon + landRibbon.
+    u32 isOrangeVariant:1; // TREY: Orange Islands tinted variant. Was skyRibbon.
     u32 countryRibbon:1;  // Distributed during Pokémon Festa '04 and '05 to tournament winners.
     u32 nationalRibbon:1; // Given to purified Shadow Pokémon in Colosseum/XD.
     u32 earthRibbon:1;    // Given to teams that have beaten Mt. Battle's 100-battle challenge in Colosseum/XD.

@@ -2980,7 +2980,7 @@ bool8 ScrCmd_warpspinenter(struct ScriptContext *ctx)
 bool8 ScrCmd_setmonmetlocation(struct ScriptContext *ctx)
 {
     u16 partyIndex = VarGet(ScriptReadHalfword(ctx));
-    u8 location = ScriptReadByte(ctx);
+    u16 location = ScriptReadHalfword(ctx); // TREY: met locations are 10-bit (macro emits .2byte)
 
     Script_RequestEffects(SCREFF_V1 | SCREFF_SAVE);
 

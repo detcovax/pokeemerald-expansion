@@ -4535,7 +4535,7 @@ static void CreateInGameTradePokemonInternal(u8 whichPlayerMon, u8 whichInGameTr
     u8 level = GetMonData(&gPlayerParty[whichPlayerMon], MON_DATA_LEVEL);
 
     struct Mail mail;
-    u8 metLocation = METLOC_IN_GAME_TRADE;
+    u16 metLocation = METLOC_IN_GAME_TRADE; // TREY: met locations are 10-bit
     u8 mailNum;
     struct Pokemon *pokemon = &gEnemyParty[0];
 

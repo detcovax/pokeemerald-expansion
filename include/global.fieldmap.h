@@ -169,11 +169,13 @@ struct MapHeader
     /* 0x0C */ const struct MapConnections *connections;
     /* 0x10 */ u16 music;
     /* 0x12 */ u16 mapLayoutId;
-    /* 0x14 */ u8 regionMapSectionId;
-    /* 0x15 */ u8 cave;
-    /* 0x16 */ u8 weather;
-    /* 0x17 */ u8 mapType;
-    /* 0x18 */ u8 filler_18[2];
+    // TREY: regionMapSectionId widened to u16 (TREY_PLAN.md E1). The header stays 0x1C bytes:
+    // the 2-byte filler that used to sit at 0x18 shrank to 1 byte. Emitted by tools/mapjson.
+    /* 0x14 */ u16 regionMapSectionId;
+    /* 0x16 */ u8 cave;
+    /* 0x17 */ u8 weather;
+    /* 0x18 */ u8 mapType;
+    /* 0x19 */ u8 filler_19;
                // fields correspond to the arguments in the map_header_flags macro
     /* 0x1A */ bool8 allowCycling:1;
                bool8 allowEscaping:1; // Escape Rope and Dig

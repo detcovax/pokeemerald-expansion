@@ -365,7 +365,7 @@ static void AddHatchedMonToParty(u8 id)
     u16 species;
     u8 name[POKEMON_NAME_LENGTH + 1];
     u16 metLevel;
-    u8 metLocation;
+    u16 metLocation; // TREY: met locations are 10-bit
     struct Pokemon *mon = &gPlayerParty[id];
 
     CreateHatchedMon(mon, &gEnemyParty[0]);

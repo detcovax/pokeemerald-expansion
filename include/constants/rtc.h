@@ -91,6 +91,6 @@ enum TimeOfDay
     TIMES_OF_DAY_COUNT,
 };
 
-#define TIME_OF_DAY_DEFAULT    1 // TREY: TIME_DAY (was 0, TIME_MORNING)
+#define TIME_OF_DAY_DEFAULT    0 // TREY: must stay 0. Encounter tables without a time suffix are generated into slot 0.
 
 #endif // GUARD_CONSTANTS_RTC_H

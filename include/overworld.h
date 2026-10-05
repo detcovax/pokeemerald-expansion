@@ -133,8 +133,8 @@ u8 GetLastUsedWarpMapType(void);
 bool8 IsMapTypeOutdoors(u8 mapType);
 bool8 Overworld_MapTypeAllowsTeleportAndFly(u8 mapType);
 bool8 IsMapTypeIndoors(u8 mapType);
-u8 GetSavedWarpRegionMapSectionId(void);
-u8 GetCurrentRegionMapSectionId(void);
+u16 GetSavedWarpRegionMapSectionId(void); // TREY: MAPSECs are u16
+u16 GetCurrentRegionMapSectionId(void); // TREY: MAPSECs are u16
 u8 GetCurrentMapBattleScene(void);
 void CleanupOverworldWindowsAndTilemaps(void);
 bool32 IsOverworldLinkActive(void);

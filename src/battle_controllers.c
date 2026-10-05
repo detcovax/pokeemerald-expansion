@@ -1747,9 +1747,11 @@ static u32 GetBattlerMonData(u32 battler, struct Pokemon *party, u32 monId, u8 *
         dst[0] = GetMonData(&party[monId], MON_DATA_POKERUS);
         size = 1;
         break;
-    case REQUEST_MET_LOCATION_BATTLE:
-        dst[0] = GetMonData(&party[monId], MON_DATA_MET_LOCATION);
-        size = 1;
+    case REQUEST_MET_LOCATION_BATTLE: // TREY: met location is 2 bytes
+        data16 = GetMonData(&party[monId], MON_DATA_MET_LOCATION);
+        dst[0] = data16;
+        dst[1] = data16 >> 8;
+        size = 2;
         break;
     case REQUEST_MET_LEVEL_BATTLE:
         dst[0] = GetMonData(&party[monId], MON_DATA_MET_LEVEL);

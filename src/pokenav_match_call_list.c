@@ -430,7 +430,7 @@ void BufferMatchCallNameAndDesc(struct PokenavMatchCallEntry *matchCallEntry, u8
     }
 }
 
-u8 GetMatchTableMapSectionId(int rematchIndex)
+u16 GetMatchTableMapSectionId(int rematchIndex) // TREY: MAPSECs are u16
 {
     int mapGroup = gRematchTable[rematchIndex].mapGroup;
     int mapNum = gRematchTable[rematchIndex].mapNum;

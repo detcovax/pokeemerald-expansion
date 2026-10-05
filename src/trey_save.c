@@ -7,6 +7,9 @@
 #include "constants/battle_partner.h"
 #include "constants/opponents.h"
 #include "constants/trainers.h"
+#include "constants/region_map_sections.h"
+#include "constants/rtc.h"
+#include "pokemon.h"
 
 // ---------------------------------------------------------------------------
 // Build-time checks
@@ -31,6 +34,28 @@ STATIC_ASSERT(TRAINERS_COUNT <= TRAINER_FRONTIER_BRAIN, TreyAddDummyTrainerAt102
 STATIC_ASSERT(TRAINERS_COUNT <= TRAINER_SECRET_BASE, TreyAddDummyTrainerAt1024);
 STATIC_ASSERT(TRAINERS_COUNT <= TRAINER_LINK_OPPONENT, TreyAddDummyTrainerAt2048);
 STATIC_ASSERT(TRAINERS_COUNT <= MAX_TRAINERS_COUNT, TreyTooManyTrainers);
+
+// Location IDs (TREY_PLAN.md E1/E2): every real MAPSEC must fit in 10 bits and stay below the special METLOC IDs.
+STATIC_ASSERT(MAPSEC_COUNT <= METLOC_SPECIAL_EGG, TreyTooManyMapsecs);
+STATIC_ASSERT(METLOC_FATEFUL_ENCOUNTER <= MAPSEC_MAX_ID, TreyMetlocOutOfRange);
+STATIC_ASSERT(MAPSEC_MAX_ID < (1 << 10), TreyMetLocationIsTenBits);
+
+// Wild encounters (TREY_PLAN.md D22): every time of day has its own explicit table in
+// src/data/wild_encounters.json (labels end in _Morning/_Day/_Evening/_Night). There is no fallback:
+// a time with no table has no wild Pokémon, and the Pokédex area page shows exactly that.
+// A table WITHOUT a time suffix is generated into slot 0 (TIME_MORNING) only, so never add one.
+STATIC_ASSERT(OW_TIME_OF_DAY_DISABLE_FALLBACK == TRUE, TreyEncounterFallbackMustBeOff);
+STATIC_ASSERT(TIME_OF_DAY_DEFAULT == TIME_MORNING, TreyTimeOfDayDefaultMustBeMorning);
+
+// The map header layout must match what tools/mapjson emits (header.inc files).
+STATIC_ASSERT(sizeof(struct MapHeader) == 0x1C, TreyMapHeaderSizeChanged);
+STATIC_ASSERT(offsetof(struct MapHeader, regionMapSectionId) == 0x14, TreyMapHeaderMapsecOffset);
+STATIC_ASSERT(offsetof(struct MapHeader, mapType) == 0x18, TreyMapHeaderMapTypeOffset);
+STATIC_ASSERT(offsetof(struct MapHeader, battleType) == 0x1B, TreyMapHeaderBattleTypeOffset);
+
+// Reusing the old ribbon bits must not change the Pokémon data size.
+STATIC_ASSERT(sizeof(struct PokemonSubstruct3) == 12, TreySubstruct3SizeChanged);
+STATIC_ASSERT(sizeof(struct BoxPokemon) == 80, TreyBoxPokemonSizeChanged);
 
 // The TREY data must be the last thing in each save block (see include/trey_save_types.h).
 STATIC_ASSERT(offsetof(struct SaveBlock1, treyReserved) + TREY_SB1_RESERVED == sizeof(struct SaveBlock1), TreySB1ReservedNotLast);
