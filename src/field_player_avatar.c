@@ -1,4 +1,6 @@
 #include "global.h"
+#include "trey_hm.h" // TREY
+#include "trey_layers.h" // TREY
 #include "main.h"
 #include "bike.h"
 #include "event_data.h"
@@ -107,6 +109,7 @@ static void PlayerAvatarTransition_MachBike(struct ObjectEvent *);
 static void PlayerAvatarTransition_AcroBike(struct ObjectEvent *);
 static void PlayerAvatarTransition_Surfing(struct ObjectEvent *);
 static void PlayerAvatarTransition_Underwater(struct ObjectEvent *);
+static void PlayerAvatarTransition_Soaring(struct ObjectEvent *); // TREY
 static void PlayerAvatarTransition_ReturnToField(struct ObjectEvent *);
 
 static bool8 PlayerAnimIsMultiFrameStationary(void);
@@ -263,7 +266,7 @@ static void (*const sPlayerAvatarTransitionFuncs[])(struct ObjectEvent *) =
     [PLAYER_AVATAR_STATE_FISHING]    = PlayerAvatarTransition_Dummy,
     [PLAYER_AVATAR_STATE_WATERING]   = PlayerAvatarTransition_Dummy,
     // TREY: one entry per avatar flag bit. Soaring, Underground and Climbing transitions arrive in Phase 3.
-    [8]                              = PlayerAvatarTransition_Dummy, // PLAYER_AVATAR_FLAG_SOARING
+    [8]                              = PlayerAvatarTransition_Soaring, // PLAYER_AVATAR_FLAG_SOARING
     [9]                              = PlayerAvatarTransition_Dummy, // PLAYER_AVATAR_FLAG_UNDERGROUND
     [10]                             = PlayerAvatarTransition_Dummy, // PLAYER_AVATAR_FLAG_CLIMBING
 };
@@ -847,6 +850,11 @@ static void PlayerNotOnBikeMoving(u8 direction, u16 heldKeys)
 
     ResetSpinTimer(); // Everything below will move the player a space, reset the timer.
     gPlayerAvatar.creeping = FALSE;
+    if (gPlayerAvatar.flags & PLAYER_AVATAR_FLAG_SOARING) // TREY: soaring moves at surf speed
+    {
+        PlayerWalkFast(direction);
+        return;
+    }
     if (gPlayerAvatar.flags & PLAYER_AVATAR_FLAG_SURFING)
     {
         if (FlagGet(DN_FLAG_SEARCHING) && (heldKeys & A_BUTTON))
@@ -1109,6 +1117,15 @@ static void PlayerAvatarTransition_Surfing(struct ObjectEvent *objEvent)
     spriteId = FieldEffectStart(FLDEFF_SURF_BLOB);
     objEvent->fieldEffectSpriteId = spriteId;
     SetSurfBlob_BobState(spriteId, BOB_PLAYER_AND_MON);
+}
+
+// TREY: soaring on a Sky map. Placeholder art: the player's surfing pose on the Fly bird (TREY_PLAN.md 5.3).
+static void PlayerAvatarTransition_Soaring(struct ObjectEvent *objEvent)
+{
+    ObjectEventSetGraphicsId(objEvent, GetPlayerAvatarGraphicsIdByStateId(PLAYER_AVATAR_STATE_SURFING));
+    ObjectEventTurn(objEvent, objEvent->movementDirection);
+    SetPlayerAvatarStateMask(PLAYER_AVATAR_FLAG_SOARING);
+    objEvent->fieldEffectSpriteId = TreyLayer_CreateSoarBird(gPlayerAvatar.objectEventId);
 }
 
 static void PlayerAvatarTransition_Underwater(struct ObjectEvent *objEvent)
@@ -1547,7 +1564,7 @@ bool8 PartyHasMonWithSurf(void)
         {
             if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES) == SPECIES_NONE)
                 break;
-            if (MonKnowsMove(&gPlayerParty[i], MOVE_SURF))
+            if (TreyHM_MonCanUseInField(&gPlayerParty[i], MOVE_SURF)) // TREY: can learn Surf + Surf unlocked
                 return TRUE;
         }
     }

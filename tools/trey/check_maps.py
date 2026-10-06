@@ -83,6 +83,8 @@ def main():
     groups = load_json("data/maps/map_groups.json")
     layouts = {l["id"]: l for l in load_json("data/layouts/layouts.json")["layouts"] if "id" in l}
     layer_types = load_layer_types()
+    with open("include/constants/songs.h", encoding="utf-8") as f:
+        songs = set(re.findall(r"#define\s+(MUS_\w+|SE_\w+|PH_\w+)\b", f.read()))
 
     # Map groups
     group_order = groups["group_order"]
@@ -114,6 +116,12 @@ def main():
     for map_id, (folder, data) in maps_by_id.items():
         where = f"data/maps/{folder}/map.json"
         size = layout_size(data)
+
+        music = data.get("music")
+        if music and songs and music not in songs:
+            error(f"{where}: music {music!r} is not defined in include/constants/songs.h.")
+        if data.get("layout") not in layouts:
+            error(f"{where}: layout {data.get('layout')!r} does not exist.")
 
         # Layer links
         links = data.get("trey_layer_links", [])

@@ -1,4 +1,5 @@
 #include "global.h"
+#include "trey_layers.h" // TREY
 #include "overworld.h"
 #include "battle_pyramid.h"
 #include "battle_setup.h"
@@ -811,7 +812,13 @@ const struct MapConnection *GetMapConnection(u8 dir)
 
 static bool8 SetDiveWarp(u8 dir, u16 x, u16 y)
 {
-    const struct MapConnection *connection = GetMapConnection(dir);
+    const struct MapConnection *connection;
+
+    // TREY: a layer link at this spot wins over the map's Dive/Emerge connection (TREY_PLAN.md 5.2).
+    if (TreyLayer_SetWarpFromPlayer(dir == CONNECTION_DIVE ? LAYER_LINK_DIVE : LAYER_LINK_EMERGE, FALSE))
+        return TRUE;
+
+    connection = GetMapConnection(dir);
 
     if (connection != NULL)
     {
@@ -970,6 +977,8 @@ void StoreInitialPlayerAvatarState(void)
         sInitialPlayerAvatarState.transitionFlags = PLAYER_AVATAR_FLAG_SURFING;
     else if (TestPlayerAvatarFlags(PLAYER_AVATAR_FLAG_UNDERWATER))
         sInitialPlayerAvatarState.transitionFlags = PLAYER_AVATAR_FLAG_UNDERWATER;
+    else if (TestPlayerAvatarFlags(PLAYER_AVATAR_FLAG_SOARING)) // TREY
+        sInitialPlayerAvatarState.transitionFlags = PLAYER_AVATAR_FLAG_SOARING;
     else
         sInitialPlayerAvatarState.transitionFlags = PLAYER_AVATAR_FLAG_ON_FOOT;
 }
@@ -992,6 +1001,8 @@ static u16 GetAdjustedInitialTransitionFlags(struct InitialPlayerAvatarState *pl
         return PLAYER_AVATAR_FLAG_ON_FOOT;
     else if (mapType == MAP_TYPE_UNDERWATER)
         return PLAYER_AVATAR_FLAG_UNDERWATER;
+    else if (mapType == MAP_TYPE_SKY) // TREY: on a Sky map the player is always soaring
+        return PLAYER_AVATAR_FLAG_SOARING;
     else if (MetatileBehavior_IsSurfableWaterOrUnderwater(metatileBehavior) == TRUE)
         return PLAYER_AVATAR_FLAG_SURFING;
     else if (Overworld_IsBikingAllowed() != TRUE)

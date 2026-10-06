@@ -1,4 +1,5 @@
 #include "global.h"
+#include "trey_layers.h" // TREY
 #include "braille_puzzles.h"
 #include "event_scripts.h"
 #include "field_effect.h"
@@ -18,6 +19,13 @@ static void StartDigFieldEffect(void);
 // text
 bool8 SetUpFieldMove_Dig(void)
 {
+    // TREY (TREY_PLAN.md 5.3): a Dig layer link here takes you down to / up from the Underground layer.
+    if (TreyLayer_CanDig())
+    {
+        gFieldCallback2 = FieldCallback_PrepareFadeInFromMenu;
+        gPostMenuFieldCallback = TreyLayer_FieldCallback_Dig;
+        return TRUE;
+    }
     if (CanUseDigOrEscapeRopeOnCurMap() == TRUE)
     {
         gFieldCallback2 = FieldCallback_PrepareFadeInFromMenu;

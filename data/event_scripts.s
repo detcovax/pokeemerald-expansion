@@ -127,6 +127,8 @@ gStdScripts_End::
 	.include "data/maps/VerdanturfTown/scripts.inc"
 	.include "data/maps/PacifidlogTown/scripts.inc"
 	.include "data/maps/Route101/scripts.inc"
+	.include "data/maps/TreyTest_Route101Sky/scripts.inc" @ TREY test map
+	.include "data/maps/TreyTest_Route101Underground/scripts.inc" @ TREY test map
 	.include "data/maps/Route102/scripts.inc"
 	.include "data/maps/Route103/scripts.inc"
 	.include "data/maps/Route104/scripts.inc"
@@ -1121,6 +1123,8 @@ EventScript_VsSeekerChargingDone::
 	.include "data/text/pokemon_news.inc"
 	.include "data/scripts/mauville_man.inc"
 	.include "data/scripts/field_move_scripts.inc"
+	.include "data/scripts/trey_layers.inc" @ TREY
+	.include "data/scripts/trey_hm_tutor.inc" @ TREY
 	.include "data/scripts/item_ball_scripts.inc"
 	.include "data/scripts/profile_man.inc"
 	.include "data/scripts/day_care.inc"

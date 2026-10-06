@@ -1,4 +1,6 @@
 #include "global.h"
+#include "trey_hm.h" // TREY
+#include "trey_layers.h" // TREY
 #include "malloc.h"
 #include "battle.h"
 #include "battle_anim.h"
@@ -363,6 +365,7 @@ static void Task_CancelParticipationYesNo(u8);
 static void Task_HandleCancelParticipationYesNoInput(u8);
 static bool8 ShouldUseChooseMonText(void);
 static void SetPartyMonFieldSelectionActions(struct Pokemon *, u8);
+static void TreyAppendLearnableHMs(struct Pokemon *mon); // TREY
 static u8 GetPartyMenuActionsTypeInBattle(struct Pokemon *);
 static u8 GetPartySlotEntryStatus(s8);
 static void Task_UpdateHeldItemSprite(u8);
@@ -2881,6 +2884,7 @@ static void SetPartyMonFieldSelectionActions(struct Pokemon *mons, u8 slotId)
             }
         }
     }
+    TreyAppendLearnableHMs(&mons[slotId]); // TREY: unlocked HMs this Pokémon can learn (TREY_PLAN.md 5.3)
 
     if (!InBattlePike())
     {
@@ -2892,6 +2896,44 @@ static void SetPartyMonFieldSelectionActions(struct Pokemon *mons, u8 slotId)
             AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_ITEM);
     }
     AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, MENU_CANCEL1);
+}
+
+// TREY (TREY_PLAN.md 5.3): after the moves a Pokémon knows, list unlocked HMs it can learn but doesn't
+// know. Moves you can only start from this menu come first; the rest can also be used by pressing A
+// in front of a tree, rock, boulder, water or waterfall. The menu holds 8 entries and Switch, Item
+// and Cancel still need room, so at most 4 field moves are shown.
+static void TreyAppendLearnableHMs(struct Pokemon *mon)
+{
+    static const u8 sOrder[] =
+    {
+        FIELD_MOVE_TELEPORT, FIELD_MOVE_FLY, FIELD_MOVE_DIG, FIELD_MOVE_FLASH,
+#if OW_DEFOG_FIELD_MOVE == TRUE
+        FIELD_MOVE_DEFOG,
+#endif
+        FIELD_MOVE_DIVE, FIELD_MOVE_SURF, FIELD_MOVE_WATERFALL,
+        FIELD_MOVE_STRENGTH, FIELD_MOVE_CUT, FIELD_MOVE_ROCK_SMASH,
+    };
+    u32 i, k;
+    u16 species = GetMonData(mon, MON_DATA_SPECIES);
+
+    if (GetMonData(mon, MON_DATA_IS_EGG))
+        return;
+    for (i = 0; i < ARRAY_COUNT(sOrder) && sPartyMenuInternal->numActions < ARRAY_COUNT(sPartyMenuInternal->actions) - 3; i++)
+    {
+        u8 action = sOrder[i] + MENU_FIELD_MOVES;
+        u16 move = sFieldMoves[sOrder[i]];
+        bool32 listed = FALSE;
+
+        if (!TreyHM_IsUnlocked(move) || !TreyHM_SpeciesCanLearn(species, move))
+            continue;
+        for (k = 0; k < sPartyMenuInternal->numActions; k++)
+        {
+            if (sPartyMenuInternal->actions[k] == action)
+                listed = TRUE;
+        }
+        if (!listed)
+            AppendToList(sPartyMenuInternal->actions, &sPartyMenuInternal->numActions, action);
+    }
 }
 
 static u8 GetPartyMenuActionsType(struct Pokemon *mon)
@@ -3991,10 +4033,10 @@ static void CursorCb_FieldMove(u8 taskId)
     }
     else
     {
-        // All field moves before WATERFALL are HMs.
-        if (fieldMove <= FIELD_MOVE_WATERFALL && FlagGet(FLAG_BADGE01_GET + fieldMove) != TRUE)
+        // TREY: HMs are gated by their unlock flag, not by badges (TREY_PLAN.md 5.3).
+        if (TreyHM_IsHM(sFieldMoves[fieldMove]) && !TreyHM_IsUnlocked(sFieldMoves[fieldMove]))
         {
-            DisplayPartyMenuMessage(gText_CantUseUntilNewBadge, TRUE);
+            DisplayPartyMenuMessage(COMPOUND_STRING("You can't use this move in the\nfield yet.{PAUSE_UNTIL_PRESS}"), TRUE);
             gTasks[taskId].func = Task_ReturnToChooseMonAfterText;
         }
         else if (sFieldMoveCursorCallbacks[fieldMove].fieldMoveFunc() == TRUE)
@@ -4006,13 +4048,20 @@ static void CursorCb_FieldMove(u8 taskId)
                 ChooseMonForSoftboiled(taskId);
                 break;
             case FIELD_MOVE_TELEPORT:
-                mapHeader = Overworld_GetMapHeaderByGroupAndId(gSaveBlock1Ptr->lastHealLocation.mapGroup, gSaveBlock1Ptr->lastHealLocation.mapNum);
-                GetMapNameGeneric(gStringVar1, mapHeader->regionMapSectionId);
-                StringExpandPlaceholders(gStringVar4, gText_ReturnToHealingSpot);
-                DisplayFieldMoveExitAreaMessage(taskId);
-                sPartyMenuInternal->data[0] = fieldMove;
+                // TREY: Teleport is the fast travel move. Pick any visited town on the map (TREY_PLAN.md 5.3).
+                TreyTeleport_SetPending(TRUE);
+                gFieldCallback2 = NULL;          // set by SetUpFieldMove_Teleport for the old
+                gPostMenuFieldCallback = NULL;   // "return to the last Pokémon Center" behaviour
+                gPartyMenu.exitCallback = CB2_OpenFlyMap;
+                Task_ClosePartyMenu(taskId);
                 break;
             case FIELD_MOVE_DIG:
+                if (TreyLayer_CanDig()) // TREY: Dig changes layer here instead of escaping
+                {
+                    gPartyMenu.exitCallback = CB2_ReturnToField;
+                    Task_ClosePartyMenu(taskId);
+                    break;
+                }
                 mapHeader = Overworld_GetMapHeaderByGroupAndId(gSaveBlock1Ptr->escapeWarp.mapGroup, gSaveBlock1Ptr->escapeWarp.mapNum);
                 GetMapNameGeneric(gStringVar1, mapHeader->regionMapSectionId);
                 StringExpandPlaceholders(gStringVar4, gText_EscapeFromHere);
@@ -4020,7 +4069,10 @@ static void CursorCb_FieldMove(u8 taskId)
                 sPartyMenuInternal->data[0] = fieldMove;
                 break;
             case FIELD_MOVE_FLY:
-                gPartyMenu.exitCallback = CB2_OpenFlyMap;
+                if (TreyLayer_IsSoaring()) // TREY: land (callbacks set in SetUpFieldMove_Fly)
+                    gPartyMenu.exitCallback = CB2_ReturnToField;
+                else // TREY: soar up with the Fly animation (Fly no longer opens the town map)
+                    gPartyMenu.exitCallback = ReturnToFieldFromFlyMapSelect;
                 Task_ClosePartyMenu(taskId);
                 break;
             default:
@@ -4199,6 +4251,17 @@ static bool8 SetUpFieldMove_Fly(void)
     if (!CheckFollowerNPCFlag(FOLLOWER_NPC_FLAG_CAN_LEAVE_ROUTE))
         return FALSE;
 
+    // TREY (TREY_PLAN.md 5.3): Fly while soaring = land; Fly under a Sky link = soar up.
+    if (TreyLayer_IsSoaring())
+    {
+        gFieldCallback2 = FieldCallback_PrepareFadeInFromMenu;
+        gPostMenuFieldCallback = TreyLayer_FieldCallback_Land;
+        return TRUE;
+    }
+    if (TreyLayer_PrepareSoar())
+        return TRUE;
+    return FALSE; // TREY: no Sky link here. Fast travel is Teleport now.
+
     if (Overworld_MapTypeAllowsTeleportAndFly(gMapHeader.mapType) == TRUE)
         return TRUE;
     else
@@ -4207,6 +4270,7 @@ static bool8 SetUpFieldMove_Fly(void)
 
 void CB2_ReturnToPartyMenuFromFlyMap(void)
 {
+    TreyTeleport_SetPending(FALSE); // TREY: Teleport cancelled on the map
     InitPartyMenu(PARTY_MENU_TYPE_FIELD, PARTY_LAYOUT_SINGLE, PARTY_ACTION_CHOOSE_MON, TRUE, PARTY_MSG_CHOOSE_MON, Task_HandleChooseMonInput, CB2_ReturnToFieldWithOpenMenu);
 }
 

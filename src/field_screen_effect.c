@@ -522,6 +522,18 @@ void DoWarp(void)
     CreateTask(Task_WarpAndLoadMap, 10);
 }
 
+// TREY: land from a Sky map onto the surface, arriving with the Fly-in animation (TREY_PLAN.md 5.3).
+void DoTreyLandingWarp(void)
+{
+    LockPlayerFieldControls();
+    TryFadeOutOldMapMusic();
+    WarpFadeOutScreen();
+    PlaySE(SE_M_FLY);
+    SetFollowerNPCData(FNPC_DATA_COME_OUT_DOOR, FNPC_DOOR_NONE);
+    gFieldCallback = FieldCallback_TreyLandIntoMap;
+    CreateTask(Task_WarpAndLoadMap, 10);
+}
+
 void DoDiveWarp(void)
 {
     LockPlayerFieldControls();

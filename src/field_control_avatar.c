@@ -1,4 +1,7 @@
 #include "global.h"
+#include "trey_hm.h" // TREY
+#include "constants/moves.h" // TREY
+#include "trey_layers.h" // TREY
 #include "battle_setup.h"
 #include "bike.h"
 #include "coord_event_weather.h"
@@ -211,6 +214,8 @@ int ProcessPlayerFieldInput(struct FieldInput *input)
         return TRUE;
 
     if (input->pressedAButton && TryStartInteractionScript(&position, metatileBehavior, playerDirection) == TRUE)
+        return TRUE;
+    if (input->pressedAButton && TreyLayer_TrySetupLandScript()) // TREY: "Land here?" while soaring
         return TRUE;
 
     if (input->heldDirection2 && input->dpadDirection == playerDirection)
@@ -560,7 +565,7 @@ static const u8 *GetInteractedMetatileScript(struct MapPosition *position, u8 me
 
 static const u8 *GetInteractedWaterScript(struct MapPosition *unused1, u8 metatileBehavior, u8 direction)
 {
-    if (FlagGet(FLAG_BADGE05_GET) == TRUE && PartyHasMonWithSurf() == TRUE && IsPlayerFacingSurfableFishableWater() == TRUE
+    if (TreyHM_IsUnlocked(MOVE_SURF) && PartyHasMonWithSurf() == TRUE && IsPlayerFacingSurfableFishableWater() == TRUE
      && CheckFollowerNPCFlag(FOLLOWER_NPC_FLAG_CAN_SURF)
      )
         return EventScript_UseSurf;
@@ -569,7 +574,7 @@ static const u8 *GetInteractedWaterScript(struct MapPosition *unused1, u8 metati
      && CheckFollowerNPCFlag(FOLLOWER_NPC_FLAG_CAN_WATERFALL)
      )
     {
-        if (FlagGet(FLAG_BADGE08_GET) == TRUE && IsPlayerSurfingNorth() == TRUE)
+        if (TreyHM_FindPartyMon(MOVE_WATERFALL) != PARTY_SIZE && IsPlayerSurfingNorth() == TRUE) // TREY: HM unlock
             return EventScript_UseWaterfall;
         else
             return EventScript_CannotUseWaterfall;
@@ -582,7 +587,7 @@ static bool32 TrySetupDiveDownScript(void)
     if (!CheckFollowerNPCFlag(FOLLOWER_NPC_FLAG_CAN_DIVE))
         return FALSE;
 
-    if (FlagGet(FLAG_BADGE07_GET) && TrySetDiveWarp() == 2)
+    if (TreyHM_FindPartyMon(MOVE_DIVE) != PARTY_SIZE && TrySetDiveWarp() == 2) // TREY: HM unlock
     {
         ScriptContext_SetupScript(EventScript_UseDive);
         return TRUE;
@@ -595,7 +600,7 @@ static bool32 TrySetupDiveEmergeScript(void)
     if (!CheckFollowerNPCFlag(FOLLOWER_NPC_FLAG_CAN_DIVE))
         return FALSE;
 
-    if (FlagGet(FLAG_BADGE07_GET) && gMapHeader.mapType == MAP_TYPE_UNDERWATER && TrySetDiveWarp() == 1)
+    if (TreyHM_FindPartyMon(MOVE_DIVE) != PARTY_SIZE && gMapHeader.mapType == MAP_TYPE_UNDERWATER && TrySetDiveWarp() == 1) // TREY: HM unlock
     {
         ScriptContext_SetupScript(EventScript_UseDiveUnderwater);
         return TRUE;

@@ -23,6 +23,7 @@ void FieldCB_ReturnToFieldNoScript(void);
 void FieldCB_ReturnToFieldNoScriptCheckMusic(void);
 void DoWarp(void);
 void DoDiveWarp(void);
+void DoTreyLandingWarp(void); // TREY
 void DoWhiteFadeWarp(void);
 void DoDoorWarp(void);
 void DoFallWarp(void);

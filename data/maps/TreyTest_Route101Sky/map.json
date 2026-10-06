@@ -1,0 +1,32 @@
+{
+  "id": "MAP_TREY_TEST_ROUTE101_SKY",
+  "name": "TreyTest_Route101Sky",
+  "layout": "LAYOUT_ROUTE101",
+  "music": "MUS_ROUTE101",
+  "region_map_section": "MAPSEC_ROUTE_101",
+  "requires_flash": false,
+  "weather": "WEATHER_SUNNY",
+  "map_type": "MAP_TYPE_SKY",
+  "allow_cycling": false,
+  "allow_escaping": false,
+  "allow_running": true,
+  "show_map_name": true,
+  "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
+  "connections": null,
+  "object_events": [],
+  "warp_events": [],
+  "coord_events": [],
+  "bg_events": [],
+  "trey_layer_links": [
+    {
+      "type": "LAYER_LINK_SKY_DOWN",
+      "x": 0,
+      "y": 0,
+      "width": 20,
+      "height": 20,
+      "dest_x": 0,
+      "dest_y": 0,
+      "map": "MAP_ROUTE101"
+    }
+  ]
+}

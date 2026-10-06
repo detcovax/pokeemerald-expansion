@@ -563,3 +563,6 @@ gSpecials::
 	def_special UseBlankMessageToCancelPokemonPic
 	def_special EnterCode
 	def_special GetCodeFeedback
+	@ TREY
+	def_special TreyLayer_CheckLanding
+	def_special TreyLayer_StartLanding

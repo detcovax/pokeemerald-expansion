@@ -1,4 +1,6 @@
 #include "global.h"
+#include "trey_hm.h" // TREY
+#include "trey_layers.h" // TREY
 #include "data.h"
 #include "decompress.h"
 #include "event_data.h"
@@ -1368,7 +1370,8 @@ static void SpriteCB_HallOfFameMonitor(struct Sprite *sprite)
 void ReturnToFieldFromFlyMapSelect(void)
 {
     SetMainCallback2(CB2_ReturnToField);
-    gFieldCallback = FieldCallback_UseFly;
+    // TREY: the fly map is opened by Teleport now; arrive with the Teleport animation.
+    gFieldCallback = TreyTeleport_IsPending() ? FieldCallback_TreyTeleport : FieldCallback_UseFly;
 }
 
 void FieldCallback_UseFly(void)
@@ -1427,13 +1430,20 @@ static void Task_UseFly(u8 taskId)
             Overworld_ResetStateAfterFly();
             WarpIntoMap();
             SetMainCallback2(CB2_LoadMap);
-            gFieldCallback = FieldCallback_FlyIntoMap;
+            // TREY: soaring up to a Sky map arrives in the air, without the "jump off the bird" animation.
+            gFieldCallback = TreyLayer_ConsumeSoarPending() ? FieldCB_DefaultWarpExit : FieldCallback_FlyIntoMap;
             DestroyTask(taskId);
         }
     }
 }
 
 #undef taskState
+
+// TREY: used by DoTreyLandingWarp (landing from a Sky map).
+void FieldCallback_TreyLandIntoMap(void)
+{
+    FieldCallback_FlyIntoMap();
+}
 
 static void FieldCallback_FlyIntoMap(void)
 {
@@ -2642,7 +2652,11 @@ static void TeleportWarpOutFieldEffect_End(struct Task *task)
 
         if (BGMusicStopped() == TRUE)
         {
-            SetWarpDestinationToLastHealLocation();
+            // TREY: Teleport goes to the town chosen on the fly map (warp already set there).
+            if (TreyTeleport_IsPending())
+                TreyTeleport_SetPending(FALSE);
+            else
+                SetWarpDestinationToLastHealLocation();
             WarpIntoMap();
             SetMainCallback2(CB2_LoadMap);
             gFieldCallback = FieldCallback_TeleportWarpIn;

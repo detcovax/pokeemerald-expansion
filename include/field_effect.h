@@ -14,6 +14,7 @@ bool8 FieldEffectActiveListContains(u8 id);
 void FieldEffectActiveListClear(void);
 void ReturnToFieldFromFlyMapSelect(void);
 void FieldCallback_UseFly(void);
+void FieldCallback_TreyLandIntoMap(void); // TREY
 u8 AddNewGameBirchObject(s16 x, s16 y, u8 subpriority);
 void FieldEffectStop(struct Sprite *sprite, u8 id);
 u8 CreateTrainerSprite(u8 trainerSpriteID, s16 x, s16 y, u8 subpriority, u8 *buffer);

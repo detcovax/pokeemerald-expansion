@@ -1,4 +1,5 @@
 #include "global.h"
+#include "trey_hm.h" // TREY
 #include "frontier_util.h"
 #include "battle_setup.h"
 #include "berry.h"
@@ -2298,7 +2299,9 @@ bool8 ScrCmd_checkpartymove(struct ScriptContext *ctx)
         u16 species = GetMonData(&gPlayerParty[i], MON_DATA_SPECIES, NULL);
         if (!species)
             break;
-        if (!GetMonData(&gPlayerParty[i], MON_DATA_IS_EGG) && MonKnowsMove(&gPlayerParty[i], move) == TRUE)
+        // TREY: HMs only need a Pokémon that can learn the move, once unlocked (TREY_PLAN.md 5.3).
+        if (TreyHM_IsHM(move) ? TreyHM_MonCanUseInField(&gPlayerParty[i], move)
+                              : (!GetMonData(&gPlayerParty[i], MON_DATA_IS_EGG) && MonKnowsMove(&gPlayerParty[i], move) == TRUE))
         {
             gSpecialVar_Result = i;
             gSpecialVar_0x8004 = species;

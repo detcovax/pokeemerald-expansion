@@ -1659,7 +1659,25 @@
 #define TREY_FLAG_SYSTEM_START          (TREY_FLAG_BADGES_END + 1)
 #define FLAG_TREY_TERA_ORB_CHARGED      (TREY_FLAG_SYSTEM_START + 0x00) // B_FLAG_TERA_ORB_CHARGED (D19)
 
-#define TREY_FLAG_NEXT_FREE             (TREY_FLAG_SYSTEM_START + 0x01) // next unused TREY flag
+// TREY HM unlocks (TREY_PLAN.md 5.3). Set by the tutorial. Once set, any party Pokémon that can
+// learn the move may use it in the field, without knowing it.
+#define TREY_FLAG_HM_START              (TREY_FLAG_SYSTEM_START + 0x10)
+#define FLAG_TREY_HM_TELEPORT           (TREY_FLAG_HM_START + 0)
+#define FLAG_TREY_HM_CUT                (TREY_FLAG_HM_START + 1)
+#define FLAG_TREY_HM_FLY                (TREY_FLAG_HM_START + 2)
+#define FLAG_TREY_HM_SURF               (TREY_FLAG_HM_START + 3)
+#define FLAG_TREY_HM_STRENGTH           (TREY_FLAG_HM_START + 4)
+#define FLAG_TREY_HM_FLASH              (TREY_FLAG_HM_START + 5)
+#define FLAG_TREY_HM_WHIRLPOOL          (TREY_FLAG_HM_START + 6)
+#define FLAG_TREY_HM_WATERFALL          (TREY_FLAG_HM_START + 7)
+#define FLAG_TREY_HM_ROCK_SMASH         (TREY_FLAG_HM_START + 8)
+#define FLAG_TREY_HM_DIVE               (TREY_FLAG_HM_START + 9)
+#define FLAG_TREY_HM_DEFOG              (TREY_FLAG_HM_START + 10)
+#define FLAG_TREY_HM_ROCK_CLIMB         (TREY_FLAG_HM_START + 11)
+#define FLAG_TREY_HM_DIG                (TREY_FLAG_HM_START + 12)
+#define TREY_FLAG_HM_END                (TREY_FLAG_HM_START + 15) // room for 3 more
+
+#define TREY_FLAG_NEXT_FREE             (TREY_FLAG_HM_END + 1) // next unused TREY flag
 
 #define FLAGS_COUNT (TREY_FLAGS_END + 1) // TREY: was (DAILY_FLAGS_END + 1)
 
