@@ -22,8 +22,17 @@
 #define TREY_SB2_RESERVED  256
 #define TREY_SB3_RESERVED  1024
 
+// ---------------------------------------------------------------------------
+// Battle model (Phase 2b, TREY_PLAN.md 5.7)
+// ---------------------------------------------------------------------------
+// Effective level for stats and damage = floor + level * (100 - floor) / 100. See include/trey_battle.h.
+// 50 means a level 1 Pokémon fights like level 50 and a level 100 like level 100. 0 = vanilla formulas.
+#define TREY_STAT_LEVEL_FLOOR   50
+// Pokémon always obey, regardless of badges, level or original trainer (D12).
+#define TREY_DISABLE_OBEDIENCE  1
+
 // Settings are added here phase by phase as each system is built:
-//   Phase 2: battle model (TREY_STAT_LEVEL_FLOOR, TREY_DISABLE_OBEDIENCE, TREY_DISABLE_ZMOVES), Orange variants
+//   Phase 2: TREY_DISABLE_ZMOVES, Orange variants
 //   Phase 3: traversal (TREY_STAMINA_ENABLED and stamina tuning)
 //   Phase 4: seasons, transit, quests
 

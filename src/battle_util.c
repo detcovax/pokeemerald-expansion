@@ -50,6 +50,7 @@
 #include "constants/trainers.h"
 #include "constants/weather.h"
 #include "constants/pokemon.h"
+#include "trey_battle.h" // TREY
 
 /*
 NOTE: The data and functions in this file up until (but not including) sSoundMovesTable
@@ -7559,6 +7560,8 @@ u8 GetAttackerObedienceForAction()
     u8 obedienceLevel = 0;
     u8 levelReferenced;
 
+    if (TREY_DISABLE_OBEDIENCE && !TESTING) // TREY: Pokémon always obey (D12)
+        return OBEYS;
     if (gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_RECORDED_LINK))
         return OBEYS;
     if (BattlerHasAi(gBattlerAttacker))
@@ -9093,6 +9096,7 @@ static inline u32 CalcDefenseStat(struct DamageCalculationData *damageCalcData, 
 // base damage formula before adding any modifiers
 static inline s32 CalculateBaseDamage(u32 power, u32 userFinalAttack, u32 level, u32 targetFinalDefense)
 {
+    level = TreyGetStatLevel(level); // TREY: level matters less to damage (TREY_PLAN.md 5.7)
     return power * userFinalAttack * (2 * level / 5 + 2) / targetFinalDefense / 50 + 2;
 }
 
@@ -9490,11 +9494,11 @@ static inline s32 DoFixedDamageMoveCalc(struct DamageCalculationData *damageCalc
     switch (GetMoveEffect(damageCalcData->move))
     {
     case EFFECT_LEVEL_DAMAGE:
-        dmg = gBattleMons[damageCalcData->battlerAtk].level;
+        dmg = TreyGetStatLevel(gBattleMons[damageCalcData->battlerAtk].level); // TREY: effective level
         break;
     case EFFECT_PSYWAVE:
         randDamage = B_PSYWAVE_DMG >= GEN_6 ? (Random() % 101) : ((Random() % 11) * 10);
-        dmg = gBattleMons[damageCalcData->battlerAtk].level * (randDamage + 50) / 100;
+        dmg = TreyGetStatLevel(gBattleMons[damageCalcData->battlerAtk].level) * (randDamage + 50) / 100; // TREY: effective level
         break;
     case EFFECT_FIXED_DAMAGE_ARG:
         dmg = GetMoveFixedDamage(damageCalcData->move);

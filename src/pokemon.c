@@ -1,4 +1,5 @@
 #include "global.h"
+#include "trey_battle.h" // TREY
 #include "malloc.h"
 #include "apprentice.h"
 #include "battle.h"
@@ -1754,7 +1755,7 @@ static u16 CalculateBoxMonChecksum(struct BoxPokemon *boxMon)
 #define CALC_STAT(base, iv, ev, statIndex, field)               \
 {                                                               \
     u8 baseStat = gSpeciesInfo[species].base;                   \
-    s32 n = (((2 * baseStat + iv + ev / 4) * level) / 100) + 5; \
+    s32 n = (((2 * baseStat + iv + ev / 4) * statLevel) / 100) + 5; /* TREY: effective level */ \
     n = ModifyStatByNature(nature, n, statIndex);               \
     if (B_FRIENDSHIP_BOOST == TRUE)                             \
         n = n + ((n * 10 * friendship) / (MAX_FRIENDSHIP * 100));\
@@ -1780,6 +1781,7 @@ void CalculateMonStats(struct Pokemon *mon)
     u16 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
     u8 friendship = GetMonData(mon, MON_DATA_FRIENDSHIP, NULL);
     s32 level = GetLevelFromMonExp(mon);
+    s32 statLevel = TreyGetStatLevel(level); // TREY: level matters less to stats (TREY_PLAN.md 5.7)
     s32 newMaxHP;
 
     u8 nature = GetMonData(mon, MON_DATA_HIDDEN_NATURE, NULL);
@@ -1793,7 +1795,7 @@ void CalculateMonStats(struct Pokemon *mon)
     else
     {
         s32 n = 2 * gSpeciesInfo[species].baseHP + hpIV;
-        newMaxHP = (((n + hpEV / 4) * level) / 100) + level + 10;
+        newMaxHP = (((n + hpEV / 4) * statLevel) / 100) + statLevel + 10; // TREY: effective level
     }
 
     gBattleScripting.levelUpHP = newMaxHP - oldMaxHP;
