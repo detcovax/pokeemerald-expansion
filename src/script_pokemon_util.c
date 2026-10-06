@@ -1,4 +1,5 @@
 #include "global.h"
+#include "trey_regional.h" // TREY
 #include "battle.h"
 #include "battle_gfx_sfx_util.h"
 #include "berry.h"
@@ -120,6 +121,7 @@ void CreateScriptedWildMon(u16 species, u8 level, u16 item)
         CreateMonWithNature(&gEnemyParty[0], species, level, USE_RANDOM_IVS, PickWildMonNature());
     else
         CreateMon(&gEnemyParty[0], species, level, USE_RANDOM_IVS, 0, 0, OT_ID_PLAYER_ID, 0);
+    TreyOrange_ApplyIfInOrangeIslands(&gEnemyParty[0]); // TREY
     if (item)
     {
         heldItem[0] = item;
@@ -138,6 +140,7 @@ void CreateScriptedDoubleWildMon(u16 species1, u8 level1, u16 item1, u16 species
         CreateMonWithNature(&gEnemyParty[0], species1, level1, 32, PickWildMonNature());
     else
         CreateMon(&gEnemyParty[0], species1, level1, 32, 0, 0, OT_ID_PLAYER_ID, 0);
+    TreyOrange_ApplyIfInOrangeIslands(&gEnemyParty[0]); // TREY
     if (item1)
     {
         heldItem1[0] = item1;
@@ -149,6 +152,7 @@ void CreateScriptedDoubleWildMon(u16 species1, u8 level1, u16 item1, u16 species
         CreateMonWithNature(&gEnemyParty[1], species2, level2, 32, PickWildMonNature());
     else
         CreateMon(&gEnemyParty[1], species2, level2, 32, 0, 0, OT_ID_PLAYER_ID, 0);
+    TreyOrange_ApplyIfInOrangeIslands(&gEnemyParty[1]); // TREY
     if (item2)
     {
         heldItem2[0] = item2;
@@ -358,6 +362,7 @@ static u32 ScriptGiveMonParameterized(u8 side, u8 slot, u16 species, u8 level, u
         CreateMonWithGenderNatureLetter(&mon, species, level, 32, gender, nature, 0);
     else
         CreateMonWithNature(&mon, species, level, 32, nature);
+    TreyOrange_ApplyIfInOrangeIslands(&mon); // TREY: gifts received in the Orange Islands
 
     // shininess
     if (P_FLAG_FORCE_SHINY != 0 && FlagGet(P_FLAG_FORCE_SHINY))

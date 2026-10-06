@@ -1,4 +1,5 @@
 #include "global.h"
+#include "trey_regional.h" // TREY
 #include "pokemon.h"
 #include "battle.h"
 #include "daycare.h"
@@ -1024,7 +1025,9 @@ static u16 DetermineEggSpeciesAndParentSlots(struct DayCare *daycare, u8 *parent
     motherIsForeign = IsSpeciesForeignRegionalForm(motherEggSpecies, currentRegion);
     fatherIsForeign = IsSpeciesForeignRegionalForm(fatherEggSpecies, currentRegion);
 
-    if (hasMotherEverstone)
+    if (TREY_EGGS_INHERIT_MOTHER_FORM && !TESTING) // TREY: the egg is always the mother's form (regional forms included)
+        parentSpecies = motherEggSpecies;
+    else if (hasMotherEverstone)
         parentSpecies = motherEggSpecies;
     else if (fatherIsForeign && hasFatherEverstone)
         parentSpecies = fatherEggSpecies;
@@ -1086,6 +1089,7 @@ static void _GiveEggFromDaycare(struct DayCare *daycare)
     if (P_INCENSE_BREEDING < GEN_9)
         AlterEggSpeciesWithIncenseItem(&species, daycare);
     SetInitialEggData(&egg, species, daycare);
+    TreyOrange_CopyBit(&egg, &daycare->mons[parentSlots[0]].mon); // TREY: Orange variant from the mother
     InheritIVs(&egg, daycare);
     InheritPokeball(&egg, &daycare->mons[parentSlots[1]].mon, &daycare->mons[parentSlots[0]].mon);
     BuildEggMoveset(&egg, &daycare->mons[parentSlots[1]].mon, &daycare->mons[parentSlots[0]].mon);

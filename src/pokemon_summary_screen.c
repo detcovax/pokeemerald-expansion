@@ -1,4 +1,5 @@
 #include "global.h"
+#include "trey_regional.h" // TREY
 #include "main.h"
 #include "battle.h"
 #include "battle_anim.h"
@@ -4416,7 +4417,7 @@ static u8 LoadMonGfxAndSprite(struct Pokemon *mon, s16 *state)
         (*state)++;
         return 0xFF;
     case 1:
-        LoadSpritePaletteWithTag(GetMonSpritePalFromSpeciesAndPersonality(summary->species2, summary->isShiny, summary->pid), summary->species2);
+        LoadSpritePaletteWithTag(TreyOrange_GetMonPalette(&sMonSummaryScreen->currentMon, GetMonSpritePalFromSpeciesAndPersonality(summary->species2, summary->isShiny, summary->pid)), summary->species2); // TREY: Orange tint
         SetMultiuseSpriteTemplateToPokemon(summary->species2, B_POSITION_OPPONENT_LEFT);
         (*state)++;
         return 0xFF;

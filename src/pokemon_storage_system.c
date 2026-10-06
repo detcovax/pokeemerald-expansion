@@ -1,4 +1,5 @@
 #include "global.h"
+#include "trey_regional.h" // TREY
 #include "malloc.h"
 #include "bg.h"
 #include "data.h"
@@ -6967,7 +6968,7 @@ static void SetDisplayMonData(void *pokemon, u8 mode)
             sStorage->displayMonLevel = GetLevelFromBoxMonExp(boxMon);
             sStorage->displayMonMarkings = GetBoxMonData(boxMon, MON_DATA_MARKINGS);
             sStorage->displayMonPersonality = GetBoxMonData(boxMon, MON_DATA_PERSONALITY);
-            sStorage->displayMonPalette = GetMonSpritePalFromSpeciesAndPersonality(sStorage->displayMonSpecies, isShiny, sStorage->displayMonPersonality);
+            sStorage->displayMonPalette = TreyOrange_GetBoxMonPalette(boxMon, GetMonSpritePalFromSpeciesAndPersonality(sStorage->displayMonSpecies, isShiny, sStorage->displayMonPersonality)); // TREY: Orange tint
             gender = GetGenderFromSpeciesAndPersonality(sStorage->displayMonSpecies, sStorage->displayMonPersonality);
             sStorage->displayMonItemId = GetBoxMonData(boxMon, MON_DATA_HELD_ITEM);
         }
@@ -10060,7 +10061,7 @@ void UpdateSpeciesSpritePSS(struct BoxPokemon *boxMon)
 
     // Update front sprite
     sStorage->displayMonSpecies = species;
-    sStorage->displayMonPalette = GetMonSpritePalFromSpeciesAndPersonality(species, isShiny, pid);
+    sStorage->displayMonPalette = TreyOrange_GetBoxMonPalette(boxMon, GetMonSpritePalFromSpeciesAndPersonality(species, isShiny, pid)); // TREY: Orange tint
     if (!sJustOpenedBag)
     {
         if (sRefreshDisplayMonGfx)

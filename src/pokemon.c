@@ -1,4 +1,5 @@
 #include "global.h"
+#include "trey_regional.h" // TREY
 #include "trey_battle.h" // TREY
 #include "malloc.h"
 #include "apprentice.h"
@@ -5931,7 +5932,8 @@ const u16 *GetMonFrontSpritePal(struct Pokemon *mon)
     u16 species = GetMonData(mon, MON_DATA_SPECIES_OR_EGG, NULL);
     bool32 isShiny = GetMonData(mon, MON_DATA_IS_SHINY, NULL);
     u32 personality = GetMonData(mon, MON_DATA_PERSONALITY, NULL);
-    return GetMonSpritePalFromSpeciesAndPersonality(species, isShiny, personality);
+    // TREY: Orange Islands variants get a tinted palette (TREY_PLAN.md 5.8)
+    return TreyOrange_GetMonPalette(mon, GetMonSpritePalFromSpeciesAndPersonality(species, isShiny, personality));
 }
 
 const u16 *GetMonSpritePalFromSpeciesAndPersonality(u16 species, bool32 isShiny, u32 personality)

@@ -115,6 +115,9 @@ bool32 CanUseZMove(u32 battler)
 {
     enum ItemHoldEffect holdEffect = GetBattlerHoldEffect(battler, FALSE);
 
+    if (TREY_DISABLE_ZMOVES && !TESTING) // TREY: no Z-Moves (D19)
+        return FALSE;
+
     // Check if Player has Z-Power Ring.
     if (!TESTING && (battler == B_POSITION_PLAYER_LEFT
         || (!(gBattleTypeFlags & BATTLE_TYPE_MULTI) && battler == B_POSITION_PLAYER_RIGHT))
@@ -173,6 +176,8 @@ bool32 IsViableZMove(u32 battler, u32 move)
 
     item = gBattleMons[battler].item;
 
+    if (TREY_DISABLE_ZMOVES && !TESTING) // TREY: no Z-Moves (D19)
+        return FALSE;
     if (gBattleStruct->gimmick.usableGimmick[battler] != GIMMICK_Z_MOVE)
         return FALSE;
 

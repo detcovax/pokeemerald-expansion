@@ -76,6 +76,9 @@ bool32 CanDynamax(u32 battler)
     u16 species = GetBattlerVisualSpecies(battler);
     enum ItemHoldEffect holdEffect = GetBattlerHoldEffect(battler, FALSE);
 
+    if (TREY_DISABLE_DYNAMAX && !TESTING) // TREY: no Dynamax/Gigantamax (D19)
+        return FALSE;
+
     // Prevents Zigzagoon from dynamaxing in vanilla.
     if (gBattleTypeFlags & BATTLE_TYPE_FIRST_BATTLE && !IsOnPlayerSide(battler))
         return FALSE;

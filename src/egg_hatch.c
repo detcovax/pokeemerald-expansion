@@ -1,4 +1,5 @@
 #include "global.h"
+#include "trey_regional.h" // TREY
 #include "pokemon.h"
 #include "egg_hatch.h"
 #include "pokedex.h"
@@ -355,6 +356,7 @@ static void CreateHatchedMon(struct Pokemon *egg, struct Pokemon *temp)
     SetMonData(temp, MON_DATA_POKERUS, &pokerus);
     SetMonData(temp, MON_DATA_MODERN_FATEFUL_ENCOUNTER, &isModernFatefulEncounter);
     SetMonData(temp, MON_DATA_POKEBALL, &ball);
+    TreyOrange_CopyBit(temp, &egg->box); // TREY: a hatched Pokémon keeps the egg's Orange variant
 
     *egg = *temp;
 }

@@ -1,4 +1,5 @@
 #include "global.h"
+#include "trey_regional.h" // TREY
 #include "battle.h"
 #include "battle_anim.h"
 #include "battle_ai_main.h"
@@ -2008,6 +2009,7 @@ u8 CreateNPCTrainerPartyFromTrainer(struct Pokemon *party, const struct Trainer 
                 SetMonData(&party[i], MON_DATA_TERA_TYPE, &data);
             }
             CalculateMonStats(&party[i]);
+            TreyOrange_ApplyIfInOrangeIslands(&party[i]); // TREY: trainers in the Orange Islands use Orange variants
 
             if (B_TRAINER_CLASS_POKE_BALLS >= GEN_7 && ball == -1)
             {

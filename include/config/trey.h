@@ -31,8 +31,30 @@
 // Pokémon always obey, regardless of badges, level or original trainer (D12).
 #define TREY_DISABLE_OBEDIENCE  1
 
+// ---------------------------------------------------------------------------
+// Battle gimmicks (Phase 2c, TREY_PLAN.md 5.13, D19/D20)
+// ---------------------------------------------------------------------------
+// Mega Evolution: on. The player needs ITEM_MEGA_RING (given in the Hoenn story). No setting needed.
+// Terastallization: on. The player needs ITEM_TERA_ORB (Kitakami story); it recharges at Pokémon Centers.
+// Z-Moves and Dynamax/Gigantamax: off for everyone.
+#define TREY_DISABLE_ZMOVES     1
+#define TREY_DISABLE_DYNAMAX    1
+
+// ---------------------------------------------------------------------------
+// Orange Islands variants (Phase 2d, TREY_PLAN.md 5.8, D18)
+// ---------------------------------------------------------------------------
+// Tint colour (RGB, 0-31 per channel) and strength (0 = none, 16 = solid colour).
+#define TREY_ORANGE_TINT_COLOR      RGB(31, 15, 0)
+#define TREY_ORANGE_TINT_STRENGTH   6
+// Testing only: 1 = treat every map as the Orange Islands, so you can see the tint before any
+// Orange Islands maps exist. Keep at 0 for real builds.
+#define TREY_DEBUG_ORANGE_EVERYWHERE 0
+
+// Breeding: the egg always takes the mother's form (the non-Ditto parent when breeding with Ditto),
+// including Hisuian/Paldean forms, with no Everstone needed. The Orange variant also comes from the mother.
+#define TREY_EGGS_INHERIT_MOTHER_FORM 1
+
 // Settings are added here phase by phase as each system is built:
-//   Phase 2: TREY_DISABLE_ZMOVES, Orange variants
 //   Phase 3: traversal (TREY_STAMINA_ENABLED and stamina tuning)
 //   Phase 4: seasons, transit, quests
 

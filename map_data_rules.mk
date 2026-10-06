@@ -22,7 +22,7 @@ MAP_JSONS := $(patsubst $(MAPS_DIR)/%/,$(MAPS_DIR)/%/map.json,$(MAP_DIRS))
 
 # TREY: map data checks (tools/trey/check_maps.py). Re-run whenever any map, layout or group changes.
 TREY_MAP_CHECK_STAMP := $(OBJ_DIR)/trey/map_check.stamp
-$(TREY_MAP_CHECK_STAMP): $(MAPS_DIR)/map_groups.json $(LAYOUTS_DIR)/layouts.json $(MAP_JSONS) tools/trey/check_maps.py include/constants/trey_layers.h
+$(TREY_MAP_CHECK_STAMP): $(MAPS_DIR)/map_groups.json $(LAYOUTS_DIR)/layouts.json $(MAP_JSONS) tools/trey/check_maps.py include/constants/trey_layers.h $(DATA_SRC_SUBDIR)/wild_encounters.json $(DATA_SRC_SUBDIR)/region_map/region_map_sections.json
 	@python3 tools/trey/check_maps.py
 	@mkdir -p $(@D)
 	@touch $@

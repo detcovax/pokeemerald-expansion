@@ -11,6 +11,7 @@ Checks:
     destination rectangle fits the target map.
   - trey_season_layouts: valid season names, layout exists, same size as the map's normal layout
     (warps and events are shared between seasons, so the size must not change).
+  - wild encounters (TREY_PLAN.md 5.8, D10): Hisuian forms only in Sinnoh, Paldean forms only in Kitakami.
 """
 import json
 import os
@@ -38,6 +39,32 @@ def load_layer_types():
     with open(path, encoding="utf-8") as f:
         names = re.findall(r"#define\s+(LAYER_LINK_\w+)\s+\d+", f.read())
     return {n for n in names if n not in ("LAYER_LINK_NONE", "LAYER_LINK_TYPES_COUNT")}
+
+
+# Region of each MAPSEC, mirroring TreyGetRegionOfMapsec() in src/trey_regions.c:
+# an explicit "trey_region" on the section wins; otherwise FRLG Kanto sections are Kanto and the rest Hoenn.
+def load_mapsec_regions():
+    sections = load_json("src/data/region_map/region_map_sections.json")["map_sections"]
+    ids = [s["id"] for s in sections]
+    kanto_start = ids.index("MAPSEC_PALLET_TOWN") if "MAPSEC_PALLET_TOWN" in ids else None
+    kanto_end = ids.index("MAPSEC_SPECIAL_AREA") if "MAPSEC_SPECIAL_AREA" in ids else None
+    regions = {}
+    for i, sec in enumerate(sections):
+        if "trey_region" in sec:
+            regions[sec["id"]] = sec["trey_region"]
+        elif kanto_start is not None and kanto_end is not None and kanto_start <= i <= kanto_end:
+            regions[sec["id"]] = "REGION_KANTO"
+        else:
+            regions[sec["id"]] = "REGION_HOENN"
+    return regions
+
+
+def regional_form_region(species):
+    if species.endswith("_HISUI") or "_HISUI_" in species or species == "SPECIES_BASCULIN_WHITE_STRIPED":
+        return "REGION_SINNOH"
+    if "_PALDEA" in species:
+        return "REGION_KITAKAMI"
+    return None
 
 
 def as_int(value, where, field):
@@ -136,6 +163,27 @@ def main():
                 continue
             if size and (layout.get("width"), layout.get("height")) != size:
                 error(f"{where}: {season} layout {layout_id} is {layout.get('width')}x{layout.get('height')}, but the map's layout is {size[0]}x{size[1]}. Seasonal layouts must be the same size.")
+
+    # Regional forms in wild encounter tables
+    mapsec_regions = load_mapsec_regions()
+    encounters = load_json("src/data/wild_encounters.json")
+    for group in encounters["wild_encounter_groups"]:
+        if not group.get("for_maps"):
+            continue
+        for enc in group["encounters"]:
+            map_id = enc.get("map")
+            entry = maps_by_id.get(map_id)
+            if entry is None:
+                continue
+            region = mapsec_regions.get(entry[1].get("region_map_section"), "REGION_HOENN")
+            for field, table in enc.items():
+                if not isinstance(table, dict) or "mons" not in table:
+                    continue
+                for mon in table["mons"]:
+                    species = mon.get("species", "")
+                    needed = regional_form_region(species)
+                    if needed and needed != region:
+                        error(f"wild_encounters.json {enc.get('base_label')} ({field}): {species} may only appear in {needed}, but {map_id} is in {region}.")
 
     if errors:
         print("TREY map check failed:")
