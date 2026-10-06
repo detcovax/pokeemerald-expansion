@@ -566,3 +566,4 @@ gSpecials::
 	@ TREY
 	def_special TreyLayer_CheckLanding
 	def_special TreyLayer_StartLanding
+	def_special TreyRockClimb_Start

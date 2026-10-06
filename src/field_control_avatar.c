@@ -1,5 +1,6 @@
 #include "global.h"
 #include "trey_hm.h" // TREY
+extern const u8 EventScript_TreyRockClimb[]; // TREY: data/scripts/trey_rock_climb.inc
 #include "constants/moves.h" // TREY
 #include "trey_layers.h" // TREY
 #include "battle_setup.h"
@@ -472,6 +473,10 @@ static const u8 *GetInteractedMetatileScript(struct MapPosition *position, u8 me
 {
     s8 elevation;
 
+    // TREY: Rock Climb (TREY_PLAN.md 5.3). Gen 4 walls are climbed up or down only.
+    if (MetatileBehavior_IsRockClimb(metatileBehavior) == TRUE
+     && (direction == DIR_NORTH || direction == DIR_SOUTH || TREY_ROCK_CLIMB_ALLOW_SIDEWAYS))
+        return EventScript_TreyRockClimb;
     if (MetatileBehavior_IsPlayerFacingTVScreen(metatileBehavior, direction) == TRUE)
         return EventScript_TV;
     if (MetatileBehavior_IsPC(metatileBehavior) == TRUE)

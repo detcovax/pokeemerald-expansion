@@ -54,6 +54,12 @@
 // including Hisuian/Paldean forms, with no Everstone needed. The Orange variant also comes from the mother.
 #define TREY_EGGS_INHERIT_MOTHER_FORM 1
 
+// ---------------------------------------------------------------------------
+// Traversal (Phase 3, TREY_PLAN.md 5.3)
+// ---------------------------------------------------------------------------
+// Rock Climb walls are climbed up or down only, like Gen 4. 1 = also allow sideways walls.
+#define TREY_ROCK_CLIMB_ALLOW_SIDEWAYS 0
+
 // Settings are added here phase by phase as each system is built:
 //   Phase 3: traversal (TREY_STAMINA_ENABLED and stamina tuning)
 //   Phase 4: seasons, transit, quests

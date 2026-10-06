@@ -251,9 +251,9 @@ bool8 MetatileBehavior_IsEscalator(u8 metatileBehavior)
         return FALSE;
 }
 
-bool8 Unref_MetatileBehavior_IsUnused04(u8 metatileBehavior)
+bool8 MetatileBehavior_IsRockClimb(u8 metatileBehavior) // TREY: was Unref_MetatileBehavior_IsUnused04
 {
-    if (metatileBehavior == MB_UNUSED_04)
+    if (metatileBehavior == MB_ROCK_CLIMB)
         return TRUE;
     else
         return FALSE;
