@@ -1,0 +1,48 @@
+family,source,notes
+# TREY species roster (TREY_PLAN.md 5.8, D4/D10/D17). Applied by: python3 tools/trey/apply_roster.py
+# Gen 1-4 families are always in (every Pokemon native to Kanto, Johto, Hoenn, Sinnoh, Sevii, Orange Islands).
+# This list is every Gen 5+ family that is also in the game. Any Gen 5+ family NOT listed here is switched off.
+# Cross-generation evolutions of included families (Sylveon, Annihilape, Dudunsparce, Kingambit, Farigiraf...) come with their family.
+# Source for Kitakami: the 200-entry Kitakami Pokedex (Scarlet/Violet: The Teal Mask), fetched from pokeapi.co 2026-10-05.
+SEWADDLE,Kitakami,
+CUTIEFLY,Kitakami,
+FOMANTIS,Kitakami,
+APPLIN,Kitakami,includes Dipplin
+PETILIL,Kitakami,Hisuian Lilligant comes with P_HISUIAN_FORMS
+PHANTUMP,Kitakami,
+ROCKRUFF,Kitakami,
+SKWOVET,Kitakami,
+TOEDSCOOL,Kitakami,
+POLTCHAGEIST,Kitakami,
+TIMBURR,Kitakami,
+NOIBAT,Kitakami,
+ARROKUDA,Kitakami,
+HATENNA,Kitakami,
+MORPEKO,Kitakami,
+ORTHWORM,Kitakami,
+TANDEMAUS,Kitakami,
+GRUBBIN,Kitakami,
+ORICORIO,Kitakami,
+VULLABY,Kitakami,
+MUDBRAY,Kitakami,
+JANGMO_O,Kitakami,
+BOMBIRDIER,Kitakami,
+MIENFOO,Kitakami,
+LITWICK,Kitakami,
+GLIMMET,Kitakami,
+CARBINK,Kitakami,
+SALANDIT,Kitakami,
+TYNAMO,Kitakami,
+GOOMY,Kitakami,Hisuian Sliggoo/Goodra come with P_HISUIAN_FORMS
+DUCKLETT,Kitakami,
+CHEWTLE,Kitakami,
+CRAMORANT,Kitakami,
+PAWNIARD,Kitakami,includes Kingambit
+MIMIKYU,Kitakami,
+IMPIDIMP,Kitakami,
+INDEEDEE,Kitakami,
+BASCULIN,Kitakami,Basculegion needs Hisuian (White-Striped) Basculin
+OKIDOGI,Kitakami,Loyal Three
+MUNKIDORI,Kitakami,Loyal Three
+FEZANDIPITI,Kitakami,Loyal Three
+OGERPON,Kitakami,Tera forms need P_TERA_FORMS
