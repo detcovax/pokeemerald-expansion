@@ -1,4 +1,5 @@
 #include "global.h"
+#include "trey_energy.h" // TREY
 #include "trey_regional.h" // TREY
 #include "trey_battle.h" // TREY
 #include "malloc.h"
@@ -1286,6 +1287,15 @@ void CreateBoxMon(struct BoxPokemon *boxMon, u16 species, u8 level, u8 fixedIV, 
         SetBoxMonData(boxMon, MON_DATA_ABILITY_NUM, &value);
     }
 
+    // TREY: Energy IV and full Energy (TREY_PLAN.md 5.6).
+    {
+        u8 energyIV = (fixedIV < USE_RANDOM_IVS) ? fixedIV : (Random() % (MAX_PER_STAT_IVS + 1));
+        u16 energy;
+        SetBoxMonData(boxMon, MON_DATA_ENERGY_IV, &energyIV);
+        energy = TreyEnergy_CalcMax(species, level, energyIV, 0);
+        SetBoxMonData(boxMon, MON_DATA_ENERGY, &energy);
+    }
+
     GiveBoxMonInitialMoveset(boxMon);
 }
 
@@ -1782,6 +1792,7 @@ void CalculateMonStats(struct Pokemon *mon)
     u16 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
     u8 friendship = GetMonData(mon, MON_DATA_FRIENDSHIP, NULL);
     s32 level = GetLevelFromMonExp(mon);
+    s32 oldLevel = GetMonData(mon, MON_DATA_LEVEL, NULL); // TREY: for Energy on level up
     s32 statLevel = TreyGetStatLevel(level); // TREY: level matters less to stats (TREY_PLAN.md 5.7)
     s32 newMaxHP;
 
@@ -1810,6 +1821,7 @@ void CalculateMonStats(struct Pokemon *mon)
     CALC_STAT(baseSpeed, speedIV, speedEV, STAT_SPEED, MON_DATA_SPEED)
     CALC_STAT(baseSpAttack, spAttackIV, spAttackEV, STAT_SPATK, MON_DATA_SPATK)
     CALC_STAT(baseSpDefense, spDefenseIV, spDefenseEV, STAT_SPDEF, MON_DATA_SPDEF)
+    TreyEnergy_OnStatsRecalculated(mon, oldLevel, level); // TREY: Energy is the seventh stat
 
     // Since a pokemon's maxHP data could either not have
     // been initialized at this point or this pokemon is
@@ -2538,8 +2550,8 @@ u32 GetBoxMonData3(struct BoxPokemon *boxMon, s32 field, u8 *data)
         case MON_DATA_EXP:
             retVal = substruct0->experience;
             break;
-        case MON_DATA_PP_BONUSES:
-            retVal = substruct0->ppBonuses;
+        case MON_DATA_PP_BONUSES: // TREY: PP no longer exists; no PP Ups are ever applied
+            retVal = 0;
             break;
         case MON_DATA_FRIENDSHIP:
             retVal = substruct0->friendship;
@@ -2556,17 +2568,19 @@ u32 GetBoxMonData3(struct BoxPokemon *boxMon, s32 field, u8 *data)
         case MON_DATA_MOVE4:
             retVal = substruct1->move4;
             break;
+        // TREY: PP no longer exists (TREY_PLAN.md 5.6). Old PP code sees every move at full PP;
+        // battles spend Energy instead (step E2).
         case MON_DATA_PP1:
-            retVal = substruct1->pp1;
+            retVal = GetMovePP(substruct1->move1);
             break;
         case MON_DATA_PP2:
-            retVal = substruct1->pp2;
+            retVal = GetMovePP(substruct1->move2);
             break;
         case MON_DATA_PP3:
-            retVal = substruct1->pp3;
+            retVal = GetMovePP(substruct1->move3);
             break;
         case MON_DATA_PP4:
-            retVal = substruct1->pp4;
+            retVal = GetMovePP(substruct1->move4);
             break;
         case MON_DATA_HP_EV:
             retVal = substruct2->hpEV;
@@ -2818,6 +2832,15 @@ u32 GetBoxMonData3(struct BoxPokemon *boxMon, s32 field, u8 *data)
         case MON_DATA_ORANGE_VARIANT: // TREY
             retVal = substruct3->isOrangeVariant;
             break;
+        case MON_DATA_ENERGY: // TREY
+            retVal = substruct1->energyLo | (substruct1->energyHi << 7);
+            break;
+        case MON_DATA_ENERGY_IV: // TREY
+            retVal = substruct0->energyIV;
+            break;
+        case MON_DATA_ENERGY_EV: // TREY
+            retVal = substruct1->energyEVLo | ((substruct1->energyEVHi & 1) << 7);
+            break;
         default:
             break;
         }
@@ -3026,8 +3049,7 @@ void SetBoxMonData(struct BoxPokemon *boxMon, s32 field, const void *dataArg)
         case MON_DATA_EXP:
             SET32(substruct0->experience);
             break;
-        case MON_DATA_PP_BONUSES:
-            SET8(substruct0->ppBonuses);
+        case MON_DATA_PP_BONUSES: // TREY: PP no longer exists
             break;
         case MON_DATA_FRIENDSHIP:
             SET8(substruct0->friendship);
@@ -3044,17 +3066,10 @@ void SetBoxMonData(struct BoxPokemon *boxMon, s32 field, const void *dataArg)
         case MON_DATA_MOVE4:
             SET16(substruct1->move4);
             break;
-        case MON_DATA_PP1:
-            SET8(substruct1->pp1);
-            break;
+        case MON_DATA_PP1: // TREY: PP no longer exists; writes are ignored
         case MON_DATA_PP2:
-            SET8(substruct1->pp2);
-            break;
         case MON_DATA_PP3:
-            SET8(substruct1->pp3);
-            break;
         case MON_DATA_PP4:
-            SET8(substruct1->pp4);
             break;
         case MON_DATA_HP_EV:
             SET8(substruct2->hpEV);
@@ -3247,6 +3262,30 @@ void SetBoxMonData(struct BoxPokemon *boxMon, s32 field, const void *dataArg)
         case MON_DATA_ORANGE_VARIANT: // TREY
             SET8(substruct3->isOrangeVariant);
             break;
+        case MON_DATA_ENERGY: // TREY
+        {
+            u16 energy;
+            SET16(energy);
+            energy = min(energy, TREY_ENERGY_MAX_VALUE);
+            substruct1->energyLo = energy & 0x7F;
+            substruct1->energyHi = (energy >> 7) & 0x7;
+            break;
+        }
+        case MON_DATA_ENERGY_IV: // TREY
+        {
+            u8 iv;
+            SET8(iv);
+            substruct0->energyIV = min(iv, MAX_PER_STAT_IVS);
+            break;
+        }
+        case MON_DATA_ENERGY_EV: // TREY
+        {
+            u8 ev;
+            SET8(ev);
+            substruct1->energyEVLo = ev & 0x7F;
+            substruct1->energyEVHi = (ev >> 7) & 1;
+            break;
+        }
         default:
             break;
         }
@@ -5356,6 +5395,7 @@ void MonGainEVs(struct Pokemon *mon, u16 defeatedSpecies)
         evs[i] = GetMonData(mon, MON_DATA_HP_EV + i, 0);
         totalEVs += evs[i];
     }
+    totalEVs += GetMonData(mon, MON_DATA_ENERGY_EV, 0); // TREY: Energy shares the EV cap
 
     for (i = 0; i < NUM_STATS; i++)
     {
@@ -5424,6 +5464,19 @@ void MonGainEVs(struct Pokemon *mon, u16 defeatedSpecies)
         totalEVs += evIncrease;
         SetMonData(mon, MON_DATA_HP_EV + i, &evs[i]);
     }
+
+    // TREY: Energy EVs, from the defeated species' Energy EV yield (TREY_PLAN.md 5.6).
+    if (totalEVs < currentEVCap)
+    {
+        u32 energyEV = GetMonData(mon, MON_DATA_ENERGY_EV, 0);
+        u32 gain = TreyEnergy_GetEVYield(defeatedSpecies) * (CheckPartyHasHadPokerus(mon, 0) ? 2 : 1);
+        u8 newEV;
+        if (holdEffect == HOLD_EFFECT_MACHO_BRACE)
+            gain *= 2;
+        gain = min(gain, currentEVCap - totalEVs);
+        newEV = min(energyEV + gain, MAX_PER_STAT_EVS);
+        SetMonData(mon, MON_DATA_ENERGY_EV, &newEV);
+    }
 }
 
 u16 GetMonEVCount(struct Pokemon *mon)
@@ -5433,6 +5486,7 @@ u16 GetMonEVCount(struct Pokemon *mon)
 
     for (i = 0; i < NUM_STATS; i++)
         count += GetMonData(mon, MON_DATA_HP_EV + i, 0);
+    count += GetMonData(mon, MON_DATA_ENERGY_EV, 0); // TREY: Energy shares the EV cap
 
     return count;
 }

@@ -1,0 +1,6 @@
+species,base_energy,energy_ev_yield
+# TREY Energy per species (TREY_PLAN.md 5.6). Only list species you want to change.
+# Any species not listed uses: base_energy = its base HP, energy_ev_yield = its HP EV yield.
+# base_energy: 1-255. energy_ev_yield: 0-3. Use the SPECIES_ constant, e.g.:
+# SPECIES_CHANSEY,120,1
+# After editing, just rebuild: tools/trey/energy_tables.py regenerates src/data/trey/energy_overrides.h.

@@ -120,6 +120,9 @@ enum {
     MON_DATA_TERA_TYPE,
     MON_DATA_EVOLUTION_TRACKER,
     MON_DATA_ORANGE_VARIANT, // TREY: Orange Islands tinted variant (TREY_PLAN.md 5.8)
+    MON_DATA_ENERGY,         // TREY: current Energy (TREY_PLAN.md 5.6). Max Energy: TreyEnergy_GetMonMax().
+    MON_DATA_ENERGY_IV,      // TREY
+    MON_DATA_ENERGY_EV,      // TREY
 };
 
 struct PokemonSubstruct0
@@ -131,7 +134,8 @@ struct PokemonSubstruct0
     u32 experience:21;
     u32 nickname11:8; // 11th character of nickname.
     u32 unused_04:3;
-    u8 ppBonuses;
+    u8 energyIV:5;        // TREY: Energy IV (was ppBonuses; PP no longer exists, TREY_PLAN.md 5.6)
+    u8 unused_ppBonuses:3;
     u8 friendship;
     u16 pokeball:6; // 63 balls.
     u16 nickname12:8; // 12th character of nickname.
@@ -150,13 +154,14 @@ struct PokemonSubstruct1
     u16 unused_06:3;
     u16 hyperTrainedHP:1;
     u16 hyperTrainedAttack:1;
-    u8 pp1:7; // 127 PP.
+    // TREY: the four 7-bit PP counters now hold Energy (TREY_PLAN.md 5.6).
+    u8 energyLo:7;    // current Energy, bits 0-6 (was pp1)
     u8 hyperTrainedDefense:1;
-    u8 pp2:7; // 127 PP.
+    u8 energyHi:7;    // current Energy, bits 7-9 (+4 spare) (was pp2)
     u8 hyperTrainedSpeed:1;
-    u8 pp3:7; // 127 PP.
+    u8 energyEVLo:7;  // Energy EV, bits 0-6 (was pp3)
     u8 hyperTrainedSpAttack:1;
-    u8 pp4:7; // 127 PP.
+    u8 energyEVHi:7;  // Energy EV, bit 7 (+6 spare) (was pp4)
     u8 hyperTrainedSpDefense:1;
 };
 

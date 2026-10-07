@@ -188,6 +188,14 @@ $(DATA_SRC_SUBDIR)/wild_encounters.h: $(DATA_SRC_SUBDIR)/wild_encounters.json $(
 
 $(C_BUILDDIR)/wild_encounter.o: c_dep += $(DATA_SRC_SUBDIR)/wild_encounters.h
 
+# TREY: Energy override tables (TREY_PLAN.md 5.6), generated from docs/trey/*.csv
+AUTO_GEN_TARGETS += $(DATA_SRC_SUBDIR)/trey/energy_overrides.h
+
+$(DATA_SRC_SUBDIR)/trey/energy_overrides.h: docs/trey/species_energy.csv docs/trey/move_energy.csv tools/trey/energy_tables.py
+	python3 tools/trey/energy_tables.py && touch $@
+
+$(C_BUILDDIR)/trey_energy.o: c_dep += $(DATA_SRC_SUBDIR)/trey/energy_overrides.h
+
 PERL := perl
 SHA1 := $(shell { command -v sha1sum || command -v shasum; } 2>/dev/null) -c
 

@@ -1,0 +1,7 @@
+move,energy_cost
+# TREY Energy cost per move (TREY_PLAN.md 5.6). Only list moves you want to change.
+# Any move not listed uses the formula in src/trey_energy.c:
+#   round(100 / PP) x power factor x accuracy factor, minimum 1
+#   damaging: power factor 1 + (power - 80) / 400; status: 0.85; accuracy below 100: x 0.95
+# energy_cost: 0-255 (0 = free). Use the MOVE_ constant, e.g.:
+# MOVE_HYDRO_PUMP,22

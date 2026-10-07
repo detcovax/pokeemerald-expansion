@@ -15,7 +15,7 @@
 // A save is only loaded if its header matches these two values.
 // Bump TREY_SAVE_VERSION on ANY change to a save structure.
 #define TREY_SAVE_MAGIC    0x59455254 // "TREY"
-#define TREY_SAVE_VERSION  2 // 2: 10-bit met location + Orange variant bit in Pokémon data (Phase 1b)
+#define TREY_SAVE_VERSION  3 // 2: 10-bit met location + Orange variant bit (Phase 1b). 3: Energy replaces PP storage (E1)
 
 // Reserved bytes at the end of each save block. New save data is carved out of these.
 #define TREY_SB1_RESERVED  512
@@ -60,8 +60,23 @@
 // Rock Climb walls are climbed up or down only, like Gen 4. 1 = also allow sideways walls.
 #define TREY_ROCK_CLIMB_ALLOW_SIDEWAYS 0
 
+// ---------------------------------------------------------------------------
+// Energy, replaces PP (TREY_PLAN.md 5.6, D23)
+// ---------------------------------------------------------------------------
+// Move cost = round(SCALE / PP) x power factor x accuracy factor (see src/trey_energy.c).
+#define TREY_ENERGY_COST_SCALE          100
+// Items (step E3).
+#define TREY_ENERGY_ETHER_AMOUNT        50   // Ether and Elixir, one Pokémon
+#define TREY_ENERGY_LEPPA_AMOUNT        20   // Leppa Berry, in battle
+#define TREY_ENERGY_PP_UP_EVS           10   // PP Up = Energy vitamin
+#define TREY_ENERGY_PP_MAX_EVS          30   // PP Max = Energy vitamin
+// Moves and abilities (step E3).
+#define TREY_ENERGY_PRESSURE_PERCENT    150  // moves used against Pressure cost 1.5x (rounded up)
+#define TREY_ENERGY_SPITE_DRAIN         10
+#define TREY_ENERGY_EERIE_SPELL_DRAIN   15
+#define TREY_ENERGY_GRUDGE_PERCENT      50   // Grudge drains 50% of the attacker's max Energy
+
 // Settings are added here phase by phase as each system is built:
-//   Phase 3: traversal (TREY_STAMINA_ENABLED and stamina tuning)
 //   Phase 4: seasons, transit, quests
 
 #endif // GUARD_CONFIG_TREY_H
