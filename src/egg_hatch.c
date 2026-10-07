@@ -1,4 +1,5 @@
 #include "global.h"
+#include "trey_energy.h" // TREY
 #include "trey_regional.h" // TREY
 #include "pokemon.h"
 #include "egg_hatch.h"
@@ -391,6 +392,7 @@ static void AddHatchedMonToParty(u8 id)
     SetMonData(mon, MON_DATA_MET_LOCATION, &metLocation);
 
     MonRestorePP(mon);
+    TreyEnergy_Refill(mon); // TREY: a newly hatched Pokémon starts with full Energy
     CalculateMonStats(mon);
 }
 

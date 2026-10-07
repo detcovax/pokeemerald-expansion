@@ -1,4 +1,5 @@
 #include "global.h"
+#include "trey_energy.h" // TREY
 #include "battle.h"
 #include "battle_message.h"
 #include "battle_anim.h"
@@ -1295,7 +1296,7 @@ static void Cmd_attackcanceler(void)
     if (IsMovePowderBlocked(gBattlerAttacker, gBattlerTarget, gCurrentMove))
         return;
 
-    if (!gBattleMons[gBattlerAttacker].pp[gCurrMovePos] && gCurrentMove != MOVE_STRUGGLE
+    if (!TreyEnergy_BattlerCanAffordMove(gBattlerAttacker, gCurrMovePos) && gCurrentMove != MOVE_STRUGGLE // TREY: Energy replaces PP
      && !(gHitMarker & (HITMARKER_ALLOW_NO_PP | HITMARKER_NO_ATTACKSTRING | HITMARKER_NO_PPDEDUCT))
      && !(gBattleMons[gBattlerAttacker].status2 & STATUS2_MULTIPLETURNS))
     {
@@ -1865,18 +1866,10 @@ static void Cmd_ppreduce(void)
         if (gCurrentMove != gLastResultingMoves[gBattlerAttacker] || WasUnableToUseMove(gBattlerAttacker))
             gBattleStruct->sameMoveTurns[gBattlerAttacker] = 0;
 
-        if (gBattleMons[gBattlerAttacker].pp[gCurrMovePos] > ppToDeduct)
-            gBattleMons[gBattlerAttacker].pp[gCurrMovePos] -= ppToDeduct;
-        else
-            gBattleMons[gBattlerAttacker].pp[gCurrMovePos] = 0;
-
-        if (MOVE_IS_PERMANENT(gBattlerAttacker, gCurrMovePos))
-        {
-            BtlController_EmitSetMonData(gBattlerAttacker, B_COMM_TO_CONTROLLER, REQUEST_PPMOVE1_BATTLE + gCurrMovePos, 0,
-                                         sizeof(gBattleMons[gBattlerAttacker].pp[gCurrMovePos]),
-                                         &gBattleMons[gBattlerAttacker].pp[gCurrMovePos]);
-            MarkBattlerForControllerExec(gBattlerAttacker);
-        }
+        // TREY: spend Energy instead of PP (TREY_PLAN.md 5.6). PP stays full. ppToDeduct - 1 is the
+        // number of Pressure Pokémon affecting this move.
+        if (gCurrentMove != MOVE_STRUGGLE && gChosenMove != MOVE_STRUGGLE)
+            TreyEnergy_BattlerSpend(gBattlerAttacker, TreyEnergy_GetBattlerMoveCost(gBattlerAttacker, gCurrMovePos, ppToDeduct - 1));
     }
 
     gHitMarker &= ~HITMARKER_NO_PPDEDUCT;
@@ -16022,6 +16015,7 @@ static void Cmd_handleballthrow(void)
             if (ballId == BALL_HEAL)
             {
                 MonRestorePP(GetBattlerMon(gBattlerTarget));
+                TreyEnergy_Refill(GetBattlerMon(gBattlerTarget)); // TREY: a heal refills Energy
                 HealStatusConditions(GetBattlerMon(gBattlerTarget), STATUS1_ANY, gBattlerTarget);
                 gBattleMons[gBattlerTarget].hp = gBattleMons[gBattlerTarget].maxHP;
                 SetMonData(GetBattlerMon(gBattlerTarget), MON_DATA_HP, &gBattleMons[gBattlerTarget].hp);

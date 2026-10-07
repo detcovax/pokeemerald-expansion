@@ -1817,6 +1817,14 @@ void Friendship_(u32 sourceLine, u32 friendship)
     SetMonData(DATA.currentMon, MON_DATA_FRIENDSHIP, &friendship);
 }
 
+// TREY: set current Energy (TREY_PLAN.md 5.6)
+void Energy_(u32 sourceLine, u32 energy)
+{
+    u16 value = energy;
+    INVALID_IF(!DATA.currentMon, "Energy outside of PLAYER/OPPONENT");
+    SetMonData(DATA.currentMon, MON_DATA_ENERGY, &value);
+}
+
 void Status1_(u32 sourceLine, u32 status1)
 {
     INVALID_IF(!DATA.currentMon, "Status1 outside of PLAYER/OPPONENT");

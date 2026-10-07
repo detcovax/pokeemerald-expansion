@@ -1,6 +1,7 @@
 // TREY: Energy (TREY_PLAN.md 5.6, D23). See include/trey_energy.h.
 
 #include "global.h"
+#include "battle.h"
 #include "move.h"
 #include "pokemon.h"
 #include "trey_battle.h"
@@ -82,8 +83,8 @@ u32 TreyEnergy_GetMoveCost(u16 move)
         if (sTreyMoveEnergyOverrides[i].move == move)
             return sTreyMoveEnergyOverrides[i].cost;
     }
-    if (move == MOVE_NONE || move >= MOVES_COUNT_ALL)
-        return 0;
+    if (move == MOVE_NONE || move == MOVE_STRUGGLE || move >= MOVES_COUNT_ALL)
+        return 0; // Struggle is free: it is what a Pokémon uses when it cannot afford anything
 
     // round(SCALE / PP), then x power factor x accuracy factor. Worked in hundredths, rounded at the end.
     pp = GetMovePP(move);
@@ -128,5 +129,38 @@ void TreyEnergy_OnStatsRecalculated(struct Pokemon *mon, u32 oldLevel, u32 newLe
             current += newMax - oldMax;
     }
     value = min(current, newMax);
+    SetMonData(mon, MON_DATA_ENERGY, &value);
+}
+
+// ---------------------------------------------------------------------------
+// Battle (step E2)
+// ---------------------------------------------------------------------------
+u32 TreyEnergy_GetBattlerEnergy(u32 battler)
+{
+    return GetMonData(GetBattlerMon(battler), MON_DATA_ENERGY, NULL);
+}
+
+// Cost of the move in the battler's slot. Each Pokémon with Pressure on the other side
+// multiplies the cost by TREY_ENERGY_PRESSURE_PERCENT, rounded up.
+u32 TreyEnergy_GetBattlerMoveCost(u32 battler, u32 moveIndex, u32 pressureCount)
+{
+    u32 cost = TreyEnergy_GetMoveCost(gBattleMons[battler].moves[moveIndex]);
+    while (pressureCount-- > 0)
+        cost = (cost * TREY_ENERGY_PRESSURE_PERCENT + 99) / 100;
+    return cost;
+}
+
+bool32 TreyEnergy_BattlerCanAffordMove(u32 battler, u32 moveIndex)
+{
+    // Pressure is not counted here, like PP: a move can be chosen with enough Energy for its
+    // normal cost, and Pressure then takes whatever is left if it is short.
+    return TreyEnergy_GetBattlerEnergy(battler) >= TreyEnergy_GetBattlerMoveCost(battler, moveIndex, 0);
+}
+
+void TreyEnergy_BattlerSpend(u32 battler, u32 amount)
+{
+    struct Pokemon *mon = GetBattlerMon(battler);
+    u32 current = GetMonData(mon, MON_DATA_ENERGY, NULL);
+    u16 value = (current > amount) ? current - amount : 0;
     SetMonData(mon, MON_DATA_ENERGY, &value);
 }

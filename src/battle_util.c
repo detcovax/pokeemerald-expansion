@@ -1,4 +1,5 @@
 #include "global.h"
+#include "trey_energy.h" // TREY
 #include "battle.h"
 #include "battle_anim.h"
 #include "battle_arena.h"
@@ -1481,7 +1482,7 @@ u32 TrySetCantSelectMoveBattleScript(u32 battler)
         }
     }
 
-    if (gBattleMons[battler].pp[moveId] == 0)
+    if (!TreyEnergy_BattlerCanAffordMove(battler, moveId)) // TREY: Energy replaces PP
     {
         if (gBattleTypeFlags & BATTLE_TYPE_PALACE)
         {
@@ -1529,7 +1530,7 @@ u8 CheckMoveLimitations(u32 battler, u8 unusableMoves, u16 check)
         if (check & MOVE_LIMITATION_ZEROMOVE && move == MOVE_NONE)
             unusableMoves |= 1u << i;
         // No PP
-        else if (check & MOVE_LIMITATION_PP && gBattleMons[battler].pp[i] == 0)
+        else if (check & MOVE_LIMITATION_PP && !TreyEnergy_BattlerCanAffordMove(battler, i)) // TREY: Energy replaces PP
             unusableMoves |= 1u << i;
         // Placeholder
         else if (check & MOVE_LIMITATION_PLACEHOLDER && moveEffect == EFFECT_PLACEHOLDER)

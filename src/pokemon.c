@@ -7057,6 +7057,7 @@ void HealPokemon(struct Pokemon *mon)
     SetMonData(mon, MON_DATA_STATUS, &data);
 
     MonRestorePP(mon);
+    TreyEnergy_Refill(mon); // TREY: healing refills Energy (TREY_PLAN.md 5.6)
 }
 
 void HealBoxPokemon(struct BoxPokemon *boxMon)
@@ -7070,6 +7071,7 @@ void HealBoxPokemon(struct BoxPokemon *boxMon)
     SetBoxMonData(boxMon, MON_DATA_STATUS, &data);
 
     BoxMonRestorePP(boxMon);
+    TreyEnergy_RefillBoxMon(boxMon); // TREY: healing refills Energy
 }
 
 u16 GetCryIdBySpecies(u16 species)

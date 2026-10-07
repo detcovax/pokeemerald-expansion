@@ -25,6 +25,11 @@ void TreyEnergy_Refill(struct Pokemon *mon);
 void TreyEnergy_RefillBoxMon(struct BoxPokemon *boxMon);
 
 // Recalculates current Energy after a level change (called from CalculateMonStats).
+// Battle (step E2). Energy lives in the party Pokémon; gBattleMons PP stays full and is unused.
+u32 TreyEnergy_GetBattlerEnergy(u32 battler);
+u32 TreyEnergy_GetBattlerMoveCost(u32 battler, u32 moveIndex, u32 pressureCount);
+bool32 TreyEnergy_BattlerCanAffordMove(u32 battler, u32 moveIndex);
+void TreyEnergy_BattlerSpend(u32 battler, u32 amount);
 void TreyEnergy_OnStatsRecalculated(struct Pokemon *mon, u32 oldLevel, u32 newLevel);
 
 #endif // GUARD_TREY_ENERGY_H
