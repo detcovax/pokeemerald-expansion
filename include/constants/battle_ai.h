@@ -34,13 +34,17 @@
 #define AI_FLAG_PREDICT_INCOMING_MON        AI_FLAG(24)  // AI will score against the predicting incoming mon if it predicts the player to switch. Requires AI_FLAG_PREDICT_SWITCH
 #define AI_FLAG_PP_STALL_PREVENTION         AI_FLAG(25)  // AI keeps track of the player's switches where the incoming mon is immune to the chosen move
 #define AI_FLAG_PREDICT_MOVE                AI_FLAG(26)  // AI will predict the player's move based on what move it would use in the same situation. Recommend using AI_FLAG_OMNISCIENT
+// TREY: Energy-aware AI (TREY_PLAN.md 5.6, E5): prefers cheaper moves, saves Energy for its best move,
+// switches out when low, uses Ether/Elixir items, and punishes a low-Energy foe. Part of AI_FLAG_SMART_TRAINER.
+// Not counted in AI_FLAG_COUNT, so it doesn't appear in the debug menu's AI flag list.
+#define AI_FLAG_ENERGY_AWARE                AI_FLAG(27)
 
 
 #define AI_FLAG_COUNT                       27
 
 // The following options are enough to have a basic/smart trainer. Any other addtion could make the trainer worse/better depending on the flag
 #define AI_FLAG_BASIC_TRAINER         (AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY)
-#define AI_FLAG_SMART_TRAINER         (AI_FLAG_BASIC_TRAINER | AI_FLAG_OMNISCIENT | AI_FLAG_SMART_SWITCHING | AI_FLAG_SMART_MON_CHOICES | AI_FLAG_PP_STALL_PREVENTION)
+#define AI_FLAG_SMART_TRAINER         (AI_FLAG_BASIC_TRAINER | AI_FLAG_OMNISCIENT | AI_FLAG_SMART_SWITCHING | AI_FLAG_SMART_MON_CHOICES | AI_FLAG_PP_STALL_PREVENTION | AI_FLAG_ENERGY_AWARE)
 #define AI_FLAG_PREDICTION            (AI_FLAG_PREDICT_SWITCH | AI_FLAG_PREDICT_INCOMING_MON | AI_FLAG_PREDICT_MOVE)
 
 // 'other' ai logic flags

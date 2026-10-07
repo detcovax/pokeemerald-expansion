@@ -1,4 +1,5 @@
 #include "global.h"
+#include "trey_energy.h" // TREY
 #include "main.h"
 #include "malloc.h"
 #include "battle.h"
@@ -61,6 +62,7 @@ static s32 AI_PowerfulStatus(u32 battlerAtk, u32 battlerDef, u32 move, s32 score
 static s32 AI_DynamicFunc(u32 battlerAtk, u32 battlerDef, u32 move, s32 score);
 static s32 AI_PredictSwitch(u32 battlerAtk, u32 battlerDef, u32 move, s32 score);
 static s32 AI_CheckPpStall(u32 battlerAtk, u32 battlerDef, u32 move, s32 score);
+static s32 AI_TreyEnergy(u32 battlerAtk, u32 battlerDef, u32 move, s32 score); // TREY
 
 static s32 (*const sBattleAiFuncTable[])(u32, u32, u32, s32) =
 {
@@ -91,7 +93,7 @@ static s32 (*const sBattleAiFuncTable[])(u32, u32, u32, s32) =
     [24] = NULL,                     // AI_FLAG_PREDICT_INCOMING_MON
     [25] = AI_CheckPpStall,          // AI_FLAG_PP_STALL_PREVENTION
     [26] = NULL,                     // AI_FLAG_PREDICT_MOVE
-    [27] = NULL,                     // Unused
+    [27] = AI_TreyEnergy,            // AI_FLAG_ENERGY_AWARE (TREY)
     [28] = NULL,                     // Unused
     [29] = NULL,                     // Unused
     [30] = NULL,                     // Unused
@@ -6075,6 +6077,88 @@ static s32 AI_CheckPpStall(u32 battlerAtk, u32 battlerDef, u32 move, s32 score)
 {
     if (!IsOnPlayerSide(battlerAtk))
         score -= PpStallReduction(move, battlerAtk);
+    return score;
+}
+
+// TREY: Energy-aware move choice (TREY_PLAN.md 5.6, E5). Moves the battler can't afford are already
+// excluded by the move limitations; this only adjusts the scores of affordable moves.
+static s32 AI_TreyEnergy(u32 battlerAtk, u32 battlerDef, u32 move, s32 score)
+{
+    struct AiLogicData *aiData = gAiLogicData;
+    u32 moveIndex = gAiThinkingStruct->movesetIndex;
+    u16 *moves = GetMovesArray(battlerAtk);
+    u32 limits = aiData->moveLimitations[battlerAtk];
+    u32 energy = TreyEnergy_GetBattlerEnergy(battlerAtk);
+    u32 cost = TreyEnergy_GetBattlerMoveCost(battlerAtk, moveIndex, 0);
+    u32 i, bestIndex = MAX_MON_MOVES, bestDmg = 0;
+    bool32 kos = FALSE;
+    enum BattleMoveEffects effect = GetMoveEffect(move);
+
+    if (IsBattlerAlly(battlerAtk, battlerDef))
+        return score;
+
+    // The best affordable damaging move against this target.
+    for (i = 0; i < MAX_MON_MOVES; i++)
+    {
+        u32 dmg;
+        if (IsMoveUnusable(i, moves[i], limits) || IsBattleMoveStatus(moves[i]))
+            continue;
+        dmg = AI_GetDamage(battlerAtk, battlerDef, i, AI_ATTACKING, aiData);
+        if (dmg > bestDmg)
+        {
+            bestDmg = dmg;
+            bestIndex = i;
+        }
+    }
+
+    // 1. Prefer the cheaper of two moves that are about as good.
+    if (!IsBattleMoveStatus(move))
+    {
+        u32 dmg = AI_GetDamage(battlerAtk, battlerDef, moveIndex, AI_ATTACKING, aiData);
+        kos = CanIndexMoveFaintTarget(battlerAtk, battlerDef, moveIndex, AI_ATTACKING);
+        for (i = 0; i < MAX_MON_MOVES; i++)
+        {
+            if (i == moveIndex || IsMoveUnusable(i, moves[i], limits) || IsBattleMoveStatus(moves[i]))
+                continue;
+            if (TreyEnergy_GetBattlerMoveCost(battlerAtk, i, 0) >= cost)
+                continue;
+            if ((kos && CanIndexMoveFaintTarget(battlerAtk, battlerDef, i, AI_ATTACKING))
+             || (!kos && AI_GetDamage(battlerAtk, battlerDef, i, AI_ATTACKING, aiData) * 100 >= dmg * TREY_AI_SIMILAR_DAMAGE_PERCENT))
+            {
+                ADJUST_SCORE(-WEAK_EFFECT);
+                break;
+            }
+        }
+    }
+
+    // 2. Don't spend Energy that would leave it unable to afford its best move next turn.
+    if (bestIndex != MAX_MON_MOVES && bestIndex != moveIndex && !kos)
+    {
+        u32 bestCost = TreyEnergy_GetBattlerMoveCost(battlerAtk, bestIndex, 0);
+        if (energy >= bestCost && energy - cost < bestCost)
+            ADJUST_SCORE(-DECENT_EFFECT);
+    }
+
+    // 3. Punish a foe that is low on Energy.
+    if (effect == EFFECT_SPITE || MoveHasAdditionalEffect(move, MOVE_EFFECT_EERIE_SPELL))
+    {
+        u32 drain = (effect == EFFECT_SPITE) ? TREY_ENERGY_SPITE_DRAIN : TREY_ENERGY_EERIE_SPELL_DRAIN;
+        u32 targetEnergy = TreyEnergy_GetBattlerEnergy(battlerDef);
+        u32 targetCheapest = TreyEnergy_GetCheapestDamagingCost(battlerDef);
+        u32 targetMax = TreyEnergy_GetMonMax(GetBattlerMon(battlerDef));
+
+        if (targetEnergy > 0 && targetCheapest != 0 && targetEnergy >= targetCheapest
+         && (targetEnergy <= drain || targetEnergy - drain < targetCheapest))
+            ADJUST_SCORE(GOOD_EFFECT); // the drain leaves the foe unable to attack
+        else if (targetEnergy > 0 && targetEnergy * 4 <= targetMax)
+            ADJUST_SCORE(WEAK_EFFECT);
+    }
+    else if (effect == EFFECT_GRUDGE)
+    {
+        if (CanTargetFaintAi(battlerDef, battlerAtk) && TreyEnergy_GetBattlerEnergy(battlerDef) > 0)
+            ADJUST_SCORE(DECENT_EFFECT); // about to faint: take Energy with it
+    }
+
     return score;
 }
 

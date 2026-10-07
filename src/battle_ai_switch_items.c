@@ -1,4 +1,5 @@
 #include "global.h"
+#include "trey_energy.h" // TREY
 #include "battle.h"
 #include "constants/battle_ai.h"
 #include "battle_ai_main.h"
@@ -321,6 +322,35 @@ static bool32 ShouldSwitchIfHasBadOdds(u32 battler)
             return SetSwitchinAndSwitch(battler, PARTY_SIZE);
         }
     }
+    return FALSE;
+}
+
+// TREY: switch out a Pokémon that is out of Energy or close to Struggling (TREY_PLAN.md 5.6, E5).
+static bool32 ShouldSwitchIfLowEnergy(u32 battler)
+{
+    u32 i, energy, cheapest, opposingBattler = GetOppositeBattler(battler);
+
+    if (!(gAiThinkingStruct->aiFlags[GetThinkingBattler(battler)] & AI_FLAG_ENERGY_AWARE))
+        return FALSE;
+    if (gAiLogicData->mostSuitableMonId[battler] == PARTY_SIZE)
+        return FALSE;
+    cheapest = TreyEnergy_GetCheapestDamagingCost(battler);
+    if (cheapest == 0)
+        return FALSE;
+
+    // Stay in if an affordable move can knock the foe out now.
+    for (i = 0; i < MAX_MON_MOVES; i++)
+    {
+        if (gBattleMons[battler].moves[i] != MOVE_NONE && TreyEnergy_BattlerCanAffordMove(battler, i)
+         && CanIndexMoveFaintTarget(battler, opposingBattler, i, AI_ATTACKING))
+            return FALSE;
+    }
+
+    energy = TreyEnergy_GetBattlerEnergy(battler);
+    if (energy < cheapest)
+        return SetSwitchinAndSwitch(battler, PARTY_SIZE);
+    if (energy < cheapest * 2 && RandomPercentage(RNG_AI_SWITCH_LOW_ENERGY, TREY_AI_SWITCH_LOW_ENERGY_PERCENT))
+        return SetSwitchinAndSwitch(battler, PARTY_SIZE);
     return FALSE;
 }
 
@@ -1150,6 +1180,8 @@ bool32 ShouldSwitch(u32 battler)
     if (ShouldSwitchIfOpponentChargingOrInvulnerable(battler))
         return TRUE;
     if (ShouldSwitchIfTruant(battler))
+        return TRUE;
+    if (ShouldSwitchIfLowEnergy(battler)) // TREY
         return TRUE;
     if (ShouldSwitchIfAllMovesBad(battler))
         return TRUE;
@@ -2447,6 +2479,11 @@ static bool32 ShouldUseItem(u32 battler)
             break;
         case EFFECT_ITEM_USE_POKE_FLUTE:
             if (gBattleMons[battler].status1 & STATUS1_SLEEP)
+                shouldUse = TRUE;
+            break;
+        case EFFECT_ITEM_RESTORE_PP: // TREY: Ether / Elixir restore Energy (E5)
+            if ((gAiThinkingStruct->aiFlags[GetThinkingBattler(battler)] & AI_FLAG_ENERGY_AWARE)
+             && TreyEnergy_AiShouldRestore(battler))
                 shouldUse = TRUE;
             break;
         default:

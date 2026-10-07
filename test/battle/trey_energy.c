@@ -145,3 +145,30 @@ TEST("TREY Energy: PP Up and PP Max add Energy EVs and raise max Energy")
     EXPECT_EQ(GetMonData(&mon, MON_DATA_ENERGY_EV), TREY_ENERGY_PP_UP_EVS + TREY_ENERGY_PP_MAX_EVS);
     EXPECT_GT(TreyEnergy_GetMonMax(&mon), before);
 }
+
+// ---------------------------------------------------------------------------
+// Step E5: Energy-aware AI (AI_FLAG_ENERGY_AWARE, part of AI_FLAG_SMART_TRAINER)
+// ---------------------------------------------------------------------------
+AI_SINGLE_BATTLE_TEST("TREY Energy AI: prefers the cheaper of two moves that both knock out")
+{
+    GIVEN {
+        ASSUME(TreyEnergy_GetMoveCost(MOVE_WATER_GUN) < TreyEnergy_GetMoveCost(MOVE_SURF));
+        AI_FLAGS(AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_CHECK_VIABILITY | AI_FLAG_TRY_TO_FAINT | AI_FLAG_ENERGY_AWARE);
+        PLAYER(SPECIES_WOBBUFFET) { HP(1); }
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_SURF, MOVE_WATER_GUN); }
+    } WHEN {
+        TURN { SCORE_GT(opponent, MOVE_WATER_GUN, MOVE_SURF); }
+    }
+}
+
+AI_SINGLE_BATTLE_TEST("TREY Energy AI: a smart trainer switches out a Pokemon that can't afford to attack")
+{
+    GIVEN {
+        AI_FLAGS(AI_FLAG_SMART_TRAINER);
+        PLAYER(SPECIES_WOBBUFFET) { Moves(MOVE_TACKLE); }
+        OPPONENT(SPECIES_WOBBUFFET) { Moves(MOVE_SURF); Energy(1); }
+        OPPONENT(SPECIES_UMBREON) { Moves(MOVE_BITE); }
+    } WHEN {
+        TURN { MOVE(player, MOVE_TACKLE); EXPECT_SWITCH(opponent, 1); }
+    }
+}

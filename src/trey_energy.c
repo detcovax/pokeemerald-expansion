@@ -234,3 +234,48 @@ u32 TreyEnergy_AddEVs(struct Pokemon *mon, u32 amount)
     CalculateMonStats(mon); // raises max Energy; current Energy is unchanged
     return amount;
 }
+
+// ---------------------------------------------------------------------------
+// AI helpers (step E5)
+// ---------------------------------------------------------------------------
+u32 TreyEnergy_GetCheapestDamagingCost(u32 battler)
+{
+    u32 i, cheapest = 0;
+    for (i = 0; i < MAX_MON_MOVES; i++)
+    {
+        u32 move = gBattleMons[battler].moves[i], cost;
+        if (move == MOVE_NONE || IsBattleMoveStatus(move))
+            continue;
+        cost = TreyEnergy_GetBattlerMoveCost(battler, i, 0);
+        if (cheapest == 0 || cost < cheapest)
+            cheapest = cost;
+    }
+    return cheapest;
+}
+
+bool32 TreyEnergy_HasUnaffordableDamagingMove(u32 battler)
+{
+    u32 i;
+    for (i = 0; i < MAX_MON_MOVES; i++)
+    {
+        u32 move = gBattleMons[battler].moves[i];
+        if (move != MOVE_NONE && !IsBattleMoveStatus(move) && !TreyEnergy_BattlerCanAffordMove(battler, i))
+            return TRUE;
+    }
+    return FALSE;
+}
+
+// Should an Energy-aware trainer use an Ether or Elixir on this battler now?
+bool32 TreyEnergy_AiShouldRestore(u32 battler)
+{
+    struct Pokemon *mon = GetBattlerMon(battler);
+    u32 energy = TreyEnergy_GetBattlerEnergy(battler);
+    u32 maxEnergy = TreyEnergy_GetMonMax(mon);
+    u32 cheapest = TreyEnergy_GetCheapestDamagingCost(battler);
+
+    if (energy >= maxEnergy || cheapest == 0)
+        return FALSE;
+    if (energy < cheapest)
+        return TRUE; // can't attack at all
+    return TreyEnergy_HasUnaffordableDamagingMove(battler) && energy * 100 <= maxEnergy * TREY_AI_ETHER_ENERGY_PERCENT;
+}

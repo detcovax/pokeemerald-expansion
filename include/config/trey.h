@@ -75,6 +75,10 @@
 #define TREY_ENERGY_SPITE_DRAIN         10
 #define TREY_ENERGY_EERIE_SPELL_DRAIN   15
 #define TREY_ENERGY_GRUDGE_PERCENT      50   // Grudge drains 50% of the attacker's max Energy
+// AI (step E5, trainers with AI_FLAG_ENERGY_AWARE, which AI_FLAG_SMART_TRAINER includes).
+#define TREY_AI_SIMILAR_DAMAGE_PERCENT      90   // a cheaper move doing at least this % of the damage counts as "as good"
+#define TREY_AI_SWITCH_LOW_ENERGY_PERCENT   50   // chance to switch when it can afford its cheapest attack fewer than 2 more times
+#define TREY_AI_ETHER_ENERGY_PERCENT        25   // use an Ether once Energy is at or below this % and a damaging move is unaffordable
 // Display (step E4).
 // Testing only: 1 = the summary screen's skills page can cycle through IVs and EVs (Energy included).
 #define TREY_DEBUG_SHOW_IVS_EVS         0

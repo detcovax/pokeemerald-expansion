@@ -30,6 +30,10 @@ u32 TreyEnergy_GetBattlerEnergy(u32 battler);
 u32 TreyEnergy_GetBattlerMoveCost(u32 battler, u32 moveIndex, u32 pressureCount);
 bool32 TreyEnergy_BattlerCanAffordMove(u32 battler, u32 moveIndex);
 void TreyEnergy_BattlerSpend(u32 battler, u32 amount);
+// AI helpers (step E5).
+u32 TreyEnergy_GetCheapestDamagingCost(u32 battler);       // 0 if the battler has no damaging moves
+bool32 TreyEnergy_HasUnaffordableDamagingMove(u32 battler);
+bool32 TreyEnergy_AiShouldRestore(u32 battler);
 // Items (step E3).
 u32 TreyEnergy_GetItemRestoreAmount(u16 item);
 bool32 TreyEnergy_IsFull(struct Pokemon *mon);
