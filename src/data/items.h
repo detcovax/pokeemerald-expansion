@@ -1022,8 +1022,7 @@ const struct Item gItemsInfo[] =
         .price = (I_PRICE >= GEN_2) ? 1200 : 1,
         .holdEffectParam = 10,
         .description = COMPOUND_STRING(
-            "Restores 50 Energy
-"
+            "Restores 50 Energy\n"
             "to one Pokémon."), // TREY
         .pocket = POCKET_ITEMS,
         .type = ITEM_USE_PARTY_MENU, // TREY: no move is chosen
@@ -1041,10 +1040,8 @@ const struct Item gItemsInfo[] =
         .price = (I_PRICE >= GEN_2) ? 2000 : 1,
         .holdEffectParam = 255,
         .description = COMPOUND_STRING(
-            "Fully restores the
-"
-            "Energy of one
-"
+            "Fully restores the\n"
+            "Energy of one\n"
             "Pokémon."), // TREY
         .pocket = POCKET_ITEMS,
         .type = ITEM_USE_PARTY_MENU, // TREY: no move is chosen
@@ -1062,8 +1059,7 @@ const struct Item gItemsInfo[] =
         .price = (I_PRICE >= GEN_2) ? 3000 : 1,
         .holdEffectParam = 10,
         .description = COMPOUND_STRING(
-            "Restores 50 Energy
-"
+            "Restores 50 Energy\n"
             "to one Pokémon."), // TREY
         .pocket = POCKET_ITEMS,
         .type = ITEM_USE_PARTY_MENU,
@@ -1081,10 +1077,8 @@ const struct Item gItemsInfo[] =
         .price = (I_PRICE >= GEN_2) ? 4500 : 1,
         .holdEffectParam = 255,
         .description = COMPOUND_STRING(
-            "Fully restores the
-"
-            "Energy of one
-"
+            "Fully restores the\n"
+            "Energy of one\n"
             "Pokémon."), // TREY
         .pocket = POCKET_ITEMS,
         .type = ITEM_USE_PARTY_MENU,
@@ -1406,10 +1400,8 @@ const struct Item gItemsInfo[] =
         .name = _("PP Up"),
         .price = (I_PRICE == GEN_1) ? 1 : ((I_PRICE >= GEN_7) ? 10000 : 9800),
         .description = COMPOUND_STRING(
-            "Raises the base
-"
-            "Energy of one
-"
+            "Raises the base\n"
+            "Energy of one\n"
             "Pokémon a little."), // TREY
         .pocket = POCKET_ITEMS,
         .type = ITEM_USE_PARTY_MENU,
@@ -1426,10 +1418,8 @@ const struct Item gItemsInfo[] =
         .pluralName = _("PP Maxes"),
         .price = (I_PRICE >= GEN_7) ? 10000 : 9800,
         .description = COMPOUND_STRING(
-            "Raises the base
-"
-            "Energy of one
-"
+            "Raises the base\n"
+            "Energy of one\n"
             "Pokémon a lot."), // TREY
         .pocket = POCKET_ITEMS,
         .type = ITEM_USE_PARTY_MENU,
@@ -9298,10 +9288,8 @@ const struct Item gItemsInfo[] =
         .holdEffect = HOLD_EFFECT_RESTORE_PP,
         .holdEffectParam = 10,
         .description = COMPOUND_STRING(
-            "A hold item that
-"
-            "restores 20 Energy
-"
+            "A hold item that\n"
+            "restores 20 Energy\n"
             "in battle."), // TREY
         .pocket = POCKET_BERRIES,
         .type = ITEM_USE_PARTY_MENU, // TREY: no move is chosen
