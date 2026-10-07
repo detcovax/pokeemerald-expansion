@@ -1,4 +1,5 @@
 #include "global.h"
+#include "trey_energy.h" // TREY
 #include "trey_hm.h" // TREY
 #include "trey_layers.h" // TREY
 #include "malloc.h"
@@ -5351,22 +5352,40 @@ static void Task_HandleWhichMoveInput(u8 taskId)
     }
 }
 
-void ItemUseCB_PPRecovery(u8 taskId, TaskFunc task)
-{
-    const u8 *effect = GetItemEffect(gSpecialVar_ItemId);
+// TREY: Ether, Elixir and Leppa restore Energy to the chosen Pokémon (TREY_PLAN.md 5.6).
+static const u8 sText_TreyEnergyRestored[] = _("{STR_VAR_1}'s Energy\nwas restored.{PAUSE_UNTIL_PRESS}");
+static const u8 sText_TreyEnergyRaised[] = _("{STR_VAR_1}'s base Energy\nwas raised.{PAUSE_UNTIL_PRESS}");
 
-    if (effect == NULL || !(effect[4] & ITEM4_HEAL_PP_ONE))
+static void TreyPartyMenuItemMessage(u8 taskId, bool32 used, const u8 *text)
+{
+    struct Pokemon *mon = &gPlayerParty[gPartyMenu.slotId];
+    gPartyMenuUseExitCallback = used;
+    if (used)
     {
-        gPartyMenu.data1 = 0;
-        TryUseItemOnMove(taskId);
+        PlaySE(SE_USE_ITEM);
+        RemoveBagItem(gSpecialVar_ItemId, 1);
+        GetMonNickname(mon, gStringVar1);
+        StringExpandPlaceholders(gStringVar4, text);
+        DisplayPartyMenuMessage(gStringVar4, TRUE);
     }
     else
     {
         PlaySE(SE_SELECT);
-        DisplayPartyMenuStdMessage(PARTY_MSG_RESTORE_WHICH_MOVE);
-        ShowMoveSelectWindow(gPartyMenu.slotId);
-        gTasks[taskId].func = Task_HandleWhichMoveInput;
+        DisplayPartyMenuMessage(gText_WontHaveEffect, TRUE);
     }
+    ScheduleBgCopyTilemapToVram(2);
+    gTasks[taskId].func = Task_ClosePartyMenuAfterText;
+}
+
+void ItemUseCB_PPRecovery(u8 taskId, TaskFunc task)
+{
+    struct Pokemon *mon = &gPlayerParty[gPartyMenu.slotId];
+    if (gMain.inBattle)
+    {
+        ItemUseCB_BattleScript(taskId, task); // BS_ItemRestorePP does the work
+        return;
+    }
+    TreyPartyMenuItemMessage(taskId, TreyEnergy_Restore(mon, TreyEnergy_GetItemRestoreAmount(gSpecialVar_ItemId)) != 0, sText_TreyEnergyRestored);
 }
 
 static void SetSelectedMoveForItem(u8 taskId)
@@ -5439,12 +5458,11 @@ static void TryUseItemOnMove(u8 taskId)
     }
 }
 
+// TREY: PP Up and PP Max are Energy vitamins (Energy EVs).
 void ItemUseCB_PPUp(u8 taskId, TaskFunc task)
 {
-    PlaySE(SE_SELECT);
-    DisplayPartyMenuStdMessage(PARTY_MSG_BOOST_PP_WHICH_MOVE);
-    ShowMoveSelectWindow(gPartyMenu.slotId);
-    gTasks[taskId].func = Task_HandleWhichMoveInput;
+    struct Pokemon *mon = &gPlayerParty[gPartyMenu.slotId];
+    TreyPartyMenuItemMessage(taskId, TreyEnergy_AddEVs(mon, TreyEnergy_GetVitaminEVs(gSpecialVar_ItemId)) != 0, sText_TreyEnergyRaised);
 }
 
 u16 ItemIdToBattleMoveId(u16 item)

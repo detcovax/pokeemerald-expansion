@@ -140,13 +140,14 @@ const u8 gItemEffect_SuperbRemedy[10] = {
     [9] = -20, // Friendship change, high
 };
 
+// TREY: Ether, Elixir and Leppa restore Energy to one Pokémon (no move is chosen). Amounts: src/trey_energy.c.
 const u8 gItemEffect_Ether[7] = {
-    [4] = ITEM4_HEAL_PP_ONE | ITEM4_HEAL_PP,
+    [4] = ITEM4_HEAL_PP,
     [6] = 10,
 };
 
 const u8 gItemEffect_MaxEther[7] = {
-    [4] = ITEM4_HEAL_PP_ONE | ITEM4_HEAL_PP,
+    [4] = ITEM4_HEAL_PP,
     [6] = ITEM6_HEAL_PP_FULL,
 };
 
@@ -395,7 +396,7 @@ const u8 gItemEffect_EvoItem[6] = {
 };
 
 const u8 gItemEffect_LeppaBerry[7] = {
-    [4] = ITEM4_HEAL_PP_ONE | ITEM4_HEAL_PP,
+    [4] = ITEM4_HEAL_PP,
     [6] = 10, // Amount of PP to recover
 };
 

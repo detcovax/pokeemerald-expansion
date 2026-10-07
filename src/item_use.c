@@ -1,4 +1,5 @@
 #include "global.h"
+#include "trey_energy.h" // TREY
 #include "item_use.h"
 #include "battle.h"
 #include "battle_anim.h"
@@ -1307,21 +1308,9 @@ bool32 CannotUseItemsInBattle(u16 itemId, struct Pokemon *mon)
         if (hp != 0)
             cannotUse = TRUE;
         break;
-    case EFFECT_ITEM_RESTORE_PP:
-        if (GetItemEffect(itemId)[4] == ITEM4_HEAL_PP)
-        {
-            for (i = 0; i < MAX_MON_MOVES; i++)
-            {
-                if (GetMonData(mon, MON_DATA_PP1 + i) < CalculatePPWithBonus(GetMonData(mon, MON_DATA_MOVE1 + i), GetMonData(mon, MON_DATA_PP_BONUSES), i))
-                    break;
-            }
-            if (i == MAX_MON_MOVES)
-                cannotUse = TRUE;
-        }
-        else if (GetMonData(mon, MON_DATA_PP1 + gPartyMenu.data1) == CalculatePPWithBonus(GetMonData(mon, MON_DATA_MOVE1 + gPartyMenu.data1), GetMonData(mon, MON_DATA_PP_BONUSES), gPartyMenu.data1))
-        {
+    case EFFECT_ITEM_RESTORE_PP: // TREY: Energy items
+        if (TreyEnergy_IsFull(mon))
             cannotUse = TRUE;
-        }
         break;
     }
 

@@ -6141,50 +6141,45 @@ static enum ItemEffect ConsumeBerserkGene(u32 battler, enum ItemCaseId caseID)
     return ITEM_STATS_CHANGE;
 }
 
+// TREY: Leppa Berry restores Energy once the holder can no longer afford one of its moves (TREY_PLAN.md 5.6).
 static u32 ItemRestorePp(u32 battler, u32 itemId, enum ItemCaseId caseID)
 {
     struct Pokemon *mon = GetBattlerMon(battler);
-    u32 i, changedPP = 0;
+    u32 i;
+    bool32 trigger = FALSE;
 
-    for (i = 0; i < MAX_MON_MOVES; i++)
+    if (TreyEnergy_IsFull(mon))
+        return 0;
+    if (gBattleScripting.overrideBerryRequirements)
+        trigger = TRUE;
+    for (i = 0; i < MAX_MON_MOVES && !trigger; i++)
     {
-        u32 move = GetMonData(mon, MON_DATA_MOVE1 + i);
-        u32 currentPP = GetMonData(mon, MON_DATA_PP1 + i);
-        u32 ppBonuses = GetMonData(mon, MON_DATA_PP_BONUSES);
-        u32 maxPP = CalculatePPWithBonus(move, ppBonuses, i);
-        if (move && (currentPP == 0 || (gBattleScripting.overrideBerryRequirements && currentPP != maxPP)))
-        {
-            u32 ppRestored = GetBattlerItemHoldEffectParam(battler, itemId);
-
-            if (GetBattlerAbility(battler) == ABILITY_RIPEN)
-            {
-                ppRestored *= 2;
-                gBattlerAbility = battler;
-            }
-            if (currentPP + ppRestored > maxPP)
-                changedPP = maxPP;
-            else
-                changedPP = currentPP + ppRestored;
-
-            PREPARE_MOVE_BUFFER(gBattleTextBuff1, move);
-
-            if (caseID == ITEMEFFECT_ON_SWITCH_IN_FIRST_TURN || caseID == ITEMEFFECT_NORMAL)
-            {
-                BattleScriptExecute(BattleScript_BerryPPHealEnd2);
-            }
-            else
-            {
-                BattleScriptPushCursor();
-                gBattlescriptCurrInstr = BattleScript_BerryPPHealRet;
-            }
-            BtlController_EmitSetMonData(battler, B_COMM_TO_CONTROLLER, i + REQUEST_PPMOVE1_BATTLE, 0, 1, &changedPP);
-            MarkBattlerForControllerExec(battler);
-            if (MOVE_IS_PERMANENT(battler, i))
-                gBattleMons[battler].pp[i] = changedPP;
-            return ITEM_PP_CHANGE;
-        }
+        if (gBattleMons[battler].moves[i] != MOVE_NONE && !TreyEnergy_BattlerCanAffordMove(battler, i))
+            trigger = TRUE;
     }
-    return 0;
+    if (!trigger)
+        return 0;
+
+    {
+        u32 restored = TreyEnergy_GetItemRestoreAmount(itemId);
+        if (GetBattlerAbility(battler) == ABILITY_RIPEN)
+        {
+            restored *= 2;
+            gBattlerAbility = battler;
+        }
+        TreyEnergy_Restore(mon, restored);
+    }
+
+    if (caseID == ITEMEFFECT_ON_SWITCH_IN_FIRST_TURN || caseID == ITEMEFFECT_NORMAL)
+    {
+        BattleScriptExecute(BattleScript_BerryPPHealEnd2);
+    }
+    else
+    {
+        BattleScriptPushCursor();
+        gBattlescriptCurrInstr = BattleScript_BerryPPHealRet;
+    }
+    return ITEM_PP_CHANGE;
 }
 
 static u32 ItemHealHp(u32 battler, u32 itemId, enum ItemCaseId caseID, bool32 percentHeal)

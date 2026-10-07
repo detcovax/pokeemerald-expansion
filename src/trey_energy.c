@@ -2,6 +2,10 @@
 
 #include "global.h"
 #include "battle.h"
+#include "caps.h"
+#include "item.h"
+#include "constants/item_effects.h"
+#include "constants/items.h"
 #include "move.h"
 #include "pokemon.h"
 #include "trey_battle.h"
@@ -163,4 +167,68 @@ void TreyEnergy_BattlerSpend(u32 battler, u32 amount)
     u32 current = GetMonData(mon, MON_DATA_ENERGY, NULL);
     u16 value = (current > amount) ? current - amount : 0;
     SetMonData(mon, MON_DATA_ENERGY, &value);
+}
+
+// Battle drain (Spite, Eerie Spell, Grudge).
+u32 TreyEnergy_BattlerDrain(u32 battler, u32 amount)
+{
+    u32 current = TreyEnergy_GetBattlerEnergy(battler);
+    amount = min(amount, current);
+    TreyEnergy_BattlerSpend(battler, amount);
+    return amount;
+}
+
+// ---------------------------------------------------------------------------
+// Items (step E3)
+// ---------------------------------------------------------------------------
+// Ether and Elixir: TREY_ENERGY_ETHER_AMOUNT. Max Ether and Max Elixir: full. Leppa Berry: TREY_ENERGY_LEPPA_AMOUNT.
+u32 TreyEnergy_GetItemRestoreAmount(u16 item)
+{
+    const u8 *effect = GetItemEffect(item);
+    if (item == ITEM_LEPPA_BERRY)
+        return TREY_ENERGY_LEPPA_AMOUNT;
+    if (effect != NULL && effect[6] == ITEM6_HEAL_PP_FULL)
+        return TREY_ENERGY_MAX_VALUE;
+    return TREY_ENERGY_ETHER_AMOUNT;
+}
+
+bool32 TreyEnergy_IsFull(struct Pokemon *mon)
+{
+    return GetMonData(mon, MON_DATA_ENERGY, NULL) >= TreyEnergy_GetMonMax(mon);
+}
+
+u32 TreyEnergy_Restore(struct Pokemon *mon, u32 amount)
+{
+    u32 current = GetMonData(mon, MON_DATA_ENERGY, NULL);
+    u32 max = TreyEnergy_GetMonMax(mon);
+    u16 value;
+    if (current >= max)
+        return 0;
+    amount = min(amount, max - current);
+    value = current + amount;
+    SetMonData(mon, MON_DATA_ENERGY, &value);
+    return amount;
+}
+
+// PP Up and PP Max are Energy vitamins.
+u32 TreyEnergy_GetVitaminEVs(u16 item)
+{
+    return (item == ITEM_PP_MAX) ? TREY_ENERGY_PP_MAX_EVS : TREY_ENERGY_PP_UP_EVS;
+}
+
+u32 TreyEnergy_AddEVs(struct Pokemon *mon, u32 amount)
+{
+    u32 ev = GetMonData(mon, MON_DATA_ENERGY_EV, NULL);
+    u32 total = GetMonEVCount(mon);
+    u32 cap = !B_EV_ITEMS_CAP ? MAX_TOTAL_EVS : GetCurrentEVCap();
+    u8 value;
+
+    if (ev >= MAX_PER_STAT_EVS || total >= cap)
+        return 0;
+    amount = min(amount, MAX_PER_STAT_EVS - ev);
+    amount = min(amount, cap - total);
+    value = ev + amount;
+    SetMonData(mon, MON_DATA_ENERGY_EV, &value);
+    CalculateMonStats(mon); // raises max Energy; current Energy is unchanged
+    return amount;
 }

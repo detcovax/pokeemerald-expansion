@@ -4066,25 +4066,15 @@ void SetMoveEffect(bool32 primary, bool32 certain)
                             break;
                     }
 
-                    if (i != MAX_MON_MOVES && gBattleMons[gBattlerTarget].pp[i] != 0)
+                    // TREY: Eerie Spell drains a fixed amount of the target's Energy (TREY_PLAN.md 5.6).
+                    if (i != MAX_MON_MOVES && TreyEnergy_GetBattlerEnergy(gBattlerTarget) > 0)
                     {
-                        u32 ppToDeduct = 3;
-
-                        if (gBattleMons[gBattlerTarget].pp[i] < ppToDeduct)
-                            ppToDeduct = gBattleMons[gBattlerTarget].pp[i];
+                        u32 drained = TreyEnergy_BattlerDrain(gBattlerTarget, TREY_ENERGY_EERIE_SPELL_DRAIN);
 
                         PREPARE_MOVE_BUFFER(gBattleTextBuff1, gLastMoves[gBattlerTarget])
-                        ConvertIntToDecimalStringN(gBattleTextBuff2, ppToDeduct, STR_CONV_MODE_LEFT_ALIGN, 1);
-                        PREPARE_BYTE_NUMBER_BUFFER(gBattleTextBuff2, 1, ppToDeduct)
-                        gBattleMons[gBattlerTarget].pp[i] -= ppToDeduct;
-                        if (!(gDisableStructs[gBattlerTarget].mimickedMoves & (1u << i))
-                            && !(gBattleMons[gBattlerTarget].status2 & STATUS2_TRANSFORMED))
-                        {
-                            BtlController_EmitSetMonData(gBattlerTarget, B_COMM_TO_CONTROLLER, REQUEST_PPMOVE1_BATTLE + i, 0, sizeof(gBattleMons[gBattlerTarget].pp[i]), &gBattleMons[gBattlerTarget].pp[i]);
-                            MarkBattlerForControllerExec(gBattlerTarget);
-                        }
+                        PREPARE_HWORD_NUMBER_BUFFER(gBattleTextBuff2, 4, drained)
 
-                        if (gBattleMons[gBattlerTarget].pp[i] == 0 && gBattleStruct->skyDropTargets[gBattlerTarget] == SKY_DROP_NO_TARGET)
+                        if (!TreyEnergy_BattlerCanAffordMove(gBattlerTarget, i) && gBattleStruct->skyDropTargets[gBattlerTarget] == SKY_DROP_NO_TARGET)
                             CancelMultiTurnMoves(gBattlerTarget, SKY_DROP_IGNORE);
 
                         BattleScriptPush(gBattlescriptCurrInstr + 1);
@@ -4645,11 +4635,10 @@ static void Cmd_tryfaintmon(void)
             {
                 u8 moveIndex = gBattleStruct->chosenMovePositions[gBattlerAttacker];
 
-                gBattleMons[gBattlerAttacker].pp[moveIndex] = 0;
+                // TREY: Grudge drains a share of the attacker's max Energy (TREY_PLAN.md 5.6).
+                TreyEnergy_BattlerDrain(gBattlerAttacker, (TreyEnergy_GetMonMax(GetBattlerMon(gBattlerAttacker)) * TREY_ENERGY_GRUDGE_PERCENT + 99) / 100);
                 BattleScriptPush(gBattlescriptCurrInstr);
                 gBattlescriptCurrInstr = BattleScript_GrudgeTakesPp;
-                BtlController_EmitSetMonData(gBattlerAttacker, B_COMM_TO_CONTROLLER, moveIndex + REQUEST_PPMOVE1_BATTLE, 0, sizeof(gBattleMons[gBattlerAttacker].pp[moveIndex]), &gBattleMons[gBattlerAttacker].pp[moveIndex]);
-                MarkBattlerForControllerExec(gBattlerAttacker);
 
                 PREPARE_MOVE_BUFFER(gBattleTextBuff1, gBattleMons[gBattlerAttacker].moves[moveIndex])
             }
@@ -13912,36 +13901,18 @@ static void Cmd_tryspiteppreduce(void)
             }
         }
 
-        if (i != MAX_MON_MOVES && gBattleMons[gBattlerTarget].pp[i] > (B_CAN_SPITE_FAIL >= GEN_4 ? 0 : 1))
+        // TREY: Spite drains a fixed amount of the target's Energy (TREY_PLAN.md 5.6).
+        if (i != MAX_MON_MOVES && TreyEnergy_GetBattlerEnergy(gBattlerTarget) > 0)
         {
-            s32 ppToDeduct = B_PP_REDUCED_BY_SPITE >= GEN_4 ? 4 : (Random() & 3) + 2;
-            // G-Max Depletion only deducts 2 PP.
-            if (IsMaxMove(gCurrentMove) && MoveHasAdditionalEffect(gCurrentMove, MOVE_EFFECT_SPITE))
-                ppToDeduct = 2;
-
-            if (gBattleMons[gBattlerTarget].pp[i] < ppToDeduct)
-                ppToDeduct = gBattleMons[gBattlerTarget].pp[i];
+            u32 drained = TreyEnergy_BattlerDrain(gBattlerTarget, TREY_ENERGY_SPITE_DRAIN);
 
             PREPARE_MOVE_BUFFER(gBattleTextBuff1, gLastMoves[gBattlerTarget])
-
-            ConvertIntToDecimalStringN(gBattleTextBuff2, ppToDeduct, STR_CONV_MODE_LEFT_ALIGN, 1);
-
-            PREPARE_BYTE_NUMBER_BUFFER(gBattleTextBuff2, 1, ppToDeduct)
-
-            gBattleMons[gBattlerTarget].pp[i] -= ppToDeduct;
-
-            // if (MOVE_IS_PERMANENT(gBattlerTarget, i)), but backwards
-            if (!(gDisableStructs[gBattlerTarget].mimickedMoves & (1u << i))
-                && !(gBattleMons[gBattlerTarget].status2 & STATUS2_TRANSFORMED))
-            {
-                BtlController_EmitSetMonData(gBattlerTarget, B_COMM_TO_CONTROLLER, REQUEST_PPMOVE1_BATTLE + i, 0, sizeof(gBattleMons[gBattlerTarget].pp[i]), &gBattleMons[gBattlerTarget].pp[i]);
-                MarkBattlerForControllerExec(gBattlerTarget);
-            }
+            PREPARE_HWORD_NUMBER_BUFFER(gBattleTextBuff2, 4, drained)
 
             gBattlescriptCurrInstr = cmd->nextInstr;
 
-            // Don't cut off Sky Drop if pp is brought to zero.
-            if (gBattleMons[gBattlerTarget].pp[i] == 0 && gBattleStruct->skyDropTargets[gBattlerTarget] == SKY_DROP_NO_TARGET)
+            // A locked-in move stops if the target can no longer afford it. Don't cut off Sky Drop.
+            if (!TreyEnergy_BattlerCanAffordMove(gBattlerTarget, i) && gBattleStruct->skyDropTargets[gBattlerTarget] == SKY_DROP_NO_TARGET)
                 CancelMultiTurnMoves(gBattlerTarget, SKY_DROP_IGNORE);
         }
         else
@@ -17213,22 +17184,8 @@ void BS_ItemIncreaseStat(void)
 void BS_ItemRestorePP(void)
 {
     NATIVE_ARGS();
-    const u8 *effect = GetItemEffect(gLastUsedItem);
-    u32 i, pp, maxPP, moveId, loopEnd;
     u32 battler = MAX_BATTLERS_COUNT;
     struct Pokemon *mon = (IsOnPlayerSide(gBattlerAttacker)) ? &gPlayerParty[gBattleStruct->itemPartyIndex[gBattlerAttacker]] : &gEnemyParty[gBattleStruct->itemPartyIndex[gBattlerAttacker]];
-
-    // Check whether to apply to all moves.
-    if (effect[4] & ITEM4_HEAL_PP_ONE)
-    {
-        i = gBattleStruct->itemMoveIndex[gBattlerAttacker];
-        loopEnd = i + 1;
-    }
-    else
-    {
-        i = 0;
-        loopEnd = MAX_MON_MOVES;
-    }
 
     // Check if the recipient is an active battler.
     if (gBattleStruct->itemPartyIndex[gBattlerAttacker] == gBattlerPartyIndexes[gBattlerAttacker])
@@ -17237,28 +17194,8 @@ void BS_ItemRestorePP(void)
                 && gBattleStruct->itemPartyIndex[gBattlerAttacker] == gBattlerPartyIndexes[BATTLE_PARTNER(gBattlerAttacker)])
         battler = BATTLE_PARTNER(gBattlerAttacker);
 
-    // Heal PP!
-    for (; i < loopEnd; i++)
-    {
-        pp = GetMonData(mon, MON_DATA_PP1 + i, NULL);
-        moveId = GetMonData(mon, MON_DATA_MOVE1 + i, NULL);
-        maxPP = CalculatePPWithBonus(moveId, GetMonData(mon, MON_DATA_PP_BONUSES, NULL), i);
-        if (pp != maxPP)
-        {
-            pp += effect[6];
-            if (pp > maxPP)
-                pp = maxPP;
-            SetMonData(mon, MON_DATA_PP1 + i, &pp);
-
-            // Update battler PP if needed.
-            if (battler != MAX_BATTLERS_COUNT
-                && gBattleStruct->itemPartyIndex[gBattlerAttacker] == gBattlerPartyIndexes[battler]
-                && MOVE_IS_PERMANENT(battler, i))
-            {
-                gBattleMons[battler].pp[i] = pp;
-            }
-        }
-    }
+    // TREY: restore Energy (TREY_PLAN.md 5.6). Energy lives in the party Pokémon, so nothing else to update.
+    TreyEnergy_Restore(mon, TreyEnergy_GetItemRestoreAmount(gLastUsedItem));
     gBattleScripting.battler = battler;
     PREPARE_SPECIES_BUFFER(gBattleTextBuff1, GetMonData(mon, MON_DATA_SPECIES));
     gBattlescriptCurrInstr = cmd->nextInstr;
