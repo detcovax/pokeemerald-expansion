@@ -1,4 +1,5 @@
 #include "global.h"
+#include "trey_energy.h" // TREY
 #include "trey_regional.h" // TREY
 #include "main.h"
 #include "battle.h"
@@ -167,6 +168,8 @@ static EWRAM_DATA struct PokemonSummaryScreenData
         u32 OTID; // 0x48
         u8 teraType;
         u8 mintNature;
+        u16 energy;    // TREY: current Energy (or Energy IV/EV in those modes)
+        u16 maxEnergy; // TREY
     } summary;
     u16 bgTilemapBuffers[PSS_PAGE_COUNT][2][0x400];
     u8 mode;
@@ -745,10 +748,15 @@ static void (*const sTextPrinterTasks[])(u8 taskId) =
 
 static const u8 sMemoNatureTextColor[] = _("{COLOR LIGHT_RED}{SHADOW GREEN}");
 static const u8 sMemoMiscTextColor[] = _("{COLOR WHITE}{SHADOW DARK_GRAY}"); // This is also affected by palettes, apparently
-static const u8 sStatsLeftColumnLayout[] = _("{DYNAMIC 0}/{DYNAMIC 1}\n{DYNAMIC 2}\n{DYNAMIC 3}");
-static const u8 sStatsLeftIVEVColumnLayout[] = _("{DYNAMIC 0}\n{DYNAMIC 1}\n{DYNAMIC 2}");
+// TREY: the left column is HP, Energy, Attack, Defense, in the small font so four rows fit.
+static const u8 sStatsLeftColumnLayout[] = _("{DYNAMIC 0}/{DYNAMIC 1}\n{DYNAMIC 4}/{DYNAMIC 5}\n{DYNAMIC 2}\n{DYNAMIC 3}");
+static const u8 sStatsLeftIVEVColumnLayout[] = _("{DYNAMIC 0}\n{DYNAMIC 3}\n{DYNAMIC 1}\n{DYNAMIC 2}");
 static const u8 sStatsRightColumnLayout[] = _("{DYNAMIC 0}\n{DYNAMIC 1}\n{DYNAMIC 2}");
-static const u8 sMovesPPLayout[] = _("{PP}{DYNAMIC 0}/{DYNAMIC 1}");
+static const u8 sMovesPPLayout[] = _("EN{DYNAMIC 0}"); // TREY: Energy cost instead of PP
+static const u8 sText_TreyEnergyLabel[] = _("ENERGY"); // TREY
+// TREY: stats rows are 12 px apart (FONT_SMALL); the right column (3 rows) is centred against the left (4 rows).
+#define TREY_STATS_ROW_Y(row) ((row) * 12)
+#define TREY_STATS_RIGHT_Y 6
 
 #define TAG_MOVE_SELECTOR 30000
 #define TAG_MON_STATUS 30001
@@ -1518,6 +1526,8 @@ static bool8 ExtractMonDataToSummaryStruct(struct Pokemon *mon)
             sum->pp[i] = GetMonData(mon, MON_DATA_PP1+i);
         }
         sum->ppBonuses = GetMonData(mon, MON_DATA_PP_BONUSES);
+        sum->energy = GetMonData(mon, MON_DATA_ENERGY); // TREY
+        sum->maxEnergy = TreyEnergy_GetMonMax(mon);
         break;
     case 2:
         ExtractMonSkillStatsData(mon, sum);
@@ -1861,6 +1871,8 @@ void ExtractMonSkillStatsData(struct Pokemon *mon, struct PokeSummary *sum)
         sum->spdef = GetMonData(mon, MON_DATA_SPDEF2);
         sum->speed = GetMonData(mon, MON_DATA_SPEED2);
     }
+    sum->energy = GetMonData(mon, MON_DATA_ENERGY); // TREY
+    sum->maxEnergy = TreyEnergy_GetMonMax(mon);
 }
 
 void ExtractMonSkillIvData(struct Pokemon *mon, struct PokeSummary *sum)
@@ -1871,6 +1883,7 @@ void ExtractMonSkillIvData(struct Pokemon *mon, struct PokeSummary *sum)
     sum->spatk = GetMonData(mon, MON_DATA_SPATK_IV);
     sum->spdef = GetMonData(mon, MON_DATA_SPDEF_IV);
     sum->speed = GetMonData(mon, MON_DATA_SPEED_IV);
+    sum->energy = GetMonData(mon, MON_DATA_ENERGY_IV); // TREY
 }
 
 void ExtractMonSkillEvData(struct Pokemon *mon, struct PokeSummary *sum)
@@ -1881,6 +1894,7 @@ void ExtractMonSkillEvData(struct Pokemon *mon, struct PokeSummary *sum)
     sum->spatk = GetMonData(mon, MON_DATA_SPATK_EV);
     sum->spdef = GetMonData(mon, MON_DATA_SPDEF_EV);
     sum->speed = GetMonData(mon, MON_DATA_SPEED_EV);
+    sum->energy = GetMonData(mon, MON_DATA_ENERGY_EV); // TREY
 }
 
 static void ChangeSummaryPokemon(u8 taskId, s8 delta)
@@ -3213,18 +3227,21 @@ static void PrintPageNamesAndStats(void)
 
     PrintTextOnWindow(PSS_LABEL_WINDOW_POKEMON_INFO_RENTAL, gText_RentalPkmn, 0, 1, 0, 1);
     PrintTextOnWindow(PSS_LABEL_WINDOW_POKEMON_INFO_TYPE, gText_TypeSlash, 0, 1, 0, 0);
-    statsXPos = 6 + GetStringCenterAlignXOffset(FONT_NORMAL, gText_HP4, 42);
-    PrintTextOnWindow(PSS_LABEL_WINDOW_POKEMON_SKILLS_STATS_LEFT, gText_HP4, statsXPos, 1, 0, 1);
-    statsXPos = 6 + GetStringCenterAlignXOffset(FONT_NORMAL, gText_Attack3, 42);
-    PrintTextOnWindow(PSS_LABEL_WINDOW_POKEMON_SKILLS_STATS_LEFT, gText_Attack3, statsXPos, 17, 0, 1);
-    statsXPos = 6 + GetStringCenterAlignXOffset(FONT_NORMAL, gText_Defense3, 42);
-    PrintTextOnWindow(PSS_LABEL_WINDOW_POKEMON_SKILLS_STATS_LEFT, gText_Defense3, statsXPos, 33, 0, 1);
-    statsXPos = 2 + GetStringCenterAlignXOffset(FONT_NORMAL, gText_SpAtk4, 36);
-    PrintTextOnWindow(PSS_LABEL_WINDOW_POKEMON_SKILLS_STATS_RIGHT, gText_SpAtk4, statsXPos, 1, 0, 1);
-    statsXPos = 2 + GetStringCenterAlignXOffset(FONT_NORMAL, gText_SpDef4, 36);
-    PrintTextOnWindow(PSS_LABEL_WINDOW_POKEMON_SKILLS_STATS_RIGHT, gText_SpDef4, statsXPos, 17, 0, 1);
-    statsXPos = 2 + GetStringCenterAlignXOffset(FONT_NORMAL, gText_Speed2, 36);
-    PrintTextOnWindow(PSS_LABEL_WINDOW_POKEMON_SKILLS_STATS_RIGHT, gText_Speed2, statsXPos, 33, 0, 1);
+    // TREY: seven stats in the small font: HP, Energy, Attack, Defense | Sp. Atk, Sp. Def, Speed.
+    statsXPos = 6 + GetStringCenterAlignXOffset(FONT_SMALL, gText_HP4, 42);
+    PrintTextOnWindowWithFont(PSS_LABEL_WINDOW_POKEMON_SKILLS_STATS_LEFT, gText_HP4, statsXPos, TREY_STATS_ROW_Y(0), 0, 1, FONT_SMALL);
+    statsXPos = 6 + GetStringCenterAlignXOffset(FONT_SMALL, sText_TreyEnergyLabel, 42);
+    PrintTextOnWindowWithFont(PSS_LABEL_WINDOW_POKEMON_SKILLS_STATS_LEFT, sText_TreyEnergyLabel, statsXPos, TREY_STATS_ROW_Y(1), 0, 1, FONT_SMALL);
+    statsXPos = 6 + GetStringCenterAlignXOffset(FONT_SMALL, gText_Attack3, 42);
+    PrintTextOnWindowWithFont(PSS_LABEL_WINDOW_POKEMON_SKILLS_STATS_LEFT, gText_Attack3, statsXPos, TREY_STATS_ROW_Y(2), 0, 1, FONT_SMALL);
+    statsXPos = 6 + GetStringCenterAlignXOffset(FONT_SMALL, gText_Defense3, 42);
+    PrintTextOnWindowWithFont(PSS_LABEL_WINDOW_POKEMON_SKILLS_STATS_LEFT, gText_Defense3, statsXPos, TREY_STATS_ROW_Y(3), 0, 1, FONT_SMALL);
+    statsXPos = 2 + GetStringCenterAlignXOffset(FONT_SMALL, gText_SpAtk4, 36);
+    PrintTextOnWindowWithFont(PSS_LABEL_WINDOW_POKEMON_SKILLS_STATS_RIGHT, gText_SpAtk4, statsXPos, TREY_STATS_RIGHT_Y + TREY_STATS_ROW_Y(0), 0, 1, FONT_SMALL);
+    statsXPos = 2 + GetStringCenterAlignXOffset(FONT_SMALL, gText_SpDef4, 36);
+    PrintTextOnWindowWithFont(PSS_LABEL_WINDOW_POKEMON_SKILLS_STATS_RIGHT, gText_SpDef4, statsXPos, TREY_STATS_RIGHT_Y + TREY_STATS_ROW_Y(1), 0, 1, FONT_SMALL);
+    statsXPos = 2 + GetStringCenterAlignXOffset(FONT_SMALL, gText_Speed2, 36);
+    PrintTextOnWindowWithFont(PSS_LABEL_WINDOW_POKEMON_SKILLS_STATS_RIGHT, gText_Speed2, statsXPos, TREY_STATS_RIGHT_Y + TREY_STATS_ROW_Y(2), 0, 1, FONT_SMALL);
     PrintTextOnWindow(PSS_LABEL_WINDOW_POKEMON_SKILLS_EXP, gText_ExpPoints, 6, 1, 0, 1);
     PrintTextOnWindow(PSS_LABEL_WINDOW_POKEMON_SKILLS_EXP, gText_NextLv, 6, 17, 0, 1);
     PrintTextOnWindow(PSS_LABEL_WINDOW_POKEMON_SKILLS_STATUS, gText_Status, 2, 1, 0, 1);
@@ -3816,13 +3833,20 @@ static void BufferLeftColumnStats(void)
 
     DynamicPlaceholderTextUtil_Reset();
 
+    u8 *energyString = Alloc(20);    // TREY
+    u8 *maxEnergyString = Alloc(20); // TREY
+
     BufferStat(currentHPString, STAT_HP, sMonSummaryScreen->summary.currentHP, 0, 3);
     BufferStat(maxHPString, STAT_HP, sMonSummaryScreen->summary.maxHP, 1, 3);
     BufferStat(attackString, STAT_ATK, sMonSummaryScreen->summary.atk, 2, 7);
     BufferStat(defenseString, STAT_DEF, sMonSummaryScreen->summary.def, 3, 7);
+    BufferStat(energyString, STAT_HP, sMonSummaryScreen->summary.energy, 4, 3);       // TREY: no nature colour, like HP
+    BufferStat(maxEnergyString, STAT_HP, sMonSummaryScreen->summary.maxEnergy, 5, 3);
 
     DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, sStatsLeftColumnLayout);
 
+    Free(energyString);
+    Free(maxEnergyString);
     Free(currentHPString);
     Free(maxHPString);
     Free(attackString);
@@ -3840,9 +3864,12 @@ static void BufferLeftColumnIvEvStats(void)
     BufferStat(hpIvEvString, STAT_HP, sMonSummaryScreen->summary.currentHP, 0, 7);
     BufferStat(attackIvEvString, STAT_ATK, sMonSummaryScreen->summary.atk, 1, 7);
     BufferStat(defenseIvEvString, STAT_DEF, sMonSummaryScreen->summary.def, 2, 7);
+    u8 *energyIvEvString = Alloc(20); // TREY
+    BufferStat(energyIvEvString, STAT_HP, sMonSummaryScreen->summary.energy, 3, 7);
 
     DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, sStatsLeftIVEVColumnLayout);
 
+    Free(energyIvEvString);
     Free(hpIvEvString);
     Free(attackIvEvString);
     Free(defenseIvEvString);
@@ -3853,11 +3880,11 @@ static void PrintLeftColumnStats(void)
     int x;
 
     if (sMonSummaryScreen->skillsPageMode == SUMMARY_SKILLS_MODE_IVS && !P_SUMMARY_SCREEN_IV_EV_VALUES)
-        x = GetStringRightAlignXOffset(FONT_NORMAL, gStringVar4, 46);
+        x = GetStringRightAlignXOffset(FONT_SMALL, gStringVar4, 46);
     else
         x = 4;
 
-    PrintTextOnWindow(AddWindowFromTemplateList(sPageSkillsTemplate, PSS_DATA_WINDOW_SKILLS_STATS_LEFT), gStringVar4, x, 1, 0, 0);
+    PrintTextOnWindowWithFont(AddWindowFromTemplateList(sPageSkillsTemplate, PSS_DATA_WINDOW_SKILLS_STATS_LEFT), gStringVar4, x, TREY_STATS_ROW_Y(0), 0, 0, FONT_SMALL); // TREY
 }
 
 static void BufferRightColumnStats(void)
@@ -3876,11 +3903,11 @@ static void PrintRightColumnStats(void)
     int x;
 
     if (sMonSummaryScreen->skillsPageMode == SUMMARY_SKILLS_MODE_IVS && !P_SUMMARY_SCREEN_IV_EV_VALUES)
-        x = GetStringRightAlignXOffset(FONT_NORMAL, gStringVar4, 20);
+        x = GetStringRightAlignXOffset(FONT_SMALL, gStringVar4, 20);
     else
         x = 2;
 
-    PrintTextOnWindow(AddWindowFromTemplateList(sPageSkillsTemplate, PSS_DATA_WINDOW_SKILLS_STATS_RIGHT), gStringVar4, x, 1, 0, 0);
+    PrintTextOnWindowWithFont(AddWindowFromTemplateList(sPageSkillsTemplate, PSS_DATA_WINDOW_SKILLS_STATS_RIGHT), gStringVar4, x, TREY_STATS_RIGHT_Y + TREY_STATS_ROW_Y(0), 0, 0, FONT_SMALL); // TREY
 }
 
 static void PrintExpPointsNextLevel(void)
@@ -3982,16 +4009,17 @@ static void PrintMoveNameAndPP(u8 moveIndex)
 
     if (move != 0)
     {
-        pp = CalculatePPWithBonus(move, summary->ppBonuses, moveIndex);
+        // TREY: Energy cost instead of PP; red if the Pokémon can't afford it right now.
+        u32 cost = TreyEnergy_GetMoveCost(move);
+        pp = 0;
+        (void)pp;
         PrintTextOnWindowToFit(moveNameWindowId, GetMoveName(move), 0, moveIndex * 16 + 1, 0, 1);
-        ConvertIntToDecimalStringN(gStringVar1, summary->pp[moveIndex], STR_CONV_MODE_RIGHT_ALIGN, 2);
-        ConvertIntToDecimalStringN(gStringVar2, pp, STR_CONV_MODE_RIGHT_ALIGN, 2);
+        ConvertIntToDecimalStringN(gStringVar1, cost, STR_CONV_MODE_RIGHT_ALIGN, 3);
         DynamicPlaceholderTextUtil_Reset();
         DynamicPlaceholderTextUtil_SetPlaceholderPtr(0, gStringVar1);
-        DynamicPlaceholderTextUtil_SetPlaceholderPtr(1, gStringVar2);
         DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, sMovesPPLayout);
         text = gStringVar4;
-        ppState = GetCurrentPpToMaxPpState(summary->pp[moveIndex], pp) + 9;
+        ppState = (summary->energy >= cost) ? 12 : 9;
         x = GetStringRightAlignXOffset(FONT_NORMAL, text, 44);
     }
     else
@@ -4151,10 +4179,9 @@ static void PrintNewMoveDetailsOrCancelText(void)
         else
             PrintTextOnWindowToFit(windowId1, GetMoveName(move), 0, 65, 0, 5);
 
-        ConvertIntToDecimalStringN(gStringVar1, GetMovePP(move), STR_CONV_MODE_RIGHT_ALIGN, 2);
+        ConvertIntToDecimalStringN(gStringVar1, TreyEnergy_GetMoveCost(move), STR_CONV_MODE_RIGHT_ALIGN, 3); // TREY
         DynamicPlaceholderTextUtil_Reset();
         DynamicPlaceholderTextUtil_SetPlaceholderPtr(0, gStringVar1);
-        DynamicPlaceholderTextUtil_SetPlaceholderPtr(1, gStringVar1);
         DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, sMovesPPLayout);
         PrintTextOnWindow(windowId2, gStringVar4, GetStringRightAlignXOffset(FONT_NORMAL, gStringVar4, 44), 65, 0, 12);
     }

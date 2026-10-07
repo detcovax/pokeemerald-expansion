@@ -1,4 +1,5 @@
 #include "global.h"
+#include "trey_energy.h" // TREY
 #include "battle.h"
 #include "battle_anim.h"
 #include "battle_arena.h"
@@ -1718,9 +1719,10 @@ static void MoveSelectionDisplayPpNumber(u32 battler)
 
     SetPpNumbersPaletteInMoveSelection(battler);
     moveInfo = (struct ChooseMoveStruct *)(&gBattleResources->bufferA[battler][4]);
-    txtPtr = ConvertIntToDecimalStringN(gDisplayedStringBattle, moveInfo->currentPp[gMoveSelectionCursor[battler]], STR_CONV_MODE_RIGHT_ALIGN, 2);
-    *(txtPtr)++ = CHAR_SLASH;
-    ConvertIntToDecimalStringN(txtPtr, moveInfo->maxPp[gMoveSelectionCursor[battler]], STR_CONV_MODE_RIGHT_ALIGN, 2);
+    // TREY: show the selected move's Energy cost instead of PP (TREY_PLAN.md 5.6).
+    (void)moveInfo;
+    txtPtr = ConvertIntToDecimalStringN(gDisplayedStringBattle, TreyEnergy_GetBattlerMoveCost(battler, gMoveSelectionCursor[battler], 0), STR_CONV_MODE_RIGHT_ALIGN, 3);
+    (void)txtPtr;
 
     BattlePutTextOnWindow(gDisplayedStringBattle, B_WIN_PP_REMAINING);
 }

@@ -1,4 +1,5 @@
 #include "global.h"
+#include "trey_energy.h" // TREY
 #include "battle.h"
 #include "battle_anim.h"
 #include "battle_controllers.h"
@@ -1413,7 +1414,7 @@ const u8 gText_WhatWillWallyDo[] = _("What will\nWALLY do?");
 const u8 gText_LinkStandby[] = _("{PAUSE 16}Link standby…");
 const u8 gText_BattleMenu[] = _("Battle{CLEAR_TO 56}Bag\nPokémon{CLEAR_TO 56}Run");
 const u8 gText_SafariZoneMenu[] = _("Ball{CLEAR_TO 56}{POKEBLOCK}\nGo Near{CLEAR_TO 56}Run");
-const u8 gText_MoveInterfacePP[] = _("PP ");
+const u8 gText_MoveInterfacePP[] = _("EN "); // TREY: Energy cost
 const u8 gText_MoveInterfaceType[] = _("TYPE/");
 const u8 gText_MoveInterfacePpType[] = _("{PALETTE 5}{COLOR_HIGHLIGHT_SHADOW DYNAMIC_COLOR4 DYNAMIC_COLOR5 DYNAMIC_COLOR6}PP\nTYPE/");
 const u8 gText_MoveInterfaceDynamicColors[] = _("{PALETTE 5}{COLOR_HIGHLIGHT_SHADOW DYNAMIC_COLOR4 DYNAMIC_COLOR5 DYNAMIC_COLOR6}");
@@ -3507,11 +3508,12 @@ void SetPpNumbersPaletteInMoveSelection(u32 battler)
     const u16 *palPtr = gPPTextPalette;
     u8 var;
 
+    // TREY: the Energy cost is red when the Pokémon can't afford the move, otherwise normal.
     if (!gBattleStruct->zmove.viewing)
-        var = GetCurrentPpToMaxPpState(chooseMoveStruct->currentPp[gMoveSelectionCursor[battler]],
-                         chooseMoveStruct->maxPp[gMoveSelectionCursor[battler]]);
+        var = TreyEnergy_BattlerCanAffordMove(battler, gMoveSelectionCursor[battler]) ? 3 : 0;
     else
         var = 3;
+    (void)chooseMoveStruct;
 
     gPlttBufferUnfaded[BG_PLTT_ID(5) + 12] = palPtr[(var * 2) + 0];
     gPlttBufferUnfaded[BG_PLTT_ID(5) + 11] = palPtr[(var * 2) + 1];

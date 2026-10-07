@@ -75,6 +75,9 @@
 #define TREY_ENERGY_SPITE_DRAIN         10
 #define TREY_ENERGY_EERIE_SPELL_DRAIN   15
 #define TREY_ENERGY_GRUDGE_PERCENT      50   // Grudge drains 50% of the attacker's max Energy
+// Display (step E4).
+// Testing only: 1 = the summary screen's skills page can cycle through IVs and EVs (Energy included).
+#define TREY_DEBUG_SHOW_IVS_EVS         0
 
 // Settings are added here phase by phase as each system is built:
 //   Phase 4: seasons, transit, quests
