@@ -208,7 +208,7 @@ MAKEFLAGS += --no-print-directory
 # Delete files that weren't built properly
 .DELETE_ON_ERROR:
 
-RULES_NO_SCAN += libagbsyscall clean clean-assets tidy tidymodern tidycheck generated clean-generated
+RULES_NO_SCAN += libagbsyscall clean clean-assets tidy tidymodern tidycheck generated clean-generated trey-check
 .PHONY: all rom agbcc modern compare check debug
 .PHONY: $(RULES_NO_SCAN)
 
@@ -506,3 +506,14 @@ $(SYM): $(ELF)
 .PHONY: trey-save-report
 trey-save-report: rom
 	@bash tools/trey/save_report.sh "$(PREFIX)gcc" "$(PREFIX)nm" $(CPPFLAGS)
+
+# TREY: one command for both reports. The game ROM and the test ROM are separate builds
+# (build/modern and build/modern-test), so this runs them one after the other; each only
+# recompiles what changed. Usage: make trey-check                    (TREY tests only)
+#                                 make trey-check TREY_TESTS=Pressure  (tests whose name contains "Pressure")
+TREY_TESTS ?= TREY
+.PHONY: trey-check
+trey-check:
+	@$(MAKE) --no-print-directory trey-save-report
+	@$(MAKE) --no-print-directory check TESTS="$(TREY_TESTS)"
+	@echo "BUILD OK"
