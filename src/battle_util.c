@@ -6168,6 +6168,7 @@ static u32 ItemRestorePp(u32 battler, u32 itemId, enum ItemCaseId caseID)
             gBattlerAbility = battler;
         }
         TreyEnergy_Restore(mon, restored);
+        TreyEnergy_UpdateHealthboxBar(battler);
     }
 
     if (caseID == ITEMEFFECT_ON_SWITCH_IN_FIRST_TURN || caseID == ITEMEFFECT_NORMAL)

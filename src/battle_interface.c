@@ -1,4 +1,5 @@
 #include "global.h"
+#include "trey_energy.h" // TREY
 #include "malloc.h"
 #include "battle.h"
 #include "pokemon.h"
@@ -177,6 +178,11 @@ static u8 *AddTextPrinterAndCreateWindowOnHealthboxToFit(const u8 *, u32, u32, u
 static void RemoveWindowOnHealthbox(u32 windowId);
 static void UpdateHpTextInHealthboxInDoubles(u32 healthboxSpriteId, u32 maxOrCurrent, s16 currHp, s16 maxHp);
 static void UpdateStatusIconInHealthbox(u8);
+static void TreyDrawBars(u32 battler, u8 healthboxSpriteId); // TREY
+// TREY: last drawn HP bar state per battler, so Energy changes can redraw the bar.
+static EWRAM_DATA u8 sTreyHpBarPixels[MAX_BATTLERS_COUNT] = {0};
+static EWRAM_DATA u8 sTreyHpBarColor[MAX_BATTLERS_COUNT] = {0};
+static EWRAM_DATA bool8 sTreyHpBarKnown[MAX_BATTLERS_COUNT] = {0};
 
 static void TextIntoHealthboxObject(void *, u8 *, s32);
 static void SafariTextIntoHealthboxObject(void *, u8 *, u32);
@@ -715,6 +721,7 @@ u8 CreateBattlerHealthboxSprites(u8 battler)
     CpuCopy32(GetHealthboxElementGfxPtr(HEALTHBOX_GFX_1), (void *)(OBJ_VRAM0 + healthBarSpritePtr->oam.tileNum * TILE_SIZE_4BPP), 64);
 
     gSprites[healthboxLeftSpriteId].hMain_HealthBarSpriteId = healthbarSpriteId;
+    sTreyHpBarKnown[battler] = FALSE; // TREY
     gSprites[healthboxLeftSpriteId].hMain_Battler = battler;
     gSprites[healthboxLeftSpriteId].invisible = TRUE;
 
@@ -2032,6 +2039,8 @@ void UpdateHealthboxAttribute(u8 healthboxSpriteId, struct Pokemon *mon, u8 elem
             UpdateNickInHealthbox(healthboxSpriteId, mon);
         if (elementId == HEALTHBOX_STATUS_ICON || elementId == HEALTHBOX_ALL)
             UpdateStatusIconInHealthbox(healthboxSpriteId);
+        if (!(gBattleTypeFlags & BATTLE_TYPE_SAFARI))
+            TreyDrawBars(battler, healthboxSpriteId); // TREY: after the status icon, which rewrites the bar label
         if (elementId == HEALTHBOX_SAFARI_ALL_TEXT)
             UpdateSafariBallsTextOnHealthbox(healthboxSpriteId);
         if (elementId == HEALTHBOX_SAFARI_ALL_TEXT || elementId == HEALTHBOX_SAFARI_BALLS_TEXT)
@@ -2060,11 +2069,164 @@ void UpdateHealthboxAttribute(u8 healthboxSpriteId, struct Pokemon *mon, u8 elem
             UpdateNickInHealthbox(healthboxSpriteId, mon);
         if (elementId == HEALTHBOX_STATUS_ICON || elementId == HEALTHBOX_ALL)
             UpdateStatusIconInHealthbox(healthboxSpriteId);
+        TreyDrawBars(battler, healthboxSpriteId); // TREY
     }
 }
 
 #define B_EXPBAR_PIXELS 64
 #define B_HEALTHBAR_PIXELS 48
+
+// ---------------------------------------------------------------------------
+// TREY: HP + Energy bar (TREY_PLAN.md 5.6, step E4b). Temporary art until the Phase 7 healthbox redesign.
+// The HP bar sprite (8 px tall) is redrawn as two stacked slim bars: HP on top, Energy directly beneath,
+// with a two-line "HP"/"EN" label. Nothing else in the healthbox moves. Rows of the 8 px bar sprite:
+//   0 clear | 1 border | 2-3 HP fill | 4 border | 5-6 Energy fill | 7 border
+// Energy is yellow, or red once the Pokémon can't afford at least one of its moves.
+// Colours are indices in the healthbar palette (graphics/battle_interface/hpbar.png).
+// ---------------------------------------------------------------------------
+enum { TREY_BAR_GREEN, TREY_BAR_YELLOW, TREY_BAR_RED };
+#define TREY_BAR_BORDER   6
+#define TREY_BAR_EMPTY    5
+#define TREY_BAR_OUTLINE  3
+static const u8 sTreyBarFillColors[3][2] = // [colour][dark row, light row]
+{
+    [TREY_BAR_GREEN]  = {11, 10},
+    [TREY_BAR_YELLOW] = {13, 12},
+    [TREY_BAR_RED]    = {15, 14},
+};
+static const u8 sTreyLabelLetterColors[3] = {7, 8, 9}; // light to dark, top to bottom
+
+// 16 x 8 label: '.' clear, 'o' outline, '#' body, 'L' letter.
+static const u8 sTreyBarLabel[8][17] =
+{
+    "................",
+    ".oL#L#LLL#######",
+    "o#LLL#LLL#######",
+    "o#L#L#L#########",
+    "o###############",
+    "o#LLL#LL#L######",
+    "o#LL##L#LL######",
+    ".oLLL#L##L######",
+};
+
+
+static bool32 TreyBarLabelVisible(u32 battler)
+{
+    // The status icon replaces the bar label on opponent and double-battle boxes.
+    if (GetMonData(GetBattlerMon(battler), MON_DATA_STATUS) == 0)
+        return TRUE;
+    return !(GetBattlerCoordsIndex(battler) == BATTLE_COORDS_DOUBLES || !IsOnPlayerSide(battler));
+}
+
+static void TreyDrawBars(u32 battler, u8 healthboxSpriteId)
+{
+    struct Pokemon *mon = GetBattlerMon(battler);
+    u8 barSpriteId = gSprites[healthboxSpriteId].hMain_HealthBarSpriteId;
+    u32 *vram = (u32 *)(OBJ_VRAM0 + gSprites[barSpriteId].oam.tileNum * TILE_SIZE_4BPP);
+    u32 tiles[8][8]; // 8 tiles x 8 rows, one u32 per 8-pixel row
+    u32 energy, maxEnergy, enPixels, hpPixels, hpColor, enColor, i, t, x, y;
+
+    if (gBattleSpritesDataPtr == NULL || gBattleSpritesDataPtr->battlerData[battler].hpNumbersNoBars)
+        return;
+
+    if (!sTreyHpBarKnown[battler])
+    {
+        s32 hp = GetMonData(mon, MON_DATA_HP), maxHp = GetMonData(mon, MON_DATA_MAX_HP);
+        sTreyHpBarPixels[battler] = GetScaledHPFraction(hp, maxHp, B_HEALTHBAR_PIXELS);
+        switch (GetHPBarLevel(hp, maxHp))
+        {
+        case HP_BAR_FULL:
+        case HP_BAR_GREEN:  sTreyHpBarColor[battler] = TREY_BAR_GREEN; break;
+        case HP_BAR_YELLOW: sTreyHpBarColor[battler] = TREY_BAR_YELLOW; break;
+        default:            sTreyHpBarColor[battler] = TREY_BAR_RED; break;
+        }
+    }
+    hpPixels = sTreyHpBarPixels[battler];
+    hpColor = sTreyHpBarColor[battler];
+
+    energy = GetMonData(mon, MON_DATA_ENERGY);
+    maxEnergy = TreyEnergy_GetMonMax(mon);
+    enPixels = (maxEnergy == 0) ? 0 : (energy * B_HEALTHBAR_PIXELS + maxEnergy - 1) / maxEnergy;
+    if (enPixels > B_HEALTHBAR_PIXELS)
+        enPixels = B_HEALTHBAR_PIXELS;
+    enColor = TREY_BAR_YELLOW;
+    for (i = 0; i < MAX_MON_MOVES; i++)
+    {
+        u32 move = GetMonData(mon, MON_DATA_MOVE1 + i);
+        if (move != MOVE_NONE && energy < TreyEnergy_GetMoveCost(move))
+            enColor = TREY_BAR_RED;
+    }
+
+    CpuCopy32(vram, tiles, sizeof(tiles));
+
+    // Label (tiles 0-1), unless the status icon has taken its place.
+    if (TreyBarLabelVisible(battler))
+    {
+        for (t = 0; t < 2; t++)
+        {
+            for (y = 0; y < 8; y++)
+            {
+                u32 row = 0;
+                for (x = 0; x < 8; x++)
+                {
+                    u32 c;
+                    switch (sTreyBarLabel[y][t * 8 + x])
+                    {
+                    case 'o': c = TREY_BAR_OUTLINE; break;
+                    case '#': c = TREY_BAR_BORDER; break;
+                    case 'L': c = sTreyLabelLetterColors[(y >= 5) ? y - 5 : y - 1]; break;
+                    default:  c = 0; break;
+                    }
+                    row |= c << (x * 4);
+                }
+                tiles[t][y] = row;
+            }
+        }
+    }
+
+    // Bars (tiles 2-7, 48 px).
+    for (t = 2; t < 8; t++)
+    {
+        for (y = 0; y < 8; y++)
+        {
+            u32 row = 0;
+            for (x = 0; x < 8; x++)
+            {
+                u32 px = (t - 2) * 8 + x, c;
+                switch (y)
+                {
+                case 0:
+                    c = 0;
+                    break;
+                case 2:
+                case 3:
+                    c = (px < hpPixels) ? sTreyBarFillColors[hpColor][y - 2] : TREY_BAR_EMPTY;
+                    break;
+                case 5:
+                case 6:
+                    c = (px < enPixels) ? sTreyBarFillColors[enColor][y - 5] : TREY_BAR_EMPTY;
+                    break;
+                default:
+                    c = TREY_BAR_BORDER;
+                    break;
+                }
+                row |= c << (x * 4);
+            }
+            tiles[t][y] = row;
+        }
+    }
+
+    CpuCopy32(tiles, vram, sizeof(tiles));
+}
+
+void TreyEnergy_UpdateHealthboxBar(u32 battler)
+{
+    if (gBattleSpritesDataPtr == NULL || battler >= gBattlersCount)
+        return;
+    if ((gBattleTypeFlags & BATTLE_TYPE_SAFARI) && IsOnPlayerSide(battler))
+        return;
+    TreyDrawBars(battler, gHealthboxSpriteIds[battler]);
+}
 
 s32 MoveBattleBar(u8 battler, u8 healthboxSpriteId, u8 whichBar, u8 unused)
 {
@@ -2127,16 +2289,12 @@ static void MoveBattleBarGraphically(u8 battler, u8 whichBar)
         else
             barElementId = HEALTHBOX_GFX_HP_BAR_RED; // 20 % or less
 
-        for (i = 0; i < 6; i++)
-        {
-            u8 healthbarSpriteId = gSprites[gBattleSpritesDataPtr->battleBars[battler].healthboxSpriteId].hMain_HealthBarSpriteId;
-            if (i < 2)
-                CpuCopy32(GetHealthboxElementGfxPtr(barElementId) + array[i] * 32,
-                          (void *)(OBJ_VRAM0 + (gSprites[healthbarSpriteId].oam.tileNum + 2 + i) * TILE_SIZE_4BPP), 32);
-            else
-                CpuCopy32(GetHealthboxElementGfxPtr(barElementId) + array[i] * 32,
-                          (void *)(OBJ_VRAM0 + 64 + (i + gSprites[healthbarSpriteId].oam.tileNum) * TILE_SIZE_4BPP), 32);
-        }
+        // TREY: draw the stacked HP + Energy bar instead of the vanilla HP tiles.
+        sTreyHpBarPixels[battler] = filledPixelsCount;
+        sTreyHpBarColor[battler] = (barElementId == HEALTHBOX_GFX_HP_BAR_GREEN) ? TREY_BAR_GREEN
+                                 : (barElementId == HEALTHBOX_GFX_HP_BAR_YELLOW) ? TREY_BAR_YELLOW : TREY_BAR_RED;
+        sTreyHpBarKnown[battler] = TRUE;
+        TreyDrawBars(battler, gBattleSpritesDataPtr->battleBars[battler].healthboxSpriteId);
         break;
     case EXP_BAR:
         CalcBarFilledPixels(gBattleSpritesDataPtr->battleBars[battler].maxValue,

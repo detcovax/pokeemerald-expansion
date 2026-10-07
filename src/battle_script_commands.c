@@ -17196,6 +17196,8 @@ void BS_ItemRestorePP(void)
 
     // TREY: restore Energy (TREY_PLAN.md 5.6). Energy lives in the party Pokémon, so nothing else to update.
     TreyEnergy_Restore(mon, TreyEnergy_GetItemRestoreAmount(gLastUsedItem));
+    if (battler != MAX_BATTLERS_COUNT)
+        TreyEnergy_UpdateHealthboxBar(battler);
     gBattleScripting.battler = battler;
     PREPARE_SPECIES_BUFFER(gBattleTextBuff1, GetMonData(mon, MON_DATA_SPECIES));
     gBattlescriptCurrInstr = cmd->nextInstr;

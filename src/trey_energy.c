@@ -2,6 +2,7 @@
 
 #include "global.h"
 #include "battle.h"
+#include "battle_interface.h"
 #include "caps.h"
 #include "item.h"
 #include "constants/item_effects.h"
@@ -167,6 +168,7 @@ void TreyEnergy_BattlerSpend(u32 battler, u32 amount)
     u32 current = GetMonData(mon, MON_DATA_ENERGY, NULL);
     u16 value = (current > amount) ? current - amount : 0;
     SetMonData(mon, MON_DATA_ENERGY, &value);
+    TreyEnergy_UpdateHealthboxBar(battler); // E4: redraw the Energy bar
 }
 
 // Battle drain (Spite, Eerie Spell, Grudge).

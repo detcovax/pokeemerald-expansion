@@ -507,13 +507,11 @@ $(SYM): $(ELF)
 trey-save-report: rom
 	@bash tools/trey/save_report.sh "$(PREFIX)gcc" "$(PREFIX)nm" $(CPPFLAGS)
 
-# TREY: one command for both reports. The game ROM and the test ROM are separate builds
+# TREY: one command for both reports, with one summary block at the end (tools/trey/check.sh). The game ROM and the test ROM are separate builds
 # (build/modern and build/modern-test), so this runs them one after the other; each only
 # recompiles what changed. Usage: make trey-check                    (TREY tests only)
 #                                 make trey-check TREY_TESTS=Pressure  (tests whose name contains "Pressure")
 TREY_TESTS ?= TREY
 .PHONY: trey-check
 trey-check:
-	@$(MAKE) --no-print-directory trey-save-report
-	@$(MAKE) --no-print-directory check TESTS="$(TREY_TESTS)"
-	@echo "BUILD OK"
+	@bash tools/trey/check.sh "$(MAKE)" "$(TREY_TESTS)"
