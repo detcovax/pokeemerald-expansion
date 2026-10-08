@@ -15,6 +15,7 @@
 #include "menu.h"
 #include "metatile_behavior.h"
 #include "overworld.h"
+#include "constants/map_types.h" // TREY: MAP_TYPE_SKY
 #include "party_menu.h"
 #include "random.h"
 #include "rotating_gate.h"
@@ -1612,7 +1613,13 @@ static u16 GetPlayerAvatarStateTransitionByGraphicsId(u16 graphicsId, u8 gender)
     for (i = 0; i < ARRAY_COUNT(sPlayerAvatarGfxToStateFlag[0]); i++)
     {
         if (sPlayerAvatarGfxToStateFlag[gender][i][0] == graphicsId)
+        {
+            // TREY: soaring reuses the surfing sprite. When the player is rebuilt from its sprite
+            // (returning from a battle or menu), on a Sky map that sprite means soaring, not surfing.
+            if (sPlayerAvatarGfxToStateFlag[gender][i][1] == PLAYER_AVATAR_FLAG_SURFING && GetCurrentMapType() == MAP_TYPE_SKY)
+                return PLAYER_AVATAR_FLAG_SOARING;
             return sPlayerAvatarGfxToStateFlag[gender][i][1];
+        }
     }
     return PLAYER_AVATAR_FLAG_ON_FOOT;
 }

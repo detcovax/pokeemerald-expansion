@@ -1,4 +1,5 @@
 #include "global.h"
+#include "trey_sky.h" // TREY
 #include "malloc.h"
 #include "battle_anim.h"
 #include "battle_pyramid.h"
@@ -9500,6 +9501,7 @@ static void GetAllGroundEffectFlags_OnSpawn(struct ObjectEvent *objEvent, u32 *f
 static void GetAllGroundEffectFlags_OnBeginStep(struct ObjectEvent *objEvent, u32 *flags)
 {
     ObjectEventUpdateMetatileBehaviors(objEvent);
+    TreySky_OnObjectBeginStep(objEvent); // TREY: cloud puff when soaring onto a cloud (3e)
     GetGroundEffectFlags_Reflection(objEvent, flags);
     GetGroundEffectFlags_TallGrassOnBeginStep(objEvent, flags);
     GetGroundEffectFlags_LongGrassOnBeginStep(objEvent, flags);

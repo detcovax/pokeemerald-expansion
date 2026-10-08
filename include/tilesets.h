@@ -8,6 +8,7 @@ extern const struct Tileset *const gTilesetPointer_SecretBase;
 extern const struct Tileset *const gTilesetPointer_SecretBaseRedCave;
 
 extern const struct Tileset gTileset_Building;
+extern const struct Tileset gTileset_TreySky; // TREY (3e)
 extern const struct Tileset gTileset_BrendansMaysHouse;
 
 #endif //GUARD_tilesets_H

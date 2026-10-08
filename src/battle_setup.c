@@ -581,6 +581,7 @@ static void CB2_EndWildBattle(void)
 {
     CpuFill16(0, (void *)(BG_PLTT), BG_PLTT_SIZE);
     ResetOamRange(0, 128);
+    HandleBattleVariantEndParty(); // TREY: sky cloud encounters use Sky Battle rules (3e)
 
     if (IsNPCFollowerWildBattle())
     {
@@ -607,6 +608,7 @@ static void CB2_EndScriptedWildBattle(void)
 {
     CpuFill16(0, (void *)(BG_PLTT), BG_PLTT_SIZE);
     ResetOamRange(0, 128);
+    HandleBattleVariantEndParty(); // TREY
 
     if (IsPlayerDefeated(gBattleOutcome) == TRUE)
     {
@@ -634,6 +636,8 @@ u8 BattleSetup_GetEnvironmentId(void)
 
     tileBehavior = MapGridGetMetatileBehaviorAt(x, y);
 
+    if (TestPlayerAvatarFlags(PLAYER_AVATAR_FLAG_SOARING)) // TREY: sky battle background (3e)
+        return BATTLE_ENVIRONMENT_SOARING;
     if (MetatileBehavior_IsTallGrass(tileBehavior))
         return BATTLE_ENVIRONMENT_GRASS;
     if (MetatileBehavior_IsLongGrass(tileBehavior))
@@ -1278,11 +1282,36 @@ static void SaveChangesToPlayerParty(void)
 
 static void HandleBattleVariantEndParty(void)
 {
+    // TREY: a Pokémon caught during a sky battle was put in the party after the participants.
+    // Keep it: back into the restored party if there is room, otherwise into the PC (3e).
+    struct Pokemon caught;
+    bool32 hasCaught = FALSE;
+    u32 participants;
+
     if (B_FLAG_SKY_BATTLE == 0 || !FlagGet(B_FLAG_SKY_BATTLE))
         return;
+    participants = __builtin_popcount(VarGet(B_VAR_SKY_BATTLE));
+    if (participants < PARTY_SIZE && GetMonData(&gPlayerParty[participants], MON_DATA_SPECIES) != SPECIES_NONE)
+    {
+        caught = gPlayerParty[participants];
+        hasCaught = TRUE;
+    }
     SaveChangesToPlayerParty();
     LoadPlayerParty();
     FlagClear(B_FLAG_SKY_BATTLE);
+    if (hasCaught)
+    {
+        u32 count = CalculatePlayerPartyCount();
+        if (count < PARTY_SIZE)
+        {
+            gPlayerParty[count] = caught;
+            CalculatePlayerPartyCount();
+        }
+        else
+        {
+            CopyMonToPC(&caught);
+        }
+    }
 }
 
 static void CB2_EndTrainerBattle(void)

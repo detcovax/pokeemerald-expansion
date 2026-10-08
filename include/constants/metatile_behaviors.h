@@ -7,7 +7,7 @@ enum {
     MB_TALL_GRASS,
     MB_LONG_GRASS,
     MB_ROCK_CLIMB, // TREY: climbable rock wall (Rock Climb, TREY_PLAN.md 5.3). Was MB_UNUSED_04.
-    MB_UNUSED_05,
+    MB_SKY_CLOUD, // TREY: cloud on a Sky map; triggers sky encounters while soaring (3e). Was MB_UNUSED_05.
     MB_DEEP_SAND,
     MB_SHORT_GRASS,
     MB_CAVE,
@@ -86,10 +86,10 @@ enum {
     MB_WESTWARD_CURRENT,
     MB_NORTHWARD_CURRENT,
     MB_SOUTHWARD_CURRENT,
-    MB_UNUSED_54,
-    MB_UNUSED_55,
-    MB_UNUSED_56,
-    MB_UNUSED_57,
+    MB_SKY_WIND_NORTH, // TREY: jet streams on Sky maps push like water currents (3e). Were MB_UNUSED_54-57.
+    MB_SKY_WIND_SOUTH,
+    MB_SKY_WIND_WEST,
+    MB_SKY_WIND_EAST,
     MB_UNUSED_58,
     MB_UNUSED_59,
     MB_UNUSED_5A,

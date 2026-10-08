@@ -11,7 +11,7 @@ static const u8 sTileBitAttributes[NUM_METATILE_BEHAVIORS] =
     [MB_NORMAL]                             = TILE_FLAG_UNUSED,
     [MB_TALL_GRASS]                         = TILE_FLAG_UNUSED | TILE_FLAG_HAS_ENCOUNTERS,
     [MB_LONG_GRASS]                         = TILE_FLAG_UNUSED | TILE_FLAG_HAS_ENCOUNTERS,
-    [MB_UNUSED_05]                          = TILE_FLAG_HAS_ENCOUNTERS,
+    [MB_SKY_CLOUD]                          = 0, // TREY: sky encounters are handled separately (wild_encounter.c)
     [MB_DEEP_SAND]                          = TILE_FLAG_UNUSED | TILE_FLAG_HAS_ENCOUNTERS,
     [MB_SHORT_GRASS]                        = TILE_FLAG_UNUSED,
     [MB_CAVE]                               = TILE_FLAG_UNUSED | TILE_FLAG_HAS_ENCOUNTERS,
@@ -347,6 +347,7 @@ bool8 MetatileBehavior_IsForcedMovementTile(u8 metatileBehavior)
 {
     if ((metatileBehavior >= MB_WALK_EAST && metatileBehavior <= MB_TRICK_HOUSE_PUZZLE_8_FLOOR)
      || (metatileBehavior >= MB_EASTWARD_CURRENT && metatileBehavior <= MB_SOUTHWARD_CURRENT)
+     || (metatileBehavior >= MB_SKY_WIND_NORTH && metatileBehavior <= MB_SKY_WIND_EAST) // TREY: jet streams
      || metatileBehavior == MB_MUDDY_SLOPE
      || metatileBehavior == MB_CRACKED_FLOOR
      || metatileBehavior == MB_WATERFALL
@@ -374,9 +375,9 @@ bool8 MetatileBehavior_IsTrickHouseSlipperyFloor(u8 metatileBehavior)
         return FALSE;
 }
 
-bool8 Unref_MetatileBehavior_IsUnused05(u8 metatileBehavior)
+bool8 MetatileBehavior_IsSkyCloud(u8 metatileBehavior) // TREY
 {
-    if (metatileBehavior == MB_UNUSED_05)
+    if (metatileBehavior == MB_SKY_CLOUD)
         return TRUE;
     else
         return FALSE;
@@ -416,7 +417,7 @@ bool8 MetatileBehavior_IsWalkEast(u8 metatileBehavior)
 
 bool8 MetatileBehavior_IsNorthwardCurrent(u8 metatileBehavior)
 {
-    if (metatileBehavior == MB_NORTHWARD_CURRENT)
+    if (metatileBehavior == MB_NORTHWARD_CURRENT || metatileBehavior == MB_SKY_WIND_NORTH) // TREY: jet streams
         return TRUE;
     else
         return FALSE;
@@ -424,7 +425,7 @@ bool8 MetatileBehavior_IsNorthwardCurrent(u8 metatileBehavior)
 
 bool8 MetatileBehavior_IsSouthwardCurrent(u8 metatileBehavior)
 {
-    if (metatileBehavior == MB_SOUTHWARD_CURRENT)
+    if (metatileBehavior == MB_SOUTHWARD_CURRENT || metatileBehavior == MB_SKY_WIND_SOUTH) // TREY: jet streams
         return TRUE;
     else
         return FALSE;
@@ -432,7 +433,7 @@ bool8 MetatileBehavior_IsSouthwardCurrent(u8 metatileBehavior)
 
 bool8 MetatileBehavior_IsWestwardCurrent(u8 metatileBehavior)
 {
-    if (metatileBehavior == MB_WESTWARD_CURRENT)
+    if (metatileBehavior == MB_WESTWARD_CURRENT || metatileBehavior == MB_SKY_WIND_WEST) // TREY: jet streams
         return TRUE;
     else
         return FALSE;
@@ -440,7 +441,7 @@ bool8 MetatileBehavior_IsWestwardCurrent(u8 metatileBehavior)
 
 bool8 MetatileBehavior_IsEastwardCurrent(u8 metatileBehavior)
 {
-    if (metatileBehavior == MB_EASTWARD_CURRENT)
+    if (metatileBehavior == MB_EASTWARD_CURRENT || metatileBehavior == MB_SKY_WIND_EAST) // TREY: jet streams
         return TRUE;
     else
         return FALSE;

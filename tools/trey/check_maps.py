@@ -12,6 +12,7 @@ Checks:
   - trey_season_layouts: valid season names, layout exists, same size as the map's normal layout
     (warps and events are shared between seasons, so the size must not change).
   - wild encounters (TREY_PLAN.md 5.8, D10): Hisuian forms only in Sinnoh, Paldean forms only in Kitakami.
+  - sky_mons tables (3e) only on Sky maps.
 """
 import json
 import os
@@ -184,6 +185,8 @@ def main():
             if entry is None:
                 continue
             region = mapsec_regions.get(entry[1].get("region_map_section"), "REGION_HOENN")
+            if "sky_mons" in enc and entry[1].get("map_type") != "MAP_TYPE_SKY":
+                error(f"wild_encounters.json {enc.get('base_label')}: sky_mons are only allowed on Sky maps (MAP_TYPE_SKY), but {map_id} is {entry[1].get('map_type')}.")
             for field, table in enc.items():
                 if not isinstance(table, dict) or "mons" not in table:
                     continue

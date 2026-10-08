@@ -4410,6 +4410,16 @@
       "secondary_tileset": "gTileset_MysteryEventsHouse",
       "border_filepath": "data/layouts/SootopolisCity_MysteryEventsHouse_1F_StairsUnblocked/border.bin",
       "blockdata_filepath": "data/layouts/SootopolisCity_MysteryEventsHouse_1F_StairsUnblocked/map.bin"
+    },
+    {
+      "id": "LAYOUT_TREY_TEST_ROUTE101_SKY",
+      "name": "TreyTest_Route101Sky_Layout",
+      "width": 20,
+      "height": 20,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_TreySky",
+      "border_filepath": "data/layouts/TreyTest_Route101Sky/border.bin",
+      "blockdata_filepath": "data/layouts/TreyTest_Route101Sky/map.bin"
     }
   ]
 }

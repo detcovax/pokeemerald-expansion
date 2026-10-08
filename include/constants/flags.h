@@ -1658,6 +1658,7 @@
 // TREY system flags
 #define TREY_FLAG_SYSTEM_START          (TREY_FLAG_BADGES_END + 1)
 #define FLAG_TREY_TERA_ORB_CHARGED      (TREY_FLAG_SYSTEM_START + 0x00) // B_FLAG_TERA_ORB_CHARGED (D19)
+#define FLAG_TREY_SKY_BATTLE            (TREY_FLAG_SYSTEM_START + 0x01) // B_FLAG_SKY_BATTLE: set while a Sky Battle is running (3e)
 
 // TREY HM unlocks (TREY_PLAN.md 5.3). Set by the tutorial. Once set, any party Pokémon that can
 // learn the move may use it in the field, without knowing it.

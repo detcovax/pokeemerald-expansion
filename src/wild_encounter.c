@@ -1,4 +1,6 @@
 #include "global.h"
+#include "battle_util.h" // TREY: CanMonParticipateInSkyBattle
+#include "field_specials.h" // TREY: PreparePartyForSkyBattle
 #include "trey_regional.h" // TREY
 #include "wild_encounter.h"
 #include "pokemon.h"
@@ -298,6 +300,26 @@ static u8 ChooseWildMonIndex_Fishing(u8 rod)
     return wildMonIndex;
 }
 
+// TREY: sky clouds (3e). Slot chances come from the "sky_mons" field in wild_encounters.json.
+static u8 ChooseWildMonIndex_Sky(void)
+{
+    static const u8 sChances[SKY_WILD_COUNT] =
+    {
+        ENCOUNTER_CHANCE_SKY_MONS_SLOT_0, ENCOUNTER_CHANCE_SKY_MONS_SLOT_1, ENCOUNTER_CHANCE_SKY_MONS_SLOT_2,
+        ENCOUNTER_CHANCE_SKY_MONS_SLOT_3, ENCOUNTER_CHANCE_SKY_MONS_SLOT_4, ENCOUNTER_CHANCE_SKY_MONS_SLOT_5,
+        ENCOUNTER_CHANCE_SKY_MONS_SLOT_6, ENCOUNTER_CHANCE_SKY_MONS_SLOT_7, ENCOUNTER_CHANCE_SKY_MONS_SLOT_8,
+        ENCOUNTER_CHANCE_SKY_MONS_SLOT_9, ENCOUNTER_CHANCE_SKY_MONS_SLOT_10, ENCOUNTER_CHANCE_SKY_MONS_SLOT_11,
+    };
+    u32 i, rand = Random() % ENCOUNTER_CHANCE_SKY_MONS_TOTAL;
+
+    for (i = 0; i < SKY_WILD_COUNT - 1; i++)
+    {
+        if (rand < sChances[i])
+            return i;
+    }
+    return SKY_WILD_COUNT - 1;
+}
+
 static u8 ChooseWildMonLevel(const struct WildPokemon *wildPokemon, u8 wildMonIndex, enum WildPokemonArea area)
 {
     u8 min;
@@ -408,6 +430,9 @@ enum TimeOfDay GetTimeOfDayForEncounters(u32 headerId, enum WildPokemonArea area
             break;
         case WILD_AREA_HIDDEN:
             wildMonInfo = gWildMonHeaders[headerId].encounterTypes[timeOfDay].hiddenMonsInfo;
+            break;
+        case WILD_AREA_SKY: // TREY
+            wildMonInfo = gWildMonHeaders[headerId].encounterTypes[timeOfDay].skyMonsInfo;
             break;
         }
     }
@@ -537,6 +562,17 @@ static bool8 TryGenerateWildMon(const struct WildPokemonInfo *wildMonInfo, enum 
     case WILD_AREA_ROCKS:
         wildMonIndex = ChooseWildMonIndex_WaterRock();
         break;
+    case WILD_AREA_SKY: // TREY
+        if (TRY_GET_ABILITY_INFLUENCED_WILD_MON_INDEX(wildMonInfo->wildPokemon, TYPE_STEEL, ABILITY_MAGNET_PULL, &wildMonIndex, SKY_WILD_COUNT))
+            break;
+        if (TRY_GET_ABILITY_INFLUENCED_WILD_MON_INDEX(wildMonInfo->wildPokemon, TYPE_ELECTRIC, ABILITY_STATIC, &wildMonIndex, SKY_WILD_COUNT))
+            break;
+        if (OW_LIGHTNING_ROD >= GEN_8 && TRY_GET_ABILITY_INFLUENCED_WILD_MON_INDEX(wildMonInfo->wildPokemon, TYPE_ELECTRIC, ABILITY_LIGHTNING_ROD, &wildMonIndex, SKY_WILD_COUNT))
+            break;
+        if (OW_FLASH_FIRE >= GEN_8 && TRY_GET_ABILITY_INFLUENCED_WILD_MON_INDEX(wildMonInfo->wildPokemon, TYPE_FIRE, ABILITY_FLASH_FIRE, &wildMonIndex, SKY_WILD_COUNT))
+            break;
+        wildMonIndex = ChooseWildMonIndex_Sky();
+        break;
     default:
     case WILD_AREA_FISHING:
     case WILD_AREA_HIDDEN:
@@ -659,6 +695,41 @@ static bool8 AreLegendariesInSootopolisPreventingEncounters(void)
     return FlagGet(FLAG_LEGENDARIES_IN_SOOTOPOLIS);
 }
 
+// TREY: does the player have a Pokémon that can fight under Sky Battle rules (Flying type or Levitate)?
+static bool32 TreySky_PlayerCanBattle(void)
+{
+    u32 i;
+    for (i = 0; i < PARTY_SIZE; i++)
+    {
+        if (CanMonParticipateInSkyBattle(&gPlayerParty[i]) && GetMonData(&gPlayerParty[i], MON_DATA_HP) > 0)
+            return TRUE;
+    }
+    return FALSE;
+}
+
+// TREY: a cloud encounter while soaring (3e). Fought under Sky Battle rules: only Flying-type and
+// Levitate Pokémon take part; the rest of the party is restored afterwards (battle_setup.c).
+static bool8 TreySkyWildEncounter(u32 headerId, u16 curMetatileBehavior, u16 prevMetatileBehavior)
+{
+    enum TimeOfDay timeOfDay = GetTimeOfDayForEncounters(headerId, WILD_AREA_SKY);
+    const struct WildPokemonInfo *info = gWildMonHeaders[headerId].encounterTypes[timeOfDay].skyMonsInfo;
+
+    if (info == NULL)
+        return FALSE;
+    if (prevMetatileBehavior != curMetatileBehavior && !AllowWildCheckOnNewMetatile())
+        return FALSE;
+    if (WildEncounterCheck(info->encounterRate, FALSE) != TRUE)
+        return FALSE;
+    if (!TreySky_PlayerCanBattle())
+        return FALSE; // nothing in the party can fight up here, so nothing attacks
+    if (TryGenerateWildMon(info, WILD_AREA_SKY, WILD_CHECK_REPEL | WILD_CHECK_KEEN_EYE) != TRUE)
+        return FALSE;
+
+    PreparePartyForSkyBattle();
+    BattleSetup_StartWildBattle();
+    return TRUE;
+}
+
 bool8 StandardWildEncounter(u16 curMetatileBehavior, u16 prevMetatileBehavior)
 {
     u32 headerId;
@@ -707,6 +778,12 @@ bool8 StandardWildEncounter(u16 curMetatileBehavior, u16 prevMetatileBehavior)
     }
     else
     {
+        if (TestPlayerAvatarFlags(PLAYER_AVATAR_FLAG_SOARING)) // TREY: only clouds have encounters in the sky
+        {
+            if (MetatileBehavior_IsSkyCloud(curMetatileBehavior))
+                return TreySkyWildEncounter(headerId, curMetatileBehavior, prevMetatileBehavior);
+            return FALSE;
+        }
         if (MetatileBehavior_IsLandWildEncounter(curMetatileBehavior) == TRUE)
         {
             timeOfDay = GetTimeOfDayForEncounters(headerId, WILD_AREA_LAND);
@@ -1152,6 +1229,9 @@ static u8 GetMaxLevelOfSpeciesInWildTable(const struct WildPokemon *wildMon, u16
         break;
     case WILD_AREA_ROCKS:
         numMon = ROCK_WILD_COUNT;
+        break;
+    case WILD_AREA_SKY: // TREY
+        numMon = SKY_WILD_COUNT;
         break;
     default:
     case WILD_AREA_FISHING:

@@ -706,6 +706,14 @@ static bool8 LightenSpritePaletteInFog(u8 paletteIndex)
     return FALSE;
 }
 
+// TREY: re-apply the current weather colouring (and day/night tint) to a few BG palettes after their
+// colours changed in the unfaded buffer (sky tileset storm palettes, src/trey_sky.c).
+void TreyWeather_RefreshPalettes(u8 startPalIndex, u8 numPalettes)
+{
+    if (gWeatherPtr->palProcessingState == WEATHER_PAL_STATE_IDLE)
+        ApplyColorMap(startPalIndex, numPalettes, gWeatherPtr->colorMapIndex);
+}
+
 void ApplyWeatherColorMapIfIdle(s8 colorMapIndex)
 {
     if (gWeatherPtr->palProcessingState == WEATHER_PAL_STATE_IDLE)

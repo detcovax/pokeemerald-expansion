@@ -161,6 +161,7 @@ void Weather_SetBlendCoeffs(u8 eva, u8 evb);
 void Weather_SetTargetBlendCoeffs(u8 eva, u8 evb, int delay);
 bool8 Weather_UpdateBlend(void);
 u8 GetCurrentWeather(void);
+void TreyWeather_RefreshPalettes(u8 startPalIndex, u8 numPalettes); // TREY
 void SetRainStrengthFromSoundEffect(u16 soundEffect);
 void PlayRainStoppingSoundEffect(void);
 u8 IsWeatherChangeComplete(void);

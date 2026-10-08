@@ -1,4 +1,5 @@
 #include "global.h"
+#include "trey_sky.h" // TREY
 #include "graphics.h"
 #include "palette.h"
 #include "util.h"
@@ -43,6 +44,7 @@ static void TilesetAnim_MauvilleGym(u16);
 static void TilesetAnim_BikeShop(u16);
 static void TilesetAnim_BattlePyramid(u16);
 static void TilesetAnim_BattleDome(u16);
+static void TilesetAnim_TreySky(u16); // TREY
 static void QueueAnimTiles_General_Flower(u16);
 static void QueueAnimTiles_General_Water(u16);
 static void QueueAnimTiles_General_SandWaterEdge(u16);
@@ -544,6 +546,121 @@ static const u16 *const sTilesetAnims_BattleDomeFloorLightPals[] = {
     gTilesetAnims_BattleDomePals0_3,
 };
 
+
+// TREY: sky tileset animations (phase 3e art, tools/trey/sky_art.py). Each frame is a 2x2 tile block.
+static const u16 sTreySky_Sky_A_Frame0[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/sky_a/0.4bpp");
+static const u16 sTreySky_Sky_A_Frame1[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/sky_a/1.4bpp");
+static const u16 sTreySky_Sky_A_Frame2[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/sky_a/2.4bpp");
+static const u16 sTreySky_Sky_A_Frame3[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/sky_a/3.4bpp");
+static const u16 sTreySky_Sky_A_Frame4[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/sky_a/4.4bpp");
+static const u16 sTreySky_Sky_A_Frame5[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/sky_a/5.4bpp");
+static const u16 sTreySky_Sky_A_Frame6[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/sky_a/6.4bpp");
+static const u16 sTreySky_Sky_A_Frame7[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/sky_a/7.4bpp");
+static const u16 sTreySky_Sky_B_Frame0[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/sky_b/0.4bpp");
+static const u16 sTreySky_Sky_B_Frame1[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/sky_b/1.4bpp");
+static const u16 sTreySky_Sky_B_Frame2[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/sky_b/2.4bpp");
+static const u16 sTreySky_Sky_B_Frame3[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/sky_b/3.4bpp");
+static const u16 sTreySky_Sky_B_Frame4[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/sky_b/4.4bpp");
+static const u16 sTreySky_Sky_B_Frame5[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/sky_b/5.4bpp");
+static const u16 sTreySky_Sky_B_Frame6[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/sky_b/6.4bpp");
+static const u16 sTreySky_Sky_B_Frame7[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/sky_b/7.4bpp");
+static const u16 sTreySky_Swirl_Frame0[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/swirl/0.4bpp");
+static const u16 sTreySky_Swirl_Frame1[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/swirl/1.4bpp");
+static const u16 sTreySky_Swirl_Frame2[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/swirl/2.4bpp");
+static const u16 sTreySky_Swirl_Frame3[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/swirl/3.4bpp");
+static const u16 sTreySky_Swirl_Frame4[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/swirl/4.4bpp");
+static const u16 sTreySky_Swirl_Frame5[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/swirl/5.4bpp");
+static const u16 sTreySky_Swirl_Frame6[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/swirl/6.4bpp");
+static const u16 sTreySky_Swirl_Frame7[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/swirl/7.4bpp");
+static const u16 sTreySky_Swirl_Frame8[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/swirl/8.4bpp");
+static const u16 sTreySky_Swirl_Frame9[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/swirl/9.4bpp");
+static const u16 sTreySky_Swirl_Frame10[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/swirl/10.4bpp");
+static const u16 sTreySky_Swirl_Frame11[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/swirl/11.4bpp");
+static const u16 sTreySky_Swirl_Frame12[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/swirl/12.4bpp");
+static const u16 sTreySky_Swirl_Frame13[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/swirl/13.4bpp");
+static const u16 sTreySky_Swirl_Frame14[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/swirl/14.4bpp");
+static const u16 sTreySky_Swirl_Frame15[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/swirl/15.4bpp");
+static const u16 sTreySky_Wind_E_Frame0[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/wind_e/0.4bpp");
+static const u16 sTreySky_Wind_E_Frame1[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/wind_e/1.4bpp");
+static const u16 sTreySky_Wind_E_Frame2[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/wind_e/2.4bpp");
+static const u16 sTreySky_Wind_E_Frame3[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/wind_e/3.4bpp");
+static const u16 sTreySky_Wind_E_Frame4[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/wind_e/4.4bpp");
+static const u16 sTreySky_Wind_E_Frame5[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/wind_e/5.4bpp");
+static const u16 sTreySky_Wind_E_Frame6[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/wind_e/6.4bpp");
+static const u16 sTreySky_Wind_E_Frame7[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/wind_e/7.4bpp");
+static const u16 sTreySky_Wind_S_Frame0[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/wind_s/0.4bpp");
+static const u16 sTreySky_Wind_S_Frame1[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/wind_s/1.4bpp");
+static const u16 sTreySky_Wind_S_Frame2[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/wind_s/2.4bpp");
+static const u16 sTreySky_Wind_S_Frame3[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/wind_s/3.4bpp");
+static const u16 sTreySky_Wind_S_Frame4[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/wind_s/4.4bpp");
+static const u16 sTreySky_Wind_S_Frame5[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/wind_s/5.4bpp");
+static const u16 sTreySky_Wind_S_Frame6[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/wind_s/6.4bpp");
+static const u16 sTreySky_Wind_S_Frame7[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/wind_s/7.4bpp");
+
+static const u16 *const sTreySky_Sky_A[] =
+{
+    sTreySky_Sky_A_Frame0,
+    sTreySky_Sky_A_Frame1,
+    sTreySky_Sky_A_Frame2,
+    sTreySky_Sky_A_Frame3,
+    sTreySky_Sky_A_Frame4,
+    sTreySky_Sky_A_Frame5,
+    sTreySky_Sky_A_Frame6,
+    sTreySky_Sky_A_Frame7,
+};
+static const u16 *const sTreySky_Sky_B[] =
+{
+    sTreySky_Sky_B_Frame0,
+    sTreySky_Sky_B_Frame1,
+    sTreySky_Sky_B_Frame2,
+    sTreySky_Sky_B_Frame3,
+    sTreySky_Sky_B_Frame4,
+    sTreySky_Sky_B_Frame5,
+    sTreySky_Sky_B_Frame6,
+    sTreySky_Sky_B_Frame7,
+};
+static const u16 *const sTreySky_Swirl[] =
+{
+    sTreySky_Swirl_Frame0,
+    sTreySky_Swirl_Frame1,
+    sTreySky_Swirl_Frame2,
+    sTreySky_Swirl_Frame3,
+    sTreySky_Swirl_Frame4,
+    sTreySky_Swirl_Frame5,
+    sTreySky_Swirl_Frame6,
+    sTreySky_Swirl_Frame7,
+    sTreySky_Swirl_Frame8,
+    sTreySky_Swirl_Frame9,
+    sTreySky_Swirl_Frame10,
+    sTreySky_Swirl_Frame11,
+    sTreySky_Swirl_Frame12,
+    sTreySky_Swirl_Frame13,
+    sTreySky_Swirl_Frame14,
+    sTreySky_Swirl_Frame15,
+};
+static const u16 *const sTreySky_Wind_E[] =
+{
+    sTreySky_Wind_E_Frame0,
+    sTreySky_Wind_E_Frame1,
+    sTreySky_Wind_E_Frame2,
+    sTreySky_Wind_E_Frame3,
+    sTreySky_Wind_E_Frame4,
+    sTreySky_Wind_E_Frame5,
+    sTreySky_Wind_E_Frame6,
+    sTreySky_Wind_E_Frame7,
+};
+static const u16 *const sTreySky_Wind_S[] =
+{
+    sTreySky_Wind_S_Frame0,
+    sTreySky_Wind_S_Frame1,
+    sTreySky_Wind_S_Frame2,
+    sTreySky_Wind_S_Frame3,
+    sTreySky_Wind_S_Frame4,
+    sTreySky_Wind_S_Frame5,
+    sTreySky_Wind_S_Frame6,
+    sTreySky_Wind_S_Frame7,
+};
+
 static void ResetTilesetAnimBuffer(void)
 {
     sTilesetDMA3TransferBufferSize = 0;
@@ -790,6 +907,33 @@ void InitTilesetAnim_SootopolisGym(void)
     sSecondaryTilesetAnimCounter = 0;
     sSecondaryTilesetAnimCounterMax = 240;
     sSecondaryTilesetAnimCallback = TilesetAnim_SootopolisGym;
+}
+
+// TREY (3e): the sky ripples and swirls step every 16 frames, jet streams twice as fast (every 8).
+void InitTilesetAnim_TreySky(void)
+{
+    sSecondaryTilesetAnimCounter = 0;
+    sSecondaryTilesetAnimCounterMax = 256;
+    sSecondaryTilesetAnimCallback = TilesetAnim_TreySky;
+    TreySky_ResetPalettes();
+}
+
+#define TREY_SKY_TILE(n) ((u16 *)(BG_VRAM + TILE_OFFSET_4BPP(NUM_TILES_IN_PRIMARY + (n))))
+
+static void TilesetAnim_TreySky(u16 timer)
+{
+    TreySky_UpdatePalettes(); // storm colours follow the weather
+    if (timer % 16 == 0)
+    {
+        AppendTilesetAnimToBuffer(sTreySky_Sky_A[(timer / 16) % ARRAY_COUNT(sTreySky_Sky_A)], TREY_SKY_TILE(1), 4 * TILE_SIZE_4BPP);
+        AppendTilesetAnimToBuffer(sTreySky_Sky_B[(timer / 16) % ARRAY_COUNT(sTreySky_Sky_B)], TREY_SKY_TILE(5), 4 * TILE_SIZE_4BPP);
+        AppendTilesetAnimToBuffer(sTreySky_Swirl[(timer / 16) % ARRAY_COUNT(sTreySky_Swirl)], TREY_SKY_TILE(9), 4 * TILE_SIZE_4BPP);
+    }
+    if (timer % 8 == 0)
+    {
+        AppendTilesetAnimToBuffer(sTreySky_Wind_E[(timer / 8) % ARRAY_COUNT(sTreySky_Wind_E)], TREY_SKY_TILE(13), 4 * TILE_SIZE_4BPP);
+        AppendTilesetAnimToBuffer(sTreySky_Wind_S[(timer / 8) % ARRAY_COUNT(sTreySky_Wind_S)], TREY_SKY_TILE(17), 4 * TILE_SIZE_4BPP);
+    }
 }
 
 void InitTilesetAnim_Cave(void)

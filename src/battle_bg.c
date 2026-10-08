@@ -701,6 +701,17 @@ const struct BattleBackground sBattleEnvironmentTable[] =
         .entryTilemap = gBattleEnvironmentAnimTilemap_Building,
         .palette = gBattleEnvironmentPalette_Plain,
     },
+
+    // TREY: sky cloud encounters (3e). Reuses Emerald's Sky Pillar (Rayquaza) sky: cloud platforms
+    // and a cloud bank that slides in at the start.
+    [BATTLE_ENVIRONMENT_SOARING] =
+    {
+        .tileset = gBattleEnvironmentTiles_Rayquaza,
+        .tilemap = gBattleEnvironmentTilemap_Rayquaza,
+        .entryTileset = gBattleEnvironmentAnimTiles_Rayquaza,
+        .entryTilemap = gBattleEnvironmentAnimTilemap_Rayquaza,
+        .palette = gBattleEnvironmentPalette_Rayquaza,
+    },
 };
 
 void BattleInitBgsAndWindows(void)

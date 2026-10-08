@@ -1,4 +1,5 @@
 #include "global.h"
+#include "battle_util.h" // TREY: CanMonParticipateInSkyBattle
 #include "trey_energy.h" // TREY
 #include "trey_hm.h" // TREY
 #include "trey_layers.h" // TREY
@@ -4038,6 +4039,16 @@ static void CursorCb_FieldMove(u8 taskId)
         if (TreyHM_IsHM(sFieldMoves[fieldMove]) && !TreyHM_IsUnlocked(sFieldMoves[fieldMove]))
         {
             DisplayPartyMenuMessage(COMPOUND_STRING("You can't use this move in the\nfield yet.{PAUSE_UNTIL_PRESS}"), TRUE);
+            gTasks[taskId].func = Task_ReturnToChooseMonAfterText;
+        }
+        // TREY (3e): the Pokémon you soar on must be able to fight in Sky Battles (Flying type or
+        // Levitate), so a soaring player always has at least one Pokémon that can battle up there.
+        else if (fieldMove == FIELD_MOVE_FLY && !TreyLayer_IsSoaring()
+              && !CanMonParticipateInSkyBattle(&gPlayerParty[gPartyMenu.slotId]))
+        {
+            GetMonNickname(&gPlayerParty[gPartyMenu.slotId], gStringVar1);
+            StringExpandPlaceholders(gStringVar4, COMPOUND_STRING("{STR_VAR_1} can't carry you\ninto the sky.{PAUSE_UNTIL_PRESS}"));
+            DisplayPartyMenuMessage(gStringVar4, TRUE);
             gTasks[taskId].func = Task_ReturnToChooseMonAfterText;
         }
         else if (sFieldMoveCursorCallbacks[fieldMove].fieldMoveFunc() == TRUE)
