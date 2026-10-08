@@ -28,7 +28,7 @@ static const u16 sStormPalettes[SKY_NUM_PALS][16] =
     INCBIN_U16("data/tilesets/secondary/trey_sky/palettes/storm/09.gbapal"),
 };
 
-static EWRAM_DATA s8 sStormShown = -1;
+static EWRAM_DATA s8 sStormShown = 0;
 
 bool32 TreySky_IsStormWeather(void)
 {
