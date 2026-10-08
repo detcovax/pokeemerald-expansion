@@ -202,24 +202,24 @@
   ],
   "trey_layer_links": [
     {
-      "type": "LAYER_LINK_SKY_UP",
-      "x": 0,
-      "y": 0,
-      "width": 20,
-      "height": 20,
       "dest_x": 0,
       "dest_y": 0,
-      "map": "MAP_TREY_TEST_ROUTE101_SKY"
+      "height": 20,
+      "map": "MAP_TREY_TEST_ROUTE101_SKY",
+      "type": "LAYER_LINK_SKY_UP",
+      "width": 20,
+      "x": 0,
+      "y": 0
     },
     {
-      "type": "LAYER_LINK_DIG_DOWN",
-      "x": 0,
-      "y": 0,
-      "width": 20,
-      "height": 20,
       "dest_x": 0,
       "dest_y": 0,
-      "map": "MAP_TREY_TEST_ROUTE101_UNDERGROUND"
+      "height": 20,
+      "map": "MAP_TREY_TEST_ROUTE101_UNDERGROUND",
+      "type": "LAYER_LINK_DIG_DOWN",
+      "width": 20,
+      "x": 0,
+      "y": 0
     }
   ]
 }

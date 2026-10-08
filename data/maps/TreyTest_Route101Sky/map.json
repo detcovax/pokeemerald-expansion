@@ -9,7 +9,7 @@
   "map_type": "MAP_TYPE_SKY",
   "allow_cycling": false,
   "allow_escaping": false,
-  "allow_running": true,
+  "allow_running": false,
   "show_map_name": true,
   "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
   "connections": null,
@@ -19,14 +19,14 @@
   "bg_events": [],
   "trey_layer_links": [
     {
-      "type": "LAYER_LINK_SKY_DOWN",
-      "x": 0,
-      "y": 0,
-      "width": 20,
-      "height": 20,
       "dest_x": 0,
       "dest_y": 0,
-      "map": "MAP_ROUTE101"
+      "height": 20,
+      "map": "MAP_ROUTE101",
+      "type": "LAYER_LINK_SKY_DOWN",
+      "width": 20,
+      "x": 0,
+      "y": 0
     }
   ]
 }

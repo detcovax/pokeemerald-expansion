@@ -19,14 +19,14 @@
   "bg_events": [],
   "trey_layer_links": [
     {
-      "type": "LAYER_LINK_DIG_UP",
-      "x": 0,
-      "y": 0,
-      "width": 20,
-      "height": 20,
       "dest_x": 0,
       "dest_y": 0,
-      "map": "MAP_ROUTE101"
+      "height": 20,
+      "map": "MAP_ROUTE101",
+      "type": "LAYER_LINK_DIG_UP",
+      "width": 20,
+      "x": 0,
+      "y": 0
     }
   ]
 }
