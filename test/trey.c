@@ -101,3 +101,40 @@ TEST("TREY Energy: Energy EVs count toward the EV total")
     SetMonData(&mon, MON_DATA_ENERGY_EV, &ev);
     EXPECT_EQ(GetMonEVCount(&mon), 100);
 }
+
+// Sky HMs (3f)
+#include "trey_hm.h"
+#include "metatile_behavior.h"
+#include "constants/metatile_behaviors.h"
+
+TEST("TREY Sky HMs: every Sky Battle eligible species can learn Gust, Whirlwind and Updraft")
+{
+    EXPECT(TreyHM_SpeciesCanLearn(SPECIES_PIDGEY, MOVE_UPDRAFT));
+    EXPECT(TreyHM_SpeciesCanLearn(SPECIES_PIDGEY, MOVE_WHIRLWIND));
+    EXPECT(TreyHM_SpeciesCanLearn(SPECIES_GASTLY, MOVE_GUST));      // Levitate
+    EXPECT(!TreyHM_SpeciesCanLearn(SPECIES_WOBBUFFET, MOVE_UPDRAFT));
+    EXPECT(TreyHM_IsHM(MOVE_GUST) && TreyHM_IsHM(MOVE_WHIRLWIND) && TreyHM_IsHM(MOVE_UPDRAFT));
+}
+
+TEST("TREY Sky HMs: relearner lists the sky HMs for a flyer")
+{
+    u16 known[MAX_MON_MOVES] = {MOVE_GUST, MOVE_NONE, MOVE_NONE, MOVE_NONE};
+    u16 moves[32];
+    u32 i, n = TreyHM_AppendRelearnableMoves(SPECIES_PIDGEY, known, moves, 0, ARRAY_COUNT(moves));
+    bool32 hasUpdraft = FALSE, hasGust = FALSE;
+    for (i = 0; i < n; i++)
+    {
+        hasUpdraft |= (moves[i] == MOVE_UPDRAFT);
+        hasGust |= (moves[i] == MOVE_GUST);
+    }
+    EXPECT(hasUpdraft);
+    EXPECT(!hasGust); // already known
+}
+
+TEST("TREY Sky HMs: cyclone and updraft behaviours")
+{
+    EXPECT(MetatileBehavior_IsSkyCyclone(MB_SKY_CYCLONE));
+    EXPECT(!MetatileBehavior_IsSkyCyclone(MB_SKY_UPDRAFT));
+    EXPECT(MetatileBehavior_IsSkyUpdraft(MB_SKY_UPDRAFT));
+    EXPECT(!MetatileBehavior_IsSkyUpdraft(MB_SKY_CLOUD));
+}

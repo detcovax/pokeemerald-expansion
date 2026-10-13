@@ -383,6 +383,16 @@ bool8 MetatileBehavior_IsSkyCloud(u8 metatileBehavior) // TREY
         return FALSE;
 }
 
+bool8 MetatileBehavior_IsSkyCyclone(u8 metatileBehavior) // TREY (3f)
+{
+    return metatileBehavior == MB_SKY_CYCLONE;
+}
+
+bool8 MetatileBehavior_IsSkyUpdraft(u8 metatileBehavior) // TREY (3f)
+{
+    return metatileBehavior == MB_SKY_UPDRAFT;
+}
+
 bool8 MetatileBehavior_IsWalkNorth(u8 metatileBehavior)
 {
     if (metatileBehavior == MB_WALK_NORTH)

@@ -597,6 +597,40 @@ static const u16 sTreySky_Wind_S_Frame5[] = INCBIN_U16("data/tilesets/secondary/
 static const u16 sTreySky_Wind_S_Frame6[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/wind_s/6.4bpp");
 static const u16 sTreySky_Wind_S_Frame7[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/wind_s/7.4bpp");
 
+// TREY 3f: Whirlwind cyclones and Updraft columns
+static const u16 sTreySky_Cyclone_Frame0[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/cyclone/0.4bpp");
+static const u16 sTreySky_Cyclone_Frame1[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/cyclone/1.4bpp");
+static const u16 sTreySky_Cyclone_Frame2[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/cyclone/2.4bpp");
+static const u16 sTreySky_Cyclone_Frame3[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/cyclone/3.4bpp");
+static const u16 sTreySky_Cyclone_Frame4[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/cyclone/4.4bpp");
+static const u16 sTreySky_Cyclone_Frame5[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/cyclone/5.4bpp");
+static const u16 sTreySky_Cyclone_Frame6[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/cyclone/6.4bpp");
+static const u16 sTreySky_Cyclone_Frame7[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/cyclone/7.4bpp");
+static const u16 sTreySky_Updraft_Mid_Frame0[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/updraft_mid/0.4bpp");
+static const u16 sTreySky_Updraft_Mid_Frame1[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/updraft_mid/1.4bpp");
+static const u16 sTreySky_Updraft_Mid_Frame2[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/updraft_mid/2.4bpp");
+static const u16 sTreySky_Updraft_Mid_Frame3[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/updraft_mid/3.4bpp");
+static const u16 sTreySky_Updraft_Mid_Frame4[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/updraft_mid/4.4bpp");
+static const u16 sTreySky_Updraft_Mid_Frame5[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/updraft_mid/5.4bpp");
+static const u16 sTreySky_Updraft_Mid_Frame6[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/updraft_mid/6.4bpp");
+static const u16 sTreySky_Updraft_Mid_Frame7[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/updraft_mid/7.4bpp");
+static const u16 sTreySky_Updraft_Edge_Frame0[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/updraft_edge/0.4bpp");
+static const u16 sTreySky_Updraft_Edge_Frame1[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/updraft_edge/1.4bpp");
+static const u16 sTreySky_Updraft_Edge_Frame2[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/updraft_edge/2.4bpp");
+static const u16 sTreySky_Updraft_Edge_Frame3[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/updraft_edge/3.4bpp");
+static const u16 sTreySky_Updraft_Edge_Frame4[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/updraft_edge/4.4bpp");
+static const u16 sTreySky_Updraft_Edge_Frame5[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/updraft_edge/5.4bpp");
+static const u16 sTreySky_Updraft_Edge_Frame6[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/updraft_edge/6.4bpp");
+static const u16 sTreySky_Updraft_Edge_Frame7[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/updraft_edge/7.4bpp");
+static const u16 sTreySky_Updraft_Single_Frame0[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/updraft_single/0.4bpp");
+static const u16 sTreySky_Updraft_Single_Frame1[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/updraft_single/1.4bpp");
+static const u16 sTreySky_Updraft_Single_Frame2[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/updraft_single/2.4bpp");
+static const u16 sTreySky_Updraft_Single_Frame3[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/updraft_single/3.4bpp");
+static const u16 sTreySky_Updraft_Single_Frame4[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/updraft_single/4.4bpp");
+static const u16 sTreySky_Updraft_Single_Frame5[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/updraft_single/5.4bpp");
+static const u16 sTreySky_Updraft_Single_Frame6[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/updraft_single/6.4bpp");
+static const u16 sTreySky_Updraft_Single_Frame7[] = INCBIN_U16("data/tilesets/secondary/trey_sky/anim/updraft_single/7.4bpp");
+
 static const u16 *const sTreySky_Sky_A[] =
 {
     sTreySky_Sky_A_Frame0,
@@ -659,6 +693,51 @@ static const u16 *const sTreySky_Wind_S[] =
     sTreySky_Wind_S_Frame5,
     sTreySky_Wind_S_Frame6,
     sTreySky_Wind_S_Frame7,
+};
+
+static const u16 *const sTreySky_Cyclone[] =
+{
+    sTreySky_Cyclone_Frame0,
+    sTreySky_Cyclone_Frame1,
+    sTreySky_Cyclone_Frame2,
+    sTreySky_Cyclone_Frame3,
+    sTreySky_Cyclone_Frame4,
+    sTreySky_Cyclone_Frame5,
+    sTreySky_Cyclone_Frame6,
+    sTreySky_Cyclone_Frame7,
+};
+static const u16 *const sTreySky_Updraft_Mid[] =
+{
+    sTreySky_Updraft_Mid_Frame0,
+    sTreySky_Updraft_Mid_Frame1,
+    sTreySky_Updraft_Mid_Frame2,
+    sTreySky_Updraft_Mid_Frame3,
+    sTreySky_Updraft_Mid_Frame4,
+    sTreySky_Updraft_Mid_Frame5,
+    sTreySky_Updraft_Mid_Frame6,
+    sTreySky_Updraft_Mid_Frame7,
+};
+static const u16 *const sTreySky_Updraft_Edge[] =
+{
+    sTreySky_Updraft_Edge_Frame0,
+    sTreySky_Updraft_Edge_Frame1,
+    sTreySky_Updraft_Edge_Frame2,
+    sTreySky_Updraft_Edge_Frame3,
+    sTreySky_Updraft_Edge_Frame4,
+    sTreySky_Updraft_Edge_Frame5,
+    sTreySky_Updraft_Edge_Frame6,
+    sTreySky_Updraft_Edge_Frame7,
+};
+static const u16 *const sTreySky_Updraft_Single[] =
+{
+    sTreySky_Updraft_Single_Frame0,
+    sTreySky_Updraft_Single_Frame1,
+    sTreySky_Updraft_Single_Frame2,
+    sTreySky_Updraft_Single_Frame3,
+    sTreySky_Updraft_Single_Frame4,
+    sTreySky_Updraft_Single_Frame5,
+    sTreySky_Updraft_Single_Frame6,
+    sTreySky_Updraft_Single_Frame7,
 };
 
 static void ResetTilesetAnimBuffer(void)
@@ -933,6 +1012,10 @@ static void TilesetAnim_TreySky(u16 timer)
     {
         AppendTilesetAnimToBuffer(sTreySky_Wind_E[(timer / 8) % ARRAY_COUNT(sTreySky_Wind_E)], TREY_SKY_TILE(13), 4 * TILE_SIZE_4BPP);
         AppendTilesetAnimToBuffer(sTreySky_Wind_S[(timer / 8) % ARRAY_COUNT(sTreySky_Wind_S)], TREY_SKY_TILE(17), 4 * TILE_SIZE_4BPP);
+        AppendTilesetAnimToBuffer(sTreySky_Cyclone[(timer / 8) % ARRAY_COUNT(sTreySky_Cyclone)], TREY_SKY_TILE(21), 4 * TILE_SIZE_4BPP);
+        AppendTilesetAnimToBuffer(sTreySky_Updraft_Mid[(timer / 8) % ARRAY_COUNT(sTreySky_Updraft_Mid)], TREY_SKY_TILE(25), 4 * TILE_SIZE_4BPP);
+        AppendTilesetAnimToBuffer(sTreySky_Updraft_Edge[(timer / 8) % ARRAY_COUNT(sTreySky_Updraft_Edge)], TREY_SKY_TILE(29), 4 * TILE_SIZE_4BPP);
+        AppendTilesetAnimToBuffer(sTreySky_Updraft_Single[(timer / 8) % ARRAY_COUNT(sTreySky_Updraft_Single)], TREY_SKY_TILE(33), 4 * TILE_SIZE_4BPP);
     }
 }
 

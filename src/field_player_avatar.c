@@ -921,9 +921,26 @@ static u8 CheckForPlayerAvatarStaticCollision(u8 direction)
     return CheckForObjectEventStaticCollision(playerObjEvent, x, y, direction, MapGridGetMetatileBehaviorAt(x, y));
 }
 
+// TREY (3f): sky HM obstacles for the soaring player. Cyclones block unless Whirlwind is active.
+// Updraft columns can only be entered heading south (gliding down); going up them takes Updraft,
+// whose ride ignores collision.
+static bool32 TreySky_IsBlockedForPlayer(struct ObjectEvent *objectEvent, u8 direction, u8 metatileBehavior)
+{
+    if (!objectEvent->isPlayer || !(gPlayerAvatar.flags & PLAYER_AVATAR_FLAG_SOARING))
+        return FALSE;
+    if (MetatileBehavior_IsSkyCyclone(metatileBehavior) && !FlagGet(FLAG_TREY_USE_WHIRLWIND))
+        return TRUE;
+    if (MetatileBehavior_IsSkyUpdraft(metatileBehavior) && direction != DIR_SOUTH)
+        return TRUE;
+    return FALSE;
+}
+
 u8 CheckForObjectEventCollision(struct ObjectEvent *objectEvent, s16 x, s16 y, u8 direction, u8 metatileBehavior)
 {
     u8 collision = GetCollisionAtCoords(objectEvent, x, y, direction);
+
+    if (collision == COLLISION_NONE && TreySky_IsBlockedForPlayer(objectEvent, direction, metatileBehavior)) // TREY (3f)
+        return COLLISION_IMPASSABLE;
 
     if (collision == COLLISION_ELEVATION_MISMATCH && CanStopSurfing(x, y, direction))
         return COLLISION_STOP_SURFING;
@@ -986,17 +1003,25 @@ static bool8 ShouldJumpLedge(s16 x, s16 y, u8 direction)
 
 static bool8 TryPushBoulder(s16 x, s16 y, u8 direction)
 {
-    if (FlagGet(FLAG_SYS_USE_STRENGTH))
-    {
-        u8 objectEventId = GetObjectEventIdByXY(x, y);
+    u8 objectEventId = GetObjectEventIdByXY(x, y);
+    u16 graphicsId;
 
-        if (objectEventId != OBJECT_EVENTS_COUNT && gObjectEvents[objectEventId].graphicsId == OBJ_EVENT_GFX_PUSHABLE_BOULDER)
+    if (objectEventId == OBJECT_EVENTS_COUNT)
+        return FALSE;
+    graphicsId = gObjectEvents[objectEventId].graphicsId;
+    // TREY (3f): storm puffs on Sky maps are pushed like boulders once Gust is active.
+    if ((graphicsId == OBJ_EVENT_GFX_PUSHABLE_BOULDER && FlagGet(FLAG_SYS_USE_STRENGTH))
+     || (graphicsId == OBJ_EVENT_GFX_TREY_STORM_PUFF && FlagGet(FLAG_TREY_USE_GUST)))
+    {
         {
+            u8 destBehavior;
             x = gObjectEvents[objectEventId].currentCoords.x;
             y = gObjectEvents[objectEventId].currentCoords.y;
             MoveCoords(direction, &x, &y);
+            destBehavior = MapGridGetMetatileBehaviorAt(x, y);
             if (GetCollisionAtCoords(&gObjectEvents[objectEventId], x, y, direction) == COLLISION_NONE
-             && MetatileBehavior_IsNonAnimDoor(MapGridGetMetatileBehaviorAt(x, y)) == FALSE)
+             && MetatileBehavior_IsNonAnimDoor(destBehavior) == FALSE
+             && !MetatileBehavior_IsSkyCyclone(destBehavior) && !MetatileBehavior_IsSkyUpdraft(destBehavior)) // TREY (3f)
             {
                 StartStrengthAnim(objectEventId, direction);
                 return TRUE;
@@ -1629,6 +1654,9 @@ u16 GetPlayerAvatarGraphicsIdByCurrentState(void)
     u8 i;
     u16 flags = gPlayerAvatar.flags; // TREY: avatar flags are u16 (TREY_PLAN.md E8)
 
+    if (flags & PLAYER_AVATAR_FLAG_SOARING) // TREY: soaring reuses the surfing sprite
+        return GetPlayerAvatarGraphicsIdByStateIdAndGender(PLAYER_AVATAR_STATE_SURFING, gPlayerAvatar.gender);
+
     for (i = 0; i < ARRAY_COUNT(sPlayerAvatarGfxToStateFlag[0]); i++)
     {
         if (sPlayerAvatarGfxToStateFlag[gPlayerAvatar.gender][i][1] & flags)
@@ -1782,8 +1810,15 @@ static bool8 PushBoulder_Move(struct Task *task, struct ObjectEvent *player, str
         gFieldEffectArguments[1] = boulder->currentCoords.y;
         gFieldEffectArguments[2] = boulder->previousElevation;
         gFieldEffectArguments[3] = gSprites[boulder->spriteId].oam.priority;
-        FieldEffectStart(FLDEFF_DUST);
-        PlaySE(SE_M_STRENGTH);
+        if (boulder->graphicsId == OBJ_EVENT_GFX_TREY_STORM_PUFF) // TREY (3f): no dust in the sky
+        {
+            PlaySE(SE_M_GUST);
+        }
+        else
+        {
+            FieldEffectStart(FLDEFF_DUST);
+            PlaySE(SE_M_STRENGTH);
+        }
         task->tState++;
     }
     return FALSE;

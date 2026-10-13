@@ -1,4 +1,5 @@
 #include "global.h"
+#include "trey_hm.h" // TREY
 #include "new_game.h"
 #include "random.h"
 #include "pokemon.h"
@@ -173,6 +174,7 @@ void NewGameInitData(void)
     PlayTimeCounter_Reset();
     ClearPokedexFlags();
     InitEventData();
+    TreyHM_DebugUnlockAll(); // TREY: only if TREY_DEBUG_UNLOCK_ALL_HMS
     ClearTVShowData();
     ResetGabbyAndTy();
     ClearSecretBases();

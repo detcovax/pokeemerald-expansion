@@ -21129,6 +21129,34 @@ const struct MoveInfo gMovesInfo[MOVES_COUNT_ALL] =
         .battleAnimScript = gBattleAnimMove_MalignantChain,
     },
 
+    // TREY: Updraft (TREY_PLAN.md 3f), the sky Waterfall HM. Flame Charge's effect as a wind move.
+    [MOVE_UPDRAFT] =
+    {
+        .name = COMPOUND_STRING("Updraft"),
+        .description = COMPOUND_STRING(
+            "Rides a rising wind to\n"
+            "strike. Raises Speed."),
+        .effect = EFFECT_HIT,
+        .power = 50,
+        .type = TYPE_FLYING,
+        .accuracy = 100,
+        .pp = 20,
+        .target = MOVE_TARGET_SELECTED,
+        .priority = 0,
+        .category = DAMAGE_CATEGORY_SPECIAL,
+        .windMove = TRUE,
+        .additionalEffects = ADDITIONAL_EFFECTS({
+            .moveEffect = MOVE_EFFECT_SPD_PLUS_1,
+            .self = TRUE,
+            .chance = 100,
+        }),
+        .contestEffect = CONTEST_EFFECT_IMPROVE_CONDITION_PREVENT_NERVOUSNESS,
+        .contestCategory = CONTEST_CATEGORY_COOL,
+        .contestComboStarterId = 0,
+        .contestComboMoves = {0},
+        .battleAnimScript = gBattleAnimMove_Gust,
+    },
+
     // Z-Moves
     [MOVE_BREAKNECK_BLITZ] =
     {

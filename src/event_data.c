@@ -62,6 +62,8 @@ void ClearTempFieldEventData(void)
     FlagClear(FLAG_SYS_ENC_UP_ITEM);
     FlagClear(FLAG_SYS_ENC_DOWN_ITEM);
     FlagClear(FLAG_SYS_USE_STRENGTH);
+    FlagClear(FLAG_TREY_USE_GUST); // TREY (3f)
+    FlagClear(FLAG_TREY_USE_WHIRLWIND);
     FlagClear(FLAG_SYS_CTRL_OBJ_DELETE);
     FlagClear(FLAG_NURSE_UNION_ROOM_REMINDER);
 }

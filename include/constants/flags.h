@@ -1676,7 +1676,10 @@
 #define FLAG_TREY_HM_DEFOG              (TREY_FLAG_HM_START + 10)
 #define FLAG_TREY_HM_ROCK_CLIMB         (TREY_FLAG_HM_START + 11)
 #define FLAG_TREY_HM_DIG                (TREY_FLAG_HM_START + 12)
-#define TREY_FLAG_HM_END                (TREY_FLAG_HM_START + 15) // room for 3 more
+#define FLAG_TREY_HM_GUST               (TREY_FLAG_HM_START + 13) // sky HMs (3f)
+#define FLAG_TREY_HM_WHIRLWIND          (TREY_FLAG_HM_START + 14)
+#define FLAG_TREY_HM_UPDRAFT            (TREY_FLAG_HM_START + 15)
+#define TREY_FLAG_HM_END                (TREY_FLAG_HM_START + 15) // full
 
 #define TREY_FLAG_NEXT_FREE             (TREY_FLAG_HM_END + 1) // next unused TREY flag
 
@@ -1691,7 +1694,10 @@
 #define FLAG_STORING_ITEMS_IN_PYRAMID_BAG       (SPECIAL_FLAGS_START + 0x4)
 #define FLAG_SAFE_FOLLOWER_MOVEMENT             (SPECIAL_FLAGS_START + 0x5) // When set, applymovement does not put the follower inside a pokeball
                                                                             // Also, scripted movements on the player will move follower(s), too
-// FLAG_SPECIAL_FLAG_0x4005 - 0x407F also exist and are unused
+// FLAG_SPECIAL_FLAG_0x4006 - 0x407F also exist and are unused (TREY uses 0x4010-0x4011 below)
+// TREY (3f): sky HMs stay active until the next map load, like FLAG_SYS_USE_STRENGTH. Not saved.
+#define FLAG_TREY_USE_GUST                      (SPECIAL_FLAGS_START + 0x10) // storm puffs can be pushed
+#define FLAG_TREY_USE_WHIRLWIND                 (SPECIAL_FLAGS_START + 0x11) // cyclones can be flown through
 #define SPECIAL_FLAGS_END                       (SPECIAL_FLAGS_START + 0x7F)
 #define NUM_SPECIAL_FLAGS                       (SPECIAL_FLAGS_END - SPECIAL_FLAGS_START + 1)
 

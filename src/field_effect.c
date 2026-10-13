@@ -1999,7 +1999,8 @@ static bool8 WaterfallFieldEffect_ContinueRideOrEnd(struct Task *task, struct Ob
     if (!ObjectEventClearHeldMovementIfFinished(objectEvent))
         return FALSE;
 
-    if (MetatileBehavior_IsWaterfall(objectEvent->currentMetatileBehavior))
+    if (MetatileBehavior_IsWaterfall(objectEvent->currentMetatileBehavior)
+     || MetatileBehavior_IsSkyUpdraft(objectEvent->currentMetatileBehavior)) // TREY (3f): Updraft reuses the Waterfall ride
     {
         // Still ascending waterfall, back to WaterfallFieldEffect_RideUp
         task->tState = 3;

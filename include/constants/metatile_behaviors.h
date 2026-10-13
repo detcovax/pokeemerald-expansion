@@ -90,8 +90,8 @@ enum {
     MB_SKY_WIND_SOUTH,
     MB_SKY_WIND_WEST,
     MB_SKY_WIND_EAST,
-    MB_UNUSED_58,
-    MB_UNUSED_59,
+    MB_SKY_CYCLONE, // TREY: cyclone on a Sky map; blocks unless Whirlwind is active (3f). Was MB_UNUSED_58.
+    MB_SKY_UPDRAFT, // TREY: rising-air column on a Sky map; ridden north with Updraft (3f). Was MB_UNUSED_59.
     MB_UNUSED_5A,
     MB_UNUSED_5B,
     MB_UNUSED_5C,

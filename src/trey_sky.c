@@ -1,6 +1,7 @@
 // TREY: sky layer extras (TREY_PLAN.md 5.2, phase 3e). See include/trey_sky.h.
 
 #include "global.h"
+#include "graphics.h"
 #include "event_object_movement.h"
 #include "field_player_avatar.h"
 #include "field_weather.h"
@@ -11,6 +12,7 @@
 #include "sprite.h"
 #include "tilesets.h"
 #include "trey_sky.h"
+#include "constants/event_objects.h"
 #include "constants/weather.h"
 
 // ---------------------------------------------------------------------------
@@ -41,11 +43,26 @@ void TreySky_ResetPalettes(void)
     sStormShown = -1;
 }
 
+// 3f: storm puffs (Gust) darken a little in storms too. Their palette can be loaded at any time
+// (map load, return from battle), so it is checked every frame by one colour.
+static void TreySky_UpdateStormPuffPalette(bool32 storm)
+{
+    u32 slot = IndexOfSpritePaletteTag(OBJ_EVENT_PAL_TAG_TREY_STORM_PUFF);
+    const u16 *src = storm ? gObjectEventPal_TreyStormPuffStorm : gObjectEventPal_TreyStormPuff;
+
+    if (slot == 0xFF || gPlttBufferUnfaded[OBJ_PLTT_ID(slot) + 1] == src[1])
+        return;
+    CpuCopy16(src, &gPlttBufferUnfaded[OBJ_PLTT_ID(slot)], PLTT_SIZE_4BPP);
+    if (!gPaletteFade.active)
+        TreyWeather_RefreshPalettes(16 + slot, 1);
+}
+
 void TreySky_UpdatePalettes(void)
 {
     s8 storm = TreySky_IsStormWeather();
     const u16 *src;
 
+    TreySky_UpdateStormPuffPalette(storm);
     if (storm == sStormShown)
         return;
     src = storm ? sStormPalettes[0] : gTileset_TreySky.palettes[SKY_FIRST_PAL];

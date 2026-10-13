@@ -4013,6 +4013,10 @@ static void Task_HandleSpinTradeYesNoInput(u8 taskId)
     }
 }
 
+// TREY: must be a file-scope string. A COMPOUND_STRING inside a function lives on the stack, and the
+// party menu prints its message over several frames, after the function has returned (garbled text bug).
+static const u8 sText_TreyHMLocked[] = _("You can't use this move in the\nfield yet.{PAUSE_UNTIL_PRESS}");
+
 static void CursorCb_FieldMove(u8 taskId)
 {
     u8 fieldMove = sPartyMenuInternal->actions[Menu_GetCursorPos()] - MENU_FIELD_MOVES;
@@ -4038,7 +4042,7 @@ static void CursorCb_FieldMove(u8 taskId)
         // TREY: HMs are gated by their unlock flag, not by badges (TREY_PLAN.md 5.3).
         if (TreyHM_IsHM(sFieldMoves[fieldMove]) && !TreyHM_IsUnlocked(sFieldMoves[fieldMove]))
         {
-            DisplayPartyMenuMessage(COMPOUND_STRING("You can't use this move in the\nfield yet.{PAUSE_UNTIL_PRESS}"), TRUE);
+            DisplayPartyMenuMessage(sText_TreyHMLocked, TRUE);
             gTasks[taskId].func = Task_ReturnToChooseMonAfterText;
         }
         // TREY (3e): the Pokémon you soar on must be able to fight in Sky Battles (Flying type or

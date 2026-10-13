@@ -442,6 +442,99 @@ def ridge_image(width, height, seed, cap=None):
     return img
 
 # ---------------------------------------------------------------------------
+# Sky HM obstacles (phase 3f): Gust storm puffs, Whirlwind cyclones, Updraft columns
+# ---------------------------------------------------------------------------
+# Storm puff: a 16x16 object event sprite (pushed with Gust like a Strength boulder). Own sprite palette.
+PAL_STORM_PUFF = [(0, 0, 0),
+                  (150, 154, 176),  # 1 lit
+                  (124, 128, 152),  # 2 light
+                  (100, 104, 130),  # 3 mid
+                  (78, 80, 108),    # 4 shade
+                  (56, 58, 84),     # 5 rim
+                  (252, 224, 96),   # 6 spark
+                  (255, 252, 220),  # 7 spark core
+                  ] + [(0, 0, 0)] * 8
+PAL_STORM_PUFF_STORM = tint(PAL_STORM_PUFF[:6], 0.8, 0.2) + PAL_STORM_PUFF[6:]
+STORM_PUFF_BLOBS = [(8.0, 9.6, 6.0), (3.6, 10.6, 3.4), (12.4, 10.6, 3.4), (5.4, 6.0, 3.4), (10.4, 5.4, 3.8),
+                    (8.0, 4.4, 3.0), (5.0, 13.0, 2.8), (11.0, 13.0, 2.8)]
+# a small lightning bolt across the front of the cloud: (x, y, colour)
+STORM_PUFF_SPARK = [(10, 6, 6), (9, 7, 6), (8, 8, 7), (9, 8, 7), (10, 8, 6), (9, 9, 6), (8, 10, 7), (7, 11, 6)]
+
+def storm_puff_image():
+    img = draw_cloud(blank(), STORM_PUFF_BLOBS, light=(-0.5, -0.85))
+    for (x, y, c) in STORM_PUFF_SPARK:
+        img[y][x] = c
+    return img
+
+# Cyclone: animated 16x16 overlay over the sky, wall palette (slot 8) so it darkens with the walls in storms.
+# Three arms, symmetric every third of a turn; CYCLONE_FRAMES frames per third, at wind speed.
+CYCLONE_FRAMES = 8
+
+def cyclone_frame(frame):
+    img = blank()
+    rot = (TAU / 3) * frame / CYCLONE_FRAMES
+    cx, cy = 7.5, 7.5
+    for y in range(16):
+        for x in range(16):
+            dx, dy = x - cx, y - cy
+            r = math.hypot(dx, dy)
+            if r > 8.6:
+                continue
+            if r < 1.5:
+                img[y][x] = 6
+                continue
+            a = math.atan2(dy, dx) + rot
+            s = (a - r * 0.55) % (TAU / 3)        # tight spiral, turning clockwise
+            if r > 7.0:                           # ragged rim: only the arm tips reach the edge
+                if s < 0.7:
+                    img[y][x] = 3 if (x + y) % 2 else 2
+                continue
+            if s < 1.25:                          # arm
+                if s > 1.0:
+                    img[y][x] = 1                 # bright leading edge
+                elif r < 3.2:
+                    img[y][x] = 6
+                else:
+                    img[y][x] = 5 if s < 0.5 else 4
+            else:                                 # gap between arms
+                img[y][x] = 5 if r < 2.8 else (3 if r < 5.0 else 2)
+    return img
+
+# Updraft: a column of rising air, ridden north with Updraft. Animated overlay over the sky (sky palette):
+# a pale lane, bright chevrons rising 2 px per frame, and shimmering bands on the column's outer edges.
+UPDRAFT_FRAMES = 8
+UPDRAFT_CHEVRONS = [(5, 0), (11, 8)]   # (centre x, phase offset) within the 16 px period
+
+def updraft_frame(frame, left=False, right=False):
+    img = blank()
+    shift = frame * 2
+    for y in range(16):
+        for x in range(16):
+            img[y][x] = 4 if (x + y * 3 + shift) % 7 else 2
+    for (cx, off) in UPDRAFT_CHEVRONS:
+        top = (off - shift) % 16
+        # shade under each chevron so it stands out from the pale lane
+        for (dx, dy) in ((0, 2), (-1, 3), (1, 3), (-2, 4), (2, 4), (-3, 4), (3, 4)):
+            xx = cx + dx
+            if 0 <= xx <= 15:
+                img[(top + dy) % 16][xx] = 5
+        for (dx, dy, c) in ((0, 0, 6), (-1, 1, 6), (1, 1, 6), (0, 1, 7), (-2, 2, 6), (2, 2, 6),
+                            (-3, 3, 6), (3, 3, 6), (-1, 2, 7), (1, 2, 7)):
+            xx = cx + dx
+            if 0 <= xx <= 15:
+                img[(top + dy) % 16][xx] = c
+    for side, xs in ((left, (0, 1, 2)), (right, (15, 14, 13))):
+        if not side:
+            continue
+        for y in range(16):
+            img[y][xs[0]] = 5 if (y + shift) % 4 else 3
+            img[y][xs[1]] = 6 if (y + shift) % 4 < 2 else 7
+            img[y][xs[2]] = 7 if (y + shift) % 4 == 1 else img[y][xs[2]]
+    return img
+
+UPDRAFT_PIECES = {"mid": (False, False), "left": (True, False), "right": (False, True), "single": (True, True)}
+
+# ---------------------------------------------------------------------------
 # Rendering helpers for previews
 # ---------------------------------------------------------------------------
 def to_rgba(img, pal):
@@ -635,6 +728,75 @@ def make_preview(out):
         gif[0].save(f"{out}/{name}.gif", save_all=True, append_images=gif[1:], duration=120, loop=0)
     print("preview written to", out)
 
+def hm_scene(frame, storm=False, w=14, h=10):
+    """Sample: a wall with a cyclone gap, a storm puff in a gap, and an updraft column up a cliff of wall."""
+    sky_pal = PAL_SKY_STORM if storm else PAL_SKY
+    wall_pal = PAL_WALL_STORM if storm else PAL_WALL
+    puff_pal = PAL_STORM_PUFF_STORM if storm else PAL_STORM_PUFF
+    canvas = Image.new("RGBA", (w * 16, h * 16), (0, 0, 0, 255))
+    sky_a = to_rgba(sky_frame(frame % SKY_FRAMES), sky_pal)
+    sky_b = to_rgba(sky_frame(frame % SKY_FRAMES, math.pi), sky_pal)
+    for y in range(h):
+        for x in range(w):
+            canvas.alpha_composite(sky_a if (x * 7 + y * 3) % 5 else sky_b, (x * 16, y * 16))
+    # walls: a horizontal wall across row 4 (gaps at x=3 cyclone, x=7 puff), a vertical band at x 10-13 rows 0-9
+    solid = {(x, 4) for x in range(0, 10)} | {(x, 5) for x in range(0, 10)}
+    solid |= {(x, y) for x in (10, 13) for y in range(h)}
+    gaps = {(3, 4), (3, 5), (7, 4), (7, 5)}
+    solid -= gaps
+    edge_solid = lambda px, py: px < 0 or px >= w
+    for (x, y) in solid:
+        key = autotile_key(solid, x, y, edge_solid)
+        name = "wall_" + key
+        args = WALL_PIECES.get(name)
+        if args is not None:
+            img = wall_tile(*args, ox=(x % 2) * 16, oy=(y % 2) * 16)
+        else:
+            img = wall_tile(False, False, False, False, ox=(x % 2) * 16, oy=(y % 2) * 16, **WALL_INNER[name])
+        canvas.alpha_composite(to_rgba(img, wall_pal), (x * 16, y * 16))
+    cyc = to_rgba(cyclone_frame(frame * WIND_SPEED % CYCLONE_FRAMES), wall_pal)
+    for (x, y) in ((3, 4), (3, 5)):
+        canvas.alpha_composite(cyc, (x * 16, y * 16))
+    puff = to_rgba(storm_puff_image(), puff_pal)
+    canvas.alpha_composite(puff, (7 * 16, 5 * 16))
+    uf = frame * WIND_SPEED % UPDRAFT_FRAMES
+    up_l = to_rgba(updraft_frame(uf, left=True), sky_pal)
+    up_r = to_rgba(updraft_frame(uf, right=True), sky_pal)
+    up_1 = to_rgba(updraft_frame(uf, True, True), sky_pal)
+    for y in range(h):
+        canvas.alpha_composite(up_l, (11 * 16, y * 16))
+        canvas.alpha_composite(up_r, (12 * 16, y * 16))
+    for y in range(0, 4):
+        canvas.alpha_composite(up_1, (5 * 16, y * 16))
+    return canvas
+
+def make_hm_preview(out):
+    os.makedirs(out, exist_ok=True)
+    from PIL import ImageDraw
+    S = 4
+    items = [("storm puff", to_rgba(storm_puff_image(), PAL_STORM_PUFF)),
+             ("puff (storm)", to_rgba(storm_puff_image(), PAL_STORM_PUFF_STORM))]
+    items += [(f"cyclone {f}", to_rgba(cyclone_frame(f), PAL_WALL)) for f in range(CYCLONE_FRAMES)]
+    items += [(f"updraft {f}", to_rgba(updraft_frame(f), PAL_SKY)) for f in range(UPDRAFT_FRAMES)]
+    items += [(f"updraft {k}", to_rgba(updraft_frame(0, *v), PAL_SKY)) for k, v in UPDRAFT_PIECES.items()]
+    sky_bg = to_rgba(sky_frame(0), PAL_SKY)
+    cols, cell = 6, 16 * S + 12
+    sheet = Image.new("RGBA", (cols * cell + 8, ((len(items) + cols - 1) // cols) * (cell + 12) + 8), (40, 44, 60, 255))
+    d = ImageDraw.Draw(sheet)
+    for i, (label, im) in enumerate(items):
+        x, y = 8 + (i % cols) * cell, 8 + (i // cols) * (cell + 12)
+        bg = sky_bg.copy()
+        bg.alpha_composite(im)
+        sheet.paste(bg.resize((16 * S, 16 * S), Image.NEAREST), (x, y))
+        d.text((x, y + 16 * S + 1), label, fill=(230, 230, 240))
+    sheet.save(f"{out}/sky_hm_sheet.png")
+    for storm in (False, True):
+        gif = [hm_scene(f, storm).resize((14 * 16 * 3, 10 * 16 * 3), Image.NEAREST) for f in range(16)]
+        name = "sky_hm_scene_storm" if storm else "sky_hm_scene"
+        gif[0].save(f"{out}/{name}.png")
+        gif[0].save(f"{out}/{name}.gif", save_all=True, append_images=gif[1:], duration=120, loop=0)
+    print("HM preview written to", out)
+
 # ---------------------------------------------------------------------------
 # Game files (--write)
 # ---------------------------------------------------------------------------
@@ -647,11 +809,15 @@ METATILE_HEADER = "include/constants/trey_sky_metatiles.h"
 MB_NORMAL = 0x00
 MB_SKY_CLOUD = 0x05
 MB_SKY_WIND_NORTH, MB_SKY_WIND_SOUTH, MB_SKY_WIND_WEST, MB_SKY_WIND_EAST = 0x54, 0x55, 0x56, 0x57
+MB_SKY_CYCLONE, MB_SKY_UPDRAFT = 0x58, 0x59  # 3f: Whirlwind cyclones, Updraft columns
 LAYER_COVERED = 1  # both layers are drawn below the player
 
 # Animated 2x2 tile blocks, at fixed tile indexes (tile 0 is transparent). Frame 0 is also stored in tiles.png.
-ANIM_BLOCKS = [("sky_a", 1), ("sky_b", 5), ("swirl", 9), ("wind_e", 13), ("wind_s", 17)]
-FIRST_STATIC_TILE = 21
+ANIM_BLOCKS = [("sky_a", 1), ("sky_b", 5), ("swirl", 9), ("wind_e", 13), ("wind_s", 17),
+               ("cyclone", 21), ("updraft_mid", 25), ("updraft_edge", 29), ("updraft_single", 33)]  # 3f
+FIRST_STATIC_TILE = 37
+PUFF_OBJ_PIC = "graphics/object_events/pics/misc/trey_storm_puff.png"
+PUFF_OBJ_PAL = "graphics/object_events/palettes/trey_storm_puff.pal"
 
 def split_tiles(img16):
     """16x16 image -> 4 tiles (TL, TR, BL, BR) as tuples of 64 indices."""
@@ -772,6 +938,12 @@ def build_metatiles(sheet):
     add_big("PeakLarge", peak_image(48, 11), 3, 3)
     for cap, nm in ((None, "RidgeMid"), ("left", "RidgeLeft"), ("right", "RidgeRight")):
         add_big(nm, ridge_image(16, 32, 1, cap), 1, 2)
+    # 3f (appended so earlier metatile IDs stay the same): cyclones (wall palette) and updraft columns
+    mts.append(("Cyclone", sky_a, anim_entries(21, SLOT_WALL), MB_SKY_CYCLONE))
+    mts.append(("UpdraftMid", sky_a, anim_entries(25, SLOT_SKY), MB_SKY_UPDRAFT))
+    mts.append(("UpdraftLeft", sky_a, anim_entries(29, SLOT_SKY), MB_SKY_UPDRAFT))
+    mts.append(("UpdraftRight", sky_a, anim_entries(29, SLOT_SKY, hflip_block=True), MB_SKY_UPDRAFT))
+    mts.append(("UpdraftSingle", sky_a, anim_entries(33, SLOT_SKY), MB_SKY_UPDRAFT))
     return mts
 
 def write_game_files():
@@ -782,6 +954,10 @@ def write_game_files():
     sheet.set_anim_block(9, swirl_frame(0))
     sheet.set_anim_block(13, wind_h_frame(0))
     sheet.set_anim_block(17, wind_v_frame(0))
+    sheet.set_anim_block(21, cyclone_frame(0))
+    sheet.set_anim_block(25, updraft_frame(0))
+    sheet.set_anim_block(29, updraft_frame(0, left=True))
+    sheet.set_anim_block(33, updraft_frame(0, True, True))
     mts = build_metatiles(sheet)
     assert len(sheet.tiles) <= 512, len(sheet.tiles)
     assert len(mts) <= 512
@@ -814,7 +990,11 @@ def write_game_files():
                                ("sky_b", SKY_FRAMES, lambda f: sky_frame(f, math.pi)),
                                ("swirl", SWIRL_FRAMES, swirl_frame),
                                ("wind_e", WIND_FRAMES, wind_h_frame),
-                               ("wind_s", WIND_FRAMES, wind_v_frame)):
+                               ("wind_s", WIND_FRAMES, wind_v_frame),
+                               ("cyclone", CYCLONE_FRAMES, cyclone_frame),
+                               ("updraft_mid", UPDRAFT_FRAMES, lambda f: updraft_frame(f)),
+                               ("updraft_edge", UPDRAFT_FRAMES, lambda f: updraft_frame(f, left=True)),
+                               ("updraft_single", UPDRAFT_FRAMES, lambda f: updraft_frame(f, True, True))):
         d = f"{TILESET_DIR}/anim/{name}"
         os.makedirs(d, exist_ok=True)
         for fr in range(frames):
@@ -831,6 +1011,11 @@ def write_game_files():
     write_png(f"{PUFF_DIR}/trey_cloud_puff.png", puff, PAL_CLOUD)
     write_pal("graphics/field_effects/palettes/trey_cloud_puff.pal", PAL_CLOUD)
     write_pal("graphics/field_effects/palettes/trey_cloud_puff_storm.pal", PAL_CLOUD_STORM)
+
+    # 3f: storm puff object event (pushed with Gust), 16x16, one frame
+    write_png(PUFF_OBJ_PIC, storm_puff_image(), PAL_STORM_PUFF)
+    write_pal(PUFF_OBJ_PAL, PAL_STORM_PUFF)
+    write_pal(PUFF_OBJ_PAL.replace(".pal", "_storm.pal"), PAL_STORM_PUFF_STORM)
 
     # metatile ID constants
     ids = {name: 0x200 + i for i, (name, _, _, _) in enumerate(mts)}
@@ -893,6 +1078,24 @@ def write_test_layout(ids):
                (16, 3), (16, 4), (17, 4), (16, 5)]
     for (x, y) in patches:
         grid[y][x] = "Cloud" + "ABC"[(x * 2 + y) % 3]
+    # 3f: a short wall with a cyclone gap (Whirlwind) and a 2-wide updraft column (Updraft).
+    # Storm puffs (Gust) are object events in map.json.
+    hm_wall = {(11, 16), (12, 16), (14, 16), (15, 16)}
+    for (x, y) in hm_wall:
+        key = autotile_key(hm_wall | wall_cells, x, y, edge_solid)
+        name = "Wall_" + "".join(p.capitalize() for p in key.split("_"))
+        if key == "center":
+            name += f"_{x % 2}{y % 2}"
+        elif key in ("n", "s"):
+            name += f"_{x % 2}0"
+        elif key in ("e", "w"):
+            name += f"_0{y % 2}"
+        grid[y][x] = name
+        coll[y][x] = 1
+    grid[16][13] = "Cyclone"
+    for y in range(10, 16):
+        grid[y][17] = "UpdraftLeft"
+        grid[y][18] = "UpdraftRight"
     with open(f"{LAYOUT_DIR}/map.bin", "wb") as f:
         for y in range(H):
             for x in range(W):
@@ -904,6 +1107,8 @@ def write_test_layout(ids):
 if __name__ == "__main__":
     if len(sys.argv) >= 3 and sys.argv[1] == "--preview":
         make_preview(sys.argv[2])
+    elif len(sys.argv) >= 3 and sys.argv[1] == "--preview-hm":
+        make_hm_preview(sys.argv[2])
     elif len(sys.argv) >= 2 and sys.argv[1] == "--write":
         if not os.path.exists("Makefile"):
             print("Run from the project's root folder.")

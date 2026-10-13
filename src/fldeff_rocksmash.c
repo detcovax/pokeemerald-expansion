@@ -61,9 +61,10 @@ static void Task_DoFieldMove_Init(u8 taskId)
     if (!ObjectEventIsMovementOverridden(&gObjectEvents[objEventId])
      || ObjectEventClearHeldMovementIfFinished(&gObjectEvents[objEventId]))
     {
-        if (gMapHeader.mapType == MAP_TYPE_UNDERWATER || gFieldEffectArguments[3])
+        if (gMapHeader.mapType == MAP_TYPE_UNDERWATER || gFieldEffectArguments[3]
+         || TestPlayerAvatarFlags(PLAYER_AVATAR_FLAG_SOARING)) // TREY (3f): no pose while riding the bird
         {
-            // Skip field move pose underwater, or if arg3 is nonzero
+            // Skip field move pose underwater, while soaring, or if arg3 is nonzero
             if (gFieldEffectArguments[3])
                 gFieldEffectArguments[3] = 0;
             FieldEffectStart(FLDEFF_FIELD_MOVE_SHOW_MON_INIT);

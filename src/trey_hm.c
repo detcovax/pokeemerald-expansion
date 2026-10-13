@@ -1,6 +1,8 @@
 // TREY: HMs and Teleport (TREY_PLAN.md 5.3). See include/trey_hm.h.
 
 #include "global.h"
+#include "battle_util.h"
+#include "constants/abilities.h"
 #include "event_data.h"
 #include "event_object_movement.h"
 #include "field_effect.h"
@@ -38,6 +40,11 @@ static const struct TreyHM sTreyHMs[] =
     { MOVE_DEFOG,      FLAG_TREY_HM_DEFOG },
     { MOVE_ROCK_CLIMB, FLAG_TREY_HM_ROCK_CLIMB },
     { MOVE_DIG,        FLAG_TREY_HM_DIG },
+    // Sky HMs (3f), used while soaring: Gust pushes storm puffs, Whirlwind flies through cyclones,
+    // Updraft rides rising-air columns north.
+    { MOVE_GUST,       FLAG_TREY_HM_GUST },
+    { MOVE_WHIRLWIND,  FLAG_TREY_HM_WHIRLWIND },
+    { MOVE_UPDRAFT,    FLAG_TREY_HM_UPDRAFT },
 };
 
 u16 TreyHM_GetUnlockFlag(u16 move)
@@ -62,11 +69,33 @@ bool32 TreyHM_IsUnlocked(u16 move)
     return flag != 0 && FlagGet(flag);
 }
 
+bool32 TreyHM_IsSkyHM(u16 move)
+{
+    return move == MOVE_GUST || move == MOVE_WHIRLWIND || move == MOVE_UPDRAFT;
+}
+
+// Sky Battle rules by species: Flying type or Levitate in any ability slot, and not on the ban list.
+bool32 TreyHM_SpeciesIsSkyEligible(u16 species)
+{
+    u32 i;
+    bool32 eligible = gSpeciesInfo[species].types[0] == TYPE_FLYING || gSpeciesInfo[species].types[1] == TYPE_FLYING;
+
+    for (i = 0; i < NUM_ABILITY_SLOTS && !eligible; i++)
+    {
+        if (gSpeciesInfo[species].abilities[i] == ABILITY_LEVITATE)
+            eligible = TRUE;
+    }
+    return eligible && !IsMonBannedFromSkyBattles(species);
+}
+
 bool32 TreyHM_SpeciesCanLearn(u16 species, u16 move)
 {
     u32 i;
     const struct LevelUpMove *learnset;
 
+    // David, 2026-10-12: every Pokémon that can take part in a Sky Battle can learn the three sky HMs.
+    if (TreyHM_IsSkyHM(move) && TreyHM_SpeciesIsSkyEligible(species))
+        return TRUE;
     if (CanLearnTeachableMove(species, move))
         return TRUE;
     learnset = GetSpeciesLevelUpLearnset(species);
@@ -131,4 +160,50 @@ void FieldCallback_TreyTeleport(void)
     Overworld_ResetStateAfterTeleport();
     gFieldEffectArguments[0] = (u32)GetCursorSelectionMonId();
     FieldEffectStart(FLDEFF_USE_TELEPORT);
+}
+
+u32 TreyHM_Count(void)
+{
+    return ARRAY_COUNT(sTreyHMs);
+}
+
+u16 TreyHM_GetMove(u32 index)
+{
+    return index < ARRAY_COUNT(sTreyHMs) ? sTreyHMs[index].move : MOVE_NONE;
+}
+
+// David, 2026-10-12: all HMs a species could learn are always in the move relearner; TMs are still
+// taught from the bag.
+u32 TreyHM_AppendRelearnableMoves(u16 species, const u16 *knownMoves, u16 *moves, u32 numMoves, u32 maxMoves)
+{
+    u32 i, j;
+
+    for (i = 0; i < ARRAY_COUNT(sTreyHMs) && numMoves < maxMoves; i++)
+    {
+        u16 move = sTreyHMs[i].move;
+        bool32 skip = !TreyHM_SpeciesCanLearn(species, move);
+
+        for (j = 0; j < MAX_MON_MOVES && !skip; j++)
+        {
+            if (knownMoves[j] == move)
+                skip = TRUE;
+        }
+        for (j = 0; j < numMoves && !skip; j++)
+        {
+            if (moves[j] == move)
+                skip = TRUE;
+        }
+        if (!skip)
+            moves[numMoves++] = move;
+    }
+    return numMoves;
+}
+
+void TreyHM_DebugUnlockAll(void)
+{
+    u32 i;
+    if (!TREY_DEBUG_UNLOCK_ALL_HMS)
+        return;
+    for (i = 0; i < ARRAY_COUNT(sTreyHMs); i++)
+        FlagSet(sTreyHMs[i].flag);
 }

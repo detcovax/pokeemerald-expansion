@@ -1126,6 +1126,7 @@ EventScript_VsSeekerChargingDone::
 	.include "data/scripts/trey_layers.inc" @ TREY
 	.include "data/scripts/trey_hm_tutor.inc" @ TREY
 	.include "data/scripts/trey_rock_climb.inc" @ TREY
+	.include "data/scripts/trey_sky_hms.inc" @ TREY (3f)
 	.include "data/scripts/item_ball_scripts.inc"
 	.include "data/scripts/profile_man.inc"
 	.include "data/scripts/day_care.inc"

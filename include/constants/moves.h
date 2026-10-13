@@ -910,7 +910,12 @@
 
 #define MOVES_COUNT_GEN9 848
 
-#define MOVES_COUNT         MOVES_COUNT_GEN9
+// TREY custom moves (TREY_PLAN.md 3f)
+#define MOVE_UPDRAFT 848
+
+#define MOVES_COUNT_TREY 849
+
+#define MOVES_COUNT         MOVES_COUNT_TREY // TREY: was MOVES_COUNT_GEN9
 
 // Z Moves
 #define MOVE_BREAKNECK_BLITZ (MOVES_COUNT + 0)

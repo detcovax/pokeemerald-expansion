@@ -76,6 +76,8 @@ bool8 MetatileBehavior_HasRipples(u8 metatileBehavior);
 bool8 MetatileBehavior_IsPuddle(u8 metatileBehavior);
 bool8 MetatileBehavior_IsTallGrass(u8 metatileBehavior);
 bool8 MetatileBehavior_IsSkyCloud(u8 metatileBehavior); // TREY
+bool8 MetatileBehavior_IsSkyCyclone(u8 metatileBehavior); // TREY (3f)
+bool8 MetatileBehavior_IsSkyUpdraft(u8 metatileBehavior); // TREY (3f)
 bool8 MetatileBehavior_IsLongGrass(u8 metatileBehavior);
 bool8 MetatileBehavior_IsBerryTreeSoil(u8 metatileBehavior);
 bool8 MetatileBehavior_IsAshGrass(u8 metatileBehavior);

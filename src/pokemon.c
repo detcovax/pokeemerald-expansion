@@ -1,4 +1,5 @@
 #include "global.h"
+#include "trey_hm.h" // TREY
 #include "trey_energy.h" // TREY
 #include "trey_regional.h" // TREY
 #include "trey_battle.h" // TREY
@@ -5780,7 +5781,7 @@ u8 GetMoveRelearnerMoves(struct Pokemon *mon, u16 *moves)
         }
     }
 
-    return numMoves;
+    return TreyHM_AppendRelearnableMoves(species, learnedMoves, moves, numMoves, MAX_RELEARNER_MOVES); // TREY: HMs
 }
 
 u8 GetLevelUpMovesBySpecies(u16 species, u16 *moves)
@@ -5798,7 +5799,7 @@ u8 GetLevelUpMovesBySpecies(u16 species, u16 *moves)
 u8 GetNumberOfRelearnableMoves(struct Pokemon *mon)
 {
     u16 learnedMoves[MAX_MON_MOVES];
-    u16 moves[MAX_LEVEL_UP_MOVES];
+    u16 moves[MAX_RELEARNER_MOVES]; // TREY: level-up moves + HMs
     u8 numMoves = 0;
     u16 species = GetMonData(mon, MON_DATA_SPECIES_OR_EGG, 0);
     u8 level = GetMonData(mon, MON_DATA_LEVEL, 0);
@@ -5836,7 +5837,7 @@ u8 GetNumberOfRelearnableMoves(struct Pokemon *mon)
         }
     }
 
-    return numMoves;
+    return TreyHM_AppendRelearnableMoves(species, learnedMoves, moves, numMoves, MAX_RELEARNER_MOVES); // TREY: HMs
 }
 
 u16 SpeciesToPokedexNum(u16 species)

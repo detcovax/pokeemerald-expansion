@@ -59,6 +59,8 @@
 // ---------------------------------------------------------------------------
 // Rock Climb walls are climbed up or down only, like Gen 4. 1 = also allow sideways walls.
 #define TREY_ROCK_CLIMB_ALLOW_SIDEWAYS 0
+// Testing only: 1 = every HM is unlocked when a new game starts. Keep at 0 for real builds.
+#define TREY_DEBUG_UNLOCK_ALL_HMS      1
 
 // ---------------------------------------------------------------------------
 // Energy, replaces PP (TREY_PLAN.md 5.6, D23)

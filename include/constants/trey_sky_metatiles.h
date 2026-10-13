@@ -61,5 +61,10 @@
 #define METATILE_TreySky_RidgeLeft_01           0x235
 #define METATILE_TreySky_RidgeRight_00          0x236
 #define METATILE_TreySky_RidgeRight_01          0x237
+#define METATILE_TreySky_Cyclone                0x238
+#define METATILE_TreySky_UpdraftMid             0x239
+#define METATILE_TreySky_UpdraftLeft            0x23A
+#define METATILE_TreySky_UpdraftRight           0x23B
+#define METATILE_TreySky_UpdraftSingle          0x23C
 
 #endif // GUARD_CONSTANTS_TREY_SKY_METATILES_H

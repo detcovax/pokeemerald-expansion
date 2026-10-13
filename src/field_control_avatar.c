@@ -473,6 +473,14 @@ static const u8 *GetInteractedMetatileScript(struct MapPosition *position, u8 me
 {
     s8 elevation;
 
+    // TREY (3f): sky HMs while soaring. Whirlwind for cyclones; Updraft rides a column north.
+    if (TestPlayerAvatarFlags(PLAYER_AVATAR_FLAG_SOARING))
+    {
+        if (MetatileBehavior_IsSkyCyclone(metatileBehavior) && !FlagGet(FLAG_TREY_USE_WHIRLWIND))
+            return EventScript_TreyWhirlwind;
+        if (MetatileBehavior_IsSkyUpdraft(metatileBehavior) && direction == DIR_NORTH)
+            return EventScript_TreyUpdraft;
+    }
     // TREY: Rock Climb (TREY_PLAN.md 5.3). Gen 4 walls are climbed up or down only.
     if (MetatileBehavior_IsRockClimb(metatileBehavior) == TRUE
      && (direction == DIR_NORTH || direction == DIR_SOUTH || TREY_ROCK_CLIMB_ALLOW_SIDEWAYS))
