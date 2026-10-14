@@ -181,6 +181,53 @@ def main():
             if size and (layout.get("width"), layout.get("height")) != size:
                 error(f"{where}: {season} layout {layout_id} is {layout.get('width')}x{layout.get('height')}, but the map's layout is {size[0]}x{size[1]}. Seasonal layouts must be the same size.")
 
+    # Locations (4a): every MAPSEC needs its gameplay region and the region map page it is drawn on.
+    with open("include/constants/trey_region_maps.h", encoding="utf-8") as f:
+        pages = set(re.findall(r"#define\s+(TREY_REGION_MAP_\w+)\s+\d+", f.read())) - {"TREY_REGION_MAP_COUNT"}
+    with open("include/constants/regions.h", encoding="utf-8") as f:
+        regions = set(re.findall(r"\b(REGION_[A-Z_]+)\b", f.read())) - {"REGIONS_COUNT"}
+    sections = load_json("src/data/region_map/region_map_sections.json")["map_sections"]
+    seen = set()
+    for sec in sections:
+        sid = sec.get("id")
+        sw = f"region_map_sections.json {sid}"
+        if sid in seen:
+            error(f"{sw}: duplicate id.")
+        seen.add(sid)
+        if sec.get("trey_region") not in regions:
+            error(f"{sw}: trey_region {sec.get('trey_region')!r} is missing or not a REGION_* value.")
+        if sec.get("trey_map") not in pages:
+            error(f"{sw}: trey_map {sec.get('trey_map')!r} is missing or not a TREY_REGION_MAP_* value.")
+        if len(sec.get("name", "")) > 16:
+            error(f"{sw}: name {sec.get('name')!r} is longer than 16 characters.")
+        if "x" in sec and (sec["x"] + sec.get("width", 1) > 28 or sec["y"] + sec.get("height", 1) > 15):
+            error(f"{sw}: rectangle is outside the 28x15 region map grid.")
+    if len(sections) + 1 >= 0x3FD:
+        error(f"region_map_sections.json has {len(sections)} locations; the limit is {0x3FD - 1}.")
+
+    # Map group scheme (4a, TREY_PLAN.md 5.1). Emerald's own groups stay as they are. New groups are named
+    # gMapGroup_<Region>_<Type>[_<Place>], e.g. gMapGroup_Kanto_Outdoor, gMapGroup_Kanto_Indoor_Pallet,
+    # and every map in them must be in that region (Sevii maps go in Kanto groups).
+    GROUP_REGIONS = {"Kanto": "REGION_KANTO", "Orange": "REGION_ORANGE", "Johto": "REGION_JOHTO", "Hoenn": "REGION_HOENN",
+                     "Sinnoh": "REGION_SINNOH", "Kitakami": "REGION_KITAKAMI"}
+    GROUP_TYPES = {"Outdoor", "Sky", "Underground", "Underwater", "Indoor", "Dungeon"}
+    section_region = {sec.get("id"): sec.get("trey_region") for sec in sections}
+    for group in group_order:
+        name = group[len("gMapGroup_"):] if group.startswith("gMapGroup_") else group
+        parts = name.split("_")
+        if parts[0] not in GROUP_REGIONS:
+            continue  # Emerald's groups and gMapGroup_TreyTest
+        if len(parts) < 2 or parts[1] not in GROUP_TYPES:
+            error(f"map_groups.json {group}: TREY groups are named gMapGroup_<Region>_<Type>[_<Place>] with Type one of {sorted(GROUP_TYPES)}.")
+            continue
+        for folder in groups[group]:
+            entry = next((v for v in maps_by_id.values() if v[0] == folder), None)
+            if entry is None:
+                continue
+            sec = entry[1].get("region_map_section")
+            if section_region.get(sec) not in (None, GROUP_REGIONS[parts[0]]):
+                error(f"data/maps/{folder}/map.json: in {group}, but its location {sec} is in {section_region.get(sec)}.")
+
     # Sky clearings (3h, David 2026-10-13): the sky is entered and left only at clearings, like Dive.
     # A LAYER_LINK_SKY_UP link is one ground tile (shown in game as a light beam) and leads to a landing
     # spot on a Sky map; that landing spot needs a LAYER_LINK_SKY_DOWN link back to the same tile.

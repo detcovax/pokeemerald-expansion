@@ -1659,6 +1659,9 @@
 #define TREY_FLAG_SYSTEM_START          (TREY_FLAG_BADGES_END + 1)
 #define FLAG_TREY_TERA_ORB_CHARGED      (TREY_FLAG_SYSTEM_START + 0x00) // B_FLAG_TERA_ORB_CHARGED (D19)
 #define FLAG_TREY_SKY_BATTLE            (TREY_FLAG_SYSTEM_START + 0x01) // B_FLAG_SKY_BATTLE: set while a Sky Battle is running (3e)
+// Region map pages the player has been to (4a): one flag per TREY_REGION_MAP_* (9), +0x02..+0x0A.
+// Set on entering a map; the map screens only switch (L/R) to visited pages.
+#define FLAG_TREY_VISITED_MAP_PAGE_START (TREY_FLAG_SYSTEM_START + 0x02)
 
 // TREY HM unlocks (TREY_PLAN.md 5.3). Set by the tutorial. Once set, any party Pokémon that can
 // learn the move may use it in the field, without knowing it.

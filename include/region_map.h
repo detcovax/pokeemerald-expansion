@@ -2,6 +2,8 @@
 #define GUARD_REGION_MAP_H
 
 #include "bg.h"
+#include "constants/regions.h"         // TREY (4a)
+#include "constants/trey_region_maps.h" // TREY (4a)
 
 // Exported type declarations
 #define MAP_NAME_LENGTH 16
@@ -87,6 +89,8 @@ struct RegionMapLocation
     u8 y;
     u8 width;
     u8 height;
+    u8 region; // TREY (4a): gameplay region (enum Region), from "trey_region" in region_map_sections.json
+    u8 page;   // TREY (4a): region map page it is drawn on (TREY_REGION_MAP_*), from "trey_map"
     const u8 *name;
 };
 
@@ -121,5 +125,14 @@ u32 FilterFlyDestination(struct RegionMap* regionMap);
 void SetFlyDestination(struct RegionMap* regionMap);
 
 extern const struct RegionMapLocation gRegionMapEntries[];
+
+// TREY (4a): region map pages (TREY_REGION_MAP_*). Every map screen opens on the player's page; the
+// Teleport map and the Pokédex area page flip between visited pages.
+extern u8 gTreyRegionMapPage;                 // page the map screens show
+u8 TreyRegionMap_GetPlayerPage(void);
+bool32 TreyRegionMap_IsPageVisited(u8 page);
+u8 TreyRegionMap_NextVisitedPage(u8 page, s8 dir); // previous (-1) / next (+1) visited page, or `page`
+void TreyRegionMap_KeepPageOnNextOpen(void);  // the next map screen keeps gTreyRegionMapPage
+const u8 *TreyRegionMap_GetPageName(u8 page);
 
 #endif //GUARD_REGION_MAP_H

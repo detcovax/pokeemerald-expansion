@@ -40,6 +40,16 @@ const struct RegionMapLocation gRegionMapEntries[] = {
 {% else %}
         .height = 1,
 {% endif %}
+{% if existsIn(map_section, "trey_region") %}
+        .region = {{ map_section.trey_region }},
+{% else %}
+        .region = REGION_HOENN,
+{% endif %}
+{% if existsIn(map_section, "trey_map") %}
+        .page = {{ map_section.trey_map }},
+{% else %}
+        .page = TREY_REGION_MAP_HOENN,
+{% endif %}
 {% if existsIn(map_section, "name") %}
         .name = sMapName_{{ cleanString(map_section.name) }}{% if existsIn(map_section, "name_clone") %}_Clone{% endif %},
 {% else %}

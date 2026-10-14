@@ -9,6 +9,7 @@
 #include "trig.h"
 #include "overworld.h"
 #include "event_data.h"
+#include "trey_regions.h" // TREY (4a)
 #include "secret_base.h"
 #include "string_util.h"
 #include "international_string_util.h"
@@ -81,6 +82,15 @@ static EWRAM_DATA struct {
 
 static bool32 sDrawFlyDestTextWindow;
 
+// TREY (4a): which region map page the map screens show, and whether the player is on it.
+EWRAM_DATA u8 gTreyRegionMapPage = 0;
+static EWRAM_DATA bool8 sTreyKeepPage = FALSE;
+static EWRAM_DATA bool8 sTreyPlayerOffPage = FALSE;
+static void TreyRegionMap_ChoosePageOnOpen(void);
+static const u8 sText_TreyLRPrefix[] = _("{L_BUTTON}{R_BUTTON} ");
+static void TreyRegionMap_FixCursorForPage(void);
+static void CB_SwitchFlyMapPage(void);
+
 static u8 ProcessRegionMapInput_Full(void);
 static u8 MoveRegionMapCursor_Full(void);
 static u8 ProcessRegionMapInput_Zoomed(void);
@@ -119,15 +129,72 @@ static void CB_ExitFlyMap(void);
 static const u16 sRegionMapCursorPal[] = INCBIN_U16("graphics/pokenav/region_map/cursor.gbapal");
 static const u32 sRegionMapCursorSmallGfxLZ[] = INCBIN_U32("graphics/pokenav/region_map/cursor_small.4bpp.lz");
 static const u32 sRegionMapCursorLargeGfxLZ[] = INCBIN_U32("graphics/pokenav/region_map/cursor_large.4bpp.lz");
-static const u16 sRegionMapBg_Pal[] = INCBIN_U16("graphics/pokenav/region_map/map.gbapal");
-static const u32 sRegionMapBg_GfxLZ[] = INCBIN_U32("graphics/pokenav/region_map/map.8bpp.lz");
-static const u32 sRegionMapBg_TilemapLZ[] = INCBIN_U32("graphics/pokenav/region_map/map.bin.lz");
+// TREY (4a): one picture per region map page (Hoenn is Emerald's). Art: tools/trey/region_maps.py.
+static const u16 sRegionMapBg_Pal_KANTO[] = INCBIN_U16("graphics/pokenav/region_map/map_kanto.gbapal");
+static const u32 sRegionMapBg_GfxLZ_KANTO[] = INCBIN_U32("graphics/pokenav/region_map/map_kanto.8bpp.lz");
+static const u32 sRegionMapBg_TilemapLZ_KANTO[] = INCBIN_U32("graphics/pokenav/region_map/map_kanto.bin.lz");
+static const u16 sRegionMapBg_Pal_SEVII_123[] = INCBIN_U16("graphics/pokenav/region_map/map_sevii_123.gbapal");
+static const u32 sRegionMapBg_GfxLZ_SEVII_123[] = INCBIN_U32("graphics/pokenav/region_map/map_sevii_123.8bpp.lz");
+static const u32 sRegionMapBg_TilemapLZ_SEVII_123[] = INCBIN_U32("graphics/pokenav/region_map/map_sevii_123.bin.lz");
+static const u16 sRegionMapBg_Pal_SEVII_45[] = INCBIN_U16("graphics/pokenav/region_map/map_sevii_45.gbapal");
+static const u32 sRegionMapBg_GfxLZ_SEVII_45[] = INCBIN_U32("graphics/pokenav/region_map/map_sevii_45.8bpp.lz");
+static const u32 sRegionMapBg_TilemapLZ_SEVII_45[] = INCBIN_U32("graphics/pokenav/region_map/map_sevii_45.bin.lz");
+static const u16 sRegionMapBg_Pal_SEVII_67[] = INCBIN_U16("graphics/pokenav/region_map/map_sevii_67.gbapal");
+static const u32 sRegionMapBg_GfxLZ_SEVII_67[] = INCBIN_U32("graphics/pokenav/region_map/map_sevii_67.8bpp.lz");
+static const u32 sRegionMapBg_TilemapLZ_SEVII_67[] = INCBIN_U32("graphics/pokenav/region_map/map_sevii_67.bin.lz");
+static const u16 sRegionMapBg_Pal_ORANGE[] = INCBIN_U16("graphics/pokenav/region_map/map_orange.gbapal");
+static const u32 sRegionMapBg_GfxLZ_ORANGE[] = INCBIN_U32("graphics/pokenav/region_map/map_orange.8bpp.lz");
+static const u32 sRegionMapBg_TilemapLZ_ORANGE[] = INCBIN_U32("graphics/pokenav/region_map/map_orange.bin.lz");
+static const u16 sRegionMapBg_Pal_JOHTO[] = INCBIN_U16("graphics/pokenav/region_map/map_johto.gbapal");
+static const u32 sRegionMapBg_GfxLZ_JOHTO[] = INCBIN_U32("graphics/pokenav/region_map/map_johto.8bpp.lz");
+static const u32 sRegionMapBg_TilemapLZ_JOHTO[] = INCBIN_U32("graphics/pokenav/region_map/map_johto.bin.lz");
+static const u16 sRegionMapBg_Pal_HOENN[] = INCBIN_U16("graphics/pokenav/region_map/map.gbapal");
+static const u32 sRegionMapBg_GfxLZ_HOENN[] = INCBIN_U32("graphics/pokenav/region_map/map.8bpp.lz");
+static const u32 sRegionMapBg_TilemapLZ_HOENN[] = INCBIN_U32("graphics/pokenav/region_map/map.bin.lz");
+static const u16 sRegionMapBg_Pal_SINNOH[] = INCBIN_U16("graphics/pokenav/region_map/map_sinnoh.gbapal");
+static const u32 sRegionMapBg_GfxLZ_SINNOH[] = INCBIN_U32("graphics/pokenav/region_map/map_sinnoh.8bpp.lz");
+static const u32 sRegionMapBg_TilemapLZ_SINNOH[] = INCBIN_U32("graphics/pokenav/region_map/map_sinnoh.bin.lz");
+static const u16 sRegionMapBg_Pal_KITAKAMI[] = INCBIN_U16("graphics/pokenav/region_map/map_kitakami.gbapal");
+static const u32 sRegionMapBg_GfxLZ_KITAKAMI[] = INCBIN_U32("graphics/pokenav/region_map/map_kitakami.8bpp.lz");
+static const u32 sRegionMapBg_TilemapLZ_KITAKAMI[] = INCBIN_U32("graphics/pokenav/region_map/map_kitakami.bin.lz");
+
+struct TreyRegionMapPageGfx
+{
+    const u16 *pal;      // 48 colours, loaded into BG palettes 7-9
+    const u32 *gfxLZ;    // 8bpp tiles
+    const u32 *tilemapLZ; // 64x64 affine tilemap
+    const u8 *name;
+};
+
+static const u8 sText_TreyRegionMapPage_KANTO[] = _("KANTO");
+static const u8 sText_TreyRegionMapPage_SEVII_123[] = _("SEVII ISLANDS");
+static const u8 sText_TreyRegionMapPage_SEVII_45[] = _("SEVII ISLANDS");
+static const u8 sText_TreyRegionMapPage_SEVII_67[] = _("SEVII ISLANDS");
+static const u8 sText_TreyRegionMapPage_ORANGE[] = _("ORANGE ISLANDS");
+static const u8 sText_TreyRegionMapPage_JOHTO[] = _("JOHTO");
+static const u8 sText_TreyRegionMapPage_HOENN[] = _("HOENN");
+static const u8 sText_TreyRegionMapPage_SINNOH[] = _("SINNOH");
+static const u8 sText_TreyRegionMapPage_KITAKAMI[] = _("KITAKAMI");
+
+static const struct TreyRegionMapPageGfx sTreyRegionMapPageGfx[TREY_REGION_MAP_COUNT] =
+{
+    [TREY_REGION_MAP_KANTO] = {sRegionMapBg_Pal_KANTO, sRegionMapBg_GfxLZ_KANTO, sRegionMapBg_TilemapLZ_KANTO, sText_TreyRegionMapPage_KANTO},
+    [TREY_REGION_MAP_SEVII_123] = {sRegionMapBg_Pal_SEVII_123, sRegionMapBg_GfxLZ_SEVII_123, sRegionMapBg_TilemapLZ_SEVII_123, sText_TreyRegionMapPage_SEVII_123},
+    [TREY_REGION_MAP_SEVII_45] = {sRegionMapBg_Pal_SEVII_45, sRegionMapBg_GfxLZ_SEVII_45, sRegionMapBg_TilemapLZ_SEVII_45, sText_TreyRegionMapPage_SEVII_45},
+    [TREY_REGION_MAP_SEVII_67] = {sRegionMapBg_Pal_SEVII_67, sRegionMapBg_GfxLZ_SEVII_67, sRegionMapBg_TilemapLZ_SEVII_67, sText_TreyRegionMapPage_SEVII_67},
+    [TREY_REGION_MAP_ORANGE] = {sRegionMapBg_Pal_ORANGE, sRegionMapBg_GfxLZ_ORANGE, sRegionMapBg_TilemapLZ_ORANGE, sText_TreyRegionMapPage_ORANGE},
+    [TREY_REGION_MAP_JOHTO] = {sRegionMapBg_Pal_JOHTO, sRegionMapBg_GfxLZ_JOHTO, sRegionMapBg_TilemapLZ_JOHTO, sText_TreyRegionMapPage_JOHTO},
+    [TREY_REGION_MAP_HOENN] = {sRegionMapBg_Pal_HOENN, sRegionMapBg_GfxLZ_HOENN, sRegionMapBg_TilemapLZ_HOENN, sText_TreyRegionMapPage_HOENN},
+    [TREY_REGION_MAP_SINNOH] = {sRegionMapBg_Pal_SINNOH, sRegionMapBg_GfxLZ_SINNOH, sRegionMapBg_TilemapLZ_SINNOH, sText_TreyRegionMapPage_SINNOH},
+    [TREY_REGION_MAP_KITAKAMI] = {sRegionMapBg_Pal_KITAKAMI, sRegionMapBg_GfxLZ_KITAKAMI, sRegionMapBg_TilemapLZ_KITAKAMI, sText_TreyRegionMapPage_KITAKAMI},
+};
+
 static const u16 sRegionMapPlayerIcon_BrendanPal[] = INCBIN_U16("graphics/pokenav/region_map/brendan_icon.gbapal");
 static const u8 sRegionMapPlayerIcon_BrendanGfx[] = INCBIN_U8("graphics/pokenav/region_map/brendan_icon.4bpp");
 static const u16 sRegionMapPlayerIcon_MayPal[] = INCBIN_U16("graphics/pokenav/region_map/may_icon.gbapal");
 static const u8 sRegionMapPlayerIcon_MayGfx[] = INCBIN_U8("graphics/pokenav/region_map/may_icon.4bpp");
 
-#include "data/region_map/region_map_layout.h"
+#include "data/region_map/trey_layouts.h" // TREY (4a): one grid per region map page (Hoenn copied from region_map_layout.h)
 #include "data/region_map/region_map_entries.h"
 
 static const u16 sRegionMap_SpecialPlaceLocations[][2] =
@@ -513,6 +580,7 @@ void InitRegionMap(struct RegionMap *regionMap, bool8 zoomed)
 
 void InitRegionMapData(struct RegionMap *regionMap, const struct BgTemplate *template, bool8 zoomed)
 {
+    TreyRegionMap_ChoosePageOnOpen(); // TREY (4a)
     sRegionMap = regionMap;
     sRegionMap->initStep = 0;
     sRegionMap->zoomed = zoomed;
@@ -547,24 +615,24 @@ bool8 LoadRegionMapGfx(void)
     {
     case 0:
         if (sRegionMap->bgManaged)
-            DecompressAndCopyTileDataToVram(sRegionMap->bgNum, sRegionMapBg_GfxLZ, 0, 0, 0);
+            DecompressAndCopyTileDataToVram(sRegionMap->bgNum, sTreyRegionMapPageGfx[gTreyRegionMapPage].gfxLZ, 0, 0, 0);
         else
-            LZ77UnCompVram(sRegionMapBg_GfxLZ, (u16 *)BG_CHAR_ADDR(2));
+            LZ77UnCompVram(sTreyRegionMapPageGfx[gTreyRegionMapPage].gfxLZ, (u16 *)BG_CHAR_ADDR(2));
         break;
     case 1:
         if (sRegionMap->bgManaged)
         {
             if (!FreeTempTileDataBuffersIfPossible())
-                DecompressAndCopyTileDataToVram(sRegionMap->bgNum, sRegionMapBg_TilemapLZ, 0, 0, 1);
+                DecompressAndCopyTileDataToVram(sRegionMap->bgNum, sTreyRegionMapPageGfx[gTreyRegionMapPage].tilemapLZ, 0, 0, 1);
         }
         else
         {
-            LZ77UnCompVram(sRegionMapBg_TilemapLZ, (u16 *)BG_SCREEN_ADDR(28));
+            LZ77UnCompVram(sTreyRegionMapPageGfx[gTreyRegionMapPage].tilemapLZ, (u16 *)BG_SCREEN_ADDR(28));
         }
         break;
     case 2:
         if (!FreeTempTileDataBuffersIfPossible())
-            LoadPalette(sRegionMapBg_Pal, BG_PLTT_ID(7), 3 * PLTT_SIZE_4BPP);
+            LoadPalette(sTreyRegionMapPageGfx[gTreyRegionMapPage].pal, BG_PLTT_ID(7), 3 * PLTT_SIZE_4BPP);
         break;
     case 3:
         LZ77UnCompWram(sRegionMapCursorSmallGfxLZ, sRegionMap->cursorSmallImage);
@@ -970,7 +1038,7 @@ static u16 GetMapSecIdAt(u16 x, u16 y)
     }
     y -= MAPCURSOR_Y_MIN;
     x -= MAPCURSOR_X_MIN;
-    return sRegionMap_MapSectionLayout[y][x];
+    return sTreyRegionMapLayouts[gTreyRegionMapPage][y][x]; // TREY (4a)
 }
 
 static void InitMapBasedOnPlayerLocation(void)
@@ -1126,6 +1194,7 @@ static void InitMapBasedOnPlayerLocation(void)
     }
     sRegionMap->cursorPosX = gRegionMapEntries[sRegionMap->mapSecId].x + x + MAPCURSOR_X_MIN;
     sRegionMap->cursorPosY = gRegionMapEntries[sRegionMap->mapSecId].y + y + MAPCURSOR_Y_MIN;
+    TreyRegionMap_FixCursorForPage(); // TREY (4a)
 }
 
 static void RegionMap_InitializeStateBasedOnSSTidalLocation(void)
@@ -1548,6 +1617,11 @@ static void SpriteCB_PlayerIconMapFull(struct Sprite *sprite)
 
 static void SpriteCB_PlayerIcon(struct Sprite *sprite)
 {
+    if (sTreyPlayerOffPage) // TREY (4a): the player is on another region map page
+    {
+        sprite->invisible = TRUE;
+        return;
+    }
     if (sRegionMap->blinkPlayerIcon)
     {
         if (++sprite->sTimer > 16)
@@ -1718,7 +1792,17 @@ void CB2_OpenFlyMap(void)
         LoadPalette(sRegionMapFramePal, BG_PLTT_ID(1), sizeof(sRegionMapFramePal));
         PutWindowTilemap(WIN_FLY_TO_WHERE);
         FillWindowPixelBuffer(WIN_FLY_TO_WHERE, PIXEL_FILL(0));
-        AddTextPrinterParameterized(WIN_FLY_TO_WHERE, FONT_NORMAL, gText_FlyToWhere, 0, 1, 0, NULL);
+        // TREY (4a): with more than one visited region, the title shows the region and the L/R hint.
+        if (TreyRegionMap_NextVisitedPage(gTreyRegionMapPage, 1) != gTreyRegionMapPage)
+        {
+            StringCopy(gStringVar4, sText_TreyLRPrefix);
+            StringAppend(gStringVar4, TreyRegionMap_GetPageName(gTreyRegionMapPage));
+            AddTextPrinterParameterized(WIN_FLY_TO_WHERE, FONT_NARROW, gStringVar4, 0, 1, 0, NULL);
+        }
+        else
+        {
+            AddTextPrinterParameterized(WIN_FLY_TO_WHERE, FONT_NORMAL, gText_FlyToWhere, 0, 1, 0, NULL);
+        }
         ScheduleBgCopyTilemapToVram(0);
         gMain.state++;
         break;
@@ -1856,6 +1940,8 @@ static void CreateFlyDestIcons(void)
     u8 spriteId;
 
     canFlyFlag = FLAG_VISITED_LITTLEROOT_TOWN;
+    if (gTreyRegionMapPage != TREY_REGION_MAP_HOENN) // TREY (4a): other regions get Teleport targets with their heal locations
+        return;
     for (mapSecId = MAPSEC_LITTLEROOT_TOWN; mapSecId <= MAPSEC_EVER_GRANDE_CITY; mapSecId++)
     {
         GetMapSecDimensions(mapSecId, &x, &y, &width, &height);
@@ -1900,6 +1986,8 @@ static void TryCreateRedOutlineFlyDestIcons(void)
 
     for (i = 0; sRedOutlineFlyDestinations[i][1] != MAPSEC_NONE; i++)
     {
+        if (gRegionMapEntries[sRedOutlineFlyDestinations[i][1]].page != gTreyRegionMapPage) // TREY (4a)
+            continue;
         if (FlagGet(sRedOutlineFlyDestinations[i][0]))
         {
             mapSecId = sRedOutlineFlyDestinations[i][1];
@@ -1960,6 +2048,18 @@ static void CB_HandleFlyMapInput(void)
 {
     if (sFlyMap->state == 0)
     {
+        // TREY (4a): L/R flips between the regions you have visited.
+        if (JOY_NEW(L_BUTTON | R_BUTTON))
+        {
+            u8 page = TreyRegionMap_NextVisitedPage(gTreyRegionMapPage, JOY_NEW(L_BUTTON) ? -1 : 1);
+            if (page != gTreyRegionMapPage)
+            {
+                m4aSongNumStart(SE_DEX_PAGE);
+                gTreyRegionMapPage = page;
+                SetFlyMapCallback(CB_SwitchFlyMapPage);
+                return;
+            }
+        }
         switch (DoRegionMapInputCallback())
         {
         case MAP_INPUT_NONE:
@@ -2044,4 +2144,117 @@ void SetFlyDestination(struct RegionMap* regionMap)
         SetWarpDestinationToHealLocation(flyDestination);
     else
         SetWarpDestinationToMapWarp(sMapHealLocations[regionMap->mapSecId][0], sMapHealLocations[regionMap->mapSecId][1], WARP_ID_NONE);
+}
+
+// ---------------------------------------------------------------------------
+// TREY (TREY_PLAN.md Phase 4, chunk 4a): region map pages
+// ---------------------------------------------------------------------------
+
+// The location the map screens treat as "where the player is" (indoors: the building's own location,
+// or the outside one for MAPSEC_DYNAMIC buildings).
+static u16 TreyRegionMap_GetPlayerMapSec(void)
+{
+    u16 mapSecId = gMapHeader.regionMapSectionId;
+
+    if (mapSecId == MAPSEC_DYNAMIC)
+        mapSecId = Overworld_GetMapHeaderByGroupAndId(gSaveBlock1Ptr->dynamicWarp.mapGroup, gSaveBlock1Ptr->dynamicWarp.mapNum)->regionMapSectionId;
+    return CorrectSpecialMapSecId_Internal(mapSecId);
+}
+
+u8 TreyRegionMap_GetPlayerPage(void)
+{
+    return TreyGetRegionMapPageOfMapsec(TreyRegionMap_GetPlayerMapSec());
+}
+
+bool32 TreyRegionMap_IsPageVisited(u8 page)
+{
+    return page < TREY_REGION_MAP_COUNT && FlagGet(FLAG_TREY_VISITED_MAP_PAGE_START + page);
+}
+
+// The next visited page in L/R order (dir +1 or -1), or `page` itself if there is no other.
+u8 TreyRegionMap_NextVisitedPage(u8 page, s8 dir)
+{
+    u32 i;
+    s32 p = page;
+
+    for (i = 1; i < TREY_REGION_MAP_COUNT; i++)
+    {
+        p = (p + dir + TREY_REGION_MAP_COUNT) % TREY_REGION_MAP_COUNT;
+        if (TreyRegionMap_IsPageVisited(p))
+            return p;
+    }
+    return page;
+}
+
+// The next map screen that opens keeps gTreyRegionMapPage instead of jumping to the player's page.
+void TreyRegionMap_KeepPageOnNextOpen(void)
+{
+    sTreyKeepPage = TRUE;
+}
+
+const u8 *TreyRegionMap_GetPageName(u8 page)
+{
+    return page < TREY_REGION_MAP_COUNT ? sTreyRegionMapPageGfx[page].name : sTreyRegionMapPageGfx[TREY_REGION_MAP_HOENN].name;
+}
+
+static void TreyRegionMap_ChoosePageOnOpen(void)
+{
+    if (!sTreyKeepPage || gTreyRegionMapPage >= TREY_REGION_MAP_COUNT)
+        gTreyRegionMapPage = TreyRegionMap_GetPlayerPage();
+    sTreyKeepPage = FALSE;
+    sTreyPlayerOffPage = (gTreyRegionMapPage != TreyRegionMap_GetPlayerPage());
+}
+
+// Called at the end of InitMapBasedOnPlayerLocation: on another page, start the cursor on the location
+// nearest the middle of the map, and hide the player icon.
+static void TreyRegionMap_FixCursorForPage(void)
+{
+    u32 x, y, best = 0xFFFFFFFF;
+    u16 bestX = MAPCURSOR_X_MIN + MAP_WIDTH / 2, bestY = MAPCURSOR_Y_MIN + MAP_HEIGHT / 2;
+
+    sTreyPlayerOffPage = (gTreyRegionMapPage != TreyGetRegionMapPageOfMapsec(sRegionMap->mapSecId));
+    if (!sTreyPlayerOffPage)
+        return;
+    for (y = MAPCURSOR_Y_MIN; y <= MAPCURSOR_Y_MAX; y++)
+    {
+        for (x = MAPCURSOR_X_MIN; x <= MAPCURSOR_X_MAX; x++)
+        {
+            s32 dx = (s32)x - (MAPCURSOR_X_MIN + MAP_WIDTH / 2);
+            s32 dy = (s32)y - (MAPCURSOR_Y_MIN + MAP_HEIGHT / 2);
+            u32 d = dx * dx + dy * dy;
+            if (GetMapSecIdAt(x, y) != MAPSEC_NONE && d < best)
+            {
+                best = d;
+                bestX = x;
+                bestY = y;
+            }
+        }
+    }
+    sRegionMap->cursorPosX = bestX;
+    sRegionMap->cursorPosY = bestY;
+    sRegionMap->mapSecId = GetMapSecIdAt(bestX, bestY);
+    sRegionMap->playerIsInCave = FALSE;
+}
+
+// Fly/Teleport map: L/R flips to the previous/next visited page by reopening the map on that page.
+static void CB_SwitchFlyMapPage(void)
+{
+    switch (sFlyMap->state)
+    {
+    case 0:
+        BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 16, RGB_BLACK);
+        sFlyMap->state++;
+        break;
+    case 1:
+        if (!UpdatePaletteFade())
+        {
+            FreeRegionMapIconResources();
+            TRY_FREE_AND_SET_NULL(sFlyMap);
+            FreeAllWindowBuffers();
+            TreyRegionMap_KeepPageOnNextOpen();
+            gMain.state = 0;
+            SetMainCallback2(CB2_OpenFlyMap);
+        }
+        break;
+    }
 }

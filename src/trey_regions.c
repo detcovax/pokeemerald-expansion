@@ -2,6 +2,7 @@
 
 #include "global.h"
 #include "event_data.h"
+#include "region_map.h"
 #include "trey_regions.h"
 #include "constants/flags.h"
 #include "constants/region_map_sections.h"
@@ -10,15 +11,34 @@
 // Regions
 // ---------------------------------------------------------------------------
 
-// For now only Hoenn and the FRLG Kanto/Sevii sections exist. When new regions get their
-// MAPSECs (Phase 4), this becomes a table generated from region_map_sections.json.
+// The region and region map page of every location come from region_map_sections.json (4a).
+// Phase 4 (4a): every location carries its region in region_map_sections.json ("trey_region").
 enum Region TreyGetRegionOfMapsec(u16 mapSec)
 {
-    if (mapSec >= KANTO_MAPSEC_START && mapSec <= KANTO_MAPSEC_END)
-        return REGION_KANTO;
-    // Everything else, including MAPSEC_NONE and special sections, counts as Hoenn for now,
-    // which matches how the expansion behaved before (it always returned Hoenn).
-    return REGION_HOENN;
+    if (mapSec >= MAPSEC_NONE)
+        return REGION_HOENN; // MAPSEC_NONE and the special met-location IDs
+    return gRegionMapEntries[mapSec].region;
+}
+
+// On every map load (warp or walking across a connection): the page this map is drawn on counts as
+// visited, so the map screens can flip to it.
+void TreyRegions_OnMapEnter(void)
+{
+    u32 page = TreyRegionMap_GetPlayerPage();
+    if (page < TREY_REGION_MAP_COUNT)
+        FlagSet(FLAG_TREY_VISITED_MAP_PAGE_START + page);
+    if (TREY_DEBUG_ALL_REGION_MAPS)
+    {
+        for (page = 0; page < TREY_REGION_MAP_COUNT; page++)
+            FlagSet(FLAG_TREY_VISITED_MAP_PAGE_START + page);
+    }
+}
+
+u32 TreyGetRegionMapPageOfMapsec(u16 mapSec)
+{
+    if (mapSec >= MAPSEC_NONE)
+        return TREY_REGION_MAP_HOENN;
+    return gRegionMapEntries[mapSec].page;
 }
 
 enum Region TreyGetCurrentRegion(void)

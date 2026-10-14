@@ -23,6 +23,7 @@
 #include "wild_encounter.h"
 #include "window.h"
 #include "constants/region_map_sections.h"
+#include "constants/map_types.h" // TREY (4a)
 #include "constants/rgb.h"
 #include "constants/songs.h"
 #include "config/pokedex_plus_hgss.h"
@@ -351,6 +352,23 @@ static void FindMapsWithMon(u16 species)
             case MAP_GROUP_DUNGEONS:
             case MAP_GROUP_SPECIAL_AREA:
                 SetSpecialMapHasMon(gWildMonHeaders[i].mapGroup, gWildMonHeaders[i].mapNum);
+                break;
+            default:
+                // TREY (4a): the other regions' map groups. Outdoor maps glow, the rest get a marker.
+                switch (GetMapTypeByGroupAndId(gWildMonHeaders[i].mapGroup, gWildMonHeaders[i].mapNum))
+                {
+                case MAP_TYPE_TOWN:
+                case MAP_TYPE_CITY:
+                case MAP_TYPE_ROUTE:
+                case MAP_TYPE_OCEAN_ROUTE:
+                case MAP_TYPE_UNDERWATER:
+                case MAP_TYPE_SKY:
+                    SetAreaHasMon(gWildMonHeaders[i].mapGroup, gWildMonHeaders[i].mapNum);
+                    break;
+                default:
+                    SetSpecialMapHasMon(gWildMonHeaders[i].mapGroup, gWildMonHeaders[i].mapNum);
+                    break;
+                }
                 break;
             }
         }
@@ -721,6 +739,8 @@ void DisplayPokedexAreaScreen(u16 species, u8 *screenSwitchState, enum TimeOfDay
     sPokedexAreaScreen->areaState = areaState;
     gAreaTimeOfDay = timeOfDay;
     screenSwitchState[0] = 0;
+    if (areaState != DEX_UPDATE_AREA_SCREEN) // TREY (4a): open on the player's region; L/R or SELECT flip regions
+        gTreyRegionMapPage = TreyRegionMap_GetPlayerPage();
 
     if (sPokedexAreaScreen->areaState == DEX_UPDATE_AREA_SCREEN)
         taskId = CreateTask(Task_UpdatePokedexAreaScreen, 0);
@@ -888,6 +908,18 @@ static void Task_HandlePokedexAreaScreenInput(u8 taskId)
             gTasks[taskId].data[1] = 2;
             PlaySE(SE_DEX_PAGE);
         }
+        else if (JOY_NEW(SELECT_BUTTON)
+              || (JOY_NEW(L_BUTTON | R_BUTTON) && gSaveBlock2Ptr->optionsButtonMode != OPTIONS_BUTTON_MODE_LR))
+        {
+            // TREY (4a): flip between visited regions (SELECT, or L/R unless L/R turn pages).
+            u8 page = TreyRegionMap_NextVisitedPage(gTreyRegionMapPage, JOY_NEW(L_BUTTON) ? -1 : 1);
+            if (page == gTreyRegionMapPage)
+                return;
+            gTreyRegionMapPage = page;
+            gTasks[taskId].data[1] = 3;
+            sPokedexAreaScreen->areaState = DEX_UPDATE_AREA_SCREEN;
+            PlaySE(SE_DEX_PAGE);
+        }
         else if (JOY_NEW(DPAD_UP) && OW_TIME_OF_DAY_ENCOUNTERS == TRUE)
         {
             gTasks[taskId].data[1] = 3;
@@ -957,6 +989,8 @@ static void CreateAreaMarkerSprites(void)
     for (i = 0; i < sPokedexAreaScreen->numSpecialAreas; i++)
     {
         mapSecId = sPokedexAreaScreen->specialAreaRegionMapSectionIds[i];
+        if (gRegionMapEntries[mapSecId].page != gTreyRegionMapPage) // TREY (4a): markers of the region shown only
+            continue;
         x = 8 * (gRegionMapEntries[mapSecId].x + 1) + 4;
         y = 8 * (gRegionMapEntries[mapSecId].y) + 28;
         x += 4 * (gRegionMapEntries[mapSecId].width - 1);

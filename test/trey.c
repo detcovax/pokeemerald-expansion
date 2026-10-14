@@ -140,3 +140,37 @@ TEST("TREY Sky HMs: cyclone, updraft and landing spot behaviours")
     EXPECT(MetatileBehavior_IsSkyLanding(MB_SKY_LANDING));
     EXPECT(!MetatileBehavior_IsSkyLanding(MB_SKY_CLOUD));
 }
+
+// Regions and region maps (4a)
+#include "event_data.h"
+#include "region_map.h"
+#include "trey_regions.h"
+#include "constants/region_map_sections.h"
+
+TEST("TREY Regions: every location knows its region and region map page")
+{
+    EXPECT_EQ(TreyGetRegionOfMapsec(MAPSEC_LITTLEROOT_TOWN), REGION_HOENN);
+    EXPECT_EQ(TreyGetRegionOfMapsec(MAPSEC_PALLET_TOWN), REGION_KANTO);
+    EXPECT_EQ(TreyGetRegionOfMapsec(MAPSEC_ONE_ISLAND), REGION_KANTO);        // Sevii is Kanto for gameplay
+    EXPECT_EQ(TreyGetRegionMapPageOfMapsec(MAPSEC_ONE_ISLAND), TREY_REGION_MAP_SEVII_123);
+    EXPECT_EQ(TreyGetRegionMapPageOfMapsec(MAPSEC_SEVEN_ISLAND), TREY_REGION_MAP_SEVII_67);
+    EXPECT_EQ(TreyGetRegionOfMapsec(MAPSEC_NEW_BARK_TOWN), REGION_JOHTO);
+    EXPECT_EQ(TreyGetRegionOfMapsec(MAPSEC_TWINLEAF_TOWN), REGION_SINNOH);
+    EXPECT_EQ(TreyGetRegionOfMapsec(MAPSEC_PUMMELO_ISLAND), REGION_ORANGE);
+    EXPECT_EQ(TreyGetRegionMapPageOfMapsec(MAPSEC_MOSSUI_TOWN), TREY_REGION_MAP_KITAKAMI);
+    EXPECT_EQ(TreyGetRegionOfMapsec(MAPSEC_NONE), REGION_HOENN);
+}
+
+TEST("TREY Regions: L/R only flips to visited region map pages")
+{
+    u32 i;
+    for (i = 0; i < TREY_REGION_MAP_COUNT; i++)
+        FlagClear(FLAG_TREY_VISITED_MAP_PAGE_START + i);
+    EXPECT_EQ(TreyRegionMap_NextVisitedPage(TREY_REGION_MAP_HOENN, 1), TREY_REGION_MAP_HOENN);
+    FlagSet(FLAG_TREY_VISITED_MAP_PAGE_START + TREY_REGION_MAP_HOENN);
+    FlagSet(FLAG_TREY_VISITED_MAP_PAGE_START + TREY_REGION_MAP_KANTO);
+    FlagSet(FLAG_TREY_VISITED_MAP_PAGE_START + TREY_REGION_MAP_SINNOH);
+    EXPECT_EQ(TreyRegionMap_NextVisitedPage(TREY_REGION_MAP_HOENN, 1), TREY_REGION_MAP_SINNOH);
+    EXPECT_EQ(TreyRegionMap_NextVisitedPage(TREY_REGION_MAP_SINNOH, 1), TREY_REGION_MAP_KANTO); // wraps
+    EXPECT_EQ(TreyRegionMap_NextVisitedPage(TREY_REGION_MAP_KANTO, -1), TREY_REGION_MAP_SINNOH);
+}
