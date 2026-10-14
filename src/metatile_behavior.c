@@ -393,6 +393,11 @@ bool8 MetatileBehavior_IsSkyUpdraft(u8 metatileBehavior) // TREY (3f)
     return metatileBehavior == MB_SKY_UPDRAFT;
 }
 
+bool8 MetatileBehavior_IsSkyLanding(u8 metatileBehavior) // TREY (3g)
+{
+    return metatileBehavior == MB_SKY_LANDING;
+}
+
 bool8 MetatileBehavior_IsWalkNorth(u8 metatileBehavior)
 {
     if (metatileBehavior == MB_WALK_NORTH)

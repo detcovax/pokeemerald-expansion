@@ -473,10 +473,10 @@ static const u8 *GetInteractedMetatileScript(struct MapPosition *position, u8 me
 {
     s8 elevation;
 
-    // TREY (3f): sky HMs while soaring. Whirlwind for cyclones; Updraft rides a column north.
+    // TREY (3f/3g): sky HMs while soaring. Whirlwind spins through a cyclone; Updraft rides a column north.
     if (TestPlayerAvatarFlags(PLAYER_AVATAR_FLAG_SOARING))
     {
-        if (MetatileBehavior_IsSkyCyclone(metatileBehavior) && !FlagGet(FLAG_TREY_USE_WHIRLWIND))
+        if (MetatileBehavior_IsSkyCyclone(metatileBehavior))
             return EventScript_TreyWhirlwind;
         if (MetatileBehavior_IsSkyUpdraft(metatileBehavior) && direction == DIR_NORTH)
             return EventScript_TreyUpdraft;

@@ -1,6 +1,7 @@
 @ TREY: sky HMs (TREY_PLAN.md 3f), used while soaring on Sky maps.
 @ Gust: storm puffs (OBJ_EVENT_GFX_TREY_STORM_PUFF) are pushed like Strength boulders until the next map load.
-@ Whirlwind: cyclone tiles (MB_SKY_CYCLONE) can be flown through until the next map load.
+@ Whirlwind: cyclone tiles (MB_SKY_CYCLONE) always block; each use spins the player through one cyclone
+@ (or a line of them) to the open sky beyond. Asks every time, like HGSS Whirlpool (3g).
 @ Updraft: rising-air columns (MB_SKY_UPDRAFT) are ridden north, like Waterfall.
 
 EventScript_TreyStormPuff::
@@ -36,15 +37,24 @@ EventScript_TreyWhirlwind::
 	goto_if_unset FLAG_TREY_HM_WHIRLWIND, EventScript_TreyCantWhirlwind
 	checkpartymove MOVE_WHIRLWIND
 	goto_if_eq VAR_RESULT, PARTY_SIZE, EventScript_TreyCantWhirlwind
-	setfieldeffectargument 0, VAR_RESULT
+	copyvar VAR_0x8004, VAR_RESULT
+	special TreySky_CheckWhirlwindPath
+	goto_if_eq VAR_RESULT, FALSE, EventScript_TreyWhirlwindBlocked
+	setfieldeffectargument 0, VAR_0x8004
 	msgbox Text_TreyWantToWhirlwind, MSGBOX_YESNO
 	goto_if_eq VAR_RESULT, NO, EventScript_TreySkyHMCancel
 	closemessage
 	dofieldeffect FLDEFF_USE_STRENGTH @ shows the Pokémon and buffers its name
 	waitstate
-	setflag FLAG_TREY_USE_WHIRLWIND
-	playse SE_M_GUST2
 	msgbox Text_TreyMonUsedWhirlwind, MSGBOX_DEFAULT
+	closemessage
+	special TreySky_StartWhirlwindRide
+	waitstate
+	releaseall
+	end
+
+EventScript_TreyWhirlwindBlocked::
+	msgbox Text_TreyWhirlwindBlocked, MSGBOX_DEFAULT
 	releaseall
 	end
 
@@ -100,9 +110,11 @@ Text_TreyWantToWhirlwind:
 	.string "Would you like to use WHIRLWIND?$"
 
 Text_TreyMonUsedWhirlwind:
-	.string "{STR_VAR_1} used WHIRLWIND!\p"
-	.string "Now you can ride through\n"
-	.string "the cyclones!$"
+	.string "{STR_VAR_1} used WHIRLWIND!$"
+
+Text_TreyWhirlwindBlocked:
+	.string "A fierce cyclone is spinning here.\n"
+	.string "There's no open sky beyond it.$"
 
 Text_TreyCantWhirlwind:
 	.string "A fierce cyclone is spinning here.\n"

@@ -1,6 +1,7 @@
 #include "global.h"
 #include "trey_hm.h" // TREY
 #include "trey_layers.h" // TREY
+#include "trey_sky.h" // TREY (3g): Gust burst
 #include "main.h"
 #include "bike.h"
 #include "event_data.h"
@@ -921,14 +922,14 @@ static u8 CheckForPlayerAvatarStaticCollision(u8 direction)
     return CheckForObjectEventStaticCollision(playerObjEvent, x, y, direction, MapGridGetMetatileBehaviorAt(x, y));
 }
 
-// TREY (3f): sky HM obstacles for the soaring player. Cyclones block unless Whirlwind is active.
-// Updraft columns can only be entered heading south (gliding down); going up them takes Updraft,
-// whose ride ignores collision.
+// TREY (3f/3g): sky HM obstacles for the soaring player. Cyclones always block: Whirlwind spins the
+// player through one (src/trey_sky.c). Updraft columns can only be entered heading south (gliding
+// down); going up them takes Updraft. Both rides are held movements, which ignore collision.
 static bool32 TreySky_IsBlockedForPlayer(struct ObjectEvent *objectEvent, u8 direction, u8 metatileBehavior)
 {
     if (!objectEvent->isPlayer || !(gPlayerAvatar.flags & PLAYER_AVATAR_FLAG_SOARING))
         return FALSE;
-    if (MetatileBehavior_IsSkyCyclone(metatileBehavior) && !FlagGet(FLAG_TREY_USE_WHIRLWIND))
+    if (MetatileBehavior_IsSkyCyclone(metatileBehavior))
         return TRUE;
     if (MetatileBehavior_IsSkyUpdraft(metatileBehavior) && direction != DIR_SOUTH)
         return TRUE;
@@ -1791,8 +1792,21 @@ static bool8 PushBoulder_Start(struct Task *task, struct ObjectEvent *player, st
     return FALSE;
 }
 
+#define TREY_GUST_PUSH_DELAY 9 // frames of the Gust burst before the storm puff starts to slide (3g)
+
 static bool8 PushBoulder_Move(struct Task *task, struct ObjectEvent *player, struct ObjectEvent *boulder)
 {
+    // TREY (3g): storm puffs get a puff of wind first, then slide.
+    if (boulder->graphicsId == OBJ_EVENT_GFX_TREY_STORM_PUFF && task->data[3] < TREY_GUST_PUSH_DELAY)
+    {
+        if (task->data[3] == 0)
+        {
+            TreySky_StartGustBurst(boulder, task->tDirection);
+            PlaySE(SE_M_GUST);
+        }
+        task->data[3]++;
+        return FALSE;
+    }
     if (ObjectEventIsHeldMovementActive(player))
         ObjectEventClearHeldMovementIfFinished(player);
 
@@ -1810,9 +1824,8 @@ static bool8 PushBoulder_Move(struct Task *task, struct ObjectEvent *player, str
         gFieldEffectArguments[1] = boulder->currentCoords.y;
         gFieldEffectArguments[2] = boulder->previousElevation;
         gFieldEffectArguments[3] = gSprites[boulder->spriteId].oam.priority;
-        if (boulder->graphicsId == OBJ_EVENT_GFX_TREY_STORM_PUFF) // TREY (3f): no dust in the sky
+        if (boulder->graphicsId == OBJ_EVENT_GFX_TREY_STORM_PUFF) // TREY (3f): no dust in the sky (the Gust burst played above)
         {
-            PlaySE(SE_M_GUST);
         }
         else
         {

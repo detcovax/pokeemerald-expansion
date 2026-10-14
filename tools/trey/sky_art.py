@@ -532,6 +532,135 @@ def updraft_frame(frame, left=False, right=False):
             img[y][xs[2]] = 7 if (y + shift) % 4 == 1 else img[y][xs[2]]
     return img
 
+# Gust air burst (3g): a 16x16 field effect sprite centred on the edge between the player and the storm
+# puff, drawn BEHIND the puff, while it is pushed east (flipped/rotated in game for the other directions).
+# Wind streaks blow from the player and burst against the puff's back. Cloud puff palette colours 1-4.
+GUST_FRAMES = 5
+
+def gust_burst_frame(frame):
+    img = blank()
+    t = frame / (GUST_FRAMES - 1)          # 0 .. 1
+    head = int(1 + 9 * t)                  # leading edge of the streaks, moving east; the puff's back is at ~9
+    for (row, length, curl) in ((3, 7, -1), (7, 10, 0), (11, 8, 1)):
+        for i in range(length):
+            x = head - i
+            if not (0 <= x < 16):
+                continue
+            fade = i / max(1, length - 1)  # 0 = head, 1 = tail
+            if frame == GUST_FRAMES - 1 and fade > 0.4:
+                continue                   # last frame: only the burst remains
+            y = row + (curl if i < 3 else 0)
+            img[y][x] = 1 if fade < 0.35 else (2 if fade < 0.7 else 3)
+            if fade < 0.7:                 # thicker body, shaded underneath
+                img[y + 1][x] = 3 if fade < 0.35 else 4
+    if frame >= 2:                          # burst puffs where the wind hits the cloud
+        r = frame - 1
+        for (bx, by) in ((head, 3), (head + 1, 8), (head, 13)):
+            for yy in range(by - r, by + r + 1):
+                for xx in range(bx - r, bx + r + 1):
+                    if 0 <= xx < 16 and 0 <= yy < 16 and (xx - bx) ** 2 + (yy - by) ** 2 <= r * r + 0.5:
+                        if img[yy][xx] == 0:
+                            img[yy][xx] = 1 if (xx + yy) % 3 else 2
+    return img
+
+def gust_burst_frame_south(frame):
+    e = gust_burst_frame(frame)
+    return [[e[x][y] for x in range(16)] for y in range(16)]
+
+# Landing spot (3g): a ring of small clouds round a gap that shows the ground far below. Drawn as one
+# layer in the cloud palette (an 8x8 tile can only use one palette), so cloud colours 6-9 are the hazy
+# ground seen through the gap.
+LANDING_GROUND = [(132, 176, 120),   # 6 ground (grass) far below
+                  (110, 154, 108),   # 7 ground shade
+                  (156, 190, 150),   # 8 ground haze
+                  (120, 140, 168)]   # 9 gap rim shadow
+PAL_CLOUD[6:10] = LANDING_GROUND
+PAL_CLOUD_STORM[6:10] = tint(LANDING_GROUND, 0.72, 0.3)
+
+def landing_spot_image():
+    """16x16 in the cloud palette: the gap showing the ground, with the cloud ring over it."""
+    gap = blank()
+    cx, cy = 7.5, 7.5
+    rnd = random.Random(21)
+    for y in range(16):
+        for x in range(16):
+            r = math.hypot(x - cx, (y - cy) * 1.1)
+            if r < 4.6:
+                c = 6 if (x * 5 + y * 3) % 7 else 7
+                if r > 3.6 or ((x + y) % 3 == 0 and r > 2.5):
+                    c = 8                  # haze towards the rim
+                gap[y][x] = c
+            elif r < 5.4:
+                gap[y][x] = 9
+            else:
+                gap[y][x] = 0              # sky shows through (bottom layer is the animated sky)
+    ring = []
+    for i in range(9):
+        a = TAU * i / 9 + 0.2
+        ring.append((cx + 0.5 + math.cos(a) * 6.0, cy + 0.5 + math.sin(a) * 6.0, 2.3 + rnd.uniform(-0.2, 0.4)))
+    top = draw_cloud(blank(), ring)
+    for y in range(16):
+        for x in range(16):
+            if top[y][x]:
+                gap[y][x] = top[y][x]
+    return gap
+
+# Sky clearing beam (3h): the ground/water end of a sky link, a column of light shining down through a
+# gap in the clouds. A 32x64 field sprite drawn behind the player, bottom on the clearing tile.
+# No alpha blending on the GBA, so the beam is drawn as thin bright streaks with gaps between them.
+PAL_BEAM = [(0, 0, 0),
+            (255, 255, 255),  # 1 core
+            (255, 250, 214),  # 2 light
+            (255, 238, 160),  # 3 gold
+            (246, 214, 112),  # 4 gold shade
+            (255, 255, 236),  # 5 sparkle
+            ] + [(0, 0, 0)] * 10
+BEAM_FRAMES = 4
+
+def beam_frame(frame):
+    w, h = 32, 64
+    img = blank(w, h)
+    cx = 15.5
+    base_y = 58                                   # centre of the glow on the clearing tile
+    for y in range(h):
+        # the column widens a little towards the ground, and fades out at the top
+        half = 4.5 + 2.5 * (y / h)
+        fade_top = y < 14
+        for x in range(w):
+            dx = abs(x - cx)
+            if dx > half:
+                continue
+            band = int(dx * 2 + frame) % 4          # streaks shimmer sideways
+            if fade_top and (x + y + frame) % (3 if y > 7 else 4):
+                continue
+            if dx < 1.2:
+                c = 1
+            elif band == 0:
+                c = 2
+            elif band == 2 and (y + frame * 3) % 5:
+                c = 3
+            else:
+                continue
+            img[y][x] = c
+    # glow on the ground: a flattened ring
+    for y in range(h - 14, h):
+        for x in range(w):
+            r = math.hypot((x - cx) / 1.0, (y - base_y) * 2.2)
+            if 8.5 < r < 11.5 and (x + y + frame) % 2 == 0:
+                img[y][x] = 4
+            elif 5.5 < r <= 8.5 and img[y][x] == 0 and (x * 3 + y + frame) % 3 == 0:
+                img[y][x] = 3
+    # sparkles drifting up the beam
+    rnd = random.Random(5)
+    for i in range(6):
+        sx = int(cx + rnd.uniform(-4, 4))
+        sy = (rnd.randrange(h) - frame * 6) % (h - 12)
+        img[sy][sx] = 5
+        if 0 < sx < w - 1:
+            img[sy][sx - 1] = 2
+            img[sy][sx + 1] = 2
+    return img
+
 UPDRAFT_PIECES = {"mid": (False, False), "left": (True, False), "right": (False, True), "single": (True, True)}
 
 # ---------------------------------------------------------------------------
@@ -779,6 +908,9 @@ def make_hm_preview(out):
     items += [(f"cyclone {f}", to_rgba(cyclone_frame(f), PAL_WALL)) for f in range(CYCLONE_FRAMES)]
     items += [(f"updraft {f}", to_rgba(updraft_frame(f), PAL_SKY)) for f in range(UPDRAFT_FRAMES)]
     items += [(f"updraft {k}", to_rgba(updraft_frame(0, *v), PAL_SKY)) for k, v in UPDRAFT_PIECES.items()]
+    items += [(f"gust {f}", to_rgba(gust_burst_frame(f), PAL_CLOUD)) for f in range(GUST_FRAMES)]
+    items.append(("landing spot", to_rgba(landing_spot_image(), PAL_CLOUD)))
+    items.append(("landing (storm)", to_rgba(landing_spot_image(), PAL_CLOUD_STORM)))
     sky_bg = to_rgba(sky_frame(0), PAL_SKY)
     cols, cell = 6, 16 * S + 12
     sheet = Image.new("RGBA", (cols * cell + 8, ((len(items) + cols - 1) // cols) * (cell + 12) + 8), (40, 44, 60, 255))
@@ -795,6 +927,39 @@ def make_hm_preview(out):
         name = "sky_hm_scene_storm" if storm else "sky_hm_scene"
         gif[0].save(f"{out}/{name}.png")
         gif[0].save(f"{out}/{name}.gif", save_all=True, append_images=gif[1:], duration=120, loop=0)
+    # Gust push: the burst plays on the puff's tile, then the puff slides one tile east
+    frames = []
+    for f in range(GUST_FRAMES + 8):
+        fr = Image.new("RGBA", (64, 16))
+        for x in range(4):
+            fr.alpha_composite(sky_bg, (x * 16, 0))
+        fr.alpha_composite(to_rgba(blank(), PAL_SKY))
+        px = 16 + (min(8, max(0, f - GUST_FRAMES + 1)) * 2 if f >= GUST_FRAMES - 1 else 0)
+        # placeholder player (bird rider) on the left tile
+        d = ImageDraw.Draw(fr)
+        d.ellipse((3, 4, 12, 13), fill=(200, 80, 60, 255))
+        if f < GUST_FRAMES:   # over the player, behind the puff, straddling their shared edge
+            fr.alpha_composite(to_rgba(gust_burst_frame(f), PAL_CLOUD), (8, 0))
+        fr.alpha_composite(to_rgba(storm_puff_image(), PAL_STORM_PUFF), (px, 0))
+        frames.append(fr.resize((64 * 5, 16 * 5), Image.NEAREST))
+    frames[0].save(f"{out}/sky_gust_push.gif", save_all=True, append_images=frames[1:] + [frames[-1]] * 6,
+                   duration=70, loop=0)
+    # 3h: clearing beam over a patch of grass, with a placeholder player standing in it
+    frames = []
+    for f in range(BEAM_FRAMES * 3):
+        fr = Image.new("RGBA", (48, 72), (104, 168, 88, 255))
+        d = ImageDraw.Draw(fr)
+        for gx in range(0, 48, 4):
+            for gy in range(0, 72, 4):
+                if (gx * 7 + gy * 3) % 5 == 0:
+                    d.point((gx, gy), fill=(86, 148, 72, 255))
+        fr.alpha_composite(to_rgba(beam_frame(f % BEAM_FRAMES), PAL_BEAM), (8, 0))
+        if f >= BEAM_FRAMES * 2:
+            d = ImageDraw.Draw(fr)
+            d.ellipse((19, 50, 28, 62), fill=(200, 80, 60, 255))
+        frames.append(fr.resize((48 * 4, 72 * 4), Image.NEAREST))
+    frames[0].save(f"{out}/sky_beam.gif", save_all=True, append_images=frames[1:], duration=140, loop=0)
+    frames[0].save(f"{out}/sky_beam.png")
     print("HM preview written to", out)
 
 # ---------------------------------------------------------------------------
@@ -810,6 +975,7 @@ MB_NORMAL = 0x00
 MB_SKY_CLOUD = 0x05
 MB_SKY_WIND_NORTH, MB_SKY_WIND_SOUTH, MB_SKY_WIND_WEST, MB_SKY_WIND_EAST = 0x54, 0x55, 0x56, 0x57
 MB_SKY_CYCLONE, MB_SKY_UPDRAFT = 0x58, 0x59  # 3f: Whirlwind cyclones, Updraft columns
+MB_SKY_LANDING = 0x5A                         # 3g: landing spots (A lands here)
 LAYER_COVERED = 1  # both layers are drawn below the player
 
 # Animated 2x2 tile blocks, at fixed tile indexes (tile 0 is transparent). Frame 0 is also stored in tiles.png.
@@ -944,6 +1110,8 @@ def build_metatiles(sheet):
     mts.append(("UpdraftLeft", sky_a, anim_entries(29, SLOT_SKY), MB_SKY_UPDRAFT))
     mts.append(("UpdraftRight", sky_a, anim_entries(29, SLOT_SKY, hflip_block=True), MB_SKY_UPDRAFT))
     mts.append(("UpdraftSingle", sky_a, anim_entries(33, SLOT_SKY), MB_SKY_UPDRAFT))
+    # 3g
+    mts.append(("LandingSpot", sky_a, top_from(landing_spot_image(), SLOT_CLOUD), MB_SKY_LANDING))
     return mts
 
 def write_game_files():
@@ -1017,6 +1185,21 @@ def write_game_files():
     write_pal(PUFF_OBJ_PAL, PAL_STORM_PUFF)
     write_pal(PUFF_OBJ_PAL.replace(".pal", "_storm.pal"), PAL_STORM_PUFF_STORM)
 
+    # 3g: Gust air burst, 16x16 frames stacked vertically: GUST_FRAMES eastward, then GUST_FRAMES southward
+    burst = []
+    for fr in range(GUST_FRAMES):
+        burst.extend(gust_burst_frame(fr))
+    for fr in range(GUST_FRAMES):
+        burst.extend(gust_burst_frame_south(fr))
+    write_png(f"{PUFF_DIR}/trey_gust_burst.png", burst, PAL_CLOUD)
+
+    # 3h: sky clearing beam, 32x64 frames stacked vertically, and its palette
+    beam = []
+    for fr in range(BEAM_FRAMES):
+        beam.extend(beam_frame(fr))
+    write_png(f"{PUFF_DIR}/trey_sky_beam.png", beam, PAL_BEAM)
+    write_pal("graphics/field_effects/palettes/trey_sky_beam.pal", PAL_BEAM)
+
     # metatile ID constants
     ids = {name: 0x200 + i for i, (name, _, _, _) in enumerate(mts)}
     with open(METATILE_HEADER, "w", newline="\n") as f:
@@ -1030,6 +1213,9 @@ def write_game_files():
 
     write_test_layout(ids)
     print(f"sky_art.py: {len(sheet.tiles)} tiles, {len(mts)} metatiles written")
+
+# 3g: landing spots on the test map, over open ground on Route 101
+LANDING_SPOTS = [(10, 3), (9, 11)]
 
 def write_test_layout(ids):
     """Route 101 sky test map (20x20, same size as Route 101 below it)."""
@@ -1093,6 +1279,9 @@ def write_test_layout(ids):
         grid[y][x] = name
         coll[y][x] = 1
     grid[16][13] = "Cyclone"
+    # 3g: landing spots (the only places A lands; Fly from the party menu still lands anywhere valid)
+    for (x, y) in LANDING_SPOTS:
+        grid[y][x] = "LandingSpot"
     for y in range(10, 16):
         grid[y][17] = "UpdraftLeft"
         grid[y][18] = "UpdraftRight"

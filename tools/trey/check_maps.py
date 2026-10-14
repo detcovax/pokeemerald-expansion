@@ -84,6 +84,14 @@ def main():
     groups = load_json("data/maps/map_groups.json")
     layouts = {l["id"]: l for l in load_json("data/layouts/layouts.json")["layouts"] if "id" in l}
     layer_types = load_layer_types()
+    # Every layout's map.bin must be big enough for its size (too small draws the map skewed and reads past the data).
+    for lid, layout in layouts.items():
+        path = layout.get("blockdata_filepath", "")
+        if os.path.exists(path) and isinstance(layout.get("width"), int) and isinstance(layout.get("height"), int):
+            expected = layout["width"] * layout["height"] * 2
+            actual = os.path.getsize(path)
+            if actual < expected: # (a few vanilla layouts carry a couple of spare bytes, which is harmless)
+                error(f"layouts.json {lid}: {path} is {actual} bytes, but {layout['width']}x{layout['height']} needs {expected}.")
     with open("include/constants/songs.h", encoding="utf-8") as f:
         songs = set(re.findall(r"#define\s+(MUS_\w+|SE_\w+|PH_\w+)\b", f.read()))
 
@@ -172,6 +180,58 @@ def main():
                 continue
             if size and (layout.get("width"), layout.get("height")) != size:
                 error(f"{where}: {season} layout {layout_id} is {layout.get('width')}x{layout.get('height')}, but the map's layout is {size[0]}x{size[1]}. Seasonal layouts must be the same size.")
+
+    # Sky clearings (3h, David 2026-10-13): the sky is entered and left only at clearings, like Dive.
+    # A LAYER_LINK_SKY_UP link is one ground tile (shown in game as a light beam) and leads to a landing
+    # spot on a Sky map; that landing spot needs a LAYER_LINK_SKY_DOWN link back to the same tile.
+    landing_id = None
+    if os.path.exists("include/constants/trey_sky_metatiles.h"):
+        with open("include/constants/trey_sky_metatiles.h", encoding="utf-8") as f:
+            m = re.search(r"METATILE_TreySky_LandingSpot\s+0x([0-9A-Fa-f]+)", f.read())
+            landing_id = int(m.group(1), 16) if m else None
+
+    def metatile_at(map_data, x, y):
+        layout = layouts.get(map_data.get("layout"))
+        if layout is None or not os.path.exists(layout.get("blockdata_filepath", "")):
+            return None
+        with open(layout["blockdata_filepath"], "rb") as f:
+            data = f.read()
+        i = (y * layout["width"] + x) * 2
+        if i + 2 > len(data):
+            return None
+        return int.from_bytes(data[i:i + 2], "little") & 0x3FF
+
+    def links_of(map_data, kind):
+        return [l for l in map_data.get("trey_layer_links", []) if l.get("type") == kind]
+
+    def covers(link, x, y):
+        return link["x"] <= x < link["x"] + link["width"] and link["y"] <= y < link["y"] + link["height"]
+
+    for map_id, (folder, data) in maps_by_id.items():
+        where = f"data/maps/{folder}/map.json"
+        for kind, back_kind in (("LAYER_LINK_SKY_UP", "LAYER_LINK_SKY_DOWN"), ("LAYER_LINK_SKY_DOWN", "LAYER_LINK_SKY_UP")):
+            for link in links_of(data, kind):
+                lw = f"{where}: {kind} at ({link.get('x')},{link.get('y')})"
+                if link.get("width") != 1 or link.get("height") != 1:
+                    error(f"{lw}: sky links are single tiles (clearings), so width and height must be 1.")
+                    continue
+                target = maps_by_id.get(link.get("map"))
+                if target is None:
+                    continue
+                tdata = target[1]
+                if kind == "LAYER_LINK_SKY_UP" and tdata.get("map_type") != "MAP_TYPE_SKY":
+                    error(f"{lw}: leads to {link.get('map')}, which is not a Sky map.")
+                if kind == "LAYER_LINK_SKY_DOWN" and data.get("map_type") != "MAP_TYPE_SKY":
+                    error(f"{lw}: LAYER_LINK_SKY_DOWN links belong on Sky maps.")
+                back = [b for b in links_of(tdata, back_kind) if covers(b, link["dest_x"], link["dest_y"])
+                        and b.get("map") == map_id and b.get("dest_x") == link["x"] and b.get("dest_y") == link["y"]]
+                if not back:
+                    error(f"{lw}: no matching {back_kind} on {link.get('map')} at ({link['dest_x']},{link['dest_y']}) leading back here.")
+                sky_map, sx, sy = (data, link["x"], link["y"]) if kind == "LAYER_LINK_SKY_DOWN" else (tdata, link["dest_x"], link["dest_y"])
+                if landing_id is not None:
+                    mt = metatile_at(sky_map, sx, sy)
+                    if mt is not None and mt != landing_id:
+                        error(f"{lw}: the sky end at ({sx},{sy}) is not a landing spot (METATILE_TreySky_LandingSpot).")
 
     # Regional forms in wild encounter tables
     mapsec_regions = load_mapsec_regions()

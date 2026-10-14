@@ -46,14 +46,24 @@
   "bg_events": [],
   "trey_layer_links": [
     {
-      "dest_x": 0,
-      "dest_y": 0,
-      "height": 20,
+      "dest_x": 10,
+      "dest_y": 3,
+      "height": 1,
       "map": "MAP_ROUTE101",
       "type": "LAYER_LINK_SKY_DOWN",
-      "width": 20,
-      "x": 0,
-      "y": 0
+      "width": 1,
+      "x": 10,
+      "y": 3
+    },
+    {
+      "dest_x": 9,
+      "dest_y": 11,
+      "height": 1,
+      "map": "MAP_ROUTE101",
+      "type": "LAYER_LINK_SKY_DOWN",
+      "width": 1,
+      "x": 9,
+      "y": 11
     }
   ]
 }

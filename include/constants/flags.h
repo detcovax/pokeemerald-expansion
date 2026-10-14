@@ -1694,10 +1694,10 @@
 #define FLAG_STORING_ITEMS_IN_PYRAMID_BAG       (SPECIAL_FLAGS_START + 0x4)
 #define FLAG_SAFE_FOLLOWER_MOVEMENT             (SPECIAL_FLAGS_START + 0x5) // When set, applymovement does not put the follower inside a pokeball
                                                                             // Also, scripted movements on the player will move follower(s), too
-// FLAG_SPECIAL_FLAG_0x4006 - 0x407F also exist and are unused (TREY uses 0x4010-0x4011 below)
-// TREY (3f): sky HMs stay active until the next map load, like FLAG_SYS_USE_STRENGTH. Not saved.
+// FLAG_SPECIAL_FLAG_0x4006 - 0x407F also exist and are unused (TREY uses 0x4010 below)
+// TREY (3f): Gust stays active until the next map load, like FLAG_SYS_USE_STRENGTH. Not saved.
+// (Whirlwind is used per cyclone since 3g, so it has no flag.)
 #define FLAG_TREY_USE_GUST                      (SPECIAL_FLAGS_START + 0x10) // storm puffs can be pushed
-#define FLAG_TREY_USE_WHIRLWIND                 (SPECIAL_FLAGS_START + 0x11) // cyclones can be flown through
 #define SPECIAL_FLAGS_END                       (SPECIAL_FLAGS_START + 0x7F)
 #define NUM_SPECIAL_FLAGS                       (SPECIAL_FLAGS_END - SPECIAL_FLAGS_START + 1)
 

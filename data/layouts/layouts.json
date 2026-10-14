@@ -4414,8 +4414,8 @@
     {
       "id": "LAYOUT_TREY_TEST_ROUTE101_SKY",
       "name": "TreyTest_Route101Sky_Layout",
-      "width": 22,
-      "height": 22,
+      "width": 20,
+      "height": 20,
       "primary_tileset": "gTileset_General",
       "secondary_tileset": "gTileset_TreySky",
       "border_filepath": "data/layouts/TreyTest_Route101Sky/border.bin",

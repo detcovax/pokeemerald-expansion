@@ -208,7 +208,7 @@ MAKEFLAGS += --no-print-directory
 # Delete files that weren't built properly
 .DELETE_ON_ERROR:
 
-RULES_NO_SCAN += libagbsyscall clean clean-assets tidy tidymodern tidycheck generated clean-generated trey-check
+RULES_NO_SCAN += libagbsyscall clean clean-assets tidy tidymodern tidycheck generated clean-generated trey-check trey-check-fast trey-save-report-only
 .PHONY: all rom agbcc modern compare check debug
 .PHONY: $(RULES_NO_SCAN)
 
@@ -503,15 +503,22 @@ $(SYM): $(ELF)
 	$(OBJDUMP) -t $< | sort -u | grep -E "^0[2389]" | $(PERL) -p -e 's/^(\w{8}) (\w).{6} \S+\t(\w{8}) (\S+)$$/\1 \2 \3 \4/g' > $@
 
 # TREY: save block usage report. Builds the ROM first, then prints used/free bytes per save block.
-.PHONY: trey-save-report
+.PHONY: trey-save-report trey-save-report-only
 trey-save-report: rom
+	@bash tools/trey/save_report.sh "$(PREFIX)gcc" "$(PREFIX)nm" $(CPPFLAGS)
+# The report itself only compiles tools/trey/save_report.c, so it can also run without building the ROM.
+trey-save-report-only:
 	@bash tools/trey/save_report.sh "$(PREFIX)gcc" "$(PREFIX)nm" $(CPPFLAGS)
 
 # TREY: one command for both reports, with one summary block at the end (tools/trey/check.sh). The game ROM and the test ROM are separate builds
 # (build/modern and build/modern-test), so this runs them one after the other; each only
 # recompiles what changed. Usage: make trey-check                    (TREY tests only)
 #                                 make trey-check TREY_TESTS=Pressure  (tests whose name contains "Pressure")
+# make trey-check-fast: ONE build (the test ROM only): save report + tests in one summary, but no
+# playable ROM is built. Use it when you only changed code and don't need to play yet.
 TREY_TESTS ?= TREY
-.PHONY: trey-check
+.PHONY: trey-check trey-check-fast
 trey-check:
-	@bash tools/trey/check.sh "$(MAKE)" "$(TREY_TESTS)"
+	@bash tools/trey/check.sh "$(MAKE)" "$(TREY_TESTS)" full
+trey-check-fast:
+	@bash tools/trey/check.sh "$(MAKE)" "$(TREY_TESTS)" fast

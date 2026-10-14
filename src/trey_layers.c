@@ -200,9 +200,13 @@ bool32 TreyLayer_ConsumeSoarPending(void)
     return pending;
 }
 
+// A while soaring lands only on a landing spot (3g, David 2026-10-13). Fly from the party menu while
+// soaring is the emergency landing and works anywhere the ground below is landable.
 bool32 TreyLayer_TrySetupLandScript(void)
 {
     if (!TreyLayer_IsSoaring())
+        return FALSE;
+    if (!MetatileBehavior_IsSkyLanding(gObjectEvents[gPlayerAvatar.objectEventId].currentMetatileBehavior))
         return FALSE;
     ScriptContext_SetupScript(EventScript_TreyLand);
     return TRUE;

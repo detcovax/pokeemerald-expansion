@@ -131,10 +131,12 @@ TEST("TREY Sky HMs: relearner lists the sky HMs for a flyer")
     EXPECT(!hasGust); // already known
 }
 
-TEST("TREY Sky HMs: cyclone and updraft behaviours")
+TEST("TREY Sky HMs: cyclone, updraft and landing spot behaviours")
 {
     EXPECT(MetatileBehavior_IsSkyCyclone(MB_SKY_CYCLONE));
     EXPECT(!MetatileBehavior_IsSkyCyclone(MB_SKY_UPDRAFT));
     EXPECT(MetatileBehavior_IsSkyUpdraft(MB_SKY_UPDRAFT));
     EXPECT(!MetatileBehavior_IsSkyUpdraft(MB_SKY_CLOUD));
+    EXPECT(MetatileBehavior_IsSkyLanding(MB_SKY_LANDING));
+    EXPECT(!MetatileBehavior_IsSkyLanding(MB_SKY_CLOUD));
 }
