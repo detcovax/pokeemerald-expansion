@@ -12,6 +12,7 @@ const struct Tileset gTileset_General =
     .metatiles = gMetatiles_General,
     .metatileAttributes = gMetatileAttributes_General,
     .callback = InitTilesetAnim_General,
+    .seasonal = gTilesetSeasonal_General, // TREY (4b)
 };
 
 const struct Tileset gTileset_Petalburg =
@@ -23,6 +24,7 @@ const struct Tileset gTileset_Petalburg =
     .metatiles = gMetatiles_Petalburg,
     .metatileAttributes = gMetatileAttributes_Petalburg,
     .callback = InitTilesetAnim_Petalburg,
+    .seasonal = gTilesetSeasonal_Petalburg, // TREY (4b)
 };
 
 const struct Tileset gTileset_Rustboro =

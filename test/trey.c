@@ -174,3 +174,21 @@ TEST("TREY Regions: L/R only flips to visited region map pages")
     EXPECT_EQ(TreyRegionMap_NextVisitedPage(TREY_REGION_MAP_SINNOH, 1), TREY_REGION_MAP_KANTO); // wraps
     EXPECT_EQ(TreyRegionMap_NextVisitedPage(TREY_REGION_MAP_KANTO, -1), TREY_REGION_MAP_SINNOH);
 }
+
+// Seasons (4b)
+#include "trey_seasons.h"
+
+TEST("TREY Seasons: a forced season is locked on the next map load, and the calendar takes over again")
+{
+    TreySeason_DebugForce(SEASON_WINTER);
+    TreySeason_LockForMapLoad();
+    EXPECT_EQ(TreySeason_Get(), SEASON_WINTER);
+    TreySeason_DebugForce(SEASON_AUTUMN);
+    EXPECT_EQ(TreySeason_Get(), SEASON_WINTER); // unchanged until the next map load
+    TreySeason_LockForMapLoad();
+    EXPECT_EQ(TreySeason_Get(), SEASON_AUTUMN);
+    TreySeason_DebugForce(TREY_SEASON_NOT_FORCED);
+    EXPECT_EQ(TreySeason_DebugGetForced(), TREY_SEASON_NOT_FORCED);
+    TreySeason_LockForMapLoad();
+    EXPECT_LT(TreySeason_Get(), TREY_SEASONS_COUNT);
+}

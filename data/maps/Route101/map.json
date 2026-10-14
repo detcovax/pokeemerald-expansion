@@ -231,5 +231,11 @@
       "x": 0,
       "y": 0
     }
-  ]
+  ],
+  "trey_season_layouts": {
+    "winter": "LAYOUT_ROUTE101_WINTER"
+  },
+  "trey_season_weather": {
+    "winter": "WEATHER_SNOW"
+  }
 }

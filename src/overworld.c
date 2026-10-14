@@ -1,6 +1,7 @@
 #include "global.h"
 #include "trey_layers.h" // TREY
 #include "trey_regions.h" // TREY (4a)
+#include "trey_seasons.h" // TREY (4b)
 #include "overworld.h"
 #include "battle_pyramid.h"
 #include "battle_setup.h"
@@ -638,14 +639,19 @@ static void LoadCurrentMapData(void)
 {
     sLastMapSectionId = gMapHeader.regionMapSectionId;
     gMapHeader = *Overworld_GetMapHeaderByGroupAndId(gSaveBlock1Ptr->location.mapGroup, gSaveBlock1Ptr->location.mapNum);
-    gSaveBlock1Ptr->mapLayoutId = gMapHeader.mapLayoutId;
     gMapHeader.mapLayout = GetMapLayout(gMapHeader.mapLayoutId);
+    TreySeason_LockForMapLoad();        // TREY (4b): the season is fixed until the next map load
+    TreySeason_ApplyMapOverrides(TRUE); // seasonal layout and weather from map.json
+    gSaveBlock1Ptr->mapLayoutId = gMapHeader.mapLayoutId;
 }
 
 static void LoadSaveblockMapHeader(void)
 {
     gMapHeader = *Overworld_GetMapHeaderByGroupAndId(gSaveBlock1Ptr->location.mapGroup, gSaveBlock1Ptr->location.mapNum);
     gMapHeader.mapLayout = GetMapLayout(gSaveBlock1Ptr->mapLayoutId);
+    TreySeason_LockForMapLoad();         // TREY (4b): seasonal art and weather; the saved layout is kept
+    TreySeason_ApplyMapOverrides(FALSE);
+    gMapHeader.mapLayoutId = gSaveBlock1Ptr->mapLayoutId;
 }
 
 static void SetPlayerCoordsFromWarp(void)
@@ -1673,10 +1679,11 @@ void UpdateAltBgPalettes(u16 palettes)
     {
         if (palettes & 1)
         {
+            // TREY (4b): the current season's palettes (day and night versions)
             if (i < NUM_PALS_IN_PRIMARY)
-                AvgPaletteWeighted(&((u16 *)primary->palettes)[i * 16], &((u16 *)primary->palettes)[((i + 9) % 16) * 16], gPlttBufferUnfaded + i * 16, gTimeBlend.altWeight);
+                AvgPaletteWeighted(&((u16 *)TreySeason_TilesetPalettes(primary))[i * 16], &((u16 *)TreySeason_TilesetPalettes(primary))[((i + 9) % 16) * 16], gPlttBufferUnfaded + i * 16, gTimeBlend.altWeight);
             else
-                AvgPaletteWeighted(&((u16 *)secondary->palettes)[i * 16], &((u16 *)secondary->palettes)[((i + 9) % 16) * 16], gPlttBufferUnfaded + i * 16, gTimeBlend.altWeight);
+                AvgPaletteWeighted(&((u16 *)TreySeason_TilesetPalettes(secondary))[i * 16], &((u16 *)TreySeason_TilesetPalettes(secondary))[((i + 9) % 16) * 16], gPlttBufferUnfaded + i * 16, gTimeBlend.altWeight);
         }
         i++;
         palettes >>= 1;

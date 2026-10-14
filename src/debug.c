@@ -8,6 +8,9 @@
 //Jaizu:                https://jaizu.moe/
 //AND OTHER RHH POKEEMERALD-EXPANSION CONTRIBUTORS
 #include "global.h"
+#include "trey_seasons.h" // TREY (4b)
+#include "field_player_avatar.h"
+#include "fieldmap.h"
 #include "battle.h"
 #include "battle_setup.h"
 #include "berry.h"
@@ -98,6 +101,7 @@ enum UtilDebugMenu
     DEBUG_UTIL_MENU_ITEM_CHEAT,
     DEBUG_UTIL_MENU_ITEM_BERRY_FUNCTIONS,
     DEBUG_UTIL_MENU_ITEM_EWRAM_COUNTERS,
+    DEBUG_UTIL_MENU_ITEM_TREY_SEASON, // TREY (4b)
     DEBUG_UTIL_MENU_ITEM_STEVEN_MULTI // Please keep this at the bottom <3
 };
 
@@ -407,6 +411,7 @@ static void DebugAction_Util_CheatStart(u8 taskId);
 static void DebugAction_Util_BerryFunctions(u8 taskId);
 static void DebugAction_Util_CheckEWRAMCounters(u8 taskId);
 static void DebugAction_Util_Steven_Multi(u8 taskId);
+static void DebugAction_Util_TreySeason(u8 taskId); // TREY (4b)
 static void DebugAction_Util_OpenTimeMenu(u8 taskId);
 
 static void DebugAction_TimeMenu_PrintTime(u8 taskId);
@@ -654,6 +659,7 @@ static const struct ListMenuItem sDebugMenu_Items_Utilities[] =
     [DEBUG_UTIL_MENU_ITEM_CHEAT]           = {COMPOUND_STRING("Cheat start"),                                  DEBUG_UTIL_MENU_ITEM_CHEAT},
     [DEBUG_UTIL_MENU_ITEM_BERRY_FUNCTIONS] = {COMPOUND_STRING("Berry Functions…{CLEAR_TO 110}{RIGHT_ARROW}"),  DEBUG_UTIL_MENU_ITEM_BERRY_FUNCTIONS},
     [DEBUG_UTIL_MENU_ITEM_EWRAM_COUNTERS]  = {COMPOUND_STRING("EWRAM Counters…{CLEAR_TO 110}{RIGHT_ARROW}"),   DEBUG_UTIL_MENU_ITEM_EWRAM_COUNTERS},
+    [DEBUG_UTIL_MENU_ITEM_TREY_SEASON]     = {COMPOUND_STRING("TREY: next season"),                            DEBUG_UTIL_MENU_ITEM_TREY_SEASON},
     [DEBUG_UTIL_MENU_ITEM_STEVEN_MULTI]    = {COMPOUND_STRING("Steven Multi"),                                 DEBUG_UTIL_MENU_ITEM_STEVEN_MULTI},
 };
 
@@ -865,6 +871,7 @@ static void (*const sDebugMenu_Actions_Utilities[])(u8) =
     [DEBUG_UTIL_MENU_ITEM_CHEAT]           = DebugAction_Util_CheatStart,
     [DEBUG_UTIL_MENU_ITEM_BERRY_FUNCTIONS] = DebugAction_Util_BerryFunctions,
     [DEBUG_UTIL_MENU_ITEM_EWRAM_COUNTERS]  = DebugAction_Util_CheckEWRAMCounters,
+    [DEBUG_UTIL_MENU_ITEM_TREY_SEASON]     = DebugAction_Util_TreySeason,
     [DEBUG_UTIL_MENU_ITEM_STEVEN_MULTI]    = DebugAction_Util_Steven_Multi,
 };
 
@@ -4902,4 +4909,24 @@ void CheckEWRAMCounters(struct ScriptContext *ctx)
 static void DebugAction_Util_CheckEWRAMCounters(u8 taskId)
 {
     Debug_DestroyMenu_Full_Script(taskId, Debug_EventScript_EWRAMCounters);
+}
+
+// TREY (4b): cycle the forced season (spring, summer, autumn, winter, then back to the calendar) and reload
+// the map where the player stands, so the new season's art, layout and weather show at once.
+static void DebugAction_Util_TreySeason(u8 taskId)
+{
+    u8 forced = TreySeason_DebugGetForced();
+    s16 x, y;
+
+    if (forced == TREY_SEASON_NOT_FORCED)
+        TreySeason_DebugForce(SEASON_SPRING);
+    else if (forced == SEASON_WINTER)
+        TreySeason_DebugForce(TREY_SEASON_NOT_FORCED);
+    else
+        TreySeason_DebugForce(forced + 1);
+    PlayerGetDestCoords(&x, &y);
+    SetWarpDestination(gSaveBlock1Ptr->location.mapGroup, gSaveBlock1Ptr->location.mapNum, WARP_ID_NONE, x - MAP_OFFSET, y - MAP_OFFSET);
+    Debug_DestroyMenu_Full(taskId);
+    DoWarp();
+    ResetInitialPlayerAvatarState();
 }

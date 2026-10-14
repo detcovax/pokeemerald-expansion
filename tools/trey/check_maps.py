@@ -163,6 +163,17 @@ def main():
                     if vals["dest_x"] < 0 or vals["dest_y"] < 0 or vals["dest_x"] + vals["width"] > tw or vals["dest_y"] + vals["height"] > th:
                         error(f"{lw}: destination rectangle ({vals['dest_x']},{vals['dest_y']} {vals['width']}x{vals['height']}) is outside {link.get('map')} ({tw}x{th}).")
 
+        # Seasonal weather (4b)
+        sweather = data.get("trey_season_weather", {})
+        if not isinstance(sweather, dict):
+            error(f"{where}: trey_season_weather must be an object.")
+            sweather = {}
+        for season, weather in sweather.items():
+            if season not in SEASONS:
+                error(f"{where}: trey_season_weather has unknown season {season!r}; expected {SEASONS}.")
+            elif weather and not str(weather).startswith("WEATHER_"):
+                error(f"{where}: trey_season_weather {season} is {weather!r}; expected a WEATHER_* constant.")
+
         # Seasonal layouts
         seasons = data.get("trey_season_layouts", {})
         if not isinstance(seasons, dict):

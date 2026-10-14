@@ -189,10 +189,13 @@ string generate_map_header_text(Json map_data, Json layouts_data) {
     //   "trey_layer_links": [ { "type": "LAYER_LINK_SKY_UP", "x": 0, "y": 0, "width": 10, "height": 10,
     //                           "dest_x": 0, "dest_y": 0, "map": "MAP_ROUTE101_SKY" }, ... ]
     //   "trey_season_layouts": { "spring": "LAYOUT_X", "summer": ..., "autumn": ..., "winter": ... }
+    //   "trey_season_weather": { "winter": "WEATHER_SNOW", ... }   (4b; missing seasons keep the map's weather)
     const Json &layerLinks = map_data["trey_layer_links"];
     const Json &seasonLayouts = map_data["trey_season_layouts"];
+    const Json &seasonWeather = map_data["trey_season_weather"];
     bool hasLinks = layerLinks.is_array() && !layerLinks.array_items().empty();
-    bool hasSeasons = seasonLayouts.is_object() && !seasonLayouts.object_items().empty();
+    bool hasSeasonWeather = seasonWeather.is_object() && !seasonWeather.object_items().empty();
+    bool hasSeasons = (seasonLayouts.is_object() && !seasonLayouts.object_items().empty()) || hasSeasonWeather;
 
     if (!hasLinks && !hasSeasons) {
         text << "\t.4byte NULL @ TREY data\n\n";
@@ -214,10 +217,14 @@ string generate_map_header_text(Json map_data, Json layouts_data) {
 
     static const char *const seasonNames[] = { "spring", "summer", "autumn", "winter" };
     for (const char *season : seasonNames) {
-        string layoutId = hasSeasons ? json_to_string(seasonLayouts, season, true) : "";
+        string layoutId = seasonLayouts.is_object() ? json_to_string(seasonLayouts, season, true) : "";
         text << "\t.2byte " << (layoutId.empty() ? "0" : layoutId) << " @ " << season << " layout\n";
     }
     text << "\t.2byte 0 @ padding\n";
+    for (const char *season : seasonNames) {
+        string weather = hasSeasonWeather ? json_to_string(seasonWeather, season, true) : "";
+        text << "\t.byte " << (weather.empty() ? "0" : weather) << " @ " << season << " weather\n";
+    }
 
     if (hasLinks) {
         text << "\n\t.align 2\n" << mapName << "_LayerLinks:\n";

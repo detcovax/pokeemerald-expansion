@@ -4420,6 +4420,16 @@
       "secondary_tileset": "gTileset_TreySky",
       "border_filepath": "data/layouts/TreyTest_Route101Sky/border.bin",
       "blockdata_filepath": "data/layouts/TreyTest_Route101Sky/map.bin"
+    },
+    {
+      "id": "LAYOUT_ROUTE101_WINTER",
+      "name": "Route101_Winter_Layout",
+      "width": 20,
+      "height": 20,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_Petalburg",
+      "border_filepath": "data/layouts/Route101_Winter/border.bin",
+      "blockdata_filepath": "data/layouts/Route101_Winter/map.bin"
     }
   ]
 }
