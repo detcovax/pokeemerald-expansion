@@ -88,6 +88,9 @@ void LoadPokedexAreaMapGfx(const struct PokedexAreaMapTemplate *template)
     ChangeBgY(template->bg, 0, BG_COORD_SET);
     SetBgAttribute(template->bg, BG_ATTR_PALETTEMODE, 1);
     CpuCopy16(sPokedexAreaMaps[gTreyRegionMapPage].pal, &gPlttBufferUnfaded[BG_PLTT_ID(7)], sPokedexAreaMaps[gTreyRegionMapPage].palSize); // TREY (4a)
+    // TREY (4a): switching region redraws the area page without a fade, so update the visible colours too
+    // (otherwise the previous region's palette stays on screen).
+    CpuCopy16(sPokedexAreaMaps[gTreyRegionMapPage].pal, &gPlttBufferFaded[BG_PLTT_ID(7)], sPokedexAreaMaps[gTreyRegionMapPage].palSize);
     *sPokedexAreaMapBgNum = template->bg;
 }
 

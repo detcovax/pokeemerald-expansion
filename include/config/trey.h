@@ -60,10 +60,10 @@
 // Rock Climb walls are climbed up or down only, like Gen 4. 1 = also allow sideways walls.
 #define TREY_ROCK_CLIMB_ALLOW_SIDEWAYS 0
 // Testing only: 1 = every HM is unlocked when a new game starts. Keep at 0 for real builds.
-#define TREY_DEBUG_UNLOCK_ALL_HMS      1
+#define TREY_DEBUG_UNLOCK_ALL_HMS      0
 // Debug (4a): every region map page counts as visited, so the Teleport map and the Pokédex area page
 // can flip through all regions before they have maps. Set back to 0 for real play.
-#define TREY_DEBUG_ALL_REGION_MAPS      1
+#define TREY_DEBUG_ALL_REGION_MAPS      0
 
 // ---------------------------------------------------------------------------
 // Energy, replaces PP (TREY_PLAN.md 5.6, D23)
