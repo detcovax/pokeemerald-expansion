@@ -15,6 +15,7 @@
 #include "start_menu.h"
 #include "string_util.h"
 #include "task.h"
+#include "trey_layers.h" // TREY (4a)
 #include "text.h"
 #include "constants/battle_frontier.h"
 #include "constants/layouts.h"
@@ -543,7 +544,10 @@ static void ShowMapNamePopUpWindow(void)
     else
     {
         withoutPrefixPtr = &(mapDisplayHeader[3]);
-        GetMapName(withoutPrefixPtr, gMapHeader.regionMapSectionId, 0);
+        if (TreyLayer_GetPopupName() != NULL) // TREY (4a): sky and underground layers just say SKY / UNDERGROUND
+            StringCopy(withoutPrefixPtr, TreyLayer_GetPopupName());
+        else
+            GetMapName(withoutPrefixPtr, gMapHeader.regionMapSectionId, 0);
     }
 
     if (OW_POPUP_GENERATION == GEN_5)

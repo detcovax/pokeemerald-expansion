@@ -36,6 +36,19 @@ void TreyLayer_FieldCallback_Dig(void);
 // Soaring mount: a Fly-bird sprite that follows the player (placeholder art).
 u8 TreyLayer_CreateSoarBird(u8 playerObjectEventId);
 
+// Sky clearings (3h): the sky is entered and left only at clearings, like Dive. A ground clearing is a
+// SKY_UP link tile (with a light-beam sprite); its Sky end is a landing spot with a SKY_DOWN link back.
+bool32 TreyLayer_IsOnLandingSpot(void);   // soaring, on a landing spot with a link down
+bool32 TreyLayer_IsOnSkyClearing(void);   // on foot or surfing, on a clearing with a link up
+bool32 TreyLayer_TrySetupLayerScript(void); // A button: land, or fly up
+void TreyLayer_UpdateSkyBeams(void);
+// Map name popup on a layer map: "SKY" on Sky maps, "UNDERGROUND" on maps that Dig back up from; else NULL.
+const u8 *TreyLayer_GetPopupName(void);      // every overworld frame: keeps the light beams on screen
+// Specials used by EventScript_TreySoarUp.
+void TreyLayer_FindSoarMon(void);
+void TreyLayer_CheckSoar(void);
+void TreyLayer_StartSoarFromClearing(void);
+
 // Specials used by EventScript_TreyLand (data/scripts/trey_layers.inc).
 void TreyLayer_CheckLanding(void);
 void TreyLayer_StartLanding(void);

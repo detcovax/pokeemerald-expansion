@@ -1,5 +1,6 @@
 #include "global.h"
 #include "trey_layers.h" // TREY
+#include "trey_regions.h" // TREY (4a)
 #include "overworld.h"
 #include "battle_pyramid.h"
 #include "battle_setup.h"
@@ -856,6 +857,7 @@ void LoadMapFromCameraTransition(u8 mapGroup, u8 mapNum)
     LoadCurrentMapData();
     LoadObjEventTemplatesFromHeader();
     TrySetMapSaveWarpStatus();
+    TreyRegions_OnMapEnter(); // TREY (4a): remember the region map page as visited
     ClearTempFieldEventData();
     ResetDexNavSearch();
     ResetCyclingRoadChallengeData();
@@ -920,6 +922,7 @@ static void LoadMapFromWarp(bool32 a1)
 
     CheckLeftFriendsSecretBase();
     TrySetMapSaveWarpStatus();
+    TreyRegions_OnMapEnter(); // TREY (4a): remember the region map page as visited
     ClearTempFieldEventData();
     ResetDexNavSearch();
     // reset hours override on every warp
@@ -1711,6 +1714,7 @@ static void OverworldBasic(void)
 {
     ScriptContext_RunScript();
     RunTasks();
+    TreyLayer_UpdateSkyBeams(); // TREY (3h): light beams over sky clearings
     AnimateSprites();
     CameraUpdate();
     UpdateCameraPanning();

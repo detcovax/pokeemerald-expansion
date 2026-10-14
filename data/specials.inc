@@ -566,6 +566,9 @@ gSpecials::
 	@ TREY
 	def_special TreyLayer_CheckLanding
 	def_special TreyLayer_StartLanding
+	def_special TreyLayer_FindSoarMon
+	def_special TreyLayer_CheckSoar
+	def_special TreyLayer_StartSoarFromClearing
 	def_special TreySky_CheckWhirlwindPath
 	def_special TreySky_StartWhirlwindRide
 	def_special TreyRockClimb_Start

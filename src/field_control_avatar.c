@@ -216,7 +216,7 @@ int ProcessPlayerFieldInput(struct FieldInput *input)
 
     if (input->pressedAButton && TryStartInteractionScript(&position, metatileBehavior, playerDirection) == TRUE)
         return TRUE;
-    if (input->pressedAButton && TreyLayer_TrySetupLandScript()) // TREY: "Land here?" while soaring
+    if (input->pressedAButton && TreyLayer_TrySetupLayerScript()) // TREY: land at a landing spot / fly up at a clearing (3h)
         return TRUE;
 
     if (input->heldDirection2 && input->dpadDirection == playerDirection)

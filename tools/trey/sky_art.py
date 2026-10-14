@@ -605,61 +605,70 @@ def landing_spot_image():
                 gap[y][x] = top[y][x]
     return gap
 
-# Sky clearing beam (3h): the ground/water end of a sky link, a column of light shining down through a
-# gap in the clouds. A 32x64 field sprite drawn behind the player, bottom on the clearing tile.
-# No alpha blending on the GBA, so the beam is drawn as thin bright streaks with gaps between them.
+# Sky clearing beam (3h, redrawn after David's reference 2026-10-13): a soft, wide shaft of light slanting
+# down from the upper right onto the clearing tile.
+# - Semi-transparent sprites (the overworld's BLDALPHA 13/7), so it lightens the ground under it.
+#   Colours are dim on purpose: 13/16 of these + 7/16 of the ground brightens the ground a little.
+# - The shaft is ONE 64x64 image of a vertical shaft, drawn with an affine matrix (double-size mode):
+#   scaled 2x and leaned BEAM_ANGLE_DEG, so it covers about 128 px of screen for 2 KB of sprite VRAM.
+# - The pool of light on the tile is a separate 32x16 sprite (not rotated).
 PAL_BEAM = [(0, 0, 0),
-            (255, 255, 255),  # 1 core
-            (255, 250, 214),  # 2 light
-            (255, 238, 160),  # 3 gold
-            (246, 214, 112),  # 4 gold shade
-            (255, 255, 236),  # 5 sparkle
-            ] + [(0, 0, 0)] * 10
-BEAM_FRAMES = 4
+            (176, 176, 140),  # 1 pool core
+            (152, 152, 122),  # 2 shaft core
+            (136, 136, 110),  # 3 shaft
+            (122, 122, 100),  # 4 shaft edge / haze (barely brightens)
+            ] + [(0, 0, 0)] * 11
+BEAM_ANGLE_DEG = 35          # lean from vertical, top to the right
+BEAM_SCALE = 2
+BEAM_FRAMES = 1
 
-def beam_frame(frame):
-    w, h = 32, 64
-    img = blank(w, h)
-    cx = 15.5
-    base_y = 58                                   # centre of the glow on the clearing tile
-    for y in range(h):
-        # the column widens a little towards the ground, and fades out at the top
-        half = 4.5 + 2.5 * (y / h)
-        fade_top = y < 14
-        for x in range(w):
-            dx = abs(x - cx)
-            if dx > half:
+def beam_shaft_image():
+    """64x64 vertical shaft (before the 2x scale and the lean): bottom centre at (32, 60)."""
+    img = blank(64, 64)
+    bottom = 60
+    for y in range(64):
+        along = (bottom - y) / bottom    # 0 at the bottom, 1 at the top
+        half = 6.5 + 10 * max(0.0, along)  # narrow on the clearing, wide as it rises
+        for x in range(64):
+            dx = x + 0.5 - 32
+            if y > bottom - half:        # round the bottom end
+                if math.hypot(dx, y + 0.5 - (bottom - half)) > half:
+                    continue
+            t = abs(dx) / half
+            if t >= 1 or along > 0.9:
                 continue
-            band = int(dx * 2 + frame) % 4          # streaks shimmer sideways
-            if fade_top and (x + y + frame) % (3 if y > 7 else 4):
-                continue
-            if dx < 1.2:
-                c = 1
-            elif band == 0:
-                c = 2
-            elif band == 2 and (y + frame * 3) % 5:
-                c = 3
-            else:
-                continue
+            c = 2 if t < 0.32 else (3 if t < 0.7 else 4)
+            if along > 0.6:                                   # fades out towards the top
+                c = min(4, c + 1)
+                if along > 0.72 and (x + y) % 2:
+                    continue
+                if along > 0.82 and (x // 2 + y) % 2:
+                    continue
             img[y][x] = c
-    # glow on the ground: a flattened ring
-    for y in range(h - 14, h):
-        for x in range(w):
-            r = math.hypot((x - cx) / 1.0, (y - base_y) * 2.2)
-            if 8.5 < r < 11.5 and (x + y + frame) % 2 == 0:
-                img[y][x] = 4
-            elif 5.5 < r <= 8.5 and img[y][x] == 0 and (x * 3 + y + frame) % 3 == 0:
-                img[y][x] = 3
-    # sparkles drifting up the beam
-    rnd = random.Random(5)
-    for i in range(6):
-        sx = int(cx + rnd.uniform(-4, 4))
-        sy = (rnd.randrange(h) - frame * 6) % (h - 12)
-        img[sy][sx] = 5
-        if 0 < sx < w - 1:
-            img[sy][sx - 1] = 2
-            img[sy][sx + 1] = 2
     return img
+
+def beam_pool_image():
+    """32x16 pool of light on the clearing tile."""
+    img = blank(32, 16)
+    for y in range(16):
+        for x in range(32):
+            d = math.hypot((x + 0.5 - 16) / 1.0, (y + 0.5 - 8) * 2.0)
+            if d < 7:
+                img[y][x] = 1
+            elif d < 11:
+                img[y][x] = 2
+            elif d < 14 and (x + y) % 2 == 0:
+                img[y][x] = 4
+    return img
+
+def blend(sprite_rgb, bg_rgb, eva=13, evb=7):
+    return tuple(min(255, (eva * a + evb * b) // 16) for a, b in zip(sprite_rgb, bg_rgb))
+
+def beam_affine_params():
+    """GBA affine matrix (8.8 fixed): texture = M * (screen - centre). 2x bigger, leaning clockwise."""
+    a = math.radians(BEAM_ANGLE_DEG)
+    k = 256 / BEAM_SCALE
+    return (round(math.cos(a) * k), round(math.sin(a) * k), round(-math.sin(a) * k), round(math.cos(a) * k))
 
 UPDRAFT_PIECES = {"mid": (False, False), "left": (True, False), "right": (False, True), "single": (True, True)}
 
@@ -944,22 +953,44 @@ def make_hm_preview(out):
         frames.append(fr.resize((64 * 5, 16 * 5), Image.NEAREST))
     frames[0].save(f"{out}/sky_gust_push.gif", save_all=True, append_images=frames[1:] + [frames[-1]] * 6,
                    duration=70, loop=0)
-    # 3h: clearing beam over a patch of grass, with a placeholder player standing in it
-    frames = []
-    for f in range(BEAM_FRAMES * 3):
-        fr = Image.new("RGBA", (48, 72), (104, 168, 88, 255))
-        d = ImageDraw.Draw(fr)
-        for gx in range(0, 48, 4):
-            for gy in range(0, 72, 4):
-                if (gx * 7 + gy * 3) % 5 == 0:
-                    d.point((gx, gy), fill=(86, 148, 72, 255))
-        fr.alpha_composite(to_rgba(beam_frame(f % BEAM_FRAMES), PAL_BEAM), (8, 0))
-        if f >= BEAM_FRAMES * 2:
-            d = ImageDraw.Draw(fr)
-            d.ellipse((19, 50, 28, 62), fill=(200, 80, 60, 255))
-        frames.append(fr.resize((48 * 4, 72 * 4), Image.NEAREST))
-    frames[0].save(f"{out}/sky_beam.gif", save_all=True, append_images=frames[1:], duration=140, loop=0)
-    frames[0].save(f"{out}/sky_beam.png")
+    # 3h: clearing beam over a mock route (dim, like dusk), blended the way the GBA does it
+    W, H = 160, 144
+    bg = Image.new("RGB", (W, H), (78, 112, 92))
+    d = ImageDraw.Draw(bg)
+    for gx in range(0, W, 4):
+        for gy in range(0, H, 4):
+            if (gx * 7 + gy * 3) % 5 == 0:
+                d.point((gx, gy), fill=(66, 98, 80))
+    d.rectangle((0, 40, 120, 46), fill=(120, 72, 64))                 # a ledge
+    for (tx, ty) in ((100, 60), (116, 60), (132, 60), (100, 76), (116, 76), (132, 76)):
+        d.rectangle((tx, ty, tx + 14, ty + 14), fill=(52, 88, 64))    # tall grass / trees
+    out_img = bg.copy()
+    tile_cx, tile_cy = 56, 112                                        # centre of the clearing tile
+    px = out_img.load()
+    # shaft: what the GBA's affine double-size sprite shows (inverse mapping, nearest texel)
+    pa, pb, pc, pd = beam_affine_params()
+    ang = math.radians(BEAM_ANGLE_DEG)
+    cx = tile_cx + 28 * BEAM_SCALE * math.sin(ang)   # texture bottom (32, 60) is 28 below the centre
+    cy = tile_cy - 28 * BEAM_SCALE * math.cos(ang)
+    shaft = beam_shaft_image()
+    for Y in range(H):
+        for X in range(W):
+            dx, dy = X + 0.5 - cx, Y + 0.5 - cy
+            if abs(dx) > 64 or abs(dy) > 64:
+                continue                                              # outside the 128x128 double-size box
+            tx = int(math.floor((pa * dx + pb * dy) / 256 + 32))
+            ty = int(math.floor((pc * dx + pd * dy) / 256 + 32))
+            if 0 <= tx < 64 and 0 <= ty < 64 and shaft[ty][tx]:
+                px[X, Y] = blend(PAL_BEAM[shaft[ty][tx]], bg.getpixel((X, Y)))
+    pool = beam_pool_image()
+    for y in range(16):
+        for x in range(32):
+            if pool[y][x]:
+                X, Y = tile_cx - 16 + x, tile_cy - 8 + y
+                px[X, Y] = blend(PAL_BEAM[pool[y][x]], bg.getpixel((X, Y)))
+    d2 = ImageDraw.Draw(out_img)
+    d2.ellipse((tile_cx - 5, tile_cy - 14, tile_cx + 5, tile_cy + 4), fill=(200, 80, 60))   # player stand-in
+    out_img.resize((W * 3, H * 3), Image.NEAREST).save(f"{out}/sky_beam.png")
     print("HM preview written to", out)
 
 # ---------------------------------------------------------------------------
@@ -1193,12 +1224,11 @@ def write_game_files():
         burst.extend(gust_burst_frame_south(fr))
     write_png(f"{PUFF_DIR}/trey_gust_burst.png", burst, PAL_CLOUD)
 
-    # 3h: sky clearing beam, 32x64 frames stacked vertically, and its palette
-    beam = []
-    for fr in range(BEAM_FRAMES):
-        beam.extend(beam_frame(fr))
-    write_png(f"{PUFF_DIR}/trey_sky_beam.png", beam, PAL_BEAM)
+    # 3h: sky clearing beam: the 64x64 shaft (drawn rotated and scaled in game), the 32x16 pool, one palette
+    write_png(f"{PUFF_DIR}/trey_sky_beam.png", beam_shaft_image(), PAL_BEAM)
+    write_png(f"{PUFF_DIR}/trey_sky_beam_pool.png", beam_pool_image(), PAL_BEAM)
     write_pal("graphics/field_effects/palettes/trey_sky_beam.pal", PAL_BEAM)
+    print("sky beam affine matrix (pa, pb, pc, pd):", beam_affine_params())
 
     # metatile ID constants
     ids = {name: 0x200 + i for i, (name, _, _, _) in enumerate(mts)}

@@ -11,6 +11,8 @@
 // Which region MAP a location is drawn on is a separate question, handled in Phase 4.
 enum Region TreyGetRegionOfMapsec(u16 mapSec);
 enum Region TreyGetCurrentRegion(void);
+u32 TreyGetRegionMapPageOfMapsec(u16 mapSec); // TREY_REGION_MAP_* the location is drawn on
+void TreyRegions_OnMapEnter(void);            // marks the current region map page as visited
 
 // Badges. Regions without a league (Kitakami, none) have 0 badges.
 u32 TreyBadges_GetCount(enum Region region);                 // how many badges the region has

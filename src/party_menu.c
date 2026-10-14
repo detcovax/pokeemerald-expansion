@@ -4267,9 +4267,12 @@ static bool8 SetUpFieldMove_Fly(void)
     if (!CheckFollowerNPCFlag(FOLLOWER_NPC_FLAG_CAN_LEAVE_ROUTE))
         return FALSE;
 
-    // TREY (TREY_PLAN.md 5.3): Fly while soaring = land; Fly under a Sky link = soar up.
+    // TREY (TREY_PLAN.md 5.3, 3h): Fly while soaring = land, only at a landing spot; Fly on a sky
+    // clearing (light beam) = soar up. Anywhere else Fly can't be used.
     if (TreyLayer_IsSoaring())
     {
+        if (!TreyLayer_IsOnLandingSpot())
+            return FALSE;
         gFieldCallback2 = FieldCallback_PrepareFadeInFromMenu;
         gPostMenuFieldCallback = TreyLayer_FieldCallback_Land;
         return TRUE;
