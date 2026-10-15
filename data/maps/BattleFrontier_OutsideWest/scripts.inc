@@ -10,6 +10,27 @@ BattleFrontier_OutsideWest_OnTransition:
 BattleFrontier_OutsideWest_EventScript_FerryAttendant::
 	lock
 	faceplayer
+	@ TREY (4c): the TREY transit menu (data/scripts/trey_transit.inc)
+	setvar VAR_0x8004, TRANSIT_SHIP
+	setvar VAR_0x8005, TRANSIT_STOP_BATTLE_FRONTIER
+	setvar VAR_0x8007, 0
+	call TreyTransit_EventScript_ChooseDestination
+	goto_if_eq VAR_0x8006, TRANSIT_STOP_NONE, BattleFrontier_OutsideWest_EventScript_TreyTransitEnd
+	special TreyTransit_Board
+	call BattleFrontier_OutsideWest_EventScript_BoardFerry
+	warp MAP_SS_TIDAL_CORRIDOR, 1, 10
+	waitstate
+	release
+	end
+
+BattleFrontier_OutsideWest_EventScript_TreyTransitEnd::
+	release
+	end
+
+@ Emerald's own ferry menu, no longer used (TREY 4c)
+BattleFrontier_OutsideWest_EventScript_FerryAttendantOld::
+	lock
+	faceplayer
 	msgbox BattleFrontier_OutsideWest_Text_MayISeeYourTicket, MSGBOX_DEFAULT
 	checkitem ITEM_SS_TICKET
 	goto_if_eq VAR_RESULT, FALSE, BattleFrontier_OutsideWest_EventScript_NoSSTicket

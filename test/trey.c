@@ -192,3 +192,63 @@ TEST("TREY Seasons: a forced season is locked on the next map load, and the cale
     TreySeason_LockForMapLoad();
     EXPECT_LT(TreySeason_Get(), TREY_SEASONS_COUNT);
 }
+
+// Wild encounters by season and weather (4b-2)
+#include "trey_wild.h"
+#include "constants/map_groups.h"
+#include "constants/weather.h"
+
+static u32 TreyTest_FindWildHeader(u8 group, u8 num)
+{
+    u32 i;
+    for (i = 0; gWildMonHeaders[i].mapGroup != MAP_GROUP(MAP_UNDEFINED); i++)
+    {
+        if (gWildMonHeaders[i].mapGroup == group && gWildMonHeaders[i].mapNum == num)
+            return i;
+    }
+    return HEADER_NONE;
+}
+
+TEST("TREY Wild: CSV tables override Route 101's Emerald tables only where they apply")
+{
+    u32 id = TreyTest_FindWildHeader(MAP_GROUP(MAP_ROUTE101), MAP_NUM(MAP_ROUTE101));
+    const struct WildEncounterTypes *t;
+    ASSUME(id != HEADER_NONE);
+    t = TreyWild_GetTypesFor(id, TIME_DAY, SEASON_WINTER, TREY_WEATHER_CLEAR);
+    EXPECT_EQ(t->landMonsInfo->wildPokemon[0].species, SPECIES_SNORUNT);
+    t = TreyWild_GetTypesFor(id, TIME_NIGHT, SEASON_SPRING, TREY_WEATHER_RAIN);
+    EXPECT_EQ(t->landMonsInfo->wildPokemon[0].species, SPECIES_LOTAD);
+    t = TreyWild_GetTypesFor(id, TIME_DAY, SEASON_SUMMER, TREY_WEATHER_CLEAR);
+    EXPECT_EQ(t->landMonsInfo, gWildMonHeaders[id].encounterTypes[TIME_DAY].landMonsInfo);
+}
+
+TEST("TREY Wild: weather groups")
+{
+    EXPECT_EQ(TreyWild_GetWeatherGroup(WEATHER_DOWNPOUR), TREY_WEATHER_RAIN);
+    EXPECT_EQ(TreyWild_GetWeatherGroup(WEATHER_SNOW), TREY_WEATHER_SNOW);
+    EXPECT_EQ(TreyWild_GetWeatherGroup(WEATHER_FOG_DIAGONAL), TREY_WEATHER_FOG);
+    EXPECT_EQ(TreyWild_GetWeatherGroup(WEATHER_DROUGHT), TREY_WEATHER_SUN);
+    EXPECT_EQ(TreyWild_GetWeatherGroup(WEATHER_SUNNY), TREY_WEATHER_CLEAR);
+}
+
+// Transit (4c)
+#include "trey_transit.h"
+#include "constants/vars.h"
+
+TEST("TREY Transit: boarding, getting under way and resting in the cabin brings the ship in")
+{
+    gSpecialVar_0x8005 = TRANSIT_STOP_SLATEPORT;
+    gSpecialVar_0x8006 = TRANSIT_STOP_LILYCOVE;
+    TreyTransit_Board();
+    EXPECT_EQ(VarGet(VAR_TREY_TRANSIT_STATE), TRANSIT_STATE_BOARDED);
+    EXPECT(TreyTransit_IsTravelling());
+    TreyTransit_ArriveNow();                       // not under way yet: nothing happens
+    EXPECT_EQ(gSpecialVar_Result, FALSE);
+    TreyTransit_Depart();
+    EXPECT_EQ(VarGet(VAR_TREY_TRANSIT_STATE), TRANSIT_STATE_UNDERWAY);
+    TreyTransit_ArriveNow();
+    EXPECT_EQ(gSpecialVar_Result, TRUE);
+    EXPECT_EQ(VarGet(VAR_TREY_TRANSIT_STATE), TRANSIT_STATE_ARRIVED);
+    VarSet(VAR_TREY_TRANSIT_TRIP, 0);
+    VarSet(VAR_TREY_TRANSIT_STATE, TRANSIT_STATE_NONE);
+}

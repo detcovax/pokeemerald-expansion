@@ -24,6 +24,9 @@
 #include "window.h"
 #include "constants/region_map_sections.h"
 #include "constants/map_types.h" // TREY (4a)
+#include "trey_seasons.h"         // TREY (4b-2)
+#include "trey_wild.h"
+#include "string_util.h"
 #include "constants/rgb.h"
 #include "constants/songs.h"
 #include "config/pokedex_plus_hgss.h"
@@ -63,12 +66,13 @@
 #define MAX_AREA_MARKERS 32 // Maximum number of circular spot highlights
 
 #define LABEL_WINDOW_BG 1
-#define NUM_LABEL_WINDOWS 2
+#define NUM_LABEL_WINDOWS 3 // TREY (4b-2): + season/weather label
 
 enum PokedexAreaLabels
 {
     DEX_AREA_LABEL_TIME_OF_DAY,
-    DEX_AREA_LABEL_AREA_UNKNOWN
+    DEX_AREA_LABEL_AREA_UNKNOWN,
+    DEX_AREA_LABEL_CONDITIONS, // TREY (4b-2): season and weather
 };
 
 struct OverworldArea
@@ -111,10 +115,16 @@ struct
 } static EWRAM_DATA *sPokedexAreaScreen = NULL;
 
 EWRAM_DATA u8 gAreaTimeOfDay = 0;
+// TREY (4b-2): the season and weather group shown, and which of time/season/weather up-down changes (A cycles).
+static EWRAM_DATA u8 sAreaSeason = 0;
+static EWRAM_DATA u8 sAreaWeather = 0;
+static EWRAM_DATA u8 sAreaPicker = 0;
+enum { AREA_PICK_TIME, AREA_PICK_SEASON, AREA_PICK_WEATHER, AREA_PICK_COUNT };
 
 static void FindMapsWithMon(u16);
 static void BuildAreaGlowTilemap(void);
 static void SetAreaHasMon(u16, u16);
+static void AddWildMapArea(u16, u16);
 static void SetSpecialMapHasMon(u16, u16);
 static u16 GetRegionMapSectionId(u8, u8);
 static bool8 MapHasSpecies(const struct WildEncounterTypes *, u16);
@@ -257,7 +267,18 @@ static const struct WindowTemplate sTimeOfDayWindowLabelTemplates[] =
         .height = 2,
         .paletteNum = 0,
         .baseBlock = 0x240
-    }
+    },
+
+    [DEX_AREA_LABEL_CONDITIONS] = // TREY (4b-2): bottom left
+    {
+        .bg = LABEL_WINDOW_BG,
+        .tilemapLeft = 0,
+        .tilemapTop = 18,
+        .width = 12,
+        .height = 2,
+        .paletteNum = 0,
+        .baseBlock = 0x260
+    },
 };
 
 static void ResetDrawAreaGlowState(void)
@@ -339,39 +360,22 @@ static void FindMapsWithMon(u16 species)
         }
     }
 
-    // Add regular species to the area map
+    // Add regular species to the area map (TREY 4b-2: for the season, time and weather picked)
     for (i = 0; gWildMonHeaders[i].mapGroup != MAP_GROUP(MAP_UNDEFINED); i++)
     {
-        if (MapHasSpecies(&gWildMonHeaders[i].encounterTypes[gAreaTimeOfDay], species))
-        {
-            switch (gWildMonHeaders[i].mapGroup)
-            {
-            case MAP_GROUP_TOWNS_AND_ROUTES:
-                SetAreaHasMon(gWildMonHeaders[i].mapGroup, gWildMonHeaders[i].mapNum);
-                break;
-            case MAP_GROUP_DUNGEONS:
-            case MAP_GROUP_SPECIAL_AREA:
-                SetSpecialMapHasMon(gWildMonHeaders[i].mapGroup, gWildMonHeaders[i].mapNum);
-                break;
-            default:
-                // TREY (4a): the other regions' map groups. Outdoor maps glow, the rest get a marker.
-                switch (GetMapTypeByGroupAndId(gWildMonHeaders[i].mapGroup, gWildMonHeaders[i].mapNum))
-                {
-                case MAP_TYPE_TOWN:
-                case MAP_TYPE_CITY:
-                case MAP_TYPE_ROUTE:
-                case MAP_TYPE_OCEAN_ROUTE:
-                case MAP_TYPE_UNDERWATER:
-                case MAP_TYPE_SKY:
-                    SetAreaHasMon(gWildMonHeaders[i].mapGroup, gWildMonHeaders[i].mapNum);
-                    break;
-                default:
-                    SetSpecialMapHasMon(gWildMonHeaders[i].mapGroup, gWildMonHeaders[i].mapNum);
-                    break;
-                }
-                break;
-            }
-        }
+        if (MapHasSpecies(TreyWild_GetTypesFor(i, gAreaTimeOfDay, sAreaSeason, sAreaWeather), species))
+            AddWildMapArea(gWildMonHeaders[i].mapGroup, gWildMonHeaders[i].mapNum);
+    }
+    // TREY (4b-2): maps that only have CSV encounters
+    for (i = 0; i < gTreyWildMapCount; i++)
+    {
+        u8 group = gTreyWildMaps[i].mapGroup, num = gTreyWildMaps[i].mapNum;
+        u32 j;
+        bool32 hasEmeraldTables = FALSE;
+        for (j = 0; gWildMonHeaders[j].mapGroup != MAP_GROUP(MAP_UNDEFINED) && !hasEmeraldTables; j++)
+            hasEmeraldTables = (gWildMonHeaders[j].mapGroup == group && gWildMonHeaders[j].mapNum == num);
+        if (!hasEmeraldTables && MapHasSpecies(TreyWild_GetTypesFor(TREY_WILD_HEADER_BASE + i, gAreaTimeOfDay, sAreaSeason, sAreaWeather), species))
+            AddWildMapArea(group, num);
     }
 
     // Add roamers to the area map
@@ -386,6 +390,37 @@ static void FindMapsWithMon(u16 species)
             roamerLocation->regionMapSectionId = Overworld_GetMapHeaderByGroupAndId(roamerLocation->mapGroup, roamerLocation->mapNum)->regionMapSectionId;
             sPokedexAreaScreen->numOverworldAreas++;
         }
+    }
+}
+
+// Hoenn's own groups as before; other maps by map type: outdoor maps glow, the rest get a marker (4a).
+static void AddWildMapArea(u16 mapGroup, u16 mapNum)
+{
+    switch (mapGroup)
+    {
+    case MAP_GROUP_TOWNS_AND_ROUTES:
+        SetAreaHasMon(mapGroup, mapNum);
+        break;
+    case MAP_GROUP_DUNGEONS:
+    case MAP_GROUP_SPECIAL_AREA:
+        SetSpecialMapHasMon(mapGroup, mapNum);
+        break;
+    default:
+        switch (GetMapTypeByGroupAndId(mapGroup, mapNum))
+        {
+        case MAP_TYPE_TOWN:
+        case MAP_TYPE_CITY:
+        case MAP_TYPE_ROUTE:
+        case MAP_TYPE_OCEAN_ROUTE:
+        case MAP_TYPE_UNDERWATER:
+        case MAP_TYPE_SKY:
+            SetAreaHasMon(mapGroup, mapNum);
+            break;
+        default:
+            SetSpecialMapHasMon(mapGroup, mapNum);
+            break;
+        }
+        break;
     }
 }
 
@@ -448,10 +483,10 @@ static u16 GetRegionMapSectionId(u8 mapGroup, u8 mapNum)
 static bool8 MapHasSpecies(const struct WildEncounterTypes *info, u16 species)
 {
     u32 headerId = GetCurrentMapWildMonHeaderId();
-    u8 currentMapGroup = gWildMonHeaders[headerId].mapGroup;
-    u8 currentMapNum = gWildMonHeaders[headerId].mapNum;
+    u8 currentMapGroup = headerId < TREY_WILD_HEADER_BASE ? gWildMonHeaders[headerId].mapGroup : 0; // TREY (4b-2)
+    u8 currentMapNum = headerId < TREY_WILD_HEADER_BASE ? gWildMonHeaders[headerId].mapNum : 0;
     // If this is a header for Altering Cave, skip it if it's not the current Altering Cave encounter set
-    if (GetRegionMapSectionId(currentMapGroup, currentMapNum) == MAPSEC_ALTERING_CAVE)
+    if (headerId < TREY_WILD_HEADER_BASE && GetRegionMapSectionId(currentMapGroup, currentMapNum) == MAPSEC_ALTERING_CAVE)
     {
         sPokedexAreaScreen->alteringCaveCounter++;
         if (sPokedexAreaScreen->alteringCaveCounter != sPokedexAreaScreen->alteringCaveId + 1)
@@ -688,12 +723,46 @@ static void AddTimeOfDayLabels(void)
     }
 }
 
+static const u8 sText_TreyWeatherClear[] = _("CLEAR");
+static const u8 sText_TreyWeatherRain[] = _("RAIN");
+static const u8 sText_TreyWeatherSnow[] = _("SNOW");
+static const u8 sText_TreyWeatherSand[] = _("SAND");
+static const u8 sText_TreyWeatherFog[] = _("FOG");
+static const u8 sText_TreyWeatherSun[] = _("SUN");
+static const u8 *const sTreyWeatherGroupNames[TREY_WEATHER_GROUPS_COUNT] =
+{
+    sText_TreyWeatherClear, sText_TreyWeatherRain, sText_TreyWeatherSnow,
+    sText_TreyWeatherSand, sText_TreyWeatherFog, sText_TreyWeatherSun,
+};
+static const u8 sText_TreyPickerIcon[] = _("{DPAD_UPDOWN}");
+static const u8 sText_TreyPickerSpace[] = _(" ");
+
 static void ShowEncounterInfoLabel(void)
 {
     const u8 *gText_TimeOfDay = GetTimeOfDayTextWithButton(gAreaTimeOfDay);
-    int stringXPos = GetStringCenterAlignXOffset(FONT_NORMAL, gText_TimeOfDay, 64);
+    int stringXPos;
 
-    PrintAreaLabelText(gText_TimeOfDay, DEX_AREA_LABEL_TIME_OF_DAY, stringXPos);
+    // TREY (4b-2): the up/down icon marks what up/down changes (A cycles time, season, weather).
+    if (sAreaPicker == AREA_PICK_TIME)
+    {
+        stringXPos = GetStringCenterAlignXOffset(FONT_NORMAL, gText_TimeOfDay, 64);
+        PrintAreaLabelText(gText_TimeOfDay, DEX_AREA_LABEL_TIME_OF_DAY, stringXPos);
+    }
+    else
+    {
+        // the time text without its leading icon and space
+        stringXPos = GetStringCenterAlignXOffset(FONT_NORMAL, gText_TimeOfDay + 3, 64);
+        PrintAreaLabelText(gText_TimeOfDay + 3, DEX_AREA_LABEL_TIME_OF_DAY, stringXPos);
+    }
+    gStringVar4[0] = EOS;
+    if (sAreaPicker == AREA_PICK_SEASON)
+        StringAppend(gStringVar4, sText_TreyPickerIcon);
+    StringAppend(gStringVar4, TreySeason_GetName(sAreaSeason));
+    StringAppend(gStringVar4, sText_TreyPickerSpace);
+    if (sAreaPicker == AREA_PICK_WEATHER)
+        StringAppend(gStringVar4, sText_TreyPickerIcon);
+    StringAppend(gStringVar4, sTreyWeatherGroupNames[sAreaWeather % TREY_WEATHER_GROUPS_COUNT]);
+    PrintAreaLabelText(gStringVar4, DEX_AREA_LABEL_CONDITIONS, 4);
 }
 
 static void ShowAreaUnknownLabel(void)
@@ -740,7 +809,12 @@ void DisplayPokedexAreaScreen(u16 species, u8 *screenSwitchState, enum TimeOfDay
     gAreaTimeOfDay = timeOfDay;
     screenSwitchState[0] = 0;
     if (areaState != DEX_UPDATE_AREA_SCREEN) // TREY (4a): open on the player's region; L/R or SELECT flip regions
+    {
         gTreyRegionMapPage = TreyRegionMap_GetPlayerPage();
+        sAreaSeason = TreySeason_Get();                      // TREY (4b-2): open on the current conditions
+        sAreaWeather = TreyWild_GetCurrentWeatherGroup();
+        sAreaPicker = AREA_PICK_TIME;
+    }
 
     if (sPokedexAreaScreen->areaState == DEX_UPDATE_AREA_SCREEN)
         taskId = CreateTask(Task_UpdatePokedexAreaScreen, 0);
@@ -920,17 +994,24 @@ static void Task_HandlePokedexAreaScreenInput(u8 taskId)
             sPokedexAreaScreen->areaState = DEX_UPDATE_AREA_SCREEN;
             PlaySE(SE_DEX_PAGE);
         }
-        else if (JOY_NEW(DPAD_UP) && OW_TIME_OF_DAY_ENCOUNTERS == TRUE)
+        else if (JOY_NEW(A_BUTTON) && OW_TIME_OF_DAY_ENCOUNTERS == TRUE)
         {
-            gTasks[taskId].data[1] = 3;
-            gAreaTimeOfDay = TryDecrementTimeOfDay(gAreaTimeOfDay);
-            sPokedexAreaScreen->areaState = DEX_UPDATE_AREA_SCREEN;
-            PlaySE(SE_DEX_PAGE);
+            // TREY (4b-2): choose what up/down changes
+            sAreaPicker = (sAreaPicker + 1) % AREA_PICK_COUNT;
+            ShowEncounterInfoLabel();
+            PlaySE(SE_SELECT);
+            return;
         }
-        else if (JOY_NEW(DPAD_DOWN) && OW_TIME_OF_DAY_ENCOUNTERS == TRUE)
+        else if (JOY_NEW(DPAD_UP | DPAD_DOWN) && OW_TIME_OF_DAY_ENCOUNTERS == TRUE)
         {
+            bool32 up = JOY_NEW(DPAD_UP);
             gTasks[taskId].data[1] = 3;
-            gAreaTimeOfDay = TryIncrementTimeOfDay(gAreaTimeOfDay);
+            if (sAreaPicker == AREA_PICK_SEASON)
+                sAreaSeason = (sAreaSeason + (up ? TREY_SEASONS_COUNT - 1 : 1)) % TREY_SEASONS_COUNT;
+            else if (sAreaPicker == AREA_PICK_WEATHER)
+                sAreaWeather = (sAreaWeather + (up ? TREY_WEATHER_GROUPS_COUNT - 1 : 1)) % TREY_WEATHER_GROUPS_COUNT;
+            else
+                gAreaTimeOfDay = up ? TryDecrementTimeOfDay(gAreaTimeOfDay) : TryIncrementTimeOfDay(gAreaTimeOfDay);
             sPokedexAreaScreen->areaState = DEX_UPDATE_AREA_SCREEN;
             PlaySE(SE_DEX_PAGE);
         }

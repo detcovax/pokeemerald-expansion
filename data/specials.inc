@@ -569,6 +569,14 @@ gSpecials::
 	def_special TreyLayer_FindSoarMon
 	def_special TreyLayer_CheckSoar
 	def_special TreyLayer_StartSoarFromClearing
+	def_special TreyTransit_CheckPass
+	def_special TreyTransit_PushDestinations
+	def_special TreyTransit_BufferStopName
+	def_special TreyTransit_Board
+	def_special TreyTransit_Depart
+	def_special TreyTransit_ArriveNow
+	def_special TreyTransit_BufferDestinationName
+	def_special TreyTransit_WarpToDestination
 	def_special TreySky_CheckWhirlwindPath
 	def_special TreySky_StartWhirlwindRide
 	def_special TreyRockClimb_Start

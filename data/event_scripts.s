@@ -60,6 +60,7 @@
 #include "constants/tv.h"
 #include "constants/union_room.h"
 #include "constants/vars.h"
+#include "constants/trey_transit.h" // TREY (4c)
 #include "constants/weather.h"
 	.include "asm/macros.inc"
 	.include "asm/macros/event.inc"
@@ -1127,6 +1128,7 @@ EventScript_VsSeekerChargingDone::
 	.include "data/scripts/trey_hm_tutor.inc" @ TREY
 	.include "data/scripts/trey_rock_climb.inc" @ TREY
 	.include "data/scripts/trey_sky_hms.inc" @ TREY (3f)
+	.include "data/scripts/trey_transit.inc" @ TREY (4c)
 	.include "data/scripts/item_ball_scripts.inc"
 	.include "data/scripts/profile_man.inc"
 	.include "data/scripts/day_care.inc"

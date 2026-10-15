@@ -10,6 +10,7 @@
 #include "overworld.h"
 #include "event_data.h"
 #include "trey_regions.h" // TREY (4a)
+#include "trey_transit.h" // TREY (4c)
 #include "secret_base.h"
 #include "string_util.h"
 #include "international_string_util.h"
@@ -1210,6 +1211,16 @@ static void RegionMap_InitializeStateBasedOnSSTidalLocation(void)
 
     y = 0;
     x = 0;
+    // TREY (4c): on a TREY trip the map shows the stop you sailed from
+    if (TreyTransit_IsTravelling() && TreyTransit_GetFromStopMapsec() != MAPSEC_NONE)
+    {
+        sRegionMap->mapSecId = TreyTransit_GetFromStopMapsec();
+        sRegionMap->playerIsInCave = FALSE;
+        sRegionMap->cursorPosX = gRegionMapEntries[sRegionMap->mapSecId].x + MAPCURSOR_X_MIN;
+        sRegionMap->cursorPosY = gRegionMapEntries[sRegionMap->mapSecId].y + MAPCURSOR_Y_MIN;
+        TreyRegionMap_FixCursorForPage();
+        return;
+    }
     switch (GetSSTidalLocation(&mapGroup, &mapNum, &xOnMap, &yOnMap))
     {
     case SS_TIDAL_LOCATION_SLATEPORT:

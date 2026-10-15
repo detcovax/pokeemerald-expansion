@@ -1,4 +1,5 @@
 #include "global.h"
+#include "trey_wild.h" // TREY (4b-2): encounters by season and weather
 #include "malloc.h"
 #include "battle.h"
 #include "battle_setup.h"
@@ -1769,18 +1770,18 @@ static void PopulateSpeciesFromTrainerLocation(int matchCallId, u8 *destStr)
         {
             timeOfDay = GetTimeOfDayForEncounters(i, WILD_AREA_LAND);
             numSpecies = 0;
-            if (gWildMonHeaders[i].encounterTypes[timeOfDay].landMonsInfo)
+            if (TreyWild_GetTypes(i, timeOfDay)[0].landMonsInfo)
             {
                 slot = GetLandEncounterSlot();
-                species[numSpecies] = gWildMonHeaders[i].encounterTypes[timeOfDay].landMonsInfo->wildPokemon[slot].species;
+                species[numSpecies] = TreyWild_GetTypes(i, timeOfDay)[0].landMonsInfo->wildPokemon[slot].species;
                 numSpecies++;
             }
 
             timeOfDay = GetTimeOfDayForEncounters(i, WILD_AREA_WATER);
-            if (gWildMonHeaders[i].encounterTypes[timeOfDay].waterMonsInfo)
+            if (TreyWild_GetTypes(i, timeOfDay)[0].waterMonsInfo)
             {
                 slot = GetWaterEncounterSlot();
-                species[numSpecies] = gWildMonHeaders[i].encounterTypes[timeOfDay].waterMonsInfo->wildPokemon[slot].species;
+                species[numSpecies] = TreyWild_GetTypes(i, timeOfDay)[0].waterMonsInfo->wildPokemon[slot].species;
                 numSpecies++;
             }
 

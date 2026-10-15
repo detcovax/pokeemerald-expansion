@@ -277,6 +277,9 @@
 // TREY vars (TREY_PLAN.md E5): 0x4100-0x41FF. New TREY vars are defined as (TREY_VARS_START + n).
 #define TREY_VARS_START                                  0x4100
 #define VAR_TREY_SKY_BATTLE_SLOTS                        (TREY_VARS_START + 0x00) // B_VAR_SKY_BATTLE: party slots taking part in a Sky Battle (3e)
+#define VAR_TREY_TRANSIT_TRIP                            (TREY_VARS_START + 0x01) // 4c: (from stop + 1) << 8 | (to stop + 1), 0 = not travelling
+#define VAR_TREY_TRANSIT_STATE                           (TREY_VARS_START + 0x02) // 4c: TRANSIT_STATE_*
+#define VAR_TREY_TRANSIT_STEPS                           (TREY_VARS_START + 0x03) // 4c: steps taken on board this trip
 
 #define VARS_END                                         0x41FF // TREY: was 0x40FF
 #define VARS_COUNT                                       (VARS_END - VARS_START + 1)

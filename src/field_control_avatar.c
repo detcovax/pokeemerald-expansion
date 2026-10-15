@@ -1,5 +1,7 @@
 #include "global.h"
 #include "trey_hm.h" // TREY
+#include "trey_transit.h" // TREY (4c)
+extern const u8 TreyTransit_EventScript_Arrived[]; // data/scripts/trey_transit.inc
 extern const u8 EventScript_TreyRockClimb[]; // TREY: data/scripts/trey_rock_climb.inc
 #include "constants/moves.h" // TREY
 #include "trey_layers.h" // TREY
@@ -753,6 +755,11 @@ static bool8 TryStartStepCountScript(u16 metatileBehavior)
     if (CountSSTidalStep(1) == TRUE)
     {
         ScriptContext_SetupScript(SSTidalCorridor_EventScript_ReachedStepCount);
+        return TRUE;
+    }
+    if (TreyTransit_CountStep()) // TREY (4c): the ship comes in
+    {
+        ScriptContext_SetupScript(TreyTransit_EventScript_Arrived);
         return TRUE;
     }
     if (TryStartMatchCall())

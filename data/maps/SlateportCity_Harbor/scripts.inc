@@ -6,7 +6,10 @@ SlateportCity_Harbor_OnTransition:
 	setescapewarp MAP_SLATEPORT_CITY, 28, 13
 	setvar VAR_TEMP_1, 0
 	call_if_eq VAR_SLATEPORT_HARBOR_STATE, 1, SlateportCity_Harbor_EventScript_ReadyAquaEscapeScene
-	call_if_set FLAG_SYS_GAME_CLEAR, SlateportCity_Harbor_EventScript_ShowSSTidal
+	@ TREY (4c): the ship is in port once you can sail (S.S. Ticket), not after the Hoenn League
+	setvar VAR_0x8004, TRANSIT_SHIP
+	special TreyTransit_CheckPass
+	call_if_eq VAR_RESULT, TRUE, SlateportCity_Harbor_EventScript_ShowSSTidal
 	end
 
 SlateportCity_Harbor_EventScript_ShowSSTidal::
@@ -155,6 +158,27 @@ SlateportCity_Harbor_Movement_PlayerWalkUp:
 	step_end
 
 SlateportCity_Harbor_EventScript_FerryAttendant::
+	lock
+	faceplayer
+	@ TREY (4c): the TREY transit menu (data/scripts/trey_transit.inc)
+	setvar VAR_0x8004, TRANSIT_SHIP
+	setvar VAR_0x8005, TRANSIT_STOP_SLATEPORT
+	setvar VAR_0x8007, 0
+	call TreyTransit_EventScript_ChooseDestination
+	goto_if_eq VAR_0x8006, TRANSIT_STOP_NONE, SlateportCity_Harbor_EventScript_TreyTransitEnd
+	special TreyTransit_Board
+	call SlateportCity_Harbor_EventScript_BoardFerry
+	warp MAP_SS_TIDAL_CORRIDOR, 1, 10
+	waitstate
+	release
+	end
+
+SlateportCity_Harbor_EventScript_TreyTransitEnd::
+	release
+	end
+
+@ Emerald's own ferry menu, no longer used (TREY 4c)
+SlateportCity_Harbor_EventScript_FerryAttendantOld::
 	lock
 	faceplayer
 	goto_if_set FLAG_SYS_GAME_CLEAR, SlateportCity_Harbor_EventScript_AskForTicket

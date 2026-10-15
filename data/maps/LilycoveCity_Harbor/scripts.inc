@@ -9,7 +9,10 @@ LilycoveCity_Harbor_OnTransition:
 LilycoveCity_Harbor_EventScript_FerryAttendant::
 	lock
 	faceplayer
-	goto_if_unset FLAG_SYS_GAME_CLEAR, LilycoveCity_Harbor_EventScript_FerryUnavailable
+	@ TREY (4c): needs the S.S. Ticket instead of the Hoenn League
+	setvar VAR_0x8004, TRANSIT_SHIP
+	special TreyTransit_CheckPass
+	goto_if_eq VAR_RESULT, FALSE, LilycoveCity_Harbor_EventScript_FerryUnavailable
 	call LilycoveCity_Harbor_EventScript_GetEonTicketState
 	call LilycoveCity_Harbor_EventScript_GetAuroraTicketState
 	call LilycoveCity_Harbor_EventScript_GetOldSeaMapState
@@ -35,6 +38,29 @@ LilycoveCity_Harbor_EventScript_NoFirstTimeEventTickets::
 	end
 
 LilycoveCity_Harbor_EventScript_FerryRegularLocationSelect::
+	@ TREY (4c): the TREY transit menu, plus the event islands your tickets open
+	setvar VAR_0x8004, TRANSIT_SHIP
+	setvar VAR_0x8005, TRANSIT_STOP_LILYCOVE
+	setvar VAR_0x8007, 1
+	call TreyTransit_EventScript_ChooseAgain
+	goto_if_eq VAR_0x8006, TRANSIT_STOP_NONE, LilycoveCity_Harbor_EventScript_TreyTransitEnd
+	goto_if_eq VAR_0x8006, 100, LilycoveCity_Harbor_EventScript_GoToSouthernIsland
+	goto_if_eq VAR_0x8006, 101, LilycoveCity_Harbor_EventScript_GoToNavelRock
+	goto_if_eq VAR_0x8006, 102, LilycoveCity_Harbor_EventScript_GoToBirthIsland
+	goto_if_eq VAR_0x8006, 103, LilycoveCity_Harbor_EventScript_GoToFarawayIsland
+	special TreyTransit_Board
+	call LilycoveCity_Harbor_EventScript_BoardFerry
+	warp MAP_SS_TIDAL_CORRIDOR, 1, 10
+	waitstate
+	release
+	end
+
+LilycoveCity_Harbor_EventScript_TreyTransitEnd::
+	release
+	end
+
+@ Emerald's own ferry menu, no longer used (TREY 4c)
+LilycoveCity_Harbor_EventScript_FerryRegularLocationSelectOld::
 	setvar VAR_0x8004, 0
 	special ScriptMenu_CreateLilycoveSSTidalMultichoice
 	waitstate

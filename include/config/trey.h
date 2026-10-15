@@ -64,6 +64,9 @@
 // Debug (4a): every region map page counts as visited, so the Teleport map and the Pokédex area page
 // can flip through all regions before they have maps. Set back to 0 for real play.
 #define TREY_DEBUG_ALL_REGION_MAPS      0
+// Debug (4c): you hold the S.S. Ticket and every transit stop counts as visited, so the ferries can be tested
+// before the Kanto story exists. Set to 0 for real play.
+#define TREY_DEBUG_ALL_TRANSIT          1
 
 // ---------------------------------------------------------------------------
 // Energy, replaces PP (TREY_PLAN.md 5.6, D23)

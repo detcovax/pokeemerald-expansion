@@ -4,6 +4,7 @@ SSTidalCorridor_MapScripts::
 
 SSTidalCorridor_OnFrame:
 	map_script_2 VAR_SS_TIDAL_SCOTT_STATE, 0, SSTidalCorridor_EventScript_ScottScene
+	map_script_2 VAR_TREY_TRANSIT_STATE, TRANSIT_STATE_BOARDED, TreyTransit_EventScript_Depart @ TREY (4c)
 	map_script_2 VAR_SS_TIDAL_STATE, SS_TIDAL_BOARD_SLATEPORT, SSTidalCorridor_EventScript_DepartSlateportForLilycove
 	map_script_2 VAR_SS_TIDAL_STATE, SS_TIDAL_BOARD_LILYCOVE, SSTidalCorridor_EventScript_DepartLilycoveForSlateport
 	map_script_2 VAR_SS_TIDAL_STATE, SS_TIDAL_EXIT_CURRENTS_RIGHT, SSTidalCorridor_EventScript_HalfwayToLilycove
@@ -112,6 +113,7 @@ SSTidalCorridor_EventScript_Cabin4Sign::
 SSTidalCorridor_EventScript_ExitSailor::
 	lock
 	faceplayer
+	goto_if_ne VAR_TREY_TRANSIT_STATE, TRANSIT_STATE_NONE, TreyTransit_EventScript_ExitSailor @ TREY (4c)
 	goto_if_eq VAR_SS_TIDAL_STATE, SS_TIDAL_LAND_LILYCOVE, SSTidalCorridor_EventScript_ExitLilycove
 	goto_if_eq VAR_SS_TIDAL_STATE, SS_TIDAL_LAND_SLATEPORT, SSTidalCorridor_EventScript_ExitSlateport
 	msgbox SSTidalCorridor_Text_CanRestInCabin2, MSGBOX_DEFAULT

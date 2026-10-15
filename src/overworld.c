@@ -448,6 +448,8 @@ void Overworld_ResetBattleFlagsAndVars(void)
 static void Overworld_ResetStateAfterWhiteOut(void)
 {
     ResetInitialPlayerAvatarState();
+    VarSet(VAR_TREY_TRANSIT_TRIP, 0);  // TREY (4c): blacking out on board ends the trip
+    VarSet(VAR_TREY_TRANSIT_STATE, 0);
     FlagClear(FLAG_SYS_CYCLING_ROAD);
     FlagClear(FLAG_SYS_CRUISE_MODE);
     FlagClear(FLAG_SYS_SAFARI_MODE);

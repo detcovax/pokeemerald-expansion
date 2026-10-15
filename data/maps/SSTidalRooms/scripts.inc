@@ -23,7 +23,8 @@ SSTidalRooms_EventScript_Bed::
 	msgbox SSTidalRooms_Text_TakeRestOnBed, MSGBOX_DEFAULT
 	closemessage
 	call Common_EventScript_OutOfCenterPartyHeal
-	call SSTidalRooms_EventScript_ProgessCruiseAfterBed
+	call_if_ne VAR_TREY_TRANSIT_STATE, TRANSIT_STATE_NONE, TreyTransit_EventScript_BedRest @ TREY (4c)
+	call_if_eq VAR_TREY_TRANSIT_STATE, TRANSIT_STATE_NONE, SSTidalRooms_EventScript_ProgessCruiseAfterBed
 	releaseall
 	end
 

@@ -1684,7 +1684,11 @@
 #define FLAG_TREY_HM_UPDRAFT            (TREY_FLAG_HM_START + 15)
 #define TREY_FLAG_HM_END                (TREY_FLAG_HM_START + 15) // full
 
-#define TREY_FLAG_NEXT_FREE             (TREY_FLAG_HM_END + 1) // next unused TREY flag
+// Transit stops the player has visited (4c): one flag per TRANSIT_STOP_* (32 reserved).
+#define TREY_FLAG_TRANSIT_STOP_START    (TREY_FLAG_HM_END + 1)
+#define TREY_FLAG_TRANSIT_STOP_END      (TREY_FLAG_TRANSIT_STOP_START + 31)
+
+#define TREY_FLAG_NEXT_FREE             (TREY_FLAG_TRANSIT_STOP_END + 1) // next unused TREY flag
 
 #define FLAGS_COUNT (TREY_FLAGS_END + 1) // TREY: was (DAILY_FLAGS_END + 1)
 

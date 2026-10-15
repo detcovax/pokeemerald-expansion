@@ -196,6 +196,14 @@ $(DATA_SRC_SUBDIR)/trey/energy_overrides.h: docs/trey/species_energy.csv docs/tr
 
 $(C_BUILDDIR)/trey_energy.o: c_dep += $(DATA_SRC_SUBDIR)/trey/energy_overrides.h
 
+# TREY: wild encounters by season, time and weather (TREY_PLAN.md 5.11, 4b-2), generated from docs/trey/wild_encounters.csv
+AUTO_GEN_TARGETS += $(DATA_SRC_SUBDIR)/trey/wild_encounters_trey.h
+
+$(DATA_SRC_SUBDIR)/trey/wild_encounters_trey.h: docs/trey/wild_encounters.csv tools/trey/wild_csv.py
+	python3 tools/trey/wild_csv.py && touch $@
+
+$(C_BUILDDIR)/trey_wild.o: c_dep += $(DATA_SRC_SUBDIR)/trey/wild_encounters_trey.h
+
 PERL := perl
 SHA1 := $(shell { command -v sha1sum || command -v shasum; } 2>/dev/null) -c
 
