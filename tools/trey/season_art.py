@@ -19,11 +19,38 @@ import sys
 from PIL import Image
 
 SEASONS = ["spring", "summer", "autumn", "winter"]
-# Tilesets that get seasonal palettes: outdoor ones only.
-SEASONAL_TILESETS = {
-    "gTileset_General": "data/tilesets/primary/general",
-    "gTileset_Petalburg": "data/tilesets/secondary/petalburg",
-}
+OUTDOOR_MAP_TYPES = {"MAP_TYPE_TOWN", "MAP_TYPE_CITY", "MAP_TYPE_ROUTE", "MAP_TYPE_OCEAN_ROUTE"}
+
+
+def find_seasonal_tilesets():
+    """Every tileset used by an outdoor map (town, city, route, ocean route), with its folder."""
+    import json, re
+    groups = json.load(open("data/maps/map_groups.json", encoding="utf-8"))
+    layouts = {l["id"]: l for l in json.load(open("data/layouts/layouts.json", encoding="utf-8"))["layouts"] if "id" in l}
+    graphics = open("src/data/tilesets/graphics.h", encoding="utf-8").read() + open("src/graphics.c", encoding="utf-8").read()
+    names = set()
+    for g in groups["group_order"]:
+        for m in groups[g]:
+            path = f"data/maps/{m}/map.json"
+            if not os.path.exists(path):
+                continue
+            d = json.load(open(path, encoding="utf-8"))
+            lay = layouts.get(d.get("layout"))
+            if d.get("map_type") in OUTDOOR_MAP_TYPES and lay:
+                names.add(lay["primary_tileset"])
+                names.add(lay["secondary_tileset"])
+    out = {}
+    for name in sorted(names):
+        short = name.replace("gTileset_", "")
+        m = re.search(r'gTilesetTiles_%s\[\] = INCBIN_U32\("([^"]+)/tiles' % short, graphics)
+        if m and os.path.exists(f"{m.group(1)}/palettes/00.pal"):
+            out[name] = m.group(1)
+    return out
+
+
+# Tilesets that get seasonal palettes: every tileset an outdoor map uses (the recolours apply wherever
+# that tileset is drawn on an outdoor map; indoor and cave maps always show the base art).
+SEASONAL_TILESETS = find_seasonal_tilesets()
 PREVIEW_MAPS = {"Route101": ("data/layouts/Route101/map.bin", 20, 20, "gTileset_General", "gTileset_Petalburg")}
 NUM_PALS_IN_PRIMARY = 6
 NUM_PALS_TOTAL = 13

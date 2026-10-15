@@ -4,10 +4,12 @@
 #include "fieldmap.h"
 #include "overworld.h"
 #include "rtc.h"
+#include "constants/map_types.h"
 #include "trey_seasons.h"
 
 static EWRAM_DATA u8 sSeason = 0;
 static EWRAM_DATA u8 sForcedSeasonPlus1 = 0; // 0 = follow the calendar (EWRAM can only start at zero)
+static EWRAM_DATA bool8 sIndoorArt = FALSE;   // TRUE: this map shows the base art (indoors, caves, ...)
 
 static const u8 sText_Spring[] = _("SPRING");
 static const u8 sText_Summer[] = _("SUMMER");
@@ -28,6 +30,20 @@ const u8 *TreySeason_GetName(u8 season)
 void TreySeason_LockForMapLoad(void)
 {
     u32 month;
+
+    // Seasonal art only outdoors: the same tilesets also appear on a few cave and indoor maps.
+    switch (gMapHeader.mapType)
+    {
+    case MAP_TYPE_TOWN:
+    case MAP_TYPE_CITY:
+    case MAP_TYPE_ROUTE:
+    case MAP_TYPE_OCEAN_ROUTE:
+        sIndoorArt = FALSE;
+        break;
+    default:
+        sIndoorArt = TRUE;
+        break;
+    }
 
     if (sForcedSeasonPlus1 != 0)
     {
@@ -52,14 +68,14 @@ u8 TreySeason_DebugGetForced(void)
 
 const u32 *TreySeason_TilesetTiles(const struct Tileset *tileset)
 {
-    if (tileset->seasonal != NULL && tileset->seasonal[TreySeason_Get()].tiles != NULL)
+    if (!sIndoorArt && tileset->seasonal != NULL && tileset->seasonal[TreySeason_Get()].tiles != NULL)
         return tileset->seasonal[TreySeason_Get()].tiles;
     return tileset->tiles;
 }
 
 const u16 (*TreySeason_TilesetPalettes(const struct Tileset *tileset))[16]
 {
-    if (tileset->seasonal != NULL && tileset->seasonal[TreySeason_Get()].palettes != NULL)
+    if (!sIndoorArt && tileset->seasonal != NULL && tileset->seasonal[TreySeason_Get()].palettes != NULL)
         return tileset->seasonal[TreySeason_Get()].palettes;
     return tileset->palettes;
 }
