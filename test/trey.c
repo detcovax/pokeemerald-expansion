@@ -283,22 +283,31 @@ TEST("TREY Dex: discovery numbers follow the order Pokémon are first seen")
     TreyTest_ClearDex();
 }
 
-TEST("TREY Dex: the discovery list holds the whole roster")
+// The game's roster fitting TREY_DEX_ORDER_MAX (and 10 bits) is checked at build time by tools/trey/dex_lists.py:
+// test builds switch every species on, so they can't check it here.
+TEST("TREY Dex: the discovery list packs large National numbers and stops when full")
 {
-    u32 i, count = 0;
+    u32 i, natDex, count = 0;
     TreyTest_ClearDex();
-    for (i = NATIONAL_DEX_COUNT; i >= 1; i--) // backwards, so the 10-bit packing sees large numbers early
+    for (natDex = 1023; natDex >= 1 && count < TREY_DEX_ORDER_MAX; natDex--) // large numbers stress the 10-bit packing
     {
-        if (NationalPokedexNumToSpecies(i) != SPECIES_NONE)
-        {
-            EXPECT_LT(i, 1024); // must fit 10 bits
-            GetSetPokedexFlag(i, FLAG_SET_SEEN);
-            count++;
-            EXPECT_EQ(TreyDex_GetDiscoveryAt(count - 1), i);
-        }
+        if (NationalPokedexNumToSpecies(natDex) == SPECIES_NONE)
+            continue;
+        GetSetPokedexFlag(natDex, FLAG_SET_SEEN);
+        count++;
     }
-    EXPECT_LE(count, TREY_DEX_ORDER_MAX);
-    EXPECT_EQ(TreyDex_GetDiscoveryCount(), count);
+    EXPECT_EQ(count, TREY_DEX_ORDER_MAX);
+    EXPECT_EQ(TreyDex_GetDiscoveryCount(), TREY_DEX_ORDER_MAX);
+    for (i = 0, natDex = 1023; i < TREY_DEX_ORDER_MAX; natDex--)
+    {
+        if (NationalPokedexNumToSpecies(natDex) == SPECIES_NONE)
+            continue;
+        EXPECT_EQ(TreyDex_GetDiscoveryAt(i), natDex);
+        i++;
+    }
+    GetSetPokedexFlag(NATIONAL_DEX_BULBASAUR, FLAG_SET_SEEN); // list full: ignored, no overflow
+    EXPECT_EQ(TreyDex_GetDiscoveryCount(), TREY_DEX_ORDER_MAX);
+    EXPECT_EQ(TreyDex_GetDiscoveryNumber(NATIONAL_DEX_BULBASAUR), 0);
     TreyTest_ClearDex();
 }
 

@@ -145,7 +145,7 @@ void TreyDex_OnFirstSeen(u16 natDex)
             return;
         }
     }
-    // full: TREY_DEX_ORDER_MAX is too small for the roster (a test checks this)
+    // full: cannot happen in the game, tools/trey/dex_lists.py checks the roster fits TREY_DEX_ORDER_MAX
 }
 
 void TreyDex_Repair(void)

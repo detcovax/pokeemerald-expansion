@@ -207,7 +207,7 @@ $(C_BUILDDIR)/trey_wild.o: c_dep += $(DATA_SRC_SUBDIR)/trey/wild_encounters_trey
 # TREY: regional Pokédex membership (4d), generated from docs/trey/dex/*.txt
 AUTO_GEN_TARGETS += $(DATA_SRC_SUBDIR)/trey/dex_regions.h
 
-$(DATA_SRC_SUBDIR)/trey/dex_regions.h: $(wildcard docs/trey/dex/*.txt) tools/trey/dex_lists.py
+$(DATA_SRC_SUBDIR)/trey/dex_regions.h: $(wildcard docs/trey/dex/*.txt) tools/trey/dex_lists.py include/config/species_enabled.h include/constants/trey_dex.h
 	python3 tools/trey/dex_lists.py && touch $@
 
 $(C_BUILDDIR)/trey_dex.o: c_dep += $(DATA_SRC_SUBDIR)/trey/dex_regions.h

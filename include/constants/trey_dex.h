@@ -16,7 +16,7 @@
 
 // Discovery order (4d): every Pokémon gets the next number the first time it is SEEN. The list of
 // National numbers in that order lives at the end of the PC storage block, 10 bits per entry.
-// Must hold every Pokémon in the roster (checked by a test). 10 bits: National numbers up to 1023.
+// Must hold every Pokémon in the roster (checked at build time by tools/trey/dex_lists.py). 10 bits: National numbers up to 1023.
 #define TREY_DEX_ORDER_MAX      768
 #define TREY_DEX_ORDER_BYTES    ((TREY_DEX_ORDER_MAX * 10 + 7) / 8 + 1) // +1: entries are read 2 bytes at a time
 

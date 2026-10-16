@@ -24,6 +24,9 @@ import sys
 DEX_DIR = "docs/trey/dex"
 OUT = "src/data/trey/dex_regions.h"
 POKEDEX_H = "include/constants/pokedex.h"
+TREY_DEX_H = "include/constants/trey_dex.h"
+SPECIES_ENABLED = "include/config/species_enabled.h"
+SPECIES_INFO = "src/data/pokemon/species_info/gen_{}_families.h"
 # Must match include/constants/trey_dex.h
 REGIONS = [("kanto", "TREY_DEX_KANTO", True), ("orange", "TREY_DEX_ORANGE", False), ("johto", "TREY_DEX_JOHTO", True),
            ("hoenn", "TREY_DEX_HOENN", True), ("sinnoh", "TREY_DEX_SINNOH", True), ("kitakami", "TREY_DEX_KITAKAMI", True)]
@@ -36,6 +39,46 @@ def national_names():
     body = text[start:text.index("}", start)]
     names = re.findall(r"^\s*(NATIONAL_DEX_\w+)\s*,", body, re.M)
     return names  # index = national number
+
+
+def roster_national_numbers(names):
+    """National numbers of every species in the game's roster (families switched on in species_enabled.h).
+    Conditions nested inside a family (cross-gen evolutions, forms) count as on, so this can only overcount."""
+    defines = {}
+    with open(SPECIES_ENABLED, encoding="utf-8") as f:
+        for line in f:
+            m = re.match(r"#define\s+(P_\w+)\s+(\w+)", line)
+            if m:
+                defines[m.group(1)] = m.group(2)
+
+    def on(name, depth=0):
+        value = defines.get(name, "FALSE")
+        if value in ("TRUE", "FALSE"):
+            return value == "TRUE"
+        return depth < 4 and on(value, depth + 1)
+
+    index = {n: i for i, n in enumerate(names)}
+    found = set()
+    for gen in range(1, 10):
+        family = None
+        with open(SPECIES_INFO.format(gen), encoding="utf-8") as f:
+            for line in f:
+                m = re.match(r"#if\s+(P_FAMILY_\w+)\s*$", line)
+                if m:
+                    family = m.group(1)
+                    continue
+                if family and re.match(r"#endif\s*//\s*" + family + r"\b", line):
+                    family = None
+                    continue
+                m = re.search(r"\.natDexNum\s*=\s*(NATIONAL_DEX_\w+)", line)
+                if m and family and on(family) and m.group(1) in index:
+                    found.add(index[m.group(1)])
+    return found
+
+
+def order_max():
+    with open(TREY_DEX_H, encoding="utf-8") as f:
+        return int(re.search(r"#define\s+TREY_DEX_ORDER_MAX\s+(\d+)", f.read()).group(1))
 
 
 def main():
@@ -72,6 +115,14 @@ def main():
                 seen.add(num)
                 masks.setdefault(num, []).append(const)
         counts[const] = len(seen)
+    # The discovery list (10-bit National numbers, TREY_DEX_ORDER_MAX entries) must hold the whole roster.
+    roster = roster_national_numbers(names)
+    limit = order_max()
+    if len(roster) > limit:
+        errors.append(f"the roster has {len(roster)} Pokémon but TREY_DEX_ORDER_MAX is {limit}: raise it in {TREY_DEX_H}")
+    too_big = sorted(n for n in roster if n > 1023)
+    if too_big:
+        errors.append("National numbers above 1023 don't fit the 10-bit discovery list: " + ", ".join(names[n] for n in too_big))
     if errors:
         for e in errors:
             print("dex_lists.py: error: " + e)
@@ -93,7 +144,7 @@ def main():
     if not os.path.exists(OUT) or open(OUT, encoding="utf-8").read() != text:
         with open(OUT, "w", encoding="utf-8") as f:
             f.write(text)
-    print(f"dex_lists.py: {len(masks)} Pokémon in regional dexes -> {OUT}")
+    print(f"dex_lists.py: {len(masks)} Pokémon in regional dexes, roster {len(roster)}/{limit} -> {OUT}")
     return 0
 
 
