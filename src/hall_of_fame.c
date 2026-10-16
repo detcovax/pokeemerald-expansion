@@ -1125,7 +1125,7 @@ static void HallOfFame_PrintMonInfo(struct HallofFameMon *currMon, u8 unused1, u
         dexNumber = SpeciesToPokedexNum(currMon->species);
         if (dexNumber != 0xFFFF)
         {
-            if (IsNationalPokedexEnabled())
+            if (FALSE) // TREY (4d): discovery numbers have 3 digits
             {
                 stringPtr[0] = (dexNumber / 1000) + CHAR_0;
                 stringPtr++;

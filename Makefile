@@ -204,6 +204,14 @@ $(DATA_SRC_SUBDIR)/trey/wild_encounters_trey.h: docs/trey/wild_encounters.csv to
 
 $(C_BUILDDIR)/trey_wild.o: c_dep += $(DATA_SRC_SUBDIR)/trey/wild_encounters_trey.h
 
+# TREY: regional Pokédex membership (4d), generated from docs/trey/dex/*.txt
+AUTO_GEN_TARGETS += $(DATA_SRC_SUBDIR)/trey/dex_regions.h
+
+$(DATA_SRC_SUBDIR)/trey/dex_regions.h: $(wildcard docs/trey/dex/*.txt) tools/trey/dex_lists.py
+	python3 tools/trey/dex_lists.py && touch $@
+
+$(C_BUILDDIR)/trey_dex.o: c_dep += $(DATA_SRC_SUBDIR)/trey/dex_regions.h
+
 PERL := perl
 SHA1 := $(shell { command -v sha1sum || command -v shasum; } 2>/dev/null) -c
 

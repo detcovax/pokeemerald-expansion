@@ -1688,7 +1688,22 @@
 #define TREY_FLAG_TRANSIT_STOP_START    (TREY_FLAG_HM_END + 1)
 #define TREY_FLAG_TRANSIT_STOP_END      (TREY_FLAG_TRANSIT_STOP_START + 31)
 
-#define TREY_FLAG_NEXT_FREE             (TREY_FLAG_TRANSIT_STOP_END + 1) // next unused TREY flag
+// Regional Pokédexes (4d): one flag per TREY_DEX_* (include/constants/trey_dex.h). The National dex needs none.
+// Set by the professor of each region (special TreyDex_UnlockFromVar or setflag).
+#define TREY_FLAG_DEX_UNLOCK_START      (TREY_FLAG_TRANSIT_STOP_END + 1)
+#define FLAG_TREY_DEX_KANTO             (TREY_FLAG_DEX_UNLOCK_START + 1)
+#define FLAG_TREY_DEX_ORANGE            (TREY_FLAG_DEX_UNLOCK_START + 2)
+#define FLAG_TREY_DEX_JOHTO             (TREY_FLAG_DEX_UNLOCK_START + 3)
+#define FLAG_TREY_DEX_HOENN             (TREY_FLAG_DEX_UNLOCK_START + 4)
+#define FLAG_TREY_DEX_SINNOH            (TREY_FLAG_DEX_UNLOCK_START + 5)
+#define FLAG_TREY_DEX_KITAKAMI          (TREY_FLAG_DEX_UNLOCK_START + 6)
+#define TREY_FLAG_DEX_UNLOCK_END        (TREY_FLAG_DEX_UNLOCK_START + 7)
+// First arrival in each region (4d), same index (TREY_DEX_*). Set by TreyRegions_OnMapEnter; the first time,
+// the region's arrival script runs (src/trey_dex.c, sArrivalScripts).
+#define TREY_FLAG_REGION_ARRIVED_START  (TREY_FLAG_DEX_UNLOCK_END + 1)
+#define TREY_FLAG_REGION_ARRIVED_END    (TREY_FLAG_REGION_ARRIVED_START + 7)
+
+#define TREY_FLAG_NEXT_FREE             (TREY_FLAG_REGION_ARRIVED_END + 1) // next unused TREY flag
 
 #define FLAGS_COUNT (TREY_FLAGS_END + 1) // TREY: was (DAILY_FLAGS_END + 1)
 

@@ -577,6 +577,7 @@ gSpecials::
 	def_special TreyTransit_ArriveNow
 	def_special TreyTransit_BufferDestinationName
 	def_special TreyTransit_WarpToDestination
+	def_special TreyDex_UnlockFromVar
 	def_special TreySky_CheckWhirlwindPath
 	def_special TreySky_StartWhirlwindRide
 	def_special TreyRockClimb_Start

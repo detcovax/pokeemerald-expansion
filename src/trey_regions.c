@@ -4,6 +4,7 @@
 #include "event_data.h"
 #include "region_map.h"
 #include "trey_regions.h"
+#include "trey_dex.h"
 #include "constants/flags.h"
 #include "constants/region_map_sections.h"
 
@@ -32,6 +33,7 @@ void TreyRegions_OnMapEnter(void)
         for (page = 0; page < TREY_REGION_MAP_COUNT; page++)
             FlagSet(FLAG_TREY_VISITED_MAP_PAGE_START + page);
     }
+    TreyDex_OnMapEnter(); // 4d: first arrival in a region
 }
 
 u32 TreyGetRegionMapPageOfMapsec(u16 mapSec)

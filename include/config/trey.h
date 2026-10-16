@@ -15,7 +15,7 @@
 // A save is only loaded if its header matches these two values.
 // Bump TREY_SAVE_VERSION on ANY change to a save structure.
 #define TREY_SAVE_MAGIC    0x59455254 // "TREY"
-#define TREY_SAVE_VERSION  3 // 2: 10-bit met location + Orange variant bit (Phase 1b). 3: Energy replaces PP storage (E1)
+#define TREY_SAVE_VERSION  4 // 2: 10-bit met location + Orange variant bit (Phase 1b). 3: Energy replaces PP storage (E1). 4: Pokédex discovery order (4d)
 
 // Reserved bytes at the end of each save block. New save data is carved out of these.
 #define TREY_SB1_RESERVED  512
@@ -67,6 +67,9 @@
 // Debug (4c): you hold the S.S. Ticket and every transit stop counts as visited, so the ferries can be tested
 // before the Kanto story exists. Set to 0 for real play.
 #define TREY_DEBUG_ALL_TRANSIT          1
+// Debug (4d): every regional Pokédex is unlocked when a new game starts, without meeting the professors.
+// Set to 0 for real play.
+#define TREY_DEBUG_ALL_DEXES            1
 
 // ---------------------------------------------------------------------------
 // Energy, replaces PP (TREY_PLAN.md 5.6, D23)

@@ -1,4 +1,5 @@
 #include "global.h"
+#include "trey_dex.h" // TREY (4d)
 #include "trey_hm.h" // TREY
 #include "trey_energy.h" // TREY
 #include "trey_regional.h" // TREY
@@ -5842,6 +5843,11 @@ u8 GetNumberOfRelearnableMoves(struct Pokemon *mon)
 
 u16 SpeciesToPokedexNum(u16 species)
 {
+    // TREY (4d): the number shown everywhere is the player's discovery number. 0xFFFF = not discovered.
+    {
+        u16 discovery = TreyDex_GetDiscoveryNumber(SpeciesToNationalPokedexNum(species));
+        return discovery != 0 ? discovery : 0xFFFF;
+    }
     if (IsNationalPokedexEnabled())
     {
         return SpeciesToNationalPokedexNum(species);

@@ -23,6 +23,7 @@
 #include "party_menu.h"
 #include "pokedex.h"
 #include "pokedex_plus_hgss.h"
+#include "trey_dex.h" // TREY (4d)
 #include "pokedex_area_screen.h"
 #include "pokedex_cry_screen.h"
 #include "pokemon_icon.h"
@@ -397,6 +398,11 @@ struct PokedexView
     u16 dexModeBackup;
     u16 dexOrder;
     u16 dexOrderBackup;
+    u8 treyDex;                       // TREY (4d): TREY_DEX_* shown in the main list
+    bool8 treyMenuPending;            // TREY (4d): show the region menu once the list has loaded
+    u8 treyMenuCursor;
+    u8 treyMenuCount;
+    u8 treyMenuDexes[TREY_DEX_COUNT]; // unlocked dexes, in menu order
     u16 seenCount;
     u16 ownCount;
     u16 monSpriteIds[MAX_MONS_ON_SCREEN];
@@ -454,6 +460,11 @@ static void Task_OpenInfoScreenAfterMonMovement(u8);
 static void Task_WaitForExitInfoScreen(u8);
 static void Task_WaitForExitSearch(u8);
 static void Task_ClosePokedex(u8);
+static void TreyDexMenu_Init(void);
+static void TreyDexMenu_Open(u8 taskId);
+static void TreyDexMenu_PrintLabel(void);
+static void Task_TreyDexMenu(u8 taskId);
+static void Task_TreyDexMenu_Reload(u8 taskId);
 static void Task_OpenSearchResults(u8);
 static void Task_HandleSearchResultsInput(u8);
 static void Task_WaitForSearchResultsScroll(u8);
@@ -1214,6 +1225,12 @@ static const struct BgTemplate sPokedex_BgTemplate[] =
     }
 };
 
+// TREY (4d): windows 1 and 2 sit on BG0 (char base 0, after the 208 menu tiles; rows 0-19 of BG0
+// are free, the start menu tilemap starts at row 20).
+#define TREY_WIN_DEX_LABEL      1
+#define TREY_WIN_DEX_MENU       2
+#define TREY_DEX_MENU_FRAME_TILE 0x1D0
+#define TREY_DEX_MENU_FRAME_PAL 14
 static const struct WindowTemplate sPokemonList_WindowTemplate[] =
 {
     {
@@ -1224,6 +1241,24 @@ static const struct WindowTemplate sPokemonList_WindowTemplate[] =
         .height = 32,
         .paletteNum = 0,
         .baseBlock = 1,
+    },
+    [TREY_WIN_DEX_LABEL] = { // name of the selected dex, above its seen/own counts
+        .bg = 0,
+        .tilemapLeft = 23,
+        .tilemapTop = 1,
+        .width = 7,
+        .height = 2,
+        .paletteNum = 15,
+        .baseBlock = 0x100,
+    },
+    [TREY_WIN_DEX_MENU] = { // region menu (7 rows)
+        .bg = 0,
+        .tilemapLeft = 2,
+        .tilemapTop = 2,
+        .width = 13,
+        .height = 14,
+        .paletteNum = 15,
+        .baseBlock = 0x110,
     },
     DUMMY_WIN_TEMPLATE
 };
@@ -1831,7 +1866,7 @@ static const u8 sSearchMovementMap_ShiftHoennDex[SEARCH_COUNT][4] =
 
 static const struct SearchOptionText sDexModeOptions[] =
 {
-    [DEX_MODE_HOENN]    = {gText_DexHoennDescription, gText_DexHoennTitle},
+    [DEX_MODE_HOENN]    = {COMPOUND_STRING("The regional POKéDEX you picked"), COMPOUND_STRING("REGIONAL DEX")}, // TREY (4d)
     [DEX_MODE_NATIONAL] = {gText_DexNatDescription,   gText_DexNatTitle},
     {},
 };
@@ -2040,6 +2075,8 @@ void CB2_OpenPokedexPlusHGSS(void)
         sPokedexView->dexMode = gSaveBlock2Ptr->pokedex.mode;
         if (!IsNationalPokedexEnabled())
             sPokedexView->dexMode = DEX_MODE_HOENN;
+        TreyDex_Repair();
+        TreyDexMenu_Init();
         sPokedexView->dexOrder = gSaveBlock2Ptr->pokedex.order;
         sPokedexView->selectedPokemon = sLastSelectedPokemon;
         sPokedexView->pokeBallRotation = sPokeBallRotation;
@@ -2140,7 +2177,14 @@ static void Task_OpenPokedexMainPage(u8 taskId)
     sPokedexView->sEvoScreenData.fromEvoPage = FALSE;
     sPokedexView->formSpecies = 0;
     if (LoadPokedexListPage(PAGE_MAIN))
+    {
         gTasks[taskId].func = Task_HandlePokedexInput;
+        if (sPokedexView->treyMenuPending)
+        {
+            sPokedexView->treyMenuPending = FALSE;
+            TreyDexMenu_Open(taskId);
+        }
+    }
 }
 
 #define tLoadScreenTaskId data[0]
@@ -2193,6 +2237,12 @@ static void Task_HandlePokedexInput(u8 taskId)
             gTasks[taskId].func = Task_WaitForExitSearch;
             PlaySE(SE_PC_LOGIN);
             FreeWindowAndBgBuffers();
+        }
+        else if (JOY_NEW(B_BUTTON) && sPokedexView->treyMenuCount > 1)
+        {
+            // TREY (4d): back to the region menu
+            PlaySE(SE_SELECT);
+            TreyDexMenu_Open(taskId);
         }
         else if (JOY_NEW(B_BUTTON))
         {
@@ -2318,12 +2368,163 @@ static void Task_ClosePokedex(u8 taskId)
         if (!IsNationalPokedexEnabled())
             gSaveBlock2Ptr->pokedex.mode = DEX_MODE_HOENN;
         gSaveBlock2Ptr->pokedex.order = sPokedexView->dexOrder;
+        VarSet(VAR_TREY_DEX_LAST, sPokedexView->treyDex); // TREY (4d)
         ClearMonSprites();
         FreeWindowAndBgBuffers();
         DestroyTask(taskId);
         SetMainCallback2(CB2_ReturnToFieldWithOpenMenu);
         m4aMPlayVolumeControl(&gMPlayInfo_BGM, TRACKS_ALL, 0x100);
         Free(sPokedexView);
+    }
+}
+
+//************************************
+//*                                  *
+//*    TREY (4d): region menu        *
+//*                                  *
+//************************************
+// A menu before the list with every unlocked dex (National always). The dex of the region you are in
+// is selected first. B in the list comes back here; B here closes the Pokédex.
+
+static void TreyDexMenu_SetDex(u32 dex)
+{
+    sPokedexView->treyDex = dex;
+    sPokedexView->dexMode = (dex == TREY_DEX_NATIONAL) ? DEX_MODE_NATIONAL : DEX_MODE_HOENN;
+}
+
+static void TreyDexMenu_Init(void)
+{
+    u32 dex, current, i;
+
+    sPokedexView->treyMenuCount = 0;
+    for (dex = 0; dex < TREY_DEX_COUNT; dex++)
+    {
+        if (TreyDex_IsUnlocked(dex))
+            sPokedexView->treyMenuDexes[sPokedexView->treyMenuCount++] = dex;
+    }
+
+    current = TreyDex_GetCurrentRegionDex();
+    if (!TreyDex_IsUnlocked(current))
+    {
+        current = VarGet(VAR_TREY_DEX_LAST);
+        if (!TreyDex_IsUnlocked(current))
+            current = TREY_DEX_NATIONAL;
+    }
+    if (current != VarGet(VAR_TREY_DEX_LAST))
+    {
+        sLastSelectedPokemon = 0; // different dex: start at the top
+        sPokeBallRotation = POKEBALL_ROTATION_TOP;
+    }
+    TreyDexMenu_SetDex(current);
+
+    sPokedexView->treyMenuCursor = 0;
+    for (i = 0; i < sPokedexView->treyMenuCount; i++)
+    {
+        if (sPokedexView->treyMenuDexes[i] == current)
+            sPokedexView->treyMenuCursor = i;
+    }
+    sPokedexView->treyMenuPending = (sPokedexView->treyMenuCount > 1);
+}
+
+static void TreyDexMenu_PrintLabel(void)
+{
+    static const u8 color[3] = {TEXT_COLOR_TRANSPARENT, TEXT_COLOR_DARK_GRAY, TEXT_COLOR_LIGHT_GRAY};
+    const u8 *name = TreyDex_GetName(sPokedexView->treyDex);
+
+    FillWindowPixelBuffer(TREY_WIN_DEX_LABEL, PIXEL_FILL(0));
+    AddTextPrinterParameterized4(TREY_WIN_DEX_LABEL, FONT_SMALL, GetStringCenterAlignXOffset(FONT_SMALL, name, 7 * 8), 2, 0, 0, color, TEXT_SKIP_DRAW, name);
+    PutWindowTilemap(TREY_WIN_DEX_LABEL);
+    CopyWindowToVram(TREY_WIN_DEX_LABEL, COPYWIN_FULL);
+    CopyBgTilemapBufferToVram(0);
+}
+
+static void TreyDexMenu_Draw(void)
+{
+    static const u8 color[3] = {TEXT_COLOR_WHITE, TEXT_COLOR_DARK_GRAY, TEXT_COLOR_LIGHT_GRAY};
+    u8 count[8];
+    u32 i;
+
+    FillWindowPixelBuffer(TREY_WIN_DEX_MENU, PIXEL_FILL(1));
+    for (i = 0; i < sPokedexView->treyMenuCount; i++)
+    {
+        u32 dex = sPokedexView->treyMenuDexes[i];
+        if (i == sPokedexView->treyMenuCursor)
+            AddTextPrinterParameterized4(TREY_WIN_DEX_MENU, FONT_NORMAL, 0, i * 16, 0, 0, color, TEXT_SKIP_DRAW, gText_SelectorArrow3);
+        AddTextPrinterParameterized4(TREY_WIN_DEX_MENU, FONT_NORMAL, 8, i * 16, 0, 0, color, TEXT_SKIP_DRAW, TreyDex_GetName(dex));
+        ConvertIntToDecimalStringN(count, TreyDex_CountSeen(dex), STR_CONV_MODE_LEFT_ALIGN, 3);
+        AddTextPrinterParameterized4(TREY_WIN_DEX_MENU, FONT_NORMAL, 13 * 8 - GetStringWidth(FONT_NORMAL, count, 0) - 2, i * 16, 0, 0, color, TEXT_SKIP_DRAW, count);
+    }
+    PutWindowTilemap(TREY_WIN_DEX_MENU);
+    CopyWindowToVram(TREY_WIN_DEX_MENU, COPYWIN_FULL);
+    CopyBgTilemapBufferToVram(0);
+}
+
+static void TreyDexMenu_Open(u8 taskId)
+{
+    TryDestroyStatBars();
+    LoadUserWindowBorderGfx(TREY_WIN_DEX_MENU, TREY_DEX_MENU_FRAME_TILE, BG_PLTT_ID(TREY_DEX_MENU_FRAME_PAL));
+    DrawStdFrameWithCustomTileAndPalette(TREY_WIN_DEX_MENU, FALSE, TREY_DEX_MENU_FRAME_TILE, TREY_DEX_MENU_FRAME_PAL);
+    TreyDexMenu_Draw();
+    gTasks[taskId].func = Task_TreyDexMenu;
+}
+
+static void TreyDexMenu_Close(void)
+{
+    ClearStdWindowAndFrameToTransparent(TREY_WIN_DEX_MENU, FALSE);
+    ClearWindowTilemap(TREY_WIN_DEX_MENU);
+    CopyBgTilemapBufferToVram(0);
+}
+
+static void Task_TreyDexMenu(u8 taskId)
+{
+    u32 count = sPokedexView->treyMenuCount;
+
+    if (JOY_NEW(A_BUTTON))
+    {
+        u32 dex = sPokedexView->treyMenuDexes[sPokedexView->treyMenuCursor];
+        PlaySE(SE_PIN);
+        if (dex == sPokedexView->treyDex)
+        {
+            TreyDexMenu_Close();
+            CreateStatBars(&sPokedexView->pokedexList[sPokedexView->selectedPokemon]);
+            gTasks[taskId].func = Task_HandlePokedexInput;
+        }
+        else
+        {
+            TreyDexMenu_SetDex(dex);
+            sPokedexView->selectedPokemon = 0;
+            sPokedexView->pokeBallRotation = POKEBALL_ROTATION_TOP;
+            BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 0x10, RGB_BLACK);
+            gTasks[taskId].func = Task_TreyDexMenu_Reload;
+        }
+    }
+    else if (JOY_NEW(B_BUTTON))
+    {
+        BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 0x10, RGB_BLACK);
+        gTasks[taskId].func = Task_ClosePokedex;
+        PlaySE(SE_PC_OFF);
+    }
+    else if (JOY_REPEAT(DPAD_UP) && count > 1)
+    {
+        sPokedexView->treyMenuCursor = (sPokedexView->treyMenuCursor == 0) ? count - 1 : sPokedexView->treyMenuCursor - 1;
+        PlaySE(SE_SELECT);
+        TreyDexMenu_Draw();
+    }
+    else if (JOY_REPEAT(DPAD_DOWN) && count > 1)
+    {
+        sPokedexView->treyMenuCursor = (sPokedexView->treyMenuCursor + 1 >= count) ? 0 : sPokedexView->treyMenuCursor + 1;
+        PlaySE(SE_SELECT);
+        TreyDexMenu_Draw();
+    }
+}
+
+static void Task_TreyDexMenu_Reload(u8 taskId)
+{
+    if (!gPaletteFade.active)
+    {
+        ClearMonSprites();
+        FreeWindowAndBgBuffers();
+        gTasks[taskId].func = Task_OpenPokedexMainPage;
     }
 }
 
@@ -2469,142 +2670,62 @@ static bool8 LoadPokedexListPage(u8 page)
     return FALSE;
 }
 
+// TREY (4d): every list is in DISCOVERY order and numbered by discovery (the "numerical" order).
+// DEX_MODE_HOENN means "the regional dex picked in the region menu" (sPokedexView->treyDex);
+// DEX_MODE_NATIONAL is every Pokémon. The other orders (search) keep working, filtered the same way.
+static void AddToList(u16 dexNum, bool32 seen, bool32 owned)
+{
+    struct PokedexListItem *item = &sPokedexView->pokedexList[sPokedexView->pokemonListCount++];
+    item->dexNum = dexNum;
+    item->seen = seen;
+    item->owned = owned;
+}
+
 static void CreatePokedexList(u8 dexMode, u8 order)
 {
-    u16 vars[3]; //I have no idea why three regular variables are stored in an array, but whatever.
-#define temp_dexCount   vars[0]
-#define temp_isHoennDex vars[1]
-#define temp_dexNum     vars[2]
-    s16 i;
+    u32 filterDex = (dexMode == DEX_MODE_HOENN) ? sPokedexView->treyDex : TREY_DEX_NATIONAL;
+    s32 i;
+    u16 dexNum;
 
     sPokedexView->pokemonListCount = 0;
 
-    switch (dexMode)
+    switch (order)
     {
     default:
-    case DEX_MODE_HOENN:
-        temp_dexCount = HOENN_DEX_COUNT;
-        temp_isHoennDex = TRUE;
-        break;
-    case DEX_MODE_NATIONAL:
-        if (IsNationalPokedexEnabled())
+    case ORDER_NUMERICAL:
+    {
+        u32 count = TreyDex_GetDiscoveryCount();
+        for (i = 0; i < (s32)count && sPokedexView->pokemonListCount < NATIONAL_DEX_COUNT; i++)
         {
-            temp_dexCount = NATIONAL_DEX_COUNT;
-            temp_isHoennDex = FALSE;
-        }
-        else
-        {
-            temp_dexCount = HOENN_DEX_COUNT;
-            temp_isHoennDex = TRUE;
+            dexNum = TreyDex_GetDiscoveryAt(i);
+            if (TreyDex_IsInDex(filterDex, dexNum))
+                AddToList(dexNum, TRUE, GetSetPokedexFlag(dexNum, FLAG_GET_CAUGHT));
         }
         break;
     }
-
-    switch (order)
-    {
-    case ORDER_NUMERICAL:
-        if (temp_isHoennDex)
-        {
-            for (i = 0; i < temp_dexCount; i++)
-            {
-                temp_dexNum = HoennToNationalOrder(i + 1);
-                sPokedexView->pokedexList[i].dexNum = temp_dexNum;
-                sPokedexView->pokedexList[i].seen = GetSetPokedexFlag(temp_dexNum, FLAG_GET_SEEN);
-                sPokedexView->pokedexList[i].owned = GetSetPokedexFlag(temp_dexNum, FLAG_GET_CAUGHT);
-                if (sPokedexView->pokedexList[i].seen)
-                    sPokedexView->pokemonListCount = i + 1;
-            }
-        }
-        else
-        {
-            s16 r5, r10;
-            for (i = 0, r5 = 0, r10 = 0; i < temp_dexCount; i++)
-            {
-                temp_dexNum = i + 1;
-                if (GetSetPokedexFlag(temp_dexNum, FLAG_GET_SEEN))
-                    r10 = 1;
-                if (r10)
-                {
-                    sPokedexView->pokedexList[r5].dexNum = temp_dexNum;
-                    sPokedexView->pokedexList[r5].seen = GetSetPokedexFlag(temp_dexNum, FLAG_GET_SEEN);
-                    sPokedexView->pokedexList[r5].owned = GetSetPokedexFlag(temp_dexNum, FLAG_GET_CAUGHT);
-                    if (sPokedexView->pokedexList[r5].seen)
-                        sPokedexView->pokemonListCount = r5 + 1;
-                    r5++;
-                }
-            }
-        }
-        break;
     case ORDER_ALPHABETICAL:
         for (i = 0; i < NATIONAL_DEX_COUNT; i++)
         {
-            temp_dexNum = gPokedexOrder_Alphabetical[i];
-
-            if ((!temp_isHoennDex || NationalToHoennOrder(temp_dexNum) != 0) && GetSetPokedexFlag(temp_dexNum, FLAG_GET_SEEN))
-            {
-                sPokedexView->pokedexList[sPokedexView->pokemonListCount].dexNum = temp_dexNum;
-                sPokedexView->pokedexList[sPokedexView->pokemonListCount].seen = TRUE;
-                sPokedexView->pokedexList[sPokedexView->pokemonListCount].owned = GetSetPokedexFlag(temp_dexNum, FLAG_GET_CAUGHT);
-                sPokedexView->pokemonListCount++;
-            }
+            dexNum = gPokedexOrder_Alphabetical[i];
+            if (TreyDex_IsInDex(filterDex, dexNum) && GetSetPokedexFlag(dexNum, FLAG_GET_SEEN))
+                AddToList(dexNum, TRUE, GetSetPokedexFlag(dexNum, FLAG_GET_CAUGHT));
         }
         break;
     case ORDER_HEAVIEST:
-        for (i = NATIONAL_DEX_COUNT - 1; i >= 0; i--)
-        {
-            temp_dexNum = gPokedexOrder_Weight[i];
-
-            if ((!temp_isHoennDex || NationalToHoennOrder(temp_dexNum) != 0) && GetSetPokedexFlag(temp_dexNum, FLAG_GET_CAUGHT))
-            {
-                sPokedexView->pokedexList[sPokedexView->pokemonListCount].dexNum = temp_dexNum;
-                sPokedexView->pokedexList[sPokedexView->pokemonListCount].seen = TRUE;
-                sPokedexView->pokedexList[sPokedexView->pokemonListCount].owned = TRUE;
-                sPokedexView->pokemonListCount++;
-            }
-        }
-        break;
     case ORDER_LIGHTEST:
-        for (i = 0; i < NATIONAL_DEX_COUNT; i++)
-        {
-            temp_dexNum = gPokedexOrder_Weight[i];
-
-            if ((!temp_isHoennDex || NationalToHoennOrder(temp_dexNum) != 0) && GetSetPokedexFlag(temp_dexNum, FLAG_GET_CAUGHT))
-            {
-                sPokedexView->pokedexList[sPokedexView->pokemonListCount].dexNum = temp_dexNum;
-                sPokedexView->pokedexList[sPokedexView->pokemonListCount].seen = TRUE;
-                sPokedexView->pokedexList[sPokedexView->pokemonListCount].owned = TRUE;
-                sPokedexView->pokemonListCount++;
-            }
-        }
-        break;
     case ORDER_TALLEST:
-        for (i = NATIONAL_DEX_COUNT - 1; i >= 0; i--)
-        {
-            temp_dexNum = gPokedexOrder_Height[i];
-
-            if ((!temp_isHoennDex || NationalToHoennOrder(temp_dexNum) != 0) && GetSetPokedexFlag(temp_dexNum, FLAG_GET_CAUGHT))
-            {
-                sPokedexView->pokedexList[sPokedexView->pokemonListCount].dexNum = temp_dexNum;
-                sPokedexView->pokedexList[sPokedexView->pokemonListCount].seen = TRUE;
-                sPokedexView->pokedexList[sPokedexView->pokemonListCount].owned = TRUE;
-                sPokedexView->pokemonListCount++;
-            }
-        }
-        break;
     case ORDER_SMALLEST:
+    {
+        const u16 *table = (order == ORDER_HEAVIEST || order == ORDER_LIGHTEST) ? gPokedexOrder_Weight : gPokedexOrder_Height;
+        bool32 reverse = (order == ORDER_HEAVIEST || order == ORDER_TALLEST);
         for (i = 0; i < NATIONAL_DEX_COUNT; i++)
         {
-            temp_dexNum = gPokedexOrder_Height[i];
-
-            if ((!temp_isHoennDex || NationalToHoennOrder(temp_dexNum) != 0) && GetSetPokedexFlag(temp_dexNum, FLAG_GET_CAUGHT))
-            {
-                sPokedexView->pokedexList[sPokedexView->pokemonListCount].dexNum = temp_dexNum;
-                sPokedexView->pokedexList[sPokedexView->pokemonListCount].seen = TRUE;
-                sPokedexView->pokedexList[sPokedexView->pokemonListCount].owned = TRUE;
-                sPokedexView->pokemonListCount++;
-            }
+            dexNum = table[reverse ? NATIONAL_DEX_COUNT - 1 - i : i];
+            if (TreyDex_IsInDex(filterDex, dexNum) && GetSetPokedexFlag(dexNum, FLAG_GET_CAUGHT))
+                AddToList(dexNum, TRUE, TRUE);
         }
         break;
+    }
     }
 
     for (i = sPokedexView->pokemonListCount; i < NATIONAL_DEX_COUNT; i++)
@@ -2729,11 +2850,9 @@ static void CreateMonDexNum(u16 entryNum, u8 left, u8 top, u16 unused)
     u8 text[5];
     u16 dexNum, offset = 0;
 
-    dexNum = sPokedexView->pokedexList[entryNum].dexNum;
-    if (sPokedexView->dexMode == DEX_MODE_HOENN)
-        dexNum = NationalToHoennOrder(dexNum);
+    dexNum = TreyDex_GetDiscoveryNumber(sPokedexView->pokedexList[entryNum].dexNum); // TREY (4d)
     memcpy(text, sText_No0000, ARRAY_COUNT(sText_No0000));
-    if (NATIONAL_DEX_COUNT > 999 && sPokedexView->dexMode != DEX_MODE_HOENN)
+    if (FALSE) // TREY (4d): discovery numbers have 3 digits
     {
         text[0] = CHAR_0 + dexNum / 1000;
         offset++;
@@ -3170,8 +3289,10 @@ static void CreateInterfaceSprites(u8 page)
         u8 counterX100s  = counterX10s - counterXDist;
         u8 counterX1000s = counterX100s - counterXDist;
 
-        // Hoenn text
-        CreateSprite(&sHoennNationalTextSpriteTemplate, LIST_RIGHT_SIDE_TEXT_X, 40 - LIST_RIGHT_SIDE_TEXT_Y_OFFSET - 6, 1);
+        // Hoenn text. TREY (4d): the selected dex instead, printed in a window
+        spriteId = CreateSprite(&sHoennNationalTextSpriteTemplate, LIST_RIGHT_SIDE_TEXT_X, 40 - LIST_RIGHT_SIDE_TEXT_Y_OFFSET - 6, 1);
+        gSprites[spriteId].invisible = TRUE;
+        TreyDexMenu_PrintLabel();
         // Hoenn seen
         CreateSprite(&sSeenOwnTextSpriteTemplate, LIST_RIGHT_SIDE_TEXT_X, 45 - LIST_RIGHT_SIDE_TEXT_Y_OFFSET + 6, 1);
         // Hoenn own
@@ -3188,7 +3309,7 @@ static void CreateInterfaceSprites(u8 page)
         StartSpriteAnim(&gSprites[spriteId], 1);
 
         // Hoenn seen value - 100s
-        seenOwnedCount = GetHoennPokedexCount(FLAG_GET_SEEN);
+        seenOwnedCount = TreyDex_CountSeen(sPokedexView->treyDex); // TREY (4d)
         drawNextDigit = FALSE;
         spriteId = CreateSprite(&sNationalDexSeenOwnNumberSpriteTemplate, counterX100s, 45 - LIST_RIGHT_SIDE_TEXT_Y_OFFSET, 1);
         digitNum = seenOwnedCount / 100;
@@ -3211,7 +3332,7 @@ static void CreateInterfaceSprites(u8 page)
         digitNum = (seenOwnedCount % 100) % 10;
         StartSpriteAnim(&gSprites[spriteId], digitNum);
 
-        seenOwnedCount = GetHoennPokedexCount(FLAG_GET_CAUGHT);
+        seenOwnedCount = TreyDex_CountCaught(sPokedexView->treyDex); // TREY (4d)
         // Hoenn owned value - 100s
         drawNextDigit = FALSE;
         spriteId = CreateSprite(&sNationalDexSeenOwnNumberSpriteTemplate, counterX100s, 55 - LIST_RIGHT_SIDE_TEXT_Y_OFFSET, 1);
@@ -4397,12 +4518,9 @@ static void PrintMonInfo(u32 num, u32 value, u32 owned, u32 newEntry)
     const u8 *name;
     const u8 *category;
     const u8 *description;
-    u8 digitCount = (NATIONAL_DEX_COUNT > 999 && value != 0) ? 4 : 3;
+    u8 digitCount = 3; // TREY (4d): discovery numbers
 
-    if (value == 0)
-        value = NationalToHoennOrder(num);
-    else
-        value = num;
+    value = TreyDex_GetDiscoveryNumber(num);
     ConvertIntToDecimalStringN(StringCopy(str, gText_NumberClear01), value, STR_CONV_MODE_LEADING_ZEROS, digitCount);
     PrintInfoScreenTextWhite(str, 123, 17);
     species = NationalPokedexNumToSpeciesHGSS(num);
@@ -5364,11 +5482,8 @@ static void PrintStatsScreen_NameGender(u8 taskId, u32 num, u32 value)
     PrintStatsScreenTextSmall(WIN_STATS_NAME_GENDER, GetSpeciesName(species), base_x, base_y);
 
     //Number
-    if (value == 0)
-        value = NationalToHoennOrder(num);
-    else
-        value = num;
-    ConvertIntToDecimalStringN(StringCopy(str, gText_NumberClear01), value, STR_CONV_MODE_LEADING_ZEROS, 4);
+    value = TreyDex_GetDiscoveryNumber(num); // TREY (4d)
+    ConvertIntToDecimalStringN(StringCopy(str, gText_NumberClear01), value, STR_CONV_MODE_LEADING_ZEROS, 3);
     PrintStatsScreenTextSmall(WIN_STATS_NAME_GENDER, str, base_x, base_y + 10);
 
     //Gender ratio //MON_GENDERLESS == 0xFF

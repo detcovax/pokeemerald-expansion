@@ -50,6 +50,7 @@
 #include "difficulty.h"
 #include "follower_npc.h"
 #include "trey_save.h" // TREY
+#include "trey_dex.h" // TREY (4d)
 
 extern const u8 EventScript_ResetAllMapFlags[];
 
@@ -175,6 +176,7 @@ void NewGameInitData(void)
     ClearPokedexFlags();
     InitEventData();
     TreyHM_DebugUnlockAll(); // TREY: only if TREY_DEBUG_UNLOCK_ALL_HMS
+    TreyDex_InitNewGame();   // TREY (4d): National dex on, discovery list cleared, debug dex unlocks
     ClearTVShowData();
     ResetGabbyAndTy();
     ClearSecretBases();

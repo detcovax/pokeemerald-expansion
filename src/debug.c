@@ -9,6 +9,7 @@
 //AND OTHER RHH POKEEMERALD-EXPANSION CONTRIBUTORS
 #include "global.h"
 #include "trey_seasons.h" // TREY (4b)
+#include "trey_dex.h" // TREY (4d)
 #include "field_player_avatar.h"
 #include "fieldmap.h"
 #include "battle.h"
@@ -2719,6 +2720,7 @@ static void DebugAction_FlagsVars_PokedexFlags_Reset(u8 taskId)
     // Reset Pokedex to emtpy
     memset(&gSaveBlock1Ptr->dexCaught, 0, sizeof(gSaveBlock1Ptr->dexCaught));
     memset(&gSaveBlock1Ptr->dexSeen, 0, sizeof(gSaveBlock1Ptr->dexSeen));
+    TreyDex_ResetDiscovery(); // TREY (4d)
 
     // Add party Pokemon to Pokedex
     for (partyId = 0; partyId < PARTY_SIZE; partyId++)

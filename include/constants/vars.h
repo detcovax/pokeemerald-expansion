@@ -280,6 +280,8 @@
 #define VAR_TREY_TRANSIT_TRIP                            (TREY_VARS_START + 0x01) // 4c: (from stop + 1) << 8 | (to stop + 1), 0 = not travelling
 #define VAR_TREY_TRANSIT_STATE                           (TREY_VARS_START + 0x02) // 4c: TRANSIT_STATE_*
 #define VAR_TREY_TRANSIT_STEPS                           (TREY_VARS_START + 0x03) // 4c: steps taken on board this trip
+#define VAR_TREY_DEX_LAST                                (TREY_VARS_START + 0x04) // 4d: TREY_DEX_* last browsed in the Pokédex
+#define VAR_TREY_REGION_ARRIVAL                          (TREY_VARS_START + 0x05) // 4d: TREY_DEX_* + 1 of a first arrival whose script hasn't run yet
 
 #define VARS_END                                         0x41FF // TREY: was 0x40FF
 #define VARS_COUNT                                       (VARS_END - VARS_START + 1)

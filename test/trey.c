@@ -252,3 +252,92 @@ TEST("TREY Transit: boarding, getting under way and resting in the cabin brings 
     VarSet(VAR_TREY_TRANSIT_TRIP, 0);
     VarSet(VAR_TREY_TRANSIT_STATE, TRANSIT_STATE_NONE);
 }
+
+// Pokédex (4d)
+#include "pokedex.h"
+#include "pokemon_storage_system.h"
+#include "trey_dex.h"
+#include "constants/pokedex.h"
+
+static void TreyTest_ClearDex(void)
+{
+    memset(gSaveBlock1Ptr->dexSeen, 0, sizeof(gSaveBlock1Ptr->dexSeen));
+    memset(gSaveBlock1Ptr->dexCaught, 0, sizeof(gSaveBlock1Ptr->dexCaught));
+    TreyDex_ResetDiscovery();
+}
+
+TEST("TREY Dex: discovery numbers follow the order Pokémon are first seen")
+{
+    TreyTest_ClearDex();
+    GetSetPokedexFlag(NATIONAL_DEX_PIKACHU, FLAG_SET_SEEN);
+    GetSetPokedexFlag(NATIONAL_DEX_BULBASAUR, FLAG_SET_SEEN);
+    GetSetPokedexFlag(NATIONAL_DEX_PIKACHU, FLAG_SET_SEEN);    // seen again: keeps its number
+    GetSetPokedexFlag(NATIONAL_DEX_TREECKO, FLAG_SET_CAUGHT);  // caught without being seen still counts
+    EXPECT_EQ(TreyDex_GetDiscoveryCount(), 3);
+    EXPECT_EQ(TreyDex_GetDiscoveryNumber(NATIONAL_DEX_PIKACHU), 1);
+    EXPECT_EQ(TreyDex_GetDiscoveryNumber(NATIONAL_DEX_BULBASAUR), 2);
+    EXPECT_EQ(TreyDex_GetDiscoveryNumber(NATIONAL_DEX_TREECKO), 3);
+    EXPECT_EQ(TreyDex_GetDiscoveryNumber(NATIONAL_DEX_MEW), 0);
+    EXPECT_EQ(SpeciesToPokedexNum(SPECIES_BULBASAUR), 2);
+    EXPECT_EQ(SpeciesToPokedexNum(SPECIES_MEW), 0xFFFF);
+    TreyTest_ClearDex();
+}
+
+TEST("TREY Dex: the discovery list holds the whole roster")
+{
+    u32 i, count = 0;
+    TreyTest_ClearDex();
+    for (i = NATIONAL_DEX_COUNT; i >= 1; i--) // backwards, so the 10-bit packing sees large numbers early
+    {
+        if (NationalPokedexNumToSpecies(i) != SPECIES_NONE)
+        {
+            EXPECT_LT(i, 1024); // must fit 10 bits
+            GetSetPokedexFlag(i, FLAG_SET_SEEN);
+            count++;
+            EXPECT_EQ(TreyDex_GetDiscoveryAt(count - 1), i);
+        }
+    }
+    EXPECT_LE(count, TREY_DEX_ORDER_MAX);
+    EXPECT_EQ(TreyDex_GetDiscoveryCount(), count);
+    TreyTest_ClearDex();
+}
+
+TEST("TREY Dex: repair adds seen Pokémon missing from the list")
+{
+    TreyTest_ClearDex();
+    GetSetPokedexFlag(NATIONAL_DEX_MUDKIP, FLAG_SET_SEEN);
+    gSaveBlock1Ptr->dexSeen[(NATIONAL_DEX_EEVEE - 1) / 8] |= 1 << ((NATIONAL_DEX_EEVEE - 1) % 8); // behind the hook's back
+    EXPECT_EQ(TreyDex_GetDiscoveryNumber(NATIONAL_DEX_EEVEE), 0);
+    TreyDex_Repair();
+    EXPECT_EQ(TreyDex_GetDiscoveryNumber(NATIONAL_DEX_MUDKIP), 1);
+    EXPECT_EQ(TreyDex_GetDiscoveryNumber(NATIONAL_DEX_EEVEE), 2);
+    TreyTest_ClearDex();
+}
+
+TEST("TREY Dex: regional dex membership")
+{
+    EXPECT(TreyDex_IsInDex(TREY_DEX_KANTO, NATIONAL_DEX_PIKACHU));
+    EXPECT(TreyDex_IsInDex(TREY_DEX_JOHTO, NATIONAL_DEX_PIKACHU));
+    EXPECT(TreyDex_IsInDex(TREY_DEX_HOENN, NATIONAL_DEX_PIKACHU));
+    EXPECT(TreyDex_IsInDex(TREY_DEX_SINNOH, NATIONAL_DEX_PIKACHU));
+    EXPECT(TreyDex_IsInDex(TREY_DEX_KITAKAMI, NATIONAL_DEX_PIKACHU));
+    EXPECT(TreyDex_IsInDex(TREY_DEX_KITAKAMI, NATIONAL_DEX_OGERPON));
+    EXPECT(!TreyDex_IsInDex(TREY_DEX_HOENN, NATIONAL_DEX_OGERPON));
+    EXPECT(!TreyDex_IsInDex(TREY_DEX_HOENN, NATIONAL_DEX_BULBASAUR));
+    EXPECT(TreyDex_IsInDex(TREY_DEX_HOENN, NATIONAL_DEX_GALLADE));  // ORAS list
+    EXPECT(TreyDex_IsInDex(TREY_DEX_SINNOH, NATIONAL_DEX_GIRATINA)); // Platinum list
+    EXPECT(TreyDex_IsInDex(TREY_DEX_NATIONAL, NATIONAL_DEX_OGERPON));
+    EXPECT_EQ(TreyDex_GetDexOfRegion(REGION_HOENN), TREY_DEX_HOENN);
+    EXPECT_EQ(TreyDex_GetDexOfRegion(REGION_KITAKAMI), TREY_DEX_KITAKAMI);
+}
+
+TEST("TREY Dex: professor unlocks")
+{
+    FlagClear(FLAG_TREY_DEX_SINNOH);
+    EXPECT(TreyDex_IsUnlocked(TREY_DEX_NATIONAL));
+    EXPECT(!TreyDex_IsUnlocked(TREY_DEX_SINNOH));
+    gSpecialVar_0x8004 = TREY_DEX_SINNOH;
+    TreyDex_UnlockFromVar();
+    EXPECT(TreyDex_IsUnlocked(TREY_DEX_SINNOH));
+    FlagClear(FLAG_TREY_DEX_SINNOH);
+}

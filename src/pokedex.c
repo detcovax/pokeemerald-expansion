@@ -14,6 +14,7 @@
 #include "overworld.h"
 #include "palette.h"
 #include "pokedex.h"
+#include "trey_dex.h"
 #include "pokedex_area_screen.h"
 #include "pokedex_cry_screen.h"
 #include "pokedex_plus_hgss.h"
@@ -4532,9 +4533,13 @@ s8 GetSetPokedexFlag(u16 nationalDexNo, u8 caseID)
          retVal = ((gSaveBlock1Ptr->dexCaught[index] & mask) != 0);
         break;
     case FLAG_SET_SEEN:
+        if (!(gSaveBlock1Ptr->dexSeen[index] & mask))
+            TreyDex_OnFirstSeen(nationalDexNo + 1); // TREY (4d): next discovery number
         gSaveBlock1Ptr->dexSeen[index] |= mask;
         break;
     case FLAG_SET_CAUGHT:
+        if (!(gSaveBlock1Ptr->dexSeen[index] & mask))
+            TreyDex_OnFirstSeen(nationalDexNo + 1); // TREY (4d): caught without being seen still counts
         gSaveBlock1Ptr->dexCaught[index] |= mask;
         break;
     }
