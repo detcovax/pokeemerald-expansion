@@ -61,6 +61,8 @@
 #include "constants/union_room.h"
 #include "constants/vars.h"
 #include "constants/trey_transit.h" // TREY (4c)
+#include "constants/trey_dex.h" // TREY (4d/4e): TREY_DEX_* also name regions in scripts
+#include "constants/trey_quests.h" // TREY (4f), generated from docs/trey/quests.csv
 #include "constants/weather.h"
 	.include "asm/macros.inc"
 	.include "asm/macros/event.inc"
@@ -1129,6 +1131,7 @@ EventScript_VsSeekerChargingDone::
 	.include "data/scripts/trey_rock_climb.inc" @ TREY
 	.include "data/scripts/trey_sky_hms.inc" @ TREY (3f)
 	.include "data/scripts/trey_transit.inc" @ TREY (4c)
+	.include "data/scripts/trey_quests.inc" @ TREY (4f)
 	.include "data/scripts/item_ball_scripts.inc"
 	.include "data/scripts/profile_man.inc"
 	.include "data/scripts/day_care.inc"

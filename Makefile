@@ -212,6 +212,16 @@ $(DATA_SRC_SUBDIR)/trey/dex_regions.h: $(wildcard docs/trey/dex/*.txt) tools/tre
 
 $(C_BUILDDIR)/trey_dex.o: c_dep += $(DATA_SRC_SUBDIR)/trey/dex_regions.h
 
+# TREY: quests (4f), generated from docs/trey/quests.csv (the constants header is read by scripts too)
+AUTO_GEN_TARGETS += $(DATA_SRC_SUBDIR)/trey/quests.h include/constants/trey_quests.h
+
+$(DATA_SRC_SUBDIR)/trey/quests.h: docs/trey/quests.csv tools/trey/quests_csv.py
+	python3 tools/trey/quests_csv.py && touch $@
+include/constants/trey_quests.h: docs/trey/quests.csv tools/trey/quests_csv.py
+	python3 tools/trey/quests_csv.py && touch $@
+
+$(C_BUILDDIR)/trey_quest.o: c_dep += $(DATA_SRC_SUBDIR)/trey/quests.h
+
 PERL := perl
 SHA1 := $(shell { command -v sha1sum || command -v shasum; } 2>/dev/null) -c
 

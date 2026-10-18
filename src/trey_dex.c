@@ -218,6 +218,20 @@ u32 TreyDex_GetDexOfRegion(enum Region region)
     }
 }
 
+enum Region TreyDex_GetRegionOfDex(u32 dex)
+{
+    switch (dex)
+    {
+    case TREY_DEX_KANTO:    return REGION_KANTO;
+    case TREY_DEX_ORANGE:   return REGION_ORANGE;
+    case TREY_DEX_JOHTO:    return REGION_JOHTO;
+    case TREY_DEX_HOENN:    return REGION_HOENN;
+    case TREY_DEX_SINNOH:   return REGION_SINNOH;
+    case TREY_DEX_KITAKAMI: return REGION_KITAKAMI;
+    default:                return REGION_NONE;
+    }
+}
+
 u32 TreyDex_GetCurrentRegionDex(void)
 {
     return TreyDex_GetDexOfRegion(TreyGetCurrentRegion());

@@ -350,3 +350,75 @@ TEST("TREY Dex: professor unlocks")
     EXPECT(TreyDex_IsUnlocked(TREY_DEX_SINNOH));
     FlagClear(FLAG_TREY_DEX_SINNOH);
 }
+
+// Leagues (4e)
+TEST("TREY League: admission needs all of the region's league badges, in any order")
+{
+    u32 i;
+    for (i = 0; i < 8; i++)
+        FlagClear(TreyBadges_GetFlag(REGION_HOENN, i));
+    for (i = 0; i < 5; i++)
+        FlagClear(TreyBadges_GetFlag(REGION_ORANGE, i));
+
+    for (i = 7; i >= 1; i--) // backwards: order doesn't matter
+        FlagSet(TreyBadges_GetFlag(REGION_HOENN, i));
+    gSpecialVar_0x8004 = TREY_DEX_HOENN;
+    TreyLeague_CheckAdmission();
+    EXPECT_EQ(gSpecialVar_Result, FALSE);      // Stone Badge missing
+    FlagSet(TreyBadges_GetFlag(REGION_HOENN, 0));
+    TreyLeague_CheckAdmission();
+    EXPECT_EQ(gSpecialVar_Result, TRUE);
+
+    for (i = 0; i < 4; i++)
+        FlagSet(TreyBadges_GetFlag(REGION_ORANGE, i));
+    EXPECT(TreyLeague_HasAdmission(REGION_ORANGE)); // the Winner's Trophy isn't needed to enter
+    EXPECT(!TreyLeague_HasAdmission(REGION_KITAKAMI)); // no league
+
+    for (i = 0; i < 8; i++)
+        FlagClear(TreyBadges_GetFlag(REGION_HOENN, i));
+    for (i = 0; i < 5; i++)
+        FlagClear(TreyBadges_GetFlag(REGION_ORANGE, i));
+}
+
+// Quests (4f)
+#include "trey_quest.h"
+
+TEST("TREY Quest: stages start, advance, clamp and complete")
+{
+    memset(gSaveBlock3Ptr->trey.questStages, 0, sizeof(gSaveBlock3Ptr->trey.questStages));
+    EXPECT(!TreyQuest_AnyStarted());
+    EXPECT_EQ(TreyQuest_GetStage(QUEST_TEST_SURVEY), QUEST_STAGE_NONE);
+    EXPECT(TreyQuest_GetStageText(QUEST_TEST_SURVEY) == NULL);
+
+    TreyQuest_SetStage(QUEST_TEST_SURVEY, 1);
+    EXPECT(TreyQuest_IsStarted(QUEST_TEST_SURVEY));
+    EXPECT(TreyQuest_AnyStarted());
+    EXPECT(TreyQuest_GetStageText(QUEST_TEST_SURVEY) == gTreyQuests[QUEST_TEST_SURVEY].stages[0]);
+
+    TreyQuest_SetStage(QUEST_TEST_SURVEY, 99);                 // past the last stage: clamped
+    EXPECT_EQ(TreyQuest_GetStage(QUEST_TEST_SURVEY), 3);
+    EXPECT(!TreyQuest_IsDone(QUEST_TEST_SURVEY));
+
+    TreyQuest_Complete(QUEST_TEST_SURVEY);
+    EXPECT(TreyQuest_IsDone(QUEST_TEST_SURVEY));
+    EXPECT_GE(TreyQuest_GetStage(QUEST_TEST_SURVEY), 3);        // done counts as past every stage
+    EXPECT(TreyQuest_GetStageText(QUEST_TEST_SURVEY) == gTreyQuests[QUEST_TEST_SURVEY].stages[2]);
+
+    TreyQuest_SetStage(QUEST_TEST_SURVEY, QUEST_STAGE_NONE);
+    EXPECT(!TreyQuest_AnyStarted());
+}
+
+TEST("TREY Quest: every region has a story quest and empty slots are ignored")
+{
+    EXPECT(TreyQuest_IsValid(QUEST_KANTO_STORY));
+    EXPECT(TreyQuest_IsValid(QUEST_ORANGE_STORY));
+    EXPECT(TreyQuest_IsValid(QUEST_JOHTO_STORY));
+    EXPECT(TreyQuest_IsValid(QUEST_HOENN_STORY));
+    EXPECT(TreyQuest_IsValid(QUEST_SINNOH_STORY));
+    EXPECT(TreyQuest_IsValid(QUEST_KITAKAMI_STORY));
+    EXPECT_EQ(gTreyQuests[QUEST_KITAKAMI_STORY].region, TREY_DEX_KITAKAMI);
+    EXPECT(!TreyQuest_IsValid(100));                            // unused num
+    TreyQuest_SetStage(100, 1);                                 // ignored
+    EXPECT_EQ(gSaveBlock3Ptr->trey.questStages[100], 0);
+    EXPECT(!TreyQuest_IsValid(QUEST_COUNT));
+}

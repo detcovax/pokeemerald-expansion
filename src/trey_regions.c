@@ -107,3 +107,34 @@ u32 TreyBadges_CountOwnedTotal(void)
         owned += TreyBadges_CountOwned(region);
     return owned;
 }
+
+// ---------------------------------------------------------------------------
+// Leagues (4e, TREY_PLAN.md 5.9): admission needs that region's league badges only, in any order.
+// Orange: the 4 badges open the Supreme Cup (the Winner's Trophy, badge slot 5, is won there).
+// ---------------------------------------------------------------------------
+
+u32 TreyBadges_GetLeagueCount(enum Region region)
+{
+    if (region == REGION_ORANGE)
+        return 4;
+    return TreyBadges_GetCount(region);
+}
+
+bool32 TreyLeague_HasAdmission(enum Region region)
+{
+    u32 i, count = TreyBadges_GetLeagueCount(region);
+    if (count == 0)
+        return FALSE;
+    for (i = 0; i < count; i++)
+    {
+        if (!TreyBadges_Has(region, i))
+            return FALSE;
+    }
+    return TRUE;
+}
+
+// special: VAR_0x8004 = the region as its TREY_DEX_* id (scripts can't see enum Region). VAR_RESULT = TRUE/FALSE.
+void TreyLeague_CheckAdmission(void)
+{
+    gSpecialVar_Result = TreyLeague_HasAdmission(TreyDex_GetRegionOfDex(gSpecialVar_0x8004));
+}

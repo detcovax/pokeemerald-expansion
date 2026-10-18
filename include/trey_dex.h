@@ -22,6 +22,7 @@ void TreyDex_Unlock(u32 dex);
 void TreyDex_UnlockFromVar(void);           // special: VAR_0x8004 = TREY_DEX_*
 u32 TreyDex_GetDexOfRegion(enum Region region); // TREY_DEX_NATIONAL if the region has no dex
 u32 TreyDex_GetCurrentRegionDex(void);
+enum Region TreyDex_GetRegionOfDex(u32 dex);      // REGION_NONE for TREY_DEX_NATIONAL
 const u8 *TreyDex_GetName(u32 dex);
 u32 TreyDex_CountSeen(u32 dex);
 u32 TreyDex_CountCaught(u32 dex);

@@ -18,6 +18,8 @@
 #include "strings.h"
 #include "string_util.h"
 #include "trainer_card.h"
+#include "trey_dex.h"     // TREY (4e)
+#include "trey_regions.h" // TREY (4e)
 #include "gpu_regs.h"
 #include "international_string_util.h"
 #include "pokedex.h"
@@ -59,6 +61,9 @@ struct TrainerCardData
     bool8 unused_F;
     bool8 hasTrades;
     u8 badgeCount[NUM_BADGES];
+    u8 treyPage;                 // TREY (4e): index into treyPages
+    u8 treyPageCount;
+    u8 treyPages[5];             // TREY_CARD_PAGE_* the player has been to
     u8 easyChatProfile[TRAINER_CARD_PROFILE_LENGTH][13];
     u8 textPlayersCard[70];
     u8 textHofTime[70];
@@ -107,6 +112,11 @@ static void CreateTrainerCardTrainerPic(void);
 static void DrawCardScreenBackground(u16 *);
 static void DrawCardFrontOrBack(u16 *);
 static void DrawStarsAndBadgesOnCard(void);
+static bool32 TreyCard_HasPages(void);
+static void TreyCard_InitPages(void);
+static void TreyCard_PrintPageLabel(void);
+static void TreyCard_DrawSlots(void);
+static void TreyCard_ShowPage(void);
 static void PrintTimeOnCard(void);
 static void FlipTrainerCard(void);
 static bool8 IsCardFlipTaskActive(void);
@@ -189,6 +199,31 @@ static const u16 sTrainerCardSticker3_Pal[]      = INCBIN_U16("graphics/trainer_
 static const u16 sTrainerCardSticker4_Pal[]      = INCBIN_U16("graphics/trainer_card/frlg/stickers4.gbapal");
 static const u32 sHoennTrainerCardBadges_Gfx[]   = INCBIN_U32("graphics/trainer_card/badges.4bpp.lz");
 static const u32 sKantoTrainerCardBadges_Gfx[]   = INCBIN_U32("graphics/trainer_card/frlg/badges.4bpp.lz");
+
+// TREY (4e, TREY_PLAN.md 5.9): one badge page per region on the front of the player's own card, L/R flips
+// through the regions you have been to. Sheets: tools/trey/badge_art.py (Sinnoh and Orange are placeholders).
+static const u32 sTreyOrangeBadges_Gfx[] = INCBIN_U32("graphics/trainer_card/trey/orange_badges.4bpp.lz");
+static const u16 sTreyOrangeBadges_Pal[] = INCBIN_U16("graphics/trainer_card/trey/orange_badges.gbapal");
+static const u32 sTreyJohtoBadges_Gfx[]  = INCBIN_U32("graphics/trainer_card/trey/johto_badges.4bpp.lz");
+static const u16 sTreyJohtoBadges_Pal[]  = INCBIN_U16("graphics/trainer_card/trey/johto_badges.gbapal");
+static const u32 sTreySinnohBadges_Gfx[] = INCBIN_U32("graphics/trainer_card/trey/sinnoh_badges.4bpp.lz");
+static const u16 sTreySinnohBadges_Pal[] = INCBIN_U16("graphics/trainer_card/trey/sinnoh_badges.gbapal");
+
+struct TreyCardPage
+{
+    u8 dex;          // TREY_DEX_* (region name, arrival flag)
+    const u32 *gfx;
+    const u16 *pal;
+};
+
+static const struct TreyCardPage sTreyCardPages[] =
+{
+    { TREY_DEX_KANTO,  sKantoTrainerCardBadges_Gfx, sKantoTrainerCardBadges_Pal },
+    { TREY_DEX_ORANGE, sTreyOrangeBadges_Gfx,       sTreyOrangeBadges_Pal },
+    { TREY_DEX_JOHTO,  sTreyJohtoBadges_Gfx,        sTreyJohtoBadges_Pal },
+    { TREY_DEX_HOENN,  sHoennTrainerCardBadges_Gfx, sHoennTrainerCardBadges_Pal },
+    { TREY_DEX_SINNOH, sTreySinnohBadges_Gfx,       sTreySinnohBadges_Pal },
+};
 
 static const struct BgTemplate sTrainerCardBgTemplates[4] =
 {
@@ -449,6 +484,16 @@ static void Task_TrainerCard(u8 taskId)
             PlaySE(SE_RG_CARD_FLIP);
             sData->mainState = STATE_WAIT_FLIP_TO_BACK;
         }
+        else if (JOY_NEW(L_BUTTON | R_BUTTON) && TreyCard_HasPages() && sData->treyPageCount > 1)
+        {
+            // TREY (4e): next/previous region page
+            if (JOY_NEW(R_BUTTON))
+                sData->treyPage = (sData->treyPage + 1) % sData->treyPageCount;
+            else
+                sData->treyPage = (sData->treyPage + sData->treyPageCount - 1) % sData->treyPageCount;
+            PlaySE(SE_SELECT);
+            TreyCard_ShowPage();
+        }
         else if (JOY_NEW(B_BUTTON))
         {
             if (gReceivedRemoteLinkPlayers && sData->isLink && InUnionRoom() == TRUE)
@@ -562,7 +607,9 @@ static bool8 LoadCardGfx(void)
         }
         break;
     case 3:
-        if (sData->cardType != CARD_TYPE_FRLG)
+        if (TreyCard_HasPages())
+            LZ77UnCompWram(sTreyCardPages[sData->treyPages[sData->treyPage]].gfx, sData->badgeTiles);
+        else if (sData->cardType != CARD_TYPE_FRLG)
             LZ77UnCompWram(sHoennTrainerCardBadges_Gfx, sData->badgeTiles);
         else
             LZ77UnCompWram(sKantoTrainerCardBadges_Gfx, sData->badgeTiles);
@@ -844,6 +891,7 @@ static void SetDataFromTrainerCard(void)
         if (FlagGet(badgeFlag))
             sData->badgeCount[i]++;
     }
+    TreyCard_InitPages();
 }
 
 static void InitGpuRegs(void)
@@ -939,6 +987,9 @@ static bool8 PrintAllOnCardFront(void)
         break;
     case 5:
         PrintProfilePhraseOnCard();
+        break;
+    case 6:
+        TreyCard_PrintPageLabel(); // TREY (4e)
         break;
     default:
         sData->printState = 0;
@@ -1433,6 +1484,8 @@ static u8 SetCardBgsAndPals(void)
         {
             LoadPalette(sHoennTrainerCardPals[sData->trainerCard.stars], BG_PLTT_ID(0), 3 * PLTT_SIZE_4BPP);
             LoadPalette(sHoennTrainerCardBadges_Pal, BG_PLTT_ID(3), PLTT_SIZE_4BPP);
+            if (TreyCard_HasPages())
+                LoadPalette(sTreyCardPages[sData->treyPages[sData->treyPage]].pal, BG_PLTT_ID(3), PLTT_SIZE_4BPP);
             if (sData->trainerCard.gender != MALE)
                 LoadPalette(sHoennTrainerCardFemaleBg_Pal, BG_PLTT_ID(1), PLTT_SIZE_4BPP);
         }
@@ -1496,6 +1549,117 @@ static void DrawCardFrontOrBack(u16 *ptr)
     CopyBgTilemapBufferToVram(0);
 }
 
+// ---------------------------------------------------------------------------
+// TREY (4e): region badge pages
+// ---------------------------------------------------------------------------
+
+#define TREY_CARD_LABEL_X  72  // WIN_CARD_TEXT pixels: right of the BADGES label on the card (tile row 14)
+#define TREY_CARD_LABEL_Y  103 // any higher and the label's clear box would clip the TIME digits
+#define TREY_CARD_LABEL_W  120
+#define TREY_CARD_LABEL_H  12
+#define TREY_CARD_EMPTY_TILE 0x004 // plain strip tile of the front tilemap, covers slots a region doesn't have
+
+static bool32 TreyCard_HasPages(void)
+{
+    // The player's own card only. Cards of linked players keep the vanilla Hoenn/Kanto badges.
+    return !sData->isLink && sData->cardType != CARD_TYPE_FRLG && sData->treyPageCount != 0;
+}
+
+static enum Region TreyCard_GetRegion(void)
+{
+    return TreyDex_GetRegionOfDex(sTreyCardPages[sData->treyPages[sData->treyPage]].dex);
+}
+
+static void TreyCard_LoadBadgeFlags(void)
+{
+    u32 i;
+    enum Region region = TreyCard_GetRegion();
+    for (i = 0; i < NUM_BADGES; i++)
+        sData->badgeCount[i] = TreyBadges_Has(region, i);
+}
+
+static void TreyCard_InitPages(void)
+{
+    u32 i, current = TreyDex_GetCurrentRegionDex();
+
+    sData->treyPageCount = 0;
+    sData->treyPage = 0;
+    if (sData->isLink || sData->cardType == CARD_TYPE_FRLG)
+        return;
+    for (i = 0; i < ARRAY_COUNT(sTreyCardPages); i++)
+    {
+        u32 dex = sTreyCardPages[i].dex;
+        // Visited regions only (David, 2026-10-18). Hoenn always; a badge from somewhere also shows its page.
+        if (dex == TREY_DEX_HOENN || TREY_DEBUG_ALL_REGION_MAPS
+         || FlagGet(TREY_FLAG_REGION_ARRIVED_START + dex)
+         || TreyBadges_CountOwned(TreyDex_GetRegionOfDex(dex)) != 0)
+            sData->treyPages[sData->treyPageCount++] = i;
+    }
+    for (i = 0; i < sData->treyPageCount; i++)
+    {
+        if (sTreyCardPages[sData->treyPages[i]].dex == TREY_DEX_HOENN)
+            sData->treyPage = i;
+    }
+    for (i = 0; i < sData->treyPageCount; i++)
+    {
+        if (sTreyCardPages[sData->treyPages[i]].dex == current)
+            sData->treyPage = i; // opens on the region you are in
+    }
+    TreyCard_LoadBadgeFlags();
+}
+
+// "HOENN 5/8": only the count of the page's region (David, 2026-10-18)
+static void TreyCard_PrintPageLabel(void)
+{
+    u8 *str;
+    enum Region region;
+
+    if (!TreyCard_HasPages())
+        return;
+    region = TreyCard_GetRegion();
+    str = StringCopy(gStringVar4, TreyDex_GetName(sTreyCardPages[sData->treyPages[sData->treyPage]].dex));
+    *str++ = CHAR_SPACE;
+    str = ConvertIntToDecimalStringN(str, TreyBadges_CountOwned(region), STR_CONV_MODE_LEFT_ALIGN, 1);
+    *str++ = CHAR_SLASH;
+    ConvertIntToDecimalStringN(str, TreyBadges_GetCount(region), STR_CONV_MODE_LEFT_ALIGN, 1);
+    if (sData->treyPageCount > 1)
+        StringAppend(gStringVar4, COMPOUND_STRING("  {L_BUTTON}{R_BUTTON}"));
+    FillWindowPixelRect(WIN_CARD_TEXT, PIXEL_FILL(0), TREY_CARD_LABEL_X, TREY_CARD_LABEL_Y, TREY_CARD_LABEL_W, TREY_CARD_LABEL_H);
+    AddTextPrinterParameterized3(WIN_CARD_TEXT, FONT_SMALL, TREY_CARD_LABEL_X, TREY_CARD_LABEL_Y, sTrainerCardTextColors, TEXT_SKIP_DRAW, gStringVar4);
+}
+
+// Slots past the region's badge count (Orange has 5) are covered with the plain strip tile.
+static void TreyCard_DrawSlots(void)
+{
+    u32 i, x, y, count;
+
+    if (!TreyCard_HasPages())
+        return;
+    count = TreyBadges_GetCount(TreyCard_GetRegion());
+    for (i = 0, x = 4; i < NUM_BADGES; i++, x += 3)
+    {
+        for (y = 15; y <= 16; y++)
+        {
+            sData->cardTilemapBuffer[32 * y + x]     = (i < count) ? sData->frontTilemap[30 * y + x]     : TREY_CARD_EMPTY_TILE;
+            sData->cardTilemapBuffer[32 * y + x + 1] = (i < count) ? sData->frontTilemap[30 * y + x + 1] : TREY_CARD_EMPTY_TILE;
+        }
+    }
+    CopyBgTilemapBufferToVram(0);
+}
+
+static void TreyCard_ShowPage(void)
+{
+    const struct TreyCardPage *page = &sTreyCardPages[sData->treyPages[sData->treyPage]];
+
+    LZ77UnCompWram(page->gfx, sData->badgeTiles);
+    LoadBgTiles(3, sData->badgeTiles, ARRAY_COUNT(sData->badgeTiles), 0);
+    LoadPalette(page->pal, BG_PLTT_ID(3), PLTT_SIZE_4BPP);
+    TreyCard_LoadBadgeFlags();
+    TreyCard_PrintPageLabel();
+    CopyWindowToVram(WIN_CARD_TEXT, COPYWIN_GFX);
+    DrawStarsAndBadgesOnCard();
+}
+
 static void DrawStarsAndBadgesOnCard(void)
 {
     static const u8 yOffsets[] = {7, 7};
@@ -1517,7 +1681,12 @@ static void DrawStarsAndBadgesOnCard(void)
                 FillBgTilemapBufferRect(3, tileNum + 16, x, 16, 1, 1, palNum);
                 FillBgTilemapBufferRect(3, tileNum + 17, x + 1, 16, 1, 1, palNum);
             }
+            else if (TreyCard_HasPages())
+            {
+                FillBgTilemapBufferRect(3, 0, x, 15, 2, 2, 0); // TREY: clear what the previous page drew
+            }
         }
+        TreyCard_DrawSlots();
     }
     CopyBgTilemapBufferToVram(3);
 }

@@ -2639,3 +2639,38 @@
 	callnative ScriptChangeFollowerNPCBattlePartner
 	.2byte \battlePartner
 	.endm
+
+	@ TREY (4f, TREY_PLAN.md 5.10): quests. quest = QUEST_* (include/constants/trey_quests.h), stage = 1..stages
+	@ or QUEST_STAGE_DONE. Both may be vars. A banner shows when a quest starts, advances or completes.
+	@ The goto_if_quest_* macros overwrite VAR_RESULT. "Done" counts as greater than every stage.
+	.macro setqueststage quest:req, stage:req
+	callnative TreyQuest_Native_SetStage, requests_effects=1
+	.2byte \quest
+	.2byte \stage
+	.endm
+
+	.macro completequest quest:req
+	callnative TreyQuest_Native_Complete, requests_effects=1
+	.2byte \quest
+	.endm
+
+	@ Stage into VAR_RESULT (QUEST_STAGE_NONE = not started, QUEST_STAGE_DONE = complete).
+	.macro checkqueststage quest:req
+	callnative TreyQuest_Native_GetStage, requests_effects=1
+	.2byte \quest
+	.endm
+
+	.macro goto_if_quest_eq quest:req, stage:req, dest:req
+	checkqueststage \quest
+	goto_if_eq VAR_RESULT, \stage, \dest
+	.endm
+
+	.macro goto_if_quest_ge quest:req, stage:req, dest:req
+	checkqueststage \quest
+	goto_if_ge VAR_RESULT, \stage, \dest
+	.endm
+
+	.macro goto_if_quest_lt quest:req, stage:req, dest:req
+	checkqueststage \quest
+	goto_if_lt VAR_RESULT, \stage, \dest
+	.endm

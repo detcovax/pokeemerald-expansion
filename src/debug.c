@@ -10,6 +10,7 @@
 #include "global.h"
 #include "trey_seasons.h" // TREY (4b)
 #include "trey_dex.h" // TREY (4d)
+#include "trey_quest.h" // TREY (4f)
 #include "field_player_avatar.h"
 #include "fieldmap.h"
 #include "battle.h"
@@ -103,6 +104,8 @@ enum UtilDebugMenu
     DEBUG_UTIL_MENU_ITEM_BERRY_FUNCTIONS,
     DEBUG_UTIL_MENU_ITEM_EWRAM_COUNTERS,
     DEBUG_UTIL_MENU_ITEM_TREY_SEASON, // TREY (4b)
+    DEBUG_UTIL_MENU_ITEM_TREY_QUESTS, // TREY (4f)
+    DEBUG_UTIL_MENU_ITEM_TREY_QUEST_STEP, // TREY (4f)
     DEBUG_UTIL_MENU_ITEM_STEVEN_MULTI // Please keep this at the bottom <3
 };
 
@@ -413,6 +416,8 @@ static void DebugAction_Util_BerryFunctions(u8 taskId);
 static void DebugAction_Util_CheckEWRAMCounters(u8 taskId);
 static void DebugAction_Util_Steven_Multi(u8 taskId);
 static void DebugAction_Util_TreySeason(u8 taskId); // TREY (4b)
+static void DebugAction_Util_TreyQuests(u8 taskId); // TREY (4f)
+static void DebugAction_Util_TreyQuestStep(u8 taskId); // TREY (4f)
 static void DebugAction_Util_OpenTimeMenu(u8 taskId);
 
 static void DebugAction_TimeMenu_PrintTime(u8 taskId);
@@ -661,6 +666,8 @@ static const struct ListMenuItem sDebugMenu_Items_Utilities[] =
     [DEBUG_UTIL_MENU_ITEM_BERRY_FUNCTIONS] = {COMPOUND_STRING("Berry Functions…{CLEAR_TO 110}{RIGHT_ARROW}"),  DEBUG_UTIL_MENU_ITEM_BERRY_FUNCTIONS},
     [DEBUG_UTIL_MENU_ITEM_EWRAM_COUNTERS]  = {COMPOUND_STRING("EWRAM Counters…{CLEAR_TO 110}{RIGHT_ARROW}"),   DEBUG_UTIL_MENU_ITEM_EWRAM_COUNTERS},
     [DEBUG_UTIL_MENU_ITEM_TREY_SEASON]     = {COMPOUND_STRING("TREY: next season"),                            DEBUG_UTIL_MENU_ITEM_TREY_SEASON},
+    [DEBUG_UTIL_MENU_ITEM_TREY_QUESTS]     = {COMPOUND_STRING("TREY: quests"),                                 DEBUG_UTIL_MENU_ITEM_TREY_QUESTS},
+    [DEBUG_UTIL_MENU_ITEM_TREY_QUEST_STEP] = {COMPOUND_STRING("TREY: test quest step"),                        DEBUG_UTIL_MENU_ITEM_TREY_QUEST_STEP},
     [DEBUG_UTIL_MENU_ITEM_STEVEN_MULTI]    = {COMPOUND_STRING("Steven Multi"),                                 DEBUG_UTIL_MENU_ITEM_STEVEN_MULTI},
 };
 
@@ -873,6 +880,8 @@ static void (*const sDebugMenu_Actions_Utilities[])(u8) =
     [DEBUG_UTIL_MENU_ITEM_BERRY_FUNCTIONS] = DebugAction_Util_BerryFunctions,
     [DEBUG_UTIL_MENU_ITEM_EWRAM_COUNTERS]  = DebugAction_Util_CheckEWRAMCounters,
     [DEBUG_UTIL_MENU_ITEM_TREY_SEASON]     = DebugAction_Util_TreySeason,
+    [DEBUG_UTIL_MENU_ITEM_TREY_QUESTS]     = DebugAction_Util_TreyQuests,
+    [DEBUG_UTIL_MENU_ITEM_TREY_QUEST_STEP] = DebugAction_Util_TreyQuestStep,
     [DEBUG_UTIL_MENU_ITEM_STEVEN_MULTI]    = DebugAction_Util_Steven_Multi,
 };
 
@@ -4911,6 +4920,21 @@ void CheckEWRAMCounters(struct ScriptContext *ctx)
 static void DebugAction_Util_CheckEWRAMCounters(u8 taskId)
 {
     Debug_DestroyMenu_Full_Script(taskId, Debug_EventScript_EWRAMCounters);
+}
+
+// TREY (4f): every quest in the log, A advances the selected quest's stage (not started -> 1 -> ... -> done -> not started)
+static void DebugAction_Util_TreyQuests(u8 taskId)
+{
+    Debug_DestroyMenu_Full(taskId);
+    FreezeObjectEvents();
+    TreyQuestLog_Open(TRUE);
+}
+
+// TREY (4f): one step of the test quest through the script macros, with the banner
+extern const u8 TreyQuest_EventScript_DebugStep[];
+static void DebugAction_Util_TreyQuestStep(u8 taskId)
+{
+    Debug_DestroyMenu_Full_Script(taskId, TreyQuest_EventScript_DebugStep);
 }
 
 // TREY (4b): cycle the forced season (spring, summer, autumn, winter, then back to the calendar) and reload

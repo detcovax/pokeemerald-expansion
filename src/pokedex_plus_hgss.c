@@ -1248,7 +1248,7 @@ static const struct WindowTemplate sPokemonList_WindowTemplate[] =
         .tilemapTop = 1,
         .width = 7,
         .height = 2,
-        .paletteNum = 15,
+        .paletteNum = 0, // same palette and colours as the list text
         .baseBlock = 0x100,
     },
     [TREY_WIN_DEX_MENU] = { // region menu (7 rows)
@@ -2428,7 +2428,7 @@ static void TreyDexMenu_Init(void)
 
 static void TreyDexMenu_PrintLabel(void)
 {
-    static const u8 color[3] = {TEXT_COLOR_TRANSPARENT, TEXT_COLOR_DARK_GRAY, TEXT_COLOR_LIGHT_GRAY};
+    static const u8 color[3] = {TEXT_COLOR_TRANSPARENT, TEXT_DYNAMIC_COLOR_6, TEXT_COLOR_LIGHT_GRAY};
     const u8 *name = TreyDex_GetName(sPokedexView->treyDex);
 
     FillWindowPixelBuffer(TREY_WIN_DEX_LABEL, PIXEL_FILL(0));

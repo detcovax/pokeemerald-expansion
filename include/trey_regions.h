@@ -20,5 +20,10 @@ u16 TreyBadges_GetFlag(enum Region region, u32 badgeIndex);  // flag for one bad
 bool32 TreyBadges_Has(enum Region region, u32 badgeIndex);
 u32 TreyBadges_CountOwned(enum Region region);
 u32 TreyBadges_CountOwnedTotal(void);
+u32 TreyBadges_GetLeagueCount(enum Region region);  // badges the league asks for (Orange: 4, without the trophy)
+
+// Leagues (4e)
+bool32 TreyLeague_HasAdmission(enum Region region);
+void TreyLeague_CheckAdmission(void);               // special: VAR_0x8004 = TREY_DEX_* of the region
 
 #endif // GUARD_TREY_REGIONS_H

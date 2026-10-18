@@ -36,6 +36,7 @@
 #include "script.h"
 #include "sound.h"
 #include "start_menu.h"
+#include "trey_quest.h" // TREY (4f)
 #include "strings.h"
 #include "string_util.h"
 #include "task.h"
@@ -68,6 +69,7 @@ enum
     MENU_ACTION_PYRAMID_BAG,
     MENU_ACTION_DEBUG,
     MENU_ACTION_DEXNAV,
+    MENU_ACTION_QUESTS, // TREY (4f)
 };
 
 // Save status
@@ -87,7 +89,7 @@ EWRAM_DATA static u8 sSafariBallsWindowId = 0;
 EWRAM_DATA static u8 sBattlePyramidFloorWindowId = 0;
 EWRAM_DATA static u8 sStartMenuCursorPos = 0;
 EWRAM_DATA static u8 sNumStartMenuActions = 0;
-EWRAM_DATA static u8 sCurrentStartMenuActions[9] = {0};
+EWRAM_DATA static u8 sCurrentStartMenuActions[10] = {0}; // TREY (4f): 10, QUESTS added (9 fit on screen: DexNav is off)
 EWRAM_DATA static s8 sInitStartMenuData[2] = {0};
 
 EWRAM_DATA static u8 (*sSaveDialogCallback)(void) = NULL;
@@ -110,6 +112,7 @@ static bool8 StartMenuBattlePyramidRetireCallback(void);
 static bool8 StartMenuBattlePyramidBagCallback(void);
 static bool8 StartMenuDebugCallback(void);
 static bool8 StartMenuDexNavCallback(void);
+static bool8 StartMenuQuestsCallback(void); // TREY (4f)
 
 // Menu callbacks
 static bool8 SaveStartCallback(void);
@@ -205,6 +208,7 @@ static const struct MenuAction sStartMenuItems[] =
     [MENU_ACTION_PYRAMID_BAG]     = {gText_MenuBag,     {.u8_void = StartMenuBattlePyramidBagCallback}},
     [MENU_ACTION_DEBUG]           = {sText_MenuDebug,   {.u8_void = StartMenuDebugCallback}},
     [MENU_ACTION_DEXNAV]          = {gText_MenuDexNav,  {.u8_void = StartMenuDexNavCallback}},
+    [MENU_ACTION_QUESTS]          = {COMPOUND_STRING("QUESTS"), {.u8_void = StartMenuQuestsCallback}}, // TREY (4f)
 };
 
 static const struct BgTemplate sBgTemplates_LinkBattleSave[] =
@@ -341,6 +345,9 @@ static void BuildNormalStartMenu(void)
 
     AddStartMenuAction(MENU_ACTION_BAG);
 
+    if (TreyQuest_AnyStarted()) // TREY (4f): once the first quest has started
+        AddStartMenuAction(MENU_ACTION_QUESTS);
+
     if (FlagGet(FLAG_SYS_POKENAV_GET) == TRUE)
         AddStartMenuAction(MENU_ACTION_POKENAV);
 
@@ -358,6 +365,8 @@ static void BuildDebugStartMenu(void)
     if (FlagGet(FLAG_SYS_POKEMON_GET) == TRUE)
         AddStartMenuAction(MENU_ACTION_POKEMON);
     AddStartMenuAction(MENU_ACTION_BAG);
+    if (TreyQuest_AnyStarted()) // TREY (4f)
+        AddStartMenuAction(MENU_ACTION_QUESTS);
     if (FlagGet(FLAG_SYS_POKENAV_GET) == TRUE)
         AddStartMenuAction(MENU_ACTION_POKENAV);
     AddStartMenuAction(MENU_ACTION_PLAYER);
@@ -1495,6 +1504,15 @@ void AppendToList(u8 *list, u8 *pos, u8 newEntry)
 static bool8 StartMenuDexNavCallback(void)
 {
     CreateTask(Task_OpenDexNavFromStartMenu, 0);
+    return TRUE;
+}
+
+// TREY (4f): the quest log opens over the field, like the debug menu
+static bool8 StartMenuQuestsCallback(void)
+{
+    RemoveExtraStartMenuWindows();
+    HideStartMenuDebug(); // hides the start menu without giving back movement
+    TreyQuestLog_Open(FALSE);
     return TRUE;
 }
 
