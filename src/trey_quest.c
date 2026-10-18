@@ -25,6 +25,16 @@
 
 #include "data/trey/quests.h"
 
+// Strings live at file scope: a COMPOUND_STRING inside a function is a temporary (see TREY_PLAN.md notes).
+static const u8 sText_QuestComplete[] = _("Quest complete: ");
+static const u8 sText_NewQuest[] = _("New quest: ");
+static const u8 sText_QuestUpdated[] = _("Quest updated: ");
+static const u8 sText_LogComplete[] = _("  Complete!");
+static const u8 sText_LogNotStarted[] = _("  Not started");
+static const u8 sText_LogStep[] = _("  Step ");
+static const u8 sText_LogDone[] = _("DONE");
+static const u8 sText_LogEmpty[] = _("No quests yet.");
+
 STATIC_ASSERT(QUEST_COUNT <= TREY_QUEST_SLOTS, TreyTooManyQuests);
 STATIC_ASSERT(QUEST_COUNT <= QUEST_STAGE_DONE, TreyQuestNumHitsDoneValue);
 
@@ -192,17 +202,17 @@ static void ShowBanner(u32 quest, u32 oldStage, u32 newStage)
 
     if (newStage == QUEST_STAGE_DONE)
     {
-        prefix = COMPOUND_STRING("Quest complete: ");
+        prefix = sText_QuestComplete;
         PlaySE(SE_SUCCESS);
     }
     else if (oldStage == QUEST_STAGE_NONE)
     {
-        prefix = COMPOUND_STRING("New quest: ");
+        prefix = sText_NewQuest;
         PlaySE(SE_PIN);
     }
     else
     {
-        prefix = COMPOUND_STRING("Quest updated: ");
+        prefix = sText_QuestUpdated;
         PlaySE(SE_PIN);
     }
 
@@ -308,15 +318,15 @@ static void PrintQuestInfo(s32 quest)
         str = StringCopy(gStringVar4, TreyDex_GetName(gTreyQuests[quest].region));
         if (stage == QUEST_STAGE_DONE)
         {
-            StringCopy(str, COMPOUND_STRING("  Complete!"));
+            StringCopy(str, sText_LogComplete);
         }
         else if (stage == QUEST_STAGE_NONE)
         {
-            StringCopy(str, COMPOUND_STRING("  Not started"));
+            StringCopy(str, sText_LogNotStarted);
         }
         else
         {
-            str = StringCopy(str, COMPOUND_STRING("  Step "));
+            str = StringCopy(str, sText_LogStep);
             str = ConvertIntToDecimalStringN(str, stage, STR_CONV_MODE_LEFT_ALIGN, 3);
             *str++ = CHAR_SLASH;
             ConvertIntToDecimalStringN(str, gTreyQuests[quest].numStages, STR_CONV_MODE_LEFT_ALIGN, 3);
@@ -347,7 +357,7 @@ static void LogPrintItem(u8 windowId, u32 itemId, u8 y)
         return;
     stage = TreyQuest_GetStage(itemId);
     if (stage == QUEST_STAGE_DONE)
-        StringCopy(text, COMPOUND_STRING("DONE"));
+        StringCopy(text, sText_LogDone);
     else if (sQuestLog->debugMode)
         ConvertIntToDecimalStringN(text, stage, STR_CONV_MODE_LEFT_ALIGN, 3);
     else
@@ -403,7 +413,7 @@ void TreyQuestLog_Open(bool32 debugMode)
     {
         // nothing started yet (the start menu only offers QUESTS once one has, but the debug list can be empty too)
         FillWindowPixelBuffer(sQuestLog->listWindowId, PIXEL_FILL(1));
-        AddTextPrinterParameterized(sQuestLog->listWindowId, FONT_NORMAL, COMPOUND_STRING("No quests yet."), 8, 1, TEXT_SKIP_DRAW, NULL);
+        AddTextPrinterParameterized(sQuestLog->listWindowId, FONT_NORMAL, sText_LogEmpty, 8, 1, TEXT_SKIP_DRAW, NULL);
         PutWindowTilemap(sQuestLog->listWindowId);
         CopyWindowToVram(sQuestLog->listWindowId, COPYWIN_FULL);
         sQuestLog->listTaskId = TASK_NONE;
