@@ -5,6 +5,7 @@
 #include "field_screen_effect.h"
 #include "item.h"
 #include "list_menu.h"
+#include "malloc.h"
 #include "overworld.h"
 #include "script_menu.h"
 #include "string_util.h"
@@ -103,7 +104,10 @@ void TreyTransit_PushDestinations(void)
     {
         if (i == here || sStops[i].mode != mode || sStops[i].map == MAP_UNDEFINED || !IsStopVisited(i))
             continue;
-        MultichoiceDynamic_PushElement((struct ListMenuItem){sStops[i].name, i});
+        // The menu frees every item name when it closes (since expansion 1.16), so push a heap copy like dynmultipush.
+        u8 *name = Alloc(StringLength(sStops[i].name) + 1);
+        StringCopy(name, sStops[i].name);
+        MultichoiceDynamic_PushElement((struct ListMenuItem){name, i});
         count++;
     }
     gSpecialVar_Result = count;
