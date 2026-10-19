@@ -1,4 +1,5 @@
 #include "global.h"
+#include "region_map.h" // TREY (5a)
 #include "string_util.h"
 #include "text.h"
 #include "strings.h"
@@ -526,10 +527,8 @@ static const u8 *ExpandPlaceholder_Groudon(void)
 
 static const u8 *ExpandPlaceholder_Region(void)
 {
-    if (IS_FRLG)
-        return gText_Kanto;
-    else
-        return gText_Hoenn;
+    // TREY (5a): the region the player is in (its region map page name), not the game version.
+    return TreyRegionMap_GetPageName(TreyRegionMap_GetPlayerPage());
 }
 
 const u8 *GetExpandedPlaceholder(u32 id)

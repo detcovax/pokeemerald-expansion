@@ -231,12 +231,10 @@ static void PrintRegionMapSecName(void)
 static void PrintTitleWindowText(void)
 {
     static const u8 FlyPromptText[] = _("{R_BUTTON} FLY");
-    const u8 *region;
-    if (IS_FRLG)
-        region = gText_Kanto;
-    else
-        region = gText_Hoenn;
-    u32 hoennOffset = GetStringCenterAlignXOffset(FONT_NORMAL, region, 0x38);
+    // TREY (5a): the title is the region map page being shown (L/R flips pages), not the game version.
+    const u8 *region = TreyRegionMap_GetPageName(gTreyRegionMapPage);
+    u8 regionFont = GetStringWidth(FONT_NORMAL, region, 0) <= 0x38 ? FONT_NORMAL : FONT_NARROW;
+    u32 hoennOffset = GetStringCenterAlignXOffset(regionFont, region, 0x38);
     u32 flyOffset = GetStringCenterAlignXOffset(FONT_NORMAL, FlyPromptText, 0x38);
 
     FillWindowPixelBuffer(WIN_TITLE, PIXEL_FILL(1));
@@ -249,7 +247,7 @@ static void PrintTitleWindowText(void)
     }
     else
     {
-        AddTextPrinterParameterized(WIN_TITLE, FONT_NORMAL, region, hoennOffset, 1, 0, NULL);
+        AddTextPrinterParameterized(WIN_TITLE, regionFont, region, hoennOffset, 1, 0, NULL);
         CopyWindowToVram(WIN_TITLE, COPYWIN_FULL);
     }
 }
