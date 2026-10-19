@@ -152,7 +152,6 @@ SSTidalCorridor_EventScript_Porthole::
 
 SSTidalCorridor_EventScript_LookThroughPorthole::
 	special LookThroughPorthole
-	waitstate
 	end
 
 SSTidalCorridor_EventScript_Sailor::

@@ -21,7 +21,10 @@ def read_rows(path):
 
 def known_constants(path, prefix):
     with open(path, encoding="utf-8") as f:
-        return set(re.findall(r"#define\s+(" + prefix + r"\w+)\b", f.read()))
+        text = f.read()
+    # Species and moves are enums since expansion 1.16; some aliases are still #defines.
+    return (set(re.findall(r"#define\s+(" + prefix + r"\w+)\b", text))
+            | set(re.findall(r"^\s*(" + prefix + r"\w+)\s*[=,]", text, re.M)))
 
 
 def main():

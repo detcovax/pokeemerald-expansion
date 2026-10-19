@@ -1,14 +1,21 @@
 #ifndef GUARD_REGIONS_H
 #define GUARD_REGIONS_H
 
+#include "global.h"
 #include "constants/regions.h"
 #include "trey_regions.h" // TREY
 
-static inline u32 GetCurrentRegion(void)
+enum KantoSubRegion GetKantoSubregion(u32 mapSecId);
+
+static inline enum Region GetRegionForSectionId(u32 sectionId)
 {
-    // TREY: the region now comes from the current map's MAPSEC (src/trey_regions.c).
-    // How regions map to regional FORMS (e.g. Hisuian forms in Sinnoh) is decided in Phase 2.
-    return TreyGetCurrentRegion();
+    // TREY: every location has its region in region_map_sections.json (trey_region, src/trey_regions.c).
+    return TreyGetRegionOfMapsec(sectionId);
+}
+
+static inline enum Region GetCurrentRegion(void)
+{
+    return GetRegionForSectionId(gMapHeader.regionMapSectionId);
 }
 
 #endif // GUARD_REGIONS_H

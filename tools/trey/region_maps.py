@@ -260,10 +260,10 @@ def import_all():
     known = set(by_id)
     grids = {
         "HOENN": read_grid(HOENN_LAYOUT_H),
-        "KANTO": read_grid(f"{HNS}/src/data/region_map/region_map_layout_kanto.h"),
-        "SEVII_123": read_grid(f"{HNS}/src/data/region_map/region_map_layout_sevii123.h"),
-        "SEVII_45": read_grid(f"{HNS}/src/data/region_map/region_map_layout_sevii45.h"),
-        "SEVII_67": read_grid(f"{HNS}/src/data/region_map/region_map_layout_sevii67.h"),
+        "KANTO": read_grid("src/data/region_map/region_map_layout_kanto.h"),  # upstream FRLG (expansion 1.16)
+        "SEVII_123": read_grid("src/data/region_map/region_map_layout_sevii123.h"),  # upstream FRLG (expansion 1.16)
+        "SEVII_45": read_grid("src/data/region_map/region_map_layout_sevii45.h"),  # upstream FRLG (expansion 1.16)
+        "SEVII_67": read_grid("src/data/region_map/region_map_layout_sevii67.h"),  # upstream FRLG (expansion 1.16)
         "JOHTO": rename_grid(read_grid(f"{HNS}/src/data/region_map/region_map_layout_johto.h"), JOHTO_RENAME),
         "SINNOH": sin_grid,
     }
@@ -278,16 +278,9 @@ def import_all():
     write_layouts(grids)
 
     # Art
-    copy_art(f"{HNS}/graphics/pokenav/region_map/map_kanto", "graphics/pokenav/region_map/map_kanto")
-    copy_art(f"{HNS}/graphics/pokenav/region_map/map_sevii_123", "graphics/pokenav/region_map/map_sevii_123")
-    copy_art(f"{HNS}/graphics/pokenav/region_map/map_sevii_45", "graphics/pokenav/region_map/map_sevii_45")
-    copy_art(f"{HNS}/graphics/pokenav/region_map/map_sevii_67", "graphics/pokenav/region_map/map_sevii_67")
+    # Kanto and Sevii art is upstream's FRLG art since expansion 1.16 (D25), so it is not copied.
     copy_art(f"{HNS}/graphics/pokenav/region_map/map_johto", "graphics/pokenav/region_map/map_johto")
     copy_art(f"{SINNOH}/graphics/pokenav/region_map/map", "graphics/pokenav/region_map/map_sinnoh")
-    copy_art(f"{HNS}/graphics/pokedex/region_map_kanto", "graphics/pokedex/region_map_kanto")
-    copy_art(f"{HNS}/graphics/pokedex/region_map_sevii123", "graphics/pokedex/region_map_sevii_123")
-    copy_art(f"{HNS}/graphics/pokedex/region_map_sevii45", "graphics/pokedex/region_map_sevii_45")
-    copy_art(f"{HNS}/graphics/pokedex/region_map_sevii67", "graphics/pokedex/region_map_sevii_67")
     copy_art(f"{HNS}/graphics/pokedex/region_map_johto", "graphics/pokedex/region_map_johto")
     copy_art(f"{SINNOH}/graphics/pokedex/region_map", "graphics/pokedex/region_map_sinnoh")
     draw_placeholders(secs, grids)

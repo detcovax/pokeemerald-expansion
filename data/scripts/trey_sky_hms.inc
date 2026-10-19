@@ -8,7 +8,7 @@ EventScript_TreyStormPuff::
 	lockall
 	goto_if_unset FLAG_TREY_HM_GUST, EventScript_TreyCantGust
 	goto_if_set FLAG_TREY_USE_GUST, EventScript_TreyGustActive
-	checkpartymove MOVE_GUST
+	treycheckpartymove MOVE_GUST
 	goto_if_eq VAR_RESULT, PARTY_SIZE, EventScript_TreyCantGust
 	setfieldeffectargument 0, VAR_RESULT
 	msgbox Text_TreyWantToGust, MSGBOX_YESNO
@@ -35,7 +35,7 @@ EventScript_TreyGustActive::
 EventScript_TreyWhirlwind::
 	lockall
 	goto_if_unset FLAG_TREY_HM_WHIRLWIND, EventScript_TreyCantWhirlwind
-	checkpartymove MOVE_WHIRLWIND
+	treycheckpartymove MOVE_WHIRLWIND
 	goto_if_eq VAR_RESULT, PARTY_SIZE, EventScript_TreyCantWhirlwind
 	copyvar VAR_0x8004, VAR_RESULT
 	special TreySky_CheckWhirlwindPath
@@ -66,7 +66,7 @@ EventScript_TreyCantWhirlwind::
 EventScript_TreyUpdraft::
 	lockall
 	goto_if_unset FLAG_TREY_HM_UPDRAFT, EventScript_TreyCantUpdraft
-	checkpartymove MOVE_UPDRAFT
+	treycheckpartymove MOVE_UPDRAFT
 	goto_if_eq VAR_RESULT, PARTY_SIZE, EventScript_TreyCantUpdraft
 	bufferpartymonnick STR_VAR_1, VAR_RESULT
 	setfieldeffectargument 0, VAR_RESULT

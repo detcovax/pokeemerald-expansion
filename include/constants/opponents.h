@@ -2,6 +2,7 @@
 #define GUARD_CONSTANTS_OPPONENTS_H
 
 #include "constants/battle_partner.h"
+#include "constants/opponents_frlg.h"
 
 #define TRAINER_NONE                          0
 #define TRAINER_SAWYER_1                      1
@@ -863,15 +864,19 @@
 //       More space can be made by shifting flags around in constants/flags.h or changing how trainer flags are handled
 //       MAX_TRAINERS_COUNT can be increased but will take up additional saveblock space
 
-#define TRAINERS_COUNT                      855
-
+#define TRAINERS_COUNT_EMERALD     855
 // TREY: widened from 864 to 3008 trainers (TREY_PLAN.md E4).
-// 3008 keeps SYSTEM_FLAGS 32-aligned (0x500 + 3008 = 0x10C0) and keeps partner IDs below TRAINER_UNION_ROOM (3072).
-// RESERVED IDs: the engine compares trainer IDs against special values without checking the battle type,
-// so real trainers must NEVER use these IDs (see include/constants/trainers.h):
-//   1022 (TRAINER_FRONTIER_BRAIN), 1024 (TRAINER_SECRET_BASE), 2048 (TRAINER_LINK_OPPONENT)
-// When the trainer list reaches them, fill those slots with dummy trainers. src/trey_save.c checks this at build time.
-#define MAX_TRAINERS_COUNT                  3008
+// 3008 keeps SYSTEM_FLAGS 32-aligned (0x500 + 3008 = 0x10C0). Since expansion 1.16 the special trainer IDs
+// (TRAINER_SECRET_BASE etc.) start at 0xFF00, so no IDs inside the range are reserved. src/trey_save.c checks the partners.
+#define MAX_TRAINERS_COUNT_EMERALD 3008
+
+#if IS_FRLG
+#define TRAINERS_COUNT                      TRAINERS_COUNT_FRLG
+#define MAX_TRAINERS_COUNT                  MAX_TRAINERS_COUNT_FRLG
+#else
+#define TRAINERS_COUNT                      TRAINERS_COUNT_EMERALD
+#define MAX_TRAINERS_COUNT                  MAX_TRAINERS_COUNT_EMERALD
+#endif
 #define TRAINER_PARTNER(partner)           (MAX_TRAINERS_COUNT + partner)
 
 #endif  // GUARD_CONSTANTS_OPPONENTS_H

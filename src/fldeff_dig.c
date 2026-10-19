@@ -17,7 +17,7 @@ static void FieldCallback_Dig(void);
 static void StartDigFieldEffect(void);
 
 // text
-bool8 SetUpFieldMove_Dig(void)
+bool32 SetUpFieldMove_Dig(void)
 {
     // TREY (TREY_PLAN.md 5.3): a Dig layer link here takes you down to / up from the Underground layer.
     if (TreyLayer_CanDig())

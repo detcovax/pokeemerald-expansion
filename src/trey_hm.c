@@ -85,7 +85,7 @@ bool32 TreyHM_SpeciesIsSkyEligible(u16 species)
         if (gSpeciesInfo[species].abilities[i] == ABILITY_LEVITATE)
             eligible = TRUE;
     }
-    return eligible && !IsMonBannedFromSkyBattles(species);
+    return eligible && !gSpeciesInfo[species].isSkyBattleBanned;
 }
 
 bool32 TreyHM_SpeciesCanLearn(u16 species, u16 move)
@@ -125,12 +125,22 @@ u8 TreyHM_FindPartyMon(u16 move)
     u8 i;
     for (i = 0; i < PARTY_SIZE; i++)
     {
-        if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES) == SPECIES_NONE)
+        if (GetMonData(&gParties[B_TRAINER_PLAYER][i], MON_DATA_SPECIES) == SPECIES_NONE)
             break;
-        if (TreyHM_MonCanUseInField(&gPlayerParty[i], move))
+        if (TreyHM_MonCanUseInField(&gParties[B_TRAINER_PLAYER][i], move))
             return i;
     }
     return PARTY_SIZE;
+}
+
+// special for the treycheckpartymove script macro (upstream 1.16 removed checkpartymove).
+// VAR_0x8004 = move in; VAR_RESULT = party slot or PARTY_SIZE, VAR_0x8004 = that Pokémon's species.
+void TreyHM_CheckPartyMove(void)
+{
+    u8 slot = TreyHM_FindPartyMon(gSpecialVar_0x8004);
+    gSpecialVar_Result = slot;
+    if (slot < PARTY_SIZE)
+        gSpecialVar_0x8004 = GetMonData(&gParties[B_TRAINER_PLAYER][slot], MON_DATA_SPECIES);
 }
 
 // ---------------------------------------------------------------------------

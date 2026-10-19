@@ -16,6 +16,7 @@ bool32 TreyHM_IsSkyHM(u16 move);                 // Gust, Whirlwind, Updraft (3f
 bool32 TreyHM_SpeciesIsSkyEligible(u16 species); // Sky Battle rules by species: every one can learn the sky HMs
 bool32 TreyHM_MonCanUseInField(struct Pokemon *mon, u16 move);
 u8 TreyHM_FindPartyMon(u16 move);
+void TreyHM_CheckPartyMove(void); // special: see the treycheckpartymove macro
 void TreyHM_DebugUnlockAll(void); // new game: unlock every HM when TREY_DEBUG_UNLOCK_ALL_HMS is 1
 u32 TreyHM_Count(void);
 u16 TreyHM_GetMove(u32 index);

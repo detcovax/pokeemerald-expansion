@@ -1004,9 +1004,10 @@ METATILE_HEADER = "include/constants/trey_sky_metatiles.h"
 # Behaviours (include/constants/metatile_behaviors.h)
 MB_NORMAL = 0x00
 MB_SKY_CLOUD = 0x05
-MB_SKY_WIND_NORTH, MB_SKY_WIND_SOUTH, MB_SKY_WIND_WEST, MB_SKY_WIND_EAST = 0x54, 0x55, 0x56, 0x57
-MB_SKY_CYCLONE, MB_SKY_UPDRAFT = 0x58, 0x59  # 3f: Whirlwind cyclones, Updraft columns
-MB_SKY_LANDING = 0x5A                         # 3g: landing spots (A lands here)
+# Values must match include/constants/metatile_behaviors.h (moved in the 1.16 merge)
+MB_SKY_WIND_NORTH, MB_SKY_WIND_SOUTH, MB_SKY_WIND_WEST, MB_SKY_WIND_EAST = 0xF0, 0xF1, 0xF2, 0xF3
+MB_SKY_CYCLONE, MB_SKY_UPDRAFT = 0xF4, 0xF5  # 3f: Whirlwind cyclones, Updraft columns
+MB_SKY_LANDING = 0xF6                         # 3g: landing spots (A lands here)
 LAYER_COVERED = 1  # both layers are drawn below the player
 
 # Animated 2x2 tile blocks, at fixed tile indexes (tile 0 is transparent). Frame 0 is also stored in tiles.png.

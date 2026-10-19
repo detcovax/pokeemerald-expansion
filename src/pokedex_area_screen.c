@@ -493,21 +493,21 @@ static bool8 MapHasSpecies(const struct WildEncounterTypes *info, u16 species)
             return FALSE;
     }
 
-    if (MonListHasSpecies(info->landMonsInfo, species, LAND_WILD_COUNT))
+    if (MonListHasSpecies(info->landMonsInfo, species, NUM_LAND_MONS_ENCOUNTER_SLOTS))
         return TRUE;
-    if (MonListHasSpecies(info->waterMonsInfo, species, WATER_WILD_COUNT))
+    if (MonListHasSpecies(info->waterMonsInfo, species, NUM_WATER_MONS_ENCOUNTER_SLOTS))
         return TRUE;
 // When searching the fishing encounters, this incorrectly uses the size of the land encounters.
 // As a result it's reading out of bounds of the fishing encounters tables.
 #ifdef BUGFIX
-    if (MonListHasSpecies(info->fishingMonsInfo, species, FISH_WILD_COUNT))
+    if (MonListHasSpecies(info->fishingMonsInfo, species, NUM_FISHING_MONS_ENCOUNTER_SLOTS))
 #else
-    if (MonListHasSpecies(info->fishingMonsInfo, species, LAND_WILD_COUNT))
+    if (MonListHasSpecies(info->fishingMonsInfo, species, NUM_LAND_MONS_ENCOUNTER_SLOTS))
 #endif
         return TRUE;
-    if (MonListHasSpecies(info->rockSmashMonsInfo, species, ROCK_WILD_COUNT))
+    if (MonListHasSpecies(info->rockSmashMonsInfo, species, NUM_ROCK_SMASH_MONS_ENCOUNTER_SLOTS))
         return TRUE;
-    if (MonListHasSpecies(info->skyMonsInfo, species, SKY_WILD_COUNT)) // TREY: sky clouds (3e)
+    if (MonListHasSpecies(info->skyMonsInfo, species, NUM_SKY_MONS_ENCOUNTER_SLOTS)) // TREY: sky clouds (3e)
         return TRUE;
     return FALSE;
 }
@@ -798,7 +798,7 @@ bool32 ShouldShowAreaUnknownLabel(void)
 
 #define tState data[0]
 
-void DisplayPokedexAreaScreen(u16 species, u8 *screenSwitchState, enum TimeOfDay timeOfDay, enum PokedexAreaScreenState areaState)
+void DisplayPokedexAreaScreen(enum Species species, u8 *screenSwitchState, enum TimeOfDay timeOfDay, enum PokedexAreaScreenState areaState)
 {
     u8 taskId;
 

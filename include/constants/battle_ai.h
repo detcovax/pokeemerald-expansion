@@ -34,18 +34,23 @@
 #define AI_FLAG_PREDICT_INCOMING_MON        AI_FLAG(24)  // AI will score against the predicting incoming mon if it predicts the player to switch. Requires AI_FLAG_PREDICT_SWITCH
 #define AI_FLAG_PP_STALL_PREVENTION         AI_FLAG(25)  // AI keeps track of the player's switches where the incoming mon is immune to the chosen move
 #define AI_FLAG_PREDICT_MOVE                AI_FLAG(26)  // AI will predict the player's move based on what move it would use in the same situation. Recommend using AI_FLAG_OMNISCIENT
+#define AI_FLAG_SMART_TERA                  AI_FLAG(27)  // AI will make smarter decisions when choosing whether to terrastalize (default is to always tera whenever available).
+#define AI_FLAG_ASSUME_STAB                 AI_FLAG(28)  // AI knows player's STAB moves, but nothing else. Restricted version of AI_FLAG_OMNISCIENT.
+#define AI_FLAG_ASSUME_STATUS_MOVES         AI_FLAG(29)  // AI has a chance to know certain non-damaging moves, and also Fake Out and Super Fang. Restricted version of AI_FLAG_OMNISCIENT.
+#define AI_FLAG_ATTACKS_PARTNER             AI_FLAG(30)  // AI specific to double battles; AI can deliberately attack its 'partner.'
+#define AI_FLAG_KNOW_OPPONENT_PARTY         AI_FLAG(31)  // AI knows all the species in the player's party, but not moves/items/abilities unless they've been seen.
+#define AI_FLAG_RANDOMIZE_SWITCHIN          AI_FLAG(32)  // AI will randomly choose between eligible switchin candidates of a given category instead of picking the last one in the party.
+#define AI_FLAG_RANDOMIZE_PARTY_INDICES     AI_FLAG(33)  // AI will randomize the order of the mons in its party, including the lead. Not an AI flag really, just a way to trigger TPP functionality
 // TREY: Energy-aware AI (TREY_PLAN.md 5.6, E5): prefers cheaper moves, saves Energy for its best move,
 // switches out when low, uses Ether/Elixir items, and punishes a low-Energy foe. Part of AI_FLAG_SMART_TRAINER.
-// Not counted in AI_FLAG_COUNT, so it doesn't appear in the debug menu's AI flag list.
-#define AI_FLAG_ENERGY_AWARE                AI_FLAG(27)
-
-
-#define AI_FLAG_COUNT                       27
+// Bit 59: kept clear of upstream's numbered flags (was bit 27 before the 1.16 merge; upstream took 27 for Smart Tera).
+#define AI_FLAG_ENERGY_AWARE                AI_FLAG(59)
 
 // The following options are enough to have a basic/smart trainer. Any other addtion could make the trainer worse/better depending on the flag
 #define AI_FLAG_BASIC_TRAINER         (AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY)
-#define AI_FLAG_SMART_TRAINER         (AI_FLAG_BASIC_TRAINER | AI_FLAG_OMNISCIENT | AI_FLAG_SMART_SWITCHING | AI_FLAG_SMART_MON_CHOICES | AI_FLAG_PP_STALL_PREVENTION | AI_FLAG_ENERGY_AWARE)
+#define AI_FLAG_SMART_TRAINER         (AI_FLAG_BASIC_TRAINER | AI_FLAG_OMNISCIENT | AI_FLAG_SMART_SWITCHING | AI_FLAG_SMART_MON_CHOICES | AI_FLAG_PP_STALL_PREVENTION | AI_FLAG_SMART_TERA | AI_FLAG_RANDOMIZE_SWITCHIN | AI_FLAG_ENERGY_AWARE) // TREY: + Energy aware
 #define AI_FLAG_PREDICTION            (AI_FLAG_PREDICT_SWITCH | AI_FLAG_PREDICT_INCOMING_MON | AI_FLAG_PREDICT_MOVE)
+#define AI_FLAG_ASSUMPTIONS           (AI_FLAG_ASSUME_STAB | AI_FLAG_ASSUME_STATUS_MOVES | AI_FLAG_WEIGH_ABILITY_PREDICTION)
 
 // 'other' ai logic flags
 #define AI_FLAG_DYNAMIC_FUNC          AI_FLAG(60)  // Create custom AI functions for specific battles via "setdynamicaifunc" cmd

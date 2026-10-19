@@ -25,15 +25,9 @@ STATIC_ASSERT(TREY_VARS_START <= VARS_END, TreyNoRoomForTreyVars);
 // Daily flags are cleared in whole bytes, so they must stay byte-aligned.
 STATIC_ASSERT(DAILY_FLAGS_START % 8 == 0, TreyDailyFlagsNotByteAligned);
 
-// Partner trainer IDs sit just above MAX_TRAINERS_COUNT and must not reach the special IDs.
-STATIC_ASSERT(TRAINER_PARTNER(PARTNER_COUNT) < TRAINER_UNION_ROOM, TreyPartnerIdsHitUnionRoom);
-
-// Real trainers must never use the special IDs the engine checks without a battle-type test.
-// When TRAINERS_COUNT passes one of these, that slot must hold a dummy trainer.
-// Remove the matching assert below once the dummy is in place.
-STATIC_ASSERT(TRAINERS_COUNT <= TRAINER_FRONTIER_BRAIN, TreyAddDummyTrainerAt1022);
-STATIC_ASSERT(TRAINERS_COUNT <= TRAINER_SECRET_BASE, TreyAddDummyTrainerAt1024);
-STATIC_ASSERT(TRAINERS_COUNT <= TRAINER_LINK_OPPONENT, TreyAddDummyTrainerAt2048);
+// Partner trainer IDs sit just above MAX_TRAINERS_COUNT and must stay below the special IDs
+// (0xFF00 and up since expansion 1.16; the old 1022/1024/2048 reservations are gone).
+STATIC_ASSERT(TRAINER_PARTNER(PARTNER_COUNT) < TRAINER_SECRET_BASE, TreyPartnerIdsHitSpecialIds);
 STATIC_ASSERT(TRAINERS_COUNT <= MAX_TRAINERS_COUNT, TreyTooManyTrainers);
 
 // Location IDs (TREY_PLAN.md E1/E2): every real MAPSEC must fit in 10 bits and stay below the special METLOC IDs.

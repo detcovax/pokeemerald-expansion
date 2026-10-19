@@ -5,32 +5,18 @@
 #include "malloc.h"
 #include "palette.h"
 #include "pokedex_area_region_map.h"
-#include "region_map.h" // TREY (4a): gTreyRegionMapPage
+#include "region_map.h" // TREY (4a): gTreyRegionMapPage, gRegionMapInfos
 
 static EWRAM_DATA u8 *sPokedexAreaMapBgNum = NULL;
 
-// TREY (4a): one area map per region map page (Hoenn is Emerald's). Art: tools/trey/region_maps.py.
-static const u16 ALIGNED(4) sPokedexAreaMap_Pal_KANTO[] = INCBIN_U16("graphics/pokedex/region_map_kanto.gbapal");
-static const u32 sPokedexAreaMap_Gfx_KANTO[] = INCBIN_U32("graphics/pokedex/region_map_kanto.8bpp.lz");
-static const u32 sPokedexAreaMap_Tilemap_KANTO[] = INCBIN_U32("graphics/pokedex/region_map_kanto.bin.lz");
-static const u16 ALIGNED(4) sPokedexAreaMap_Pal_SEVII_123[] = INCBIN_U16("graphics/pokedex/region_map_sevii_123.gbapal");
-static const u32 sPokedexAreaMap_Gfx_SEVII_123[] = INCBIN_U32("graphics/pokedex/region_map_sevii_123.8bpp.lz");
-static const u32 sPokedexAreaMap_Tilemap_SEVII_123[] = INCBIN_U32("graphics/pokedex/region_map_sevii_123.bin.lz");
-static const u16 ALIGNED(4) sPokedexAreaMap_Pal_SEVII_45[] = INCBIN_U16("graphics/pokedex/region_map_sevii_45.gbapal");
-static const u32 sPokedexAreaMap_Gfx_SEVII_45[] = INCBIN_U32("graphics/pokedex/region_map_sevii_45.8bpp.lz");
-static const u32 sPokedexAreaMap_Tilemap_SEVII_45[] = INCBIN_U32("graphics/pokedex/region_map_sevii_45.bin.lz");
-static const u16 ALIGNED(4) sPokedexAreaMap_Pal_SEVII_67[] = INCBIN_U16("graphics/pokedex/region_map_sevii_67.gbapal");
-static const u32 sPokedexAreaMap_Gfx_SEVII_67[] = INCBIN_U32("graphics/pokedex/region_map_sevii_67.8bpp.lz");
-static const u32 sPokedexAreaMap_Tilemap_SEVII_67[] = INCBIN_U32("graphics/pokedex/region_map_sevii_67.bin.lz");
+// TREY (4a): one area map per region map page. Kanto, Sevii and Hoenn use upstream's art (gRegionMapInfos,
+// FRLG-style Kanto, D25); Orange, Johto, Sinnoh and Kitakami use TREY art (tools/trey/region_maps.py).
 static const u16 ALIGNED(4) sPokedexAreaMap_Pal_ORANGE[] = INCBIN_U16("graphics/pokedex/region_map_orange.gbapal");
 static const u32 sPokedexAreaMap_Gfx_ORANGE[] = INCBIN_U32("graphics/pokedex/region_map_orange.8bpp.lz");
 static const u32 sPokedexAreaMap_Tilemap_ORANGE[] = INCBIN_U32("graphics/pokedex/region_map_orange.bin.lz");
 static const u16 ALIGNED(4) sPokedexAreaMap_Pal_JOHTO[] = INCBIN_U16("graphics/pokedex/region_map_johto.gbapal");
 static const u32 sPokedexAreaMap_Gfx_JOHTO[] = INCBIN_U32("graphics/pokedex/region_map_johto.8bpp.lz");
 static const u32 sPokedexAreaMap_Tilemap_JOHTO[] = INCBIN_U32("graphics/pokedex/region_map_johto.bin.lz");
-static const u16 ALIGNED(4) sPokedexAreaMap_Pal_HOENN[] = INCBIN_U16("graphics/pokedex/region_map.gbapal");
-static const u32 sPokedexAreaMap_Gfx_HOENN[] = INCBIN_U32("graphics/pokedex/region_map.8bpp.lz");
-static const u32 sPokedexAreaMap_Tilemap_HOENN[] = INCBIN_U32("graphics/pokedex/region_map.bin.lz");
 static const u16 ALIGNED(4) sPokedexAreaMap_Pal_SINNOH[] = INCBIN_U16("graphics/pokedex/region_map_sinnoh.gbapal");
 static const u32 sPokedexAreaMap_Gfx_SINNOH[] = INCBIN_U32("graphics/pokedex/region_map_sinnoh.8bpp.lz");
 static const u32 sPokedexAreaMap_Tilemap_SINNOH[] = INCBIN_U32("graphics/pokedex/region_map_sinnoh.bin.lz");
@@ -46,16 +32,49 @@ static const struct
     const u32 *tilemap;
 } sPokedexAreaMaps[TREY_REGION_MAP_COUNT] =
 {
-    [TREY_REGION_MAP_KANTO] = {sPokedexAreaMap_Pal_KANTO, sizeof(sPokedexAreaMap_Pal_KANTO), sPokedexAreaMap_Gfx_KANTO, sPokedexAreaMap_Tilemap_KANTO},
-    [TREY_REGION_MAP_SEVII_123] = {sPokedexAreaMap_Pal_SEVII_123, sizeof(sPokedexAreaMap_Pal_SEVII_123), sPokedexAreaMap_Gfx_SEVII_123, sPokedexAreaMap_Tilemap_SEVII_123},
-    [TREY_REGION_MAP_SEVII_45] = {sPokedexAreaMap_Pal_SEVII_45, sizeof(sPokedexAreaMap_Pal_SEVII_45), sPokedexAreaMap_Gfx_SEVII_45, sPokedexAreaMap_Tilemap_SEVII_45},
-    [TREY_REGION_MAP_SEVII_67] = {sPokedexAreaMap_Pal_SEVII_67, sizeof(sPokedexAreaMap_Pal_SEVII_67), sPokedexAreaMap_Gfx_SEVII_67, sPokedexAreaMap_Tilemap_SEVII_67},
     [TREY_REGION_MAP_ORANGE] = {sPokedexAreaMap_Pal_ORANGE, sizeof(sPokedexAreaMap_Pal_ORANGE), sPokedexAreaMap_Gfx_ORANGE, sPokedexAreaMap_Tilemap_ORANGE},
     [TREY_REGION_MAP_JOHTO] = {sPokedexAreaMap_Pal_JOHTO, sizeof(sPokedexAreaMap_Pal_JOHTO), sPokedexAreaMap_Gfx_JOHTO, sPokedexAreaMap_Tilemap_JOHTO},
-    [TREY_REGION_MAP_HOENN] = {sPokedexAreaMap_Pal_HOENN, sizeof(sPokedexAreaMap_Pal_HOENN), sPokedexAreaMap_Gfx_HOENN, sPokedexAreaMap_Tilemap_HOENN},
     [TREY_REGION_MAP_SINNOH] = {sPokedexAreaMap_Pal_SINNOH, sizeof(sPokedexAreaMap_Pal_SINNOH), sPokedexAreaMap_Gfx_SINNOH, sPokedexAreaMap_Tilemap_SINNOH},
     [TREY_REGION_MAP_KITAKAMI] = {sPokedexAreaMap_Pal_KITAKAMI, sizeof(sPokedexAreaMap_Pal_KITAKAMI), sPokedexAreaMap_Gfx_KITAKAMI, sPokedexAreaMap_Tilemap_KITAKAMI},
 };
+
+struct TreyAreaMapGfx
+{
+    const u16 *pal;
+    u16 palSize;
+    const u32 *gfx;
+    const u32 *tilemap;
+};
+
+static struct TreyAreaMapGfx GetAreaMapGfx(u32 page)
+{
+    struct TreyAreaMapGfx g;
+    s32 type = -1;
+
+    switch (page)
+    {
+    case TREY_REGION_MAP_KANTO:     type = REGION_MAP_KANTO; break;
+    case TREY_REGION_MAP_SEVII_123: type = REGION_MAP_SEVII123; break;
+    case TREY_REGION_MAP_SEVII_45:  type = REGION_MAP_SEVII45; break;
+    case TREY_REGION_MAP_SEVII_67:  type = REGION_MAP_SEVII67; break;
+    case TREY_REGION_MAP_HOENN:     type = REGION_MAP_HOENN; break;
+    }
+    if (type >= 0)
+    {
+        g.pal = gRegionMapInfos[type].dexMapPalette;
+        g.palSize = gRegionMapInfos[type].dexMapPaletteSize;
+        g.gfx = gRegionMapInfos[type].dexMapGfx;
+        g.tilemap = gRegionMapInfos[type].dexMapTilemap;
+    }
+    else
+    {
+        g.pal = sPokedexAreaMaps[page].pal;
+        g.palSize = sPokedexAreaMaps[page].palSize;
+        g.gfx = sPokedexAreaMaps[page].gfx;
+        g.tilemap = sPokedexAreaMaps[page].tilemap;
+    }
+    return g;
+}
 
 static const u32 sPokedexAreaMapAffine_Gfx[] = INCBIN_U32("graphics/pokedex/region_map_affine.8bpp.lz");
 static const u32 sPokedexAreaMapAffine_Tilemap[] = INCBIN_U32("graphics/pokedex/region_map_affine.bin.lz");
@@ -64,14 +83,15 @@ void LoadPokedexAreaMapGfx(const struct PokedexAreaMapTemplate *template)
 {
     u8 mode;
     void *tilemap;
+    struct TreyAreaMapGfx page = GetAreaMapGfx(gTreyRegionMapPage); // TREY (4a)
     sPokedexAreaMapBgNum = Alloc(sizeof(sPokedexAreaMapBgNum));
     mode = template->mode;
 
     if (mode == 0)
     {
         SetBgAttribute(template->bg, BG_ATTR_METRIC, 0);
-        DecompressAndCopyTileDataToVram(template->bg, sPokedexAreaMaps[gTreyRegionMapPage].gfx, 0, template->offset, 0);
-        tilemap = DecompressAndCopyTileDataToVram(template->bg, sPokedexAreaMaps[gTreyRegionMapPage].tilemap, 0, 0, 1);
+        DecompressAndCopyTileDataToVram(template->bg, page.gfx, 0, template->offset, 0);
+        tilemap = DecompressAndCopyTileDataToVram(template->bg, page.tilemap, 0, 0, 1);
         AddValToTilemapBuffer(tilemap, template->offset, 32, 32, FALSE); // template->offset is always 0, so this does nothing.
     }
     else
@@ -87,10 +107,10 @@ void LoadPokedexAreaMapGfx(const struct PokedexAreaMapTemplate *template)
     ChangeBgX(template->bg, 0, BG_COORD_SET);
     ChangeBgY(template->bg, 0, BG_COORD_SET);
     SetBgAttribute(template->bg, BG_ATTR_PALETTEMODE, 1);
-    CpuCopy16(sPokedexAreaMaps[gTreyRegionMapPage].pal, &gPlttBufferUnfaded[BG_PLTT_ID(7)], sPokedexAreaMaps[gTreyRegionMapPage].palSize); // TREY (4a)
+    CpuCopy16(page.pal, &gPlttBufferUnfaded[BG_PLTT_ID(7)], page.palSize); // TREY (4a)
     // TREY (4a): switching region redraws the area page without a fade, so update the visible colours too
     // (otherwise the previous region's palette stays on screen).
-    CpuCopy16(sPokedexAreaMaps[gTreyRegionMapPage].pal, &gPlttBufferFaded[BG_PLTT_ID(7)], sPokedexAreaMaps[gTreyRegionMapPage].palSize);
+    CpuCopy16(page.pal, &gPlttBufferFaded[BG_PLTT_ID(7)], page.palSize);
     *sPokedexAreaMapBgNum = template->bg;
 }
 

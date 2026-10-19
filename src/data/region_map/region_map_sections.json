@@ -1538,30 +1538,6 @@
       "trey_region": "REGION_KANTO"
     },
     {
-      "id": "MAPSEC_SEVII_ISLE_6",
-      "name": "SEVII ISLE 6",
-      "trey_map": "TREY_REGION_MAP_SEVII_123",
-      "trey_region": "REGION_KANTO"
-    },
-    {
-      "id": "MAPSEC_SEVII_ISLE_7",
-      "name": "SEVII ISLE 7",
-      "trey_map": "TREY_REGION_MAP_SEVII_123",
-      "trey_region": "REGION_KANTO"
-    },
-    {
-      "id": "MAPSEC_SEVII_ISLE_8",
-      "name": "SEVII ISLE 8",
-      "trey_map": "TREY_REGION_MAP_SEVII_123",
-      "trey_region": "REGION_KANTO"
-    },
-    {
-      "id": "MAPSEC_SEVII_ISLE_9",
-      "name": "SEVII ISLE 9",
-      "trey_map": "TREY_REGION_MAP_SEVII_123",
-      "trey_region": "REGION_KANTO"
-    },
-    {
       "id": "MAPSEC_RESORT_GORGEOUS",
       "name": "RESORT GORGEOUS",
       "x": 16,

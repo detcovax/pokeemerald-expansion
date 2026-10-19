@@ -41,7 +41,7 @@ TEST("TREY Energy: current Energy, IV and EV survive a save round trip")
     struct Pokemon mon;
     u16 energy;
     u8 iv, ev;
-    CreateMon(&mon, SPECIES_WOBBUFFET, 50, 0, FALSE, 0, OT_ID_PRESET, 0);
+    CreateMonWithIVs(&mon, SPECIES_WOBBUFFET, 50, 0, OTID_STRUCT_PRESET(0), 0);
     energy = 1023; SetMonData(&mon, MON_DATA_ENERGY, &energy);
     EXPECT_EQ(GetMonData(&mon, MON_DATA_ENERGY), 1023);
     energy = 600; SetMonData(&mon, MON_DATA_ENERGY, &energy);
@@ -60,7 +60,7 @@ TEST("TREY Energy: current Energy, IV and EV survive a save round trip")
 TEST("TREY Energy: new Pokemon start with full Energy")
 {
     struct Pokemon mon;
-    CreateMon(&mon, SPECIES_WOBBUFFET, 50, 31, FALSE, 0, OT_ID_PRESET, 0);
+    CreateMonWithIVs(&mon, SPECIES_WOBBUFFET, 50, 0, OTID_STRUCT_PRESET(0), 31);
     EXPECT_EQ(GetMonData(&mon, MON_DATA_ENERGY_IV), 31);
     EXPECT_EQ(GetMonData(&mon, MON_DATA_ENERGY), TreyEnergy_GetMonMax(&mon));
     EXPECT_GT(TreyEnergy_GetMonMax(&mon), 0);
@@ -78,7 +78,7 @@ TEST("TREY Energy: PP always reads full and cannot be spent")
 {
     struct Pokemon mon;
     u8 pp = 0;
-    CreateMon(&mon, SPECIES_WOBBUFFET, 50, 0, FALSE, 0, OT_ID_PRESET, 0);
+    CreateMonWithIVs(&mon, SPECIES_WOBBUFFET, 50, 0, OTID_STRUCT_PRESET(0), 0);
     SetMonData(&mon, MON_DATA_PP1, &pp);
     EXPECT_EQ(GetMonData(&mon, MON_DATA_PP1), GetMovePP(GetMonData(&mon, MON_DATA_MOVE1)));
     EXPECT_EQ(GetMonData(&mon, MON_DATA_PP_BONUSES), 0);
@@ -97,7 +97,7 @@ TEST("TREY Energy: Energy EVs count toward the EV total")
 {
     struct Pokemon mon;
     u8 ev = 100;
-    CreateMon(&mon, SPECIES_WOBBUFFET, 50, 0, FALSE, 0, OT_ID_PRESET, 0);
+    CreateMonWithIVs(&mon, SPECIES_WOBBUFFET, 50, 0, OTID_STRUCT_PRESET(0), 0);
     SetMonData(&mon, MON_DATA_ENERGY_EV, &ev);
     EXPECT_EQ(GetMonEVCount(&mon), 100);
 }

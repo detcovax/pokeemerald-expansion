@@ -49,7 +49,9 @@ def mask(text, names, where):
 
 def known_species():
     with open("include/constants/species.h", encoding="utf-8") as f:
-        return set(re.findall(r"#define\s+(SPECIES_\w+)\b", f.read()))
+        # Species is an enum since expansion 1.16 (some aliases are still #defines).
+        text = f.read()
+        return set(re.findall(r"#define\s+(SPECIES_\w+)\b", text)) | set(re.findall(r"^\s*(SPECIES_\w+)\s*[=,]", text, re.M))
 
 
 def known_maps():
