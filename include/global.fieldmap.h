@@ -487,6 +487,9 @@ struct Camera
 extern struct ObjectEvent gObjectEvents[OBJECT_EVENTS_COUNT];
 extern u8 gSelectedObjectEvent;
 extern struct MapHeader gMapHeader;
+// TREY (5a): field details that upstream switches with IS_FRLG for the whole game (PC tiles, Pokémon Center
+// monitor, surf/cycling music) follow the current map's layout instead, so FRLG maps get them in TREY.
+#define IS_FRLG_MAP (IS_FRLG || gMapHeader.mapLayout->isFrlg)
 extern struct PlayerAvatar gPlayerAvatar;
 extern struct Camera gCamera;
 

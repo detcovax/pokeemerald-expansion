@@ -19,6 +19,8 @@
 // The flag and var ranges must not run into the next ID range.
 STATIC_ASSERT(FLAGS_COUNT <= SPECIAL_FLAGS_START, TreyFlagsOverlapSpecialFlags);
 STATIC_ASSERT(TREY_FLAGS_START <= TREY_FLAGS_END, TreyNoRoomForTreyFlags);
+STATIC_ASSERT(TREY_FLAG_NEXT_FREE - 1 <= TREY_FLAGS_END, TreyFlagsOverflow);
+STATIC_ASSERT(TREY_FRLG_ITEM_FLAGS_USED <= TREY_FLAG_FRLG_ITEMS_COUNT, TreyTooManyFrlgItemFlags); // 5a
 STATIC_ASSERT(VARS_END < SPECIAL_VARS_START, TreyVarsOverlapSpecialVars);
 STATIC_ASSERT(TREY_VARS_START <= VARS_END, TreyNoRoomForTreyVars);
 

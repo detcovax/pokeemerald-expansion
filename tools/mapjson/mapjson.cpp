@@ -796,7 +796,8 @@ void process_groups(string groups_filepath, vector<string> &map_filepaths, strin
         }
         string map_name = json_to_string(map_data, "name");
 
-        if ((version == "emerald" && region != "REGION_HOENN")
+        // TREY (5a): the TREY (emerald) build keeps the FRLG Kanto/Sevii maps as well as Hoenn.
+        if ((version == "emerald" && region != "REGION_HOENN" && region != "REGION_KANTO")
          || (version == "firered" && region != "REGION_KANTO")) {
             invalid_maps.push_back(map_name);
         }
@@ -836,8 +837,8 @@ string generate_layout_headers_text(Json layouts_data) {
             else if (version == "firered")
                 layout_version = "frlg";
         }
-        if ((version == "emerald" && layout_version != "emerald")
-         || (version == "firered" && layout_version != "frlg"))
+        // TREY (5a): the emerald build also keeps FRLG layouts (they load with isFrlg = TRUE).
+        if (version == "firered" && layout_version != "frlg")
             continue;
         string layoutName = json_to_string(layout, "name");
         string border_label = layoutName + "_Border";
@@ -894,7 +895,7 @@ string generate_layouts_table_text(Json layouts_data) {
             else if (version == "firered")
                 layout_version = "frlg";
         }
-        if ((version == "emerald" && layout_version != "emerald") || (version == "firered" && layout_version != "frlg")) {
+        if (version == "firered" && layout_version != "frlg") { // TREY (5a): emerald keeps FRLG layouts too
             text << "\t.4byte NULL\n";
         } else {
             string layout_name = json_to_string(layout, "name", true);

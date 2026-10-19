@@ -43,20 +43,6 @@
     },
     {
       "type": "object",
-      "graphics_id": "OBJ_EVENT_GFX_OLD_MAN_1",
-      "x": 17,
-      "y": 9,
-      "elevation": 3,
-      "movement_type": "MOVEMENT_TYPE_LOOK_AROUND",
-      "movement_range_x": 1,
-      "movement_range_y": 1,
-      "trainer_type": "TRAINER_TYPE_NONE",
-      "trainer_sight_or_berry_tree_id": "0",
-      "script": "VermilionCity_EventScript_OldMan1",
-      "flag": "0"
-    },
-    {
-      "type": "object",
       "graphics_id": "OBJ_EVENT_GFX_OLD_MAN_2",
       "x": 36,
       "y": 10,
@@ -109,36 +95,8 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
-      "script": "VermilionCity_EventScript_FerrySailor",
+      "script": "TreyFrlg_EventScript_Placeholder",
       "flag": "0"
-    },
-    {
-      "type": "object",
-      "graphics_id": "OBJ_EVENT_GFX_CUTTABLE_TREE_FRLG",
-      "x": 19,
-      "y": 24,
-      "elevation": 3,
-      "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
-      "movement_range_x": 1,
-      "movement_range_y": 1,
-      "trainer_type": "TRAINER_TYPE_NONE",
-      "trainer_sight_or_berry_tree_id": "0",
-      "script": "EventScript_CutTree",
-      "flag": "FLAG_TEMP_12"
-    },
-    {
-      "type": "object",
-      "graphics_id": "OBJ_EVENT_GFX_SCIENTIST",
-      "x": 25,
-      "y": 7,
-      "elevation": 3,
-      "movement_type": "MOVEMENT_TYPE_LOOK_AROUND",
-      "movement_range_x": 4,
-      "movement_range_y": 1,
-      "trainer_type": "TRAINER_TYPE_NONE",
-      "trainer_sight_or_berry_tree_id": "0",
-      "script": "VermilionCity_EventScript_OaksAide",
-      "flag": "FLAG_HIDE_VERMILION_CITY_OAKS_AIDE"
     }
   ],
   "warp_events": [
@@ -213,44 +171,7 @@
       "dest_warp_id": "1"
     }
   ],
-  "coord_events": [
-    {
-      "type": "trigger",
-      "x": 22,
-      "y": 33,
-      "elevation": 0,
-      "var": "VAR_VERMILION_CITY_TICKET_CHECK_TRIGGER",
-      "var_value": "0",
-      "script": "VermilionCity_EventScript_CheckTicketLeft"
-    },
-    {
-      "type": "trigger",
-      "x": 23,
-      "y": 33,
-      "elevation": 0,
-      "var": "VAR_VERMILION_CITY_TICKET_CHECK_TRIGGER",
-      "var_value": "0",
-      "script": "VermilionCity_EventScript_CheckTicketRight"
-    },
-    {
-      "type": "trigger",
-      "x": 22,
-      "y": 32,
-      "elevation": 0,
-      "var": "VAR_TEMP_1",
-      "var_value": "0",
-      "script": "VermilionCity_EventScript_ExitedTicketCheck"
-    },
-    {
-      "type": "trigger",
-      "x": 23,
-      "y": 32,
-      "elevation": 0,
-      "var": "VAR_TEMP_1",
-      "var_value": "0",
-      "script": "VermilionCity_EventScript_ExitedTicketCheck"
-    }
-  ],
+  "coord_events": [],
   "bg_events": [
     {
       "type": "sign",
@@ -298,7 +219,7 @@
       "y": 11,
       "elevation": 3,
       "item": "ITEM_MAX_ETHER",
-      "flag": "FLAG_HIDDEN_ITEM_VERMILION_CITY_MAX_ETHER",
+      "flag": "FLAG_FRLG_HIDDEN_ITEM_VERMILION_CITY_MAX_ETHER",
       "quantity": 1,
       "underfoot": false
     }

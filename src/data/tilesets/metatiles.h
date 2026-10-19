@@ -214,7 +214,8 @@ const u16 gMetatileAttributes_UnionRoom[] = INCBIN_U16("data/tilesets/secondary/
 const u16 gMetatiles_TreySky[] = INCBIN_U16("data/tilesets/secondary/trey_sky/metatiles.bin");
 const u16 gMetatileAttributes_TreySky[] = INCBIN_U16("data/tilesets/secondary/trey_sky/metatile_attributes.bin");
 
-#else
+#endif // !IS_FRLG
+#if IS_FRLG || TREY_FRLG_DATA // TREY (5a): FRLG data is also built into TREY
 
 const u16 gMetatiles_Building_Frlg[] = INCBIN_U16("data/tilesets/primary/building_frlg/metatiles.bin");
 const u16 gMetatileAttributes_Building_Frlg[] = INCBIN_U16("data/tilesets/primary/building_frlg/metatile_attributes.bin");

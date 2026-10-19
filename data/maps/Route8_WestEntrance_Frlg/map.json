@@ -61,34 +61,6 @@
       "dest_warp_id": "1"
     }
   ],
-  "coord_events": [
-    {
-      "type": "trigger",
-      "x": 6,
-      "y": 4,
-      "elevation": 3,
-      "var": "VAR_MAP_SCENE_ROUTE5_ROUTE6_ROUTE7_ROUTE8_GATES",
-      "var_value": "0",
-      "script": "Route8_WestEntrance_EventScript_GuardTriggerTop"
-    },
-    {
-      "type": "trigger",
-      "x": 6,
-      "y": 5,
-      "elevation": 3,
-      "var": "VAR_MAP_SCENE_ROUTE5_ROUTE6_ROUTE7_ROUTE8_GATES",
-      "var_value": "0",
-      "script": "Route8_WestEntrance_EventScript_GuardTriggerMid"
-    },
-    {
-      "type": "trigger",
-      "x": 6,
-      "y": 6,
-      "elevation": 3,
-      "var": "VAR_MAP_SCENE_ROUTE5_ROUTE6_ROUTE7_ROUTE8_GATES",
-      "var_value": "0",
-      "script": "Route8_WestEntrance_EventScript_GuardTriggerBottom"
-    }
-  ],
+  "coord_events": [],
   "bg_events": []
 }

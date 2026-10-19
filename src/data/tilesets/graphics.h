@@ -1658,7 +1658,7 @@ const u16 gTilesetPalettes_TreySky[][16] =
     INCBIN_U16("data/tilesets/secondary/trey_sky/palettes/15.gbapal"),
 };
 
-#if IS_FRLG
+#if IS_FRLG || TREY_FRLG_DATA // TREY (5a)
 
 const u32 gTilesetTiles_Building_Frlg[] = INCGFX_U32("data/tilesets/primary/building_frlg/tiles.png", ".4bpp.smol");
 

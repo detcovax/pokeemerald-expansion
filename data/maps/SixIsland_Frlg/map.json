@@ -81,9 +81,7 @@
       "dest_warp_id": "0"
     }
   ],
-  "coord_events": [
-
-  ],
+  "coord_events": [],
   "bg_events": [
     {
       "type": "sign",
@@ -99,7 +97,7 @@
       "y": 7,
       "elevation": 3,
       "item": "ITEM_LEPPA_BERRY",
-      "flag": "FLAG_HIDDEN_ITEM_SIX_ISLAND_LEPPA_BERRY",
+      "flag": "FLAG_FRLG_HIDDEN_ITEM_SIX_ISLAND_LEPPA_BERRY",
       "quantity": 1,
       "underfoot": false
     }

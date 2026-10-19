@@ -1703,7 +1703,13 @@
 #define TREY_FLAG_REGION_ARRIVED_START  (TREY_FLAG_DEX_UNLOCK_END + 1)
 #define TREY_FLAG_REGION_ARRIVED_END    (TREY_FLAG_REGION_ARRIVED_START + 7)
 
-#define TREY_FLAG_NEXT_FREE             (TREY_FLAG_REGION_ARRIVED_END + 1) // next unused TREY flag
+// Item balls and hidden items on the FRLG Kanto/Sevii maps (5a), renamed FLAG_FRLG_* by tools/trey/import_frlg.py.
+#define TREY_FLAG_FRLG_ITEMS_START      (TREY_FLAG_REGION_ARRIVED_END + 1)
+#define TREY_FLAG_FRLG_ITEMS_COUNT      512
+#define TREY_FLAG_FRLG_ITEMS_END        (TREY_FLAG_FRLG_ITEMS_START + TREY_FLAG_FRLG_ITEMS_COUNT - 1)
+#include "constants/trey_frlg_flags.h"
+
+#define TREY_FLAG_NEXT_FREE             (TREY_FLAG_FRLG_ITEMS_END + 1) // next unused TREY flag
 
 #define FLAGS_COUNT (TREY_FLAGS_END + 1) // TREY: was (DAILY_FLAGS_END + 1)
 

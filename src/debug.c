@@ -285,6 +285,7 @@ static void DebugAction_Util_WatchCredits(u8 taskId);
 static void DebugAction_Util_CheatStart(u8 taskId);
 static void DebugAction_Util_TreySeason(u8 taskId); // TREY (4b)
 static void DebugAction_Util_TreyQuests(u8 taskId); // TREY (4f)
+static void DebugAction_Util_TreyWarpPallet(u8 taskId); // TREY (5a)
 extern const u8 TreyQuest_EventScript_DebugStep[]; // TREY (4f)
 
 static void DebugAction_TimeMenu_ChangeTimeOfDay(u8 taskId);
@@ -602,6 +603,7 @@ static const struct DebugMenuOption sDebugMenu_Actions_Utilities[] =
     { COMPOUND_STRING("TREY: next season"),     DebugAction_Util_TreySeason },            // TREY (4b)
     { COMPOUND_STRING("TREY: quests"),          DebugAction_Util_TreyQuests },            // TREY (4f)
     { COMPOUND_STRING("TREY: test quest step"), DebugAction_ExecuteScript, TreyQuest_EventScript_DebugStep }, // TREY (4f)
+    { COMPOUND_STRING("TREY: warp to Pallet"),  DebugAction_Util_TreyWarpPallet },        // TREY (5a)
     { NULL }
 };
 
@@ -5003,6 +5005,15 @@ static void DebugAction_Util_TreySeason(u8 taskId)
         TreySeason_DebugForce(forced + 1);
     PlayerGetDestCoords(&x, &y);
     SetWarpDestination(gSaveBlock1Ptr->location.mapGroup, gSaveBlock1Ptr->location.mapNum, WARP_ID_NONE, x - MAP_OFFSET, y - MAP_OFFSET);
+    Debug_DestroyMenu_Full(taskId);
+    DoWarp();
+    ResetInitialPlayerAvatarState();
+}
+
+// TREY (5a): jump to the FRLG Kanto maps (Pallet Town, in front of the player's house).
+static void DebugAction_Util_TreyWarpPallet(u8 taskId)
+{
+    SetWarpDestination(MAP_GROUP(MAP_PALLET_TOWN), MAP_NUM(MAP_PALLET_TOWN), WARP_ID_NONE, 6, 8);
     Debug_DestroyMenu_Full(taskId);
     DoWarp();
     ResetInitialPlayerAvatarState();

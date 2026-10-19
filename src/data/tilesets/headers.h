@@ -863,7 +863,8 @@ const struct Tileset gTileset_TreySky =
     .callback = InitTilesetAnim_TreySky,
 };
 
-#else
+#endif // !IS_FRLG
+#if IS_FRLG || TREY_FRLG_DATA // TREY (5a): FRLG data is also built into TREY
 
 // FRLG tilesets
 const struct Tileset gTileset_BuildingFrlg =

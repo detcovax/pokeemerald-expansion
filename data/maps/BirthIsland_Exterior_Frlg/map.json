@@ -28,23 +28,8 @@
       "movement_range_y": 1,
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
-      "script": "BirthIsland_Exterior_Frlg_EventScript_Triangle",
-      "flag": "FLAG_HIDE_BIRTH_ISLAND_METEORITE"
-    },
-    {
-      "local_id": "LOCALID_BIRTH_ISLAND_DEOXYS",
-      "type": "object",
-      "graphics_id": "OBJ_EVENT_GFX_VAR_0",
-      "x": 15,
-      "y": 3,
-      "elevation": 3,
-      "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
-      "movement_range_x": 1,
-      "movement_range_y": 1,
-      "trainer_type": "TRAINER_TYPE_NONE",
-      "trainer_sight_or_berry_tree_id": "0",
-      "script": "0x0",
-      "flag": "FLAG_HIDE_DEOXYS"
+      "script": "TreyFrlg_EventScript_Placeholder",
+      "flag": "0"
     }
   ],
   "warp_events": [
@@ -56,10 +41,6 @@
       "dest_warp_id": "0"
     }
   ],
-  "coord_events": [
-
-  ],
-  "bg_events": [
-
-  ]
+  "coord_events": [],
+  "bg_events": []
 }

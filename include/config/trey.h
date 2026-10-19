@@ -69,6 +69,9 @@
 #define TREY_DEBUG_ALL_TRANSIT          0
 // Debug (4d): every regional Pokédex is unlocked when a new game starts, without meeting the professors.
 // Set to 0 for real play.
+// Kanto (5a, TREY_PLAN.md D25): 1 = the FRLG tilesets, overworld sprites and door animations are built into
+// the TREY (Emerald) ROM, so the FRLG Kanto/Sevii maps can be used. Upstream only builds them for FireRed.
+#define TREY_FRLG_DATA                  1
 #define TREY_DEBUG_ALL_DEXES            0
 
 // ---------------------------------------------------------------------------
