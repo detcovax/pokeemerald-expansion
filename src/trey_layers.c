@@ -75,6 +75,18 @@ static u16 GetLayoutBehaviorAt(const struct MapLayout *layout, s16 x, s16 y, u16
 
     *block = layout->map[x + y * layout->width];
     metatileId = UNPACK_METATILE(*block);
+    if (layout->isFrlg) // 5e: FRLG layouts have 640 primary metatiles and 32-bit attributes
+    {
+        const u32 *attributes32;
+        if (metatileId < NUM_METATILES_IN_PRIMARY_FRLG)
+            attributes32 = layout->primaryTileset->metatileAttributes;
+        else
+        {
+            attributes32 = layout->secondaryTileset->metatileAttributes;
+            metatileId -= NUM_METATILES_IN_PRIMARY_FRLG;
+        }
+        return ExtractMetatileAttribute(attributes32[metatileId], METATILE_ATTRIBUTE_BEHAVIOR, TRUE);
+    }
     if (metatileId < NUM_METATILES_IN_PRIMARY)
         attributes = layout->primaryTileset->metatileAttributes;
     else

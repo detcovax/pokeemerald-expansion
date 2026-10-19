@@ -43,7 +43,7 @@ static const struct TreyTransitStop sStops[TRANSIT_STOP_COUNT] =
     [TRANSIT_STOP_LILYCOVE]        = {sText_Lilycove,       TRANSIT_SHIP,  HEAL_LOCATION_LILYCOVE_CITY,  MAP_LILYCOVE_CITY_HARBOR,  8, 11},
     [TRANSIT_STOP_BATTLE_FRONTIER] = {sText_BattleFrontier, TRANSIT_SHIP,  0,                            MAP_BATTLE_FRONTIER_OUTSIDE_WEST, 19, 67},
     // Other regions: filled in as their harbours and stations are built (Phase 5/6).
-    [TRANSIT_STOP_VERMILION]       = {sText_Vermilion,      TRANSIT_SHIP,  0, MAP_UNDEFINED, 0, 0},
+    [TRANSIT_STOP_VERMILION]       = {sText_Vermilion,      TRANSIT_SHIP,  HEAL_LOCATION_VERMILION_CITY, MAP_VERMILION_CITY, 23, 33}, // 5e: the S.S. Anne dock
     [TRANSIT_STOP_OLIVINE]         = {sText_Olivine,        TRANSIT_SHIP,  0, MAP_UNDEFINED, 0, 0},
     [TRANSIT_STOP_VALENCIA]        = {sText_Valencia,       TRANSIT_SHIP,  0, MAP_UNDEFINED, 0, 0},
     [TRANSIT_STOP_ONE_ISLAND]      = {sText_OneIsland,      TRANSIT_SHIP,  0, MAP_UNDEFINED, 0, 0},

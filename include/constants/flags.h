@@ -1726,8 +1726,12 @@
 #define FLAG_TREY_KANTO_ROCKET_P1_DONE  (TREY_FLAG_MISC_START + 3) // 5d: Team Rocket phase 1 beaten -> Giovanni opens Viridian Gym (set by the Kanto story, or the debug menu)
 #define FLAG_TREY_KANTO_LEAGUE_BLUE_DONE (TREY_FLAG_MISC_START + 4) // 5d: Blue beaten at the Kanto League -> Blue leads Viridian Gym
 #define TREY_FLAG_MISC_END              (TREY_FLAG_MISC_START + 15)
+// FRLG "visited" (world map) flags for Kanto/Sevii fly and Teleport destinations (5e). FRLG's own numbers clash with
+// Emerald's, so the FLAG_WORLD_MAP_* names further down point into this block. Set on map entry (src/trey_regions.c).
+#define TREY_FLAG_WORLD_MAP_START       (TREY_FLAG_MISC_END + 1)
+#define TREY_FLAG_WORLD_MAP_END         (TREY_FLAG_WORLD_MAP_START + 63)
 
-#define TREY_FLAG_NEXT_FREE             (TREY_FLAG_MISC_END + 1) // next unused TREY flag
+#define TREY_FLAG_NEXT_FREE             (TREY_FLAG_WORLD_MAP_END + 1) // next unused TREY flag
 
 #define FLAGS_COUNT (TREY_FLAGS_END + 1) // TREY: was (DAILY_FLAGS_END + 1)
 
@@ -2475,58 +2479,57 @@
 #define FLAG_SYS_UNLOCKED_TANOBY_RUINS                              0
 
 // World Map Flags
-#define FLAG_WORLD_MAP_PALLET_TOWN                                  0
-#define FLAG_WORLD_MAP_VIRIDIAN_CITY                                0
-#define FLAG_WORLD_MAP_PEWTER_CITY                                  0
-#define FLAG_WORLD_MAP_CERULEAN_CITY                                0
-#define FLAG_WORLD_MAP_LAVENDER_TOWN                                0
-#define FLAG_WORLD_MAP_VERMILION_CITY                               0
-#define FLAG_WORLD_MAP_CELADON_CITY                                 0
-#define FLAG_WORLD_MAP_FUCHSIA_CITY                                 0
-#define FLAG_WORLD_MAP_CINNABAR_ISLAND                              0
-#define FLAG_WORLD_MAP_INDIGO_PLATEAU_EXTERIOR                      0
-#define FLAG_WORLD_MAP_SAFFRON_CITY                                 0
-#define FLAG_WORLD_MAP_ONE_ISLAND                                   0
-#define FLAG_WORLD_MAP_TWO_ISLAND                                   0
-#define FLAG_WORLD_MAP_THREE_ISLAND                                 0
-#define FLAG_WORLD_MAP_FOUR_ISLAND                                  0
-#define FLAG_WORLD_MAP_FIVE_ISLAND                                  0
-#define FLAG_WORLD_MAP_SEVEN_ISLAND                                 0
-#define FLAG_WORLD_MAP_SIX_ISLAND                                   0
-#define FLAG_WORLD_MAP_ROUTE4_POKEMON_CENTER_1F                     0
-#define FLAG_WORLD_MAP_ROUTE10_POKEMON_CENTER_1F                    0
-#define FLAG_WORLD_MAP_VIRIDIAN_FOREST                              0
-#define FLAG_WORLD_MAP_MT_MOON_1F                                   0
-#define FLAG_WORLD_MAP_SSANNE_EXTERIOR                              0
-#define FLAG_WORLD_MAP_UNDERGROUND_PATH_NORTH_SOUTH_TUNNEL          0
-#define FLAG_WORLD_MAP_UNDERGROUND_PATH_EAST_WEST_TUNNEL            0
-#define FLAG_WORLD_MAP_DIGLETTS_CAVE_B1F                            0
-#define FLAG_WORLD_MAP_VICTORY_ROAD_1F                              0
-#define FLAG_WORLD_MAP_ROCKET_HIDEOUT_B1F                           0
-#define FLAG_WORLD_MAP_SILPH_CO_1F                                  0
-#define FLAG_WORLD_MAP_POKEMON_MANSION_1F                           0
-#define FLAG_WORLD_MAP_SAFARI_ZONE_CENTER                           0
-#define FLAG_WORLD_MAP_POKEMON_LEAGUE_LORELEIS_ROOM                 0
-#define FLAG_WORLD_MAP_ROCK_TUNNEL_1F                               0
-#define FLAG_WORLD_MAP_SEAFOAM_ISLANDS_1F                           0
-#define FLAG_WORLD_MAP_POKEMON_TOWER_1F                             0
-#define FLAG_WORLD_MAP_CERULEAN_CAVE_1F                             0
-#define FLAG_WORLD_MAP_POWER_PLANT                                  0
-#define FLAG_WORLD_MAP_NAVEL_ROCK_EXTERIOR                          0
-#define FLAG_WORLD_MAP_MT_EMBER_EXTERIOR                            0
-#define FLAG_WORLD_MAP_THREE_ISLAND_BERRY_FOREST                    0
-#define FLAG_WORLD_MAP_FOUR_ISLAND_ICEFALL_CAVE_ENTRANCE            0
-#define FLAG_WORLD_MAP_FIVE_ISLAND_ROCKET_WAREHOUSE                 0
-#define FLAG_WORLD_MAP_TRAINER_TOWER_LOBBY                          0
-#define FLAG_WORLD_MAP_SIX_ISLAND_DOTTED_HOLE_1F                    0
-#define FLAG_WORLD_MAP_FIVE_ISLAND_LOST_CAVE_ENTRANCE               0
-#define FLAG_WORLD_MAP_SIX_ISLAND_PATTERN_BUSH                      0
-#define FLAG_WORLD_MAP_SIX_ISLAND_ALTERING_CAVE                     0
-#define FLAG_WORLD_MAP_SEVEN_ISLAND_TANOBY_RUINS_MONEAN_CHAMBER     0
-#define FLAG_WORLD_MAP_THREE_ISLAND_DUNSPARCE_TUNNEL                0
-#define FLAG_WORLD_MAP_SEVEN_ISLAND_SEVAULT_CANYON_TANOBY_KEY       0
-#define FLAG_WORLD_MAP_BIRTH_ISLAND_EXTERIOR                        0
-
+#define FLAG_WORLD_MAP_PALLET_TOWN                                  (TREY_FLAG_WORLD_MAP_START + 0) // TREY (5e)
+#define FLAG_WORLD_MAP_VIRIDIAN_CITY                                (TREY_FLAG_WORLD_MAP_START + 1) // TREY (5e)
+#define FLAG_WORLD_MAP_PEWTER_CITY                                  (TREY_FLAG_WORLD_MAP_START + 2) // TREY (5e)
+#define FLAG_WORLD_MAP_CERULEAN_CITY                                (TREY_FLAG_WORLD_MAP_START + 3) // TREY (5e)
+#define FLAG_WORLD_MAP_LAVENDER_TOWN                                (TREY_FLAG_WORLD_MAP_START + 4) // TREY (5e)
+#define FLAG_WORLD_MAP_VERMILION_CITY                               (TREY_FLAG_WORLD_MAP_START + 5) // TREY (5e)
+#define FLAG_WORLD_MAP_CELADON_CITY                                 (TREY_FLAG_WORLD_MAP_START + 6) // TREY (5e)
+#define FLAG_WORLD_MAP_FUCHSIA_CITY                                 (TREY_FLAG_WORLD_MAP_START + 7) // TREY (5e)
+#define FLAG_WORLD_MAP_CINNABAR_ISLAND                              (TREY_FLAG_WORLD_MAP_START + 8) // TREY (5e)
+#define FLAG_WORLD_MAP_INDIGO_PLATEAU_EXTERIOR                      (TREY_FLAG_WORLD_MAP_START + 9) // TREY (5e)
+#define FLAG_WORLD_MAP_SAFFRON_CITY                                 (TREY_FLAG_WORLD_MAP_START + 10) // TREY (5e)
+#define FLAG_WORLD_MAP_ONE_ISLAND                                   (TREY_FLAG_WORLD_MAP_START + 11) // TREY (5e)
+#define FLAG_WORLD_MAP_TWO_ISLAND                                   (TREY_FLAG_WORLD_MAP_START + 12) // TREY (5e)
+#define FLAG_WORLD_MAP_THREE_ISLAND                                 (TREY_FLAG_WORLD_MAP_START + 13) // TREY (5e)
+#define FLAG_WORLD_MAP_FOUR_ISLAND                                  (TREY_FLAG_WORLD_MAP_START + 14) // TREY (5e)
+#define FLAG_WORLD_MAP_FIVE_ISLAND                                  (TREY_FLAG_WORLD_MAP_START + 15) // TREY (5e)
+#define FLAG_WORLD_MAP_SEVEN_ISLAND                                 (TREY_FLAG_WORLD_MAP_START + 16) // TREY (5e)
+#define FLAG_WORLD_MAP_SIX_ISLAND                                   (TREY_FLAG_WORLD_MAP_START + 17) // TREY (5e)
+#define FLAG_WORLD_MAP_ROUTE4_POKEMON_CENTER_1F                     (TREY_FLAG_WORLD_MAP_START + 18) // TREY (5e)
+#define FLAG_WORLD_MAP_ROUTE10_POKEMON_CENTER_1F                    (TREY_FLAG_WORLD_MAP_START + 19) // TREY (5e)
+#define FLAG_WORLD_MAP_VIRIDIAN_FOREST                              (TREY_FLAG_WORLD_MAP_START + 20) // TREY (5e)
+#define FLAG_WORLD_MAP_MT_MOON_1F                                   (TREY_FLAG_WORLD_MAP_START + 21) // TREY (5e)
+#define FLAG_WORLD_MAP_SSANNE_EXTERIOR                              (TREY_FLAG_WORLD_MAP_START + 22) // TREY (5e)
+#define FLAG_WORLD_MAP_UNDERGROUND_PATH_NORTH_SOUTH_TUNNEL          (TREY_FLAG_WORLD_MAP_START + 23) // TREY (5e)
+#define FLAG_WORLD_MAP_UNDERGROUND_PATH_EAST_WEST_TUNNEL            (TREY_FLAG_WORLD_MAP_START + 24) // TREY (5e)
+#define FLAG_WORLD_MAP_DIGLETTS_CAVE_B1F                            (TREY_FLAG_WORLD_MAP_START + 25) // TREY (5e)
+#define FLAG_WORLD_MAP_VICTORY_ROAD_1F                              (TREY_FLAG_WORLD_MAP_START + 26) // TREY (5e)
+#define FLAG_WORLD_MAP_ROCKET_HIDEOUT_B1F                           (TREY_FLAG_WORLD_MAP_START + 27) // TREY (5e)
+#define FLAG_WORLD_MAP_SILPH_CO_1F                                  (TREY_FLAG_WORLD_MAP_START + 28) // TREY (5e)
+#define FLAG_WORLD_MAP_POKEMON_MANSION_1F                           (TREY_FLAG_WORLD_MAP_START + 29) // TREY (5e)
+#define FLAG_WORLD_MAP_SAFARI_ZONE_CENTER                           (TREY_FLAG_WORLD_MAP_START + 30) // TREY (5e)
+#define FLAG_WORLD_MAP_POKEMON_LEAGUE_LORELEIS_ROOM                 (TREY_FLAG_WORLD_MAP_START + 31) // TREY (5e)
+#define FLAG_WORLD_MAP_ROCK_TUNNEL_1F                               (TREY_FLAG_WORLD_MAP_START + 32) // TREY (5e)
+#define FLAG_WORLD_MAP_SEAFOAM_ISLANDS_1F                           (TREY_FLAG_WORLD_MAP_START + 33) // TREY (5e)
+#define FLAG_WORLD_MAP_POKEMON_TOWER_1F                             (TREY_FLAG_WORLD_MAP_START + 34) // TREY (5e)
+#define FLAG_WORLD_MAP_CERULEAN_CAVE_1F                             (TREY_FLAG_WORLD_MAP_START + 35) // TREY (5e)
+#define FLAG_WORLD_MAP_POWER_PLANT                                  (TREY_FLAG_WORLD_MAP_START + 36) // TREY (5e)
+#define FLAG_WORLD_MAP_NAVEL_ROCK_EXTERIOR                          (TREY_FLAG_WORLD_MAP_START + 37) // TREY (5e)
+#define FLAG_WORLD_MAP_MT_EMBER_EXTERIOR                            (TREY_FLAG_WORLD_MAP_START + 38) // TREY (5e)
+#define FLAG_WORLD_MAP_THREE_ISLAND_BERRY_FOREST                    (TREY_FLAG_WORLD_MAP_START + 39) // TREY (5e)
+#define FLAG_WORLD_MAP_FOUR_ISLAND_ICEFALL_CAVE_ENTRANCE            (TREY_FLAG_WORLD_MAP_START + 40) // TREY (5e)
+#define FLAG_WORLD_MAP_FIVE_ISLAND_ROCKET_WAREHOUSE                 (TREY_FLAG_WORLD_MAP_START + 41) // TREY (5e)
+#define FLAG_WORLD_MAP_TRAINER_TOWER_LOBBY                          (TREY_FLAG_WORLD_MAP_START + 42) // TREY (5e)
+#define FLAG_WORLD_MAP_SIX_ISLAND_DOTTED_HOLE_1F                    (TREY_FLAG_WORLD_MAP_START + 43) // TREY (5e)
+#define FLAG_WORLD_MAP_FIVE_ISLAND_LOST_CAVE_ENTRANCE               (TREY_FLAG_WORLD_MAP_START + 44) // TREY (5e)
+#define FLAG_WORLD_MAP_SIX_ISLAND_PATTERN_BUSH                      (TREY_FLAG_WORLD_MAP_START + 45) // TREY (5e)
+#define FLAG_WORLD_MAP_SIX_ISLAND_ALTERING_CAVE                     (TREY_FLAG_WORLD_MAP_START + 46) // TREY (5e)
+#define FLAG_WORLD_MAP_SEVEN_ISLAND_TANOBY_RUINS_MONEAN_CHAMBER     (TREY_FLAG_WORLD_MAP_START + 47) // TREY (5e)
+#define FLAG_WORLD_MAP_THREE_ISLAND_DUNSPARCE_TUNNEL                (TREY_FLAG_WORLD_MAP_START + 48) // TREY (5e)
+#define FLAG_WORLD_MAP_SEVEN_ISLAND_SEVAULT_CANYON_TANOBY_KEY       (TREY_FLAG_WORLD_MAP_START + 49) // TREY (5e)
+#define FLAG_WORLD_MAP_BIRTH_ISLAND_EXTERIOR                        (TREY_FLAG_WORLD_MAP_START + 50) // TREY (5e)
 #endif
 
 #if TESTING

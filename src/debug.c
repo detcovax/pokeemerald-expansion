@@ -287,6 +287,7 @@ static void DebugAction_Util_TreySeason(u8 taskId); // TREY (4b)
 static void DebugAction_Util_TreyQuests(u8 taskId); // TREY (4f)
 static void DebugAction_Util_TreyWarpPallet(u8 taskId); // TREY (5a)
 static void DebugAction_Util_TreyViridianGym(u8 taskId); // TREY (5d)
+static void DebugAction_Util_TreyWarpVermilion(u8 taskId); // TREY (5e)
 extern const u8 TreyQuest_EventScript_DebugStep[]; // TREY (4f)
 
 static void DebugAction_TimeMenu_ChangeTimeOfDay(u8 taskId);
@@ -606,6 +607,7 @@ static const struct DebugMenuOption sDebugMenu_Actions_Utilities[] =
     { COMPOUND_STRING("TREY: test quest step"), DebugAction_ExecuteScript, TreyQuest_EventScript_DebugStep }, // TREY (4f)
     { COMPOUND_STRING("TREY: warp to Pallet"),  DebugAction_Util_TreyWarpPallet },        // TREY (5a)
     { COMPOUND_STRING("TREY: Viridian Gym"),    DebugAction_Util_TreyViridianGym },       // TREY (5d)
+    { COMPOUND_STRING("TREY: warp to Vermilion"), DebugAction_Util_TreyWarpVermilion },   // TREY (5e)
     { NULL }
 };
 
@@ -5016,6 +5018,15 @@ static void DebugAction_Util_TreySeason(u8 taskId)
 static void DebugAction_Util_TreyWarpPallet(u8 taskId)
 {
     SetWarpDestination(MAP_GROUP(MAP_PALLET_TOWN), MAP_NUM(MAP_PALLET_TOWN), WARP_ID_NONE, 6, 8);
+    Debug_DestroyMenu_Full(taskId);
+    DoWarp();
+    ResetInitialPlayerAvatarState();
+}
+
+// TREY (5e, D30): the slice's only way to Vermilion (no in-game shortcut): in front of the Pokémon Center.
+static void DebugAction_Util_TreyWarpVermilion(u8 taskId)
+{
+    SetWarpDestination(MAP_GROUP(MAP_VERMILION_CITY), MAP_NUM(MAP_VERMILION_CITY), WARP_ID_NONE, 15, 7);
     Debug_DestroyMenu_Full(taskId);
     DoWarp();
     ResetInitialPlayerAvatarState();

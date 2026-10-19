@@ -25,7 +25,7 @@ TreyTransit_EventScript_ChooseAgain::
 	message TreyTransit_Text_WhereTo
 	waitmessage
 	dynmultipush TreyTransit_Text_Cancel, TRANSIT_MENU_CANCEL
-	dynmultistack 14, 1, FALSE, 6, FALSE, 0, NULL
+	dynmultistack 14, 1, FALSE, 6, FALSE, 0, DYN_MULTICHOICE_CB_NONE @ TREY (5e fix): NULL is 0 = the debug callback set since 1.16
 	goto_if_eq VAR_RESULT, MULTI_B_PRESSED, TreyTransit_EventScript_Cancelled
 	goto_if_eq VAR_RESULT, TRANSIT_MENU_CANCEL, TreyTransit_EventScript_Cancelled
 	copyvar VAR_0x8006, VAR_RESULT

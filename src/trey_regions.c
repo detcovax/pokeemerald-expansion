@@ -23,6 +23,8 @@ enum Region TreyGetRegionOfMapsec(u16 mapSec)
 
 // On every map load (warp or walking across a connection): the page this map is drawn on counts as
 // visited, so the map screens can flip to it.
+static void TreyRegions_SetWorldMapFlag(void);
+
 void TreyRegions_OnMapEnter(void)
 {
     u32 page = TreyRegionMap_GetPlayerPage();
@@ -34,6 +36,24 @@ void TreyRegions_OnMapEnter(void)
             FlagSet(FLAG_TREY_VISITED_MAP_PAGE_START + page);
     }
     TreyDex_OnMapEnter(); // 4d: first arrival in a region
+    TreyRegions_SetWorldMapFlag(); // 5e: Kanto/Sevii fly and Teleport destinations
+}
+
+#include "data/trey/frlg_world_map_flags.h"
+
+// 5e: entering an FRLG town (or landmark) marks it visited for Fly/Teleport, as FRLG's setworldmapflag did.
+static void TreyRegions_SetWorldMapFlag(void)
+{
+    u32 i;
+    u16 map = (gSaveBlock1Ptr->location.mapGroup << 8) | gSaveBlock1Ptr->location.mapNum;
+    for (i = 0; i < ARRAY_COUNT(sTreyWorldMapFlags); i++)
+    {
+        if (sTreyWorldMapFlags[i][0] == map)
+        {
+            FlagSet(sTreyWorldMapFlags[i][1]);
+            return;
+        }
+    }
 }
 
 u32 TreyGetRegionMapPageOfMapsec(u16 mapSec)
