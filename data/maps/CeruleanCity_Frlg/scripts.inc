@@ -12,6 +12,10 @@ CeruleanCity_EventScript_Youngster::
 	msgbox CeruleanCity_Text_TrainerLifeIsToughIsntIt, MSGBOX_NPC
 	end
 
+CeruleanCity_EventScript_CeruleanCaveGuard::
+	msgbox CeruleanCity_Text_ThisIsCeruleanCave, MSGBOX_NPC
+	end
+
 CeruleanCity_EventScript_CitySign::
 	msgbox CeruleanCity_Text_CitySign, MSGBOX_SIGN
 	end
@@ -38,6 +42,18 @@ CeruleanCity_Text_TrainerLifeIsToughIsntIt::
 CeruleanCity_Text_PokemonEncyclopediaAmusing::
 	.string "You're making an encyclopedia on\n"
 	.string "POKéMON? That sounds amusing.$"
+
+CeruleanCity_Text_ThisIsCeruleanCave::
+	.string "This is CERULEAN CAVE.\p"
+	.string "Horribly strong POKéMON live inside\n"
+	.string "there.\p"
+	.string "It takes a very special TRAINER to\n"
+	.string "be allowed inside there.\p"
+	.string "You'd have to be strong enough to\n"
+	.string "become the POKéMON LEAGUE\l"
+	.string "CHAMPION for starters.\p"
+	.string "And, you would have to have\n"
+	.string "made a great achievement.$"
 
 CeruleanCity_Text_CitySign::
 	.string "CERULEAN CITY\n"

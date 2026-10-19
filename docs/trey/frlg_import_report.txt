@@ -16,20 +16,20 @@ CeladonCity_DepartmentStore_4F_Frlg: clerk 1, npc kept 2, sign kept 1
 CeladonCity_DepartmentStore_5F_Frlg: clerk 2, npc kept 2, sign kept 1
 CeladonCity_DepartmentStore_Elevator_Frlg: sign dropped 2
 CeladonCity_DepartmentStore_Roof_Frlg: npc dropped 1, npc kept 1, sign dropped 3, sign kept 1
-CeladonCity_Frlg: hidden item 1, item ball 1, npc dropped 3, npc kept 5, sign kept 8, story object dropped 5
+CeladonCity_Frlg: hidden item 1, item ball 1, npc dropped 3, npc kept 7, sign kept 8, story object dropped 3
 CeladonCity_GameCorner_Frlg: hidden item 12, npc dropped 9, npc kept 1, sign dropped 21, sign kept 3, trainer 1
 CeladonCity_GameCorner_PrizeRoom_Frlg: npc dropped 3, npc kept 2
-CeladonCity_Gym_Frlg: npc dropped 1, sign dropped 2, story object dropped 3, trainer 7
+CeladonCity_Gym_Frlg: npc dropped 1, npc kept 3, sign dropped 2, trainer 7
 CeladonCity_Hotel_Frlg: npc kept 4
 CeladonCity_House1_Frlg: npc kept 3
 CeladonCity_PokemonCenter_1F_Frlg: npc kept 3, nurse 1
 CeladonCity_PokemonCenter_2F_Frlg: npc kept 3, story object dropped 1
 CeladonCity_Restaurant_Frlg: npc dropped 1, npc kept 4
-CeruleanCave_1F_Frlg: hidden item 1, item ball 3, story object dropped 6
-CeruleanCave_2F_Frlg: item ball 3, story object dropped 10
-CeruleanCave_B1F_Frlg: item ball 2, story object dropped 10
+CeruleanCave_1F_Frlg: hidden item 1, item ball 3, npc kept 6
+CeruleanCave_2F_Frlg: item ball 3, npc kept 10
+CeruleanCave_B1F_Frlg: item ball 2, npc kept 9, story object dropped 1
 CeruleanCity_BikeShop_Frlg: npc dropped 2, npc kept 1, sign kept 8
-CeruleanCity_Frlg: coord dropped 5, hidden item 1, npc dropped 5, npc kept 2, sign dropped 3, sign kept 4, story object dropped 4
+CeruleanCity_Frlg: coord dropped 5, hidden item 1, npc dropped 5, npc kept 4, sign dropped 3, sign kept 4, story object dropped 2
 CeruleanCity_Gym_Frlg: npc dropped 2, sign dropped 2, trainer 2
 CeruleanCity_House1_Frlg: npc dropped 1
 CeruleanCity_House2_Frlg: npc dropped 1, npc kept 1, sign kept 1
@@ -70,7 +70,7 @@ FiveIsland_LostCave_Room6_Frlg:
 FiveIsland_LostCave_Room7_Frlg: 
 FiveIsland_LostCave_Room8_Frlg: 
 FiveIsland_LostCave_Room9_Frlg: 
-FiveIsland_Meadow_Frlg: item ball 2, sign dropped 1, story object dropped 2, trainer 3
+FiveIsland_Meadow_Frlg: item ball 2, npc kept 2, sign dropped 1, trainer 3
 FiveIsland_MemorialPillar_Frlg: hidden item 4, item ball 1, npc dropped 1, sign dropped 1, trainer 3
 FiveIsland_PokemonCenter_1F_Frlg: npc kept 2, nurse 1, story object dropped 2
 FiveIsland_PokemonCenter_2F_Frlg: npc kept 3, story object dropped 1
@@ -78,7 +78,7 @@ FiveIsland_ResortGorgeous_Frlg: hidden item 4, sign kept 1, story object dropped
 FiveIsland_ResortGorgeous_House_Frlg: sign dropped 2, story object dropped 2
 FiveIsland_RocketWarehouse_Frlg: coord dropped 3, hidden item 2, item ball 4, sign dropped 22, sign kept 1, trainer 6
 FiveIsland_WaterLabyrinth_Frlg: npc dropped 1, trainer 1
-FourIsland_Frlg: decoration 4, hidden item 2, item ball 2, npc dropped 2, npc kept 2, sign kept 2, story object dropped 2
+FourIsland_Frlg: decoration 4, hidden item 2, item ball 2, npc dropped 2, npc kept 3, sign kept 2, story object dropped 1
 FourIsland_Harbor_Frlg: decoration 1, npc dropped 1
 FourIsland_House1_Frlg: npc dropped 1, npc kept 1
 FourIsland_House2_Frlg: placeholder 1
@@ -91,7 +91,7 @@ FourIsland_Mart_Frlg: clerk 1, npc dropped 1, npc kept 1
 FourIsland_PokemonCenter_1F_Frlg: npc kept 3, nurse 1, sign dropped 2
 FourIsland_PokemonCenter_2F_Frlg: npc kept 3, story object dropped 1
 FourIsland_PokemonDayCare_Frlg: npc dropped 1
-FuchsiaCity_Frlg: decoration 5, hidden item 1, npc dropped 1, npc kept 4, sign dropped 6, sign kept 5, story object dropped 5, var graphics 1
+FuchsiaCity_Frlg: decoration 5, hidden item 1, npc dropped 1, npc kept 8, sign dropped 6, sign kept 5, story object dropped 1, var graphics 1
 FuchsiaCity_Gym_Frlg: npc dropped 2, sign dropped 2, trainer 6
 FuchsiaCity_House1_Frlg: npc kept 3
 FuchsiaCity_House2_Frlg: npc dropped 1
@@ -112,17 +112,17 @@ LavenderTown_Mart_Frlg: clerk 1, npc kept 3
 LavenderTown_PokemonCenter_1F_Frlg: npc kept 3, nurse 1, story object dropped 1
 LavenderTown_PokemonCenter_2F_Frlg: npc kept 3, story object dropped 1
 LavenderTown_VolunteerPokemonHouse_Frlg: npc dropped 1, npc kept 4, sign kept 3, story object dropped 1
-MtEmber_Exterior_Frlg: coord dropped 3, hidden item 2, item ball 3, npc dropped 1, npc kept 5, story object dropped 8, trainer 3
-MtEmber_RubyPath_1F_Frlg: story object dropped 5
-MtEmber_RubyPath_B1F_Frlg: story object dropped 4
-MtEmber_RubyPath_B1F_Stairs_Frlg: story object dropped 1
-MtEmber_RubyPath_B2F_Frlg: npc kept 3, story object dropped 4
-MtEmber_RubyPath_B2F_Stairs_Frlg: story object dropped 2
-MtEmber_RubyPath_B3F_Frlg: npc kept 4, story object dropped 6
+MtEmber_Exterior_Frlg: coord dropped 3, hidden item 2, item ball 3, npc dropped 1, npc kept 11, story object dropped 2, trainer 3
+MtEmber_RubyPath_1F_Frlg: npc kept 5
+MtEmber_RubyPath_B1F_Frlg: npc kept 4
+MtEmber_RubyPath_B1F_Stairs_Frlg: npc kept 1
+MtEmber_RubyPath_B2F_Frlg: npc kept 7
+MtEmber_RubyPath_B2F_Stairs_Frlg: npc kept 2
+MtEmber_RubyPath_B3F_Frlg: npc kept 10
 MtEmber_RubyPath_B4F_Frlg: sign kept 26
 MtEmber_RubyPath_B5F_Frlg: sign dropped 1, story object dropped 1
 MtEmber_SummitPath_1F_Frlg: 
-MtEmber_SummitPath_2F_Frlg: story object dropped 9
+MtEmber_SummitPath_2F_Frlg: npc kept 9
 MtEmber_SummitPath_3F_Frlg: 
 MtEmber_Summit_Frlg: npc kept 4, story object dropped 1
 MtMoon_1F_Frlg: item ball 6, npc dropped 1, sign kept 1, trainer 7
@@ -155,7 +155,7 @@ OneIsland_Harbor_Frlg: decoration 1, npc dropped 1
 OneIsland_House1_Frlg: npc kept 2
 OneIsland_House2_Frlg: npc kept 1
 OneIsland_KindleRoad_EmberSpa_Frlg: coord dropped 1, npc dropped 1, npc kept 4, story object dropped 1
-OneIsland_KindleRoad_Frlg: item ball 3, sign kept 2, story object dropped 13, trainer 13
+OneIsland_KindleRoad_Frlg: item ball 3, npc kept 13, sign kept 2, trainer 13
 OneIsland_PokemonCenter_1F_Frlg: coord dropped 4, npc dropped 1, npc kept 2, nurse 1, sign dropped 9, story object dropped 2
 OneIsland_PokemonCenter_2F_Frlg: npc kept 3, story object dropped 1
 OneIsland_TreasureBeach_Frlg: hidden item 8, npc kept 1, trainer 1
@@ -164,7 +164,7 @@ PalletTown_PlayersHouse_1F_Frlg: placeholder 1, sign dropped 1
 PalletTown_PlayersHouse_2F_Frlg: sign kept 3
 PalletTown_ProfessorOaksLab_Frlg: coord dropped 6, npc dropped 2, npc kept 1, sign dropped 1, sign kept 3, story object dropped 7
 PalletTown_RivalsHouse_Frlg: npc dropped 1, sign kept 3, story object dropped 1
-PewterCity_Frlg: coord dropped 7, hidden item 1, npc kept 3, sign kept 5, story object dropped 4
+PewterCity_Frlg: coord dropped 7, hidden item 1, npc kept 4, sign kept 5, story object dropped 3
 PewterCity_Gym_Frlg: npc dropped 2, sign dropped 2, trainer 1
 PewterCity_House1_Frlg: npc dropped 1, npc kept 2
 PewterCity_House2_Frlg: npc kept 2
@@ -193,28 +193,28 @@ PokemonTower_7F_Frlg: hidden item 1, story object dropped 1, trainer 3
 PowerPlant_Frlg: hidden item 2, item ball 5, story object dropped 3
 RecordCorner_Frlg: coord dropped 4, npc dropped 1
 RockTunnel_1F_Frlg: item ball 3, sign kept 1, trainer 7
-RockTunnel_B1F_Frlg: item ball 2, npc dropped 1, story object dropped 15, trainer 8
+RockTunnel_B1F_Frlg: item ball 2, npc dropped 1, npc kept 15, trainer 8
 RocketHideout_B1F_Frlg: hidden item 1, item ball 2, trainer 5
 RocketHideout_B2F_Frlg: item ball 4, trainer 1
 RocketHideout_B3F_Frlg: hidden item 1, item ball 3, trainer 2
 RocketHideout_B4F_Frlg: hidden item 2, item ball 3, story object dropped 3, trainer 3
 RocketHideout_Elevator_Frlg: sign dropped 1
-Route10_Frlg: hidden item 5, sign kept 3, story object dropped 4, trainer 6
+Route10_Frlg: hidden item 5, npc kept 4, sign kept 3, trainer 6
 Route10_PokemonCenter_1F_Frlg: npc dropped 1, npc kept 3, nurse 1
 Route10_PokemonCenter_2F_Frlg: npc kept 3, story object dropped 1
 Route11_EastEntrance_1F_Frlg: npc kept 2
 Route11_EastEntrance_2F_Frlg: npc dropped 2, sign dropped 1, sign kept 1
 Route11_Frlg: hidden item 1, item ball 3, sign kept 1, trainer 10
 Route12_FishingHouse_Frlg: npc dropped 1, sign dropped 1
-Route12_Frlg: hidden item 3, item ball 2, sign kept 2, story object dropped 3, trainer 9
+Route12_Frlg: hidden item 3, item ball 2, npc kept 2, sign kept 2, story object dropped 1, trainer 9
 Route12_NorthEntrance_1F_Frlg: npc kept 1
 Route12_NorthEntrance_2F_Frlg: npc dropped 1, sign kept 2
-Route13_Frlg: hidden item 1, sign kept 3, story object dropped 1, trainer 10
-Route14_Frlg: hidden item 2, sign kept 1, story object dropped 3, trainer 12
+Route13_Frlg: hidden item 1, npc kept 1, sign kept 3, trainer 10
+Route14_Frlg: hidden item 2, npc kept 3, sign kept 1, trainer 12
 Route15_Frlg: item ball 1, sign kept 1, trainer 12
 Route15_WestEntrance_1F_Frlg: npc kept 1
 Route15_WestEntrance_2F_Frlg: npc dropped 1, sign dropped 1, sign kept 1
-Route16_Frlg: hidden item 1, sign kept 2, story object dropped 2, trainer 8
+Route16_Frlg: hidden item 1, npc kept 1, sign kept 2, story object dropped 1, trainer 8
 Route16_House_Frlg: npc dropped 1, npc kept 1
 Route16_NorthEntrance_1F_Frlg: coord dropped 11, npc kept 2
 Route16_NorthEntrance_2F_Frlg: npc dropped 1, npc kept 2, sign kept 2
@@ -232,10 +232,10 @@ Route22_Frlg: coord dropped 6, sign kept 1, story object dropped 1
 Route22_NorthEntrance_Frlg: coord dropped 1, npc dropped 1
 Route23_Frlg: coord dropped 42, hidden item 8, npc dropped 7, sign kept 1
 Route24_Frlg: coord dropped 2, hidden item 1, item ball 1, story object dropped 1, trainer 6
-Route25_Frlg: hidden item 4, item ball 1, npc dropped 1, npc kept 1, sign kept 1, story object dropped 1, trainer 9
+Route25_Frlg: hidden item 4, item ball 1, npc dropped 1, npc kept 2, sign kept 1, trainer 9
 Route25_SeaCottage_Frlg: sign dropped 1, story object dropped 2
 Route2_EastBuilding_Frlg: npc dropped 1, npc kept 1
-Route2_Frlg: item ball 2, sign kept 2, story object dropped 4
+Route2_Frlg: item ball 2, npc kept 4, sign kept 2
 Route2_House_Frlg: npc dropped 1, npc kept 1
 Route2_ViridianForest_NorthEntrance_Frlg: npc kept 3
 Route2_ViridianForest_SouthEntrance_Frlg: npc kept 2
@@ -251,9 +251,9 @@ Route6_NorthEntrance_Frlg: coord dropped 3, npc kept 1
 Route6_UnusedHouse_Frlg: 
 Route7_EastEntrance_Frlg: coord dropped 3, npc kept 1
 Route7_Frlg: hidden item 1, sign kept 1
-Route8_Frlg: hidden item 3, sign kept 1, story object dropped 2, trainer 13
+Route8_Frlg: hidden item 3, npc kept 2, sign kept 1, trainer 13
 Route8_WestEntrance_Frlg: coord dropped 3, npc kept 1
-Route9_Frlg: hidden item 3, item ball 2, sign kept 1, story object dropped 1, trainer 9
+Route9_Frlg: hidden item 3, item ball 2, npc kept 1, sign kept 1, trainer 9
 SSAnne_1F_Corridor_Frlg: npc kept 2
 SSAnne_1F_Room1_Frlg: npc kept 1
 SSAnne_1F_Room2_Frlg: item ball 1, npc kept 1, trainer 2
@@ -306,7 +306,7 @@ SeafoamIslands_B1F_Frlg: item ball 2, trainer 2
 SeafoamIslands_B2F_Frlg: item ball 1, trainer 2
 SeafoamIslands_B3F_Frlg: hidden item 1, story object dropped 4, trainer 2
 SeafoamIslands_B4F_Frlg: coord dropped 3, hidden item 1, item ball 1, sign kept 2, story object dropped 3
-SevenIsland_Frlg: npc dropped 1, npc kept 2, sign kept 1
+SevenIsland_Frlg: npc kept 2, placeholder 1, sign kept 1
 SevenIsland_Harbor_Frlg: decoration 1, npc dropped 1
 SevenIsland_House_Room1_Frlg: npc dropped 1, sign kept 1
 SevenIsland_House_Room2_Frlg: var graphics 1
@@ -314,7 +314,7 @@ SevenIsland_Mart_Frlg: clerk 1, npc kept 3
 SevenIsland_PokemonCenter_1F_Frlg: npc kept 3, nurse 1, story object dropped 2
 SevenIsland_PokemonCenter_2F_Frlg: npc kept 3, story object dropped 1
 SevenIsland_SevaultCanyon_Entrance_Frlg: hidden item 1, sign kept 1, trainer 6
-SevenIsland_SevaultCanyon_Frlg: hidden item 1, item ball 3, npc dropped 1, npc kept 2, sign kept 1, story object dropped 6, trainer 8
+SevenIsland_SevaultCanyon_Frlg: hidden item 1, item ball 3, npc dropped 1, npc kept 8, sign kept 1, trainer 8
 SevenIsland_SevaultCanyon_House_Frlg: item ball 1, npc dropped 1, npc kept 1
 SevenIsland_SevaultCanyon_TanobyKey_Frlg: coord dropped 7, npc kept 7
 SevenIsland_TanobyRuins_DilfordChamber_Frlg: 
@@ -358,10 +358,10 @@ SixIsland_RuinValley_Frlg: item ball 3, npc kept 8, sign dropped 1, story object
 SixIsland_WaterPath_Frlg: hidden item 3, item ball 2, sign kept 2, trainer 7
 SixIsland_WaterPath_House1_Frlg: npc dropped 1, sign dropped 1
 SixIsland_WaterPath_House2_Frlg: npc kept 1
-ThreeIsland_BerryForest_Frlg: hidden item 13, item ball 3, sign kept 2, story object dropped 11
-ThreeIsland_BondBridge_Frlg: hidden item 3, sign kept 2, story object dropped 2, trainer 7
+ThreeIsland_BerryForest_Frlg: hidden item 13, item ball 3, npc kept 10, sign kept 2, story object dropped 1
+ThreeIsland_BondBridge_Frlg: hidden item 3, npc kept 2, sign kept 2, trainer 7
 ThreeIsland_DunsparceTunnel_Frlg: hidden item 1, npc dropped 1
-ThreeIsland_Frlg: coord dropped 10, hidden item 1, item ball 1, npc kept 3, sign kept 1, story object dropped 10
+ThreeIsland_Frlg: coord dropped 10, hidden item 1, item ball 1, npc kept 4, sign kept 1, story object dropped 9
 ThreeIsland_Harbor_Frlg: decoration 1, npc dropped 1
 ThreeIsland_House1_Frlg: sign kept 1, story object dropped 1
 ThreeIsland_House2_Frlg: npc kept 2
@@ -373,20 +373,20 @@ ThreeIsland_PokemonCenter_1F_Frlg: npc kept 3, nurse 1
 ThreeIsland_PokemonCenter_2F_Frlg: npc kept 3, story object dropped 1
 ThreeIsland_Port_Frlg: npc dropped 1, story object dropped 2
 TradeCenter_Frlg: coord dropped 2, npc dropped 1
-TrainerTower_1F_Frlg: coord dropped 3, story object dropped 1, var graphics 4
-TrainerTower_2F_Frlg: coord dropped 3, story object dropped 1, var graphics 4
-TrainerTower_3F_Frlg: coord dropped 3, story object dropped 1, var graphics 4
-TrainerTower_4F_Frlg: coord dropped 3, story object dropped 1, var graphics 4
-TrainerTower_5F_Frlg: coord dropped 3, story object dropped 1, var graphics 4
-TrainerTower_6F_Frlg: coord dropped 3, story object dropped 1, var graphics 4
-TrainerTower_7F_Frlg: coord dropped 3, story object dropped 1, var graphics 4
-TrainerTower_8F_Frlg: coord dropped 3, story object dropped 1, var graphics 4
+TrainerTower_1F_Frlg: coord dropped 3, decoration 1, var graphics 4
+TrainerTower_2F_Frlg: coord dropped 3, npc dropped 1, var graphics 4
+TrainerTower_3F_Frlg: coord dropped 3, npc dropped 1, var graphics 4
+TrainerTower_4F_Frlg: coord dropped 3, npc dropped 1, var graphics 4
+TrainerTower_5F_Frlg: coord dropped 3, npc dropped 1, var graphics 4
+TrainerTower_6F_Frlg: coord dropped 3, npc dropped 1, var graphics 4
+TrainerTower_7F_Frlg: coord dropped 3, npc dropped 1, var graphics 4
+TrainerTower_8F_Frlg: coord dropped 3, npc dropped 1, var graphics 4
 TrainerTower_Elevator_Frlg: sign dropped 1
 TrainerTower_Lobby_Frlg: clerk 1, coord dropped 1, npc dropped 1, npc kept 2, nurse 1, sign dropped 1
-TrainerTower_Roof_Frlg: story object dropped 1
+TrainerTower_Roof_Frlg: npc dropped 1
 TwoIsland_CapeBrink_Frlg: hidden item 2
 TwoIsland_CapeBrink_House_Frlg: placeholder 1
-TwoIsland_Frlg: clerk 1, item ball 1, npc kept 3, sign kept 3, story object dropped 4
+TwoIsland_Frlg: clerk 1, item ball 1, npc kept 4, sign kept 3, story object dropped 3
 TwoIsland_Harbor_Frlg: decoration 1, npc dropped 1
 TwoIsland_House_Frlg: npc dropped 1
 TwoIsland_JoyfulGameCorner_Frlg: npc dropped 2, sign dropped 2, story object dropped 2
@@ -399,7 +399,7 @@ UndergroundPath_NorthSouthTunnel_Frlg: hidden item 7
 UndergroundPath_SouthEntrance_Frlg: npc kept 1
 UndergroundPath_WestEntrance_Frlg: npc kept 1
 UnionRoom_Frlg: npc dropped 1, var graphics 8
-VermilionCity_Frlg: coord dropped 4, hidden item 1, npc dropped 1, npc kept 4, placeholder 1, sign kept 5, story object dropped 2
+VermilionCity_Frlg: coord dropped 4, hidden item 1, npc dropped 1, npc kept 5, placeholder 1, sign kept 5, story object dropped 1
 VermilionCity_Gym_Frlg: npc dropped 2, sign dropped 17, trainer 3
 VermilionCity_House1_Frlg: npc dropped 1
 VermilionCity_House2_Frlg: npc dropped 1
@@ -411,7 +411,7 @@ VermilionCity_PokemonFanClub_Frlg: npc dropped 4, npc kept 2, sign kept 2
 VictoryRoad_1F_Frlg: coord dropped 1, hidden item 2, item ball 2, npc kept 3, trainer 2
 VictoryRoad_2F_Frlg: coord dropped 2, item ball 4, npc dropped 1, npc kept 2, story object dropped 1, trainer 5
 VictoryRoad_3F_Frlg: coord dropped 1, item ball 2, npc kept 3, trainer 7
-ViridianCity_Frlg: coord dropped 4, item ball 1, npc dropped 3, npc kept 2, sign kept 5, story object dropped 2, var graphics 1
+ViridianCity_Frlg: coord dropped 4, item ball 1, npc dropped 3, npc kept 4, sign kept 5, var graphics 1
 ViridianCity_Gym_Frlg: hidden item 1, npc dropped 1, sign dropped 2, story object dropped 1, trainer 8
 ViridianCity_House_Frlg: npc kept 3, sign kept 1
 ViridianCity_Mart_Frlg: clerk 1, npc kept 2
@@ -420,4 +420,4 @@ ViridianCity_PokemonCenter_2F_Frlg: npc kept 3, story object dropped 1
 ViridianCity_School_Frlg: npc dropped 2, sign dropped 5
 ViridianForest_Frlg: hidden item 2, item ball 4, npc kept 2, sign kept 6, trainer 5
 
-TOTAL: clerk 20, coord dropped 228, decoration 23, hidden item 183, item ball 168, npc dropped 189, npc kept 401, nurse 20, placeholder 5, sign dropped 233, sign kept 286, story object dropped 328, trainer 441, var graphics 44
+TOTAL: clerk 20, coord dropped 228, decoration 24, hidden item 183, item ball 168, npc dropped 196, npc kept 548, nurse 20, placeholder 6, sign dropped 233, sign kept 286, story object dropped 172, trainer 441, var graphics 44

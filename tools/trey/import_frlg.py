@@ -262,8 +262,8 @@ class MapImport:
             o = dict(o)
             if k not in ("clone", "same"):
                 o["script"] = k
-            if o.get("flag", "0") not in ("0", "", None):
-                o["flag"] = self.ctx.item_flag(o["flag"])
+            if o.get("flag", "0") not in ("0", "", None) and not o["flag"].startswith("FLAG_TEMP"):
+                o["flag"] = self.ctx.item_flag(o["flag"])  # item balls (FLAG_TEMP_* flags reset on map load and stay)
             if k not in ("clone",) and o.get("script") not in ("0x0", "NULL", None):
                 self.root(o["script"])
             new_objs.append(o)
@@ -318,7 +318,8 @@ class MapImport:
                 self.notes["clerk"] += 1
                 return self.clerk_script(args[0])
         must = lid in required
-        if flag not in ("0", "", None) and not must:
+        # FLAG_TEMP_* flags reset on every map load (cut trees, boulders): not story flags
+        if flag not in ("0", "", None) and not flag.startswith("FLAG_TEMP") and not must:
             self.notes["story object dropped"] += 1
             return False
         if script in ("0x0", "NULL", "", None):
@@ -455,11 +456,16 @@ def main():
                 continue
             with open(p, encoding="utf-8", errors="ignore") as f:
                 required |= set(re.findall(r"\bLOCALID_\w+", f.read()))
-    ctx = Ctx(global_labels, item_ball_labels, heal_ids, required)
-
     names = sorted(os.path.basename(os.path.dirname(p)) for p in glob.glob(os.path.join(a.orig, "*_Frlg", "map.json")))
     if not names:
         die(f"no *_Frlg maps in {a.orig}")
+    # objects that other maps clone at their borders (border trees, cut trees) must stay
+    for name in names:
+        with open(os.path.join(a.orig, name, "map.json"), encoding="utf-8") as f:
+            for o in json.load(f).get("object_events", []):
+                if o.get("type") == "clone" and o.get("target_local_id"):
+                    required.add(o["target_local_id"])
+    ctx = Ctx(global_labels, item_ball_labels, heal_ids, required)
     report = []
     totals = collections.Counter()
     outputs = {}
