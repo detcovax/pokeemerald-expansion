@@ -1,4 +1,5 @@
 #include "global.h"
+#include "trey_intro.h" // TREY (5b)
 #include "trey_hm.h" // TREY
 #include "trey_transit.h" // TREY (4c)
 #include "trey_dex.h" // TREY (4d)
@@ -181,6 +182,8 @@ int ProcessPlayerFieldInput(struct FieldInput *input)
     if (CheckForTrainersWantingBattle() == TRUE)
         return TRUE;
 
+    if (TreyIntro_TryRun() == TRUE) // TREY (5b): placeholder new-game intro
+        return TRUE;
     if (TreyDex_TryRunArrivalScript() == TRUE) // TREY (4d): first arrival in a region
         return TRUE;
 

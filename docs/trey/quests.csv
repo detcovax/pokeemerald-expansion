@@ -11,7 +11,7 @@ num,id,region,name,stages
 #
 # Each region's main story is a quest; its stage is that region's progress (no global story variable).
 # The story stage texts below are placeholders until each region's story is written (Phase 5/6).
-0,KANTO_STORY,kanto,Kanto journey,The Kanto story begins.
+0,KANTO_STORY,kanto,Kanto journey,Visit PROF. OAK in his lab in\nPALLET TOWN.|PROF. OAK gave you a POKéDEX.\nExplore KANTO!
 1,ORANGE_STORY,orange,Orange Islands,The Orange Islands story begins.
 2,JOHTO_STORY,johto,Johto journey,The Johto story begins.
 3,HOENN_STORY,hoenn,Hoenn journey,The Hoenn story begins.

@@ -5,7 +5,7 @@
 #define QUEST_STAGE_NONE  0   // not started
 #define QUEST_STAGE_DONE  255 // complete
 
-#define QUEST_KANTO_STORY                    0 // kanto, 1 stage(s)
+#define QUEST_KANTO_STORY                    0 // kanto, 2 stage(s)
 #define QUEST_ORANGE_STORY                   1 // orange, 1 stage(s)
 #define QUEST_JOHTO_STORY                    2 // johto, 1 stage(s)
 #define QUEST_HOENN_STORY                    3 // hoenn, 1 stage(s)

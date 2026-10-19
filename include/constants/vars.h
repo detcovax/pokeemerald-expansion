@@ -284,6 +284,11 @@
 #define VAR_TREY_TRANSIT_STEPS                           (TREY_VARS_START + 0x03) // 4c: steps taken on board this trip
 #define VAR_TREY_DEX_LAST                                (TREY_VARS_START + 0x04) // 4d: TREY_DEX_* last browsed in the Pokédex
 #define VAR_TREY_REGION_ARRIVAL                          (TREY_VARS_START + 0x05) // 4d: TREY_DEX_* + 1 of a first arrival whose script hasn't run yet
+#define VAR_TREY_VIRIDIAN_GYM                            (TREY_VARS_START + 0x06) // 5d: VIRIDIAN_GYM_* (data/maps/ViridianCity_Gym_Frlg/scripts.inc), recomputed on every map load
+#define VIRIDIAN_GYM_CLOSED     0 // before Team Rocket phase 1 is beaten
+#define VIRIDIAN_GYM_GIOVANNI   1 // Giovanni is back
+#define VIRIDIAN_GYM_EMPTY      2 // Giovanni beaten, until Blue is beaten at the Kanto League
+#define VIRIDIAN_GYM_BLUE       3 // Blue is the leader (post-game)
 
 #define VARS_END                                         0x41FF // TREY: was 0x40FF
 #define VARS_COUNT                                       (VARS_END - VARS_START + 1)

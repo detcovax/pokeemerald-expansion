@@ -1654,6 +1654,15 @@
 #define TREY_FLAG_BADGES_JOHTO_START    (TREY_FLAG_BADGES_START + 0x10) // 8 badges
 #define TREY_FLAG_BADGES_SINNOH_START   (TREY_FLAG_BADGES_START + 0x18) // 8 badges
 #define TREY_FLAG_BADGES_END            (TREY_FLAG_BADGES_START + 0x1F)
+// Kanto badges (5d), FRLG order
+#define FLAG_TREY_BADGE_BOULDER         (TREY_FLAG_BADGES_KANTO_START + 0) // Brock, Pewter
+#define FLAG_TREY_BADGE_CASCADE         (TREY_FLAG_BADGES_KANTO_START + 1) // Cerulean
+#define FLAG_TREY_BADGE_THUNDER         (TREY_FLAG_BADGES_KANTO_START + 2) // Vermilion
+#define FLAG_TREY_BADGE_RAINBOW         (TREY_FLAG_BADGES_KANTO_START + 3) // Celadon
+#define FLAG_TREY_BADGE_SOUL            (TREY_FLAG_BADGES_KANTO_START + 4) // Fuchsia
+#define FLAG_TREY_BADGE_MARSH           (TREY_FLAG_BADGES_KANTO_START + 5) // Saffron
+#define FLAG_TREY_BADGE_VOLCANO         (TREY_FLAG_BADGES_KANTO_START + 6) // Cinnabar
+#define FLAG_TREY_BADGE_EARTH           (TREY_FLAG_BADGES_KANTO_START + 7) // Giovanni, Viridian
 
 // TREY system flags
 #define TREY_FLAG_SYSTEM_START          (TREY_FLAG_BADGES_END + 1)
@@ -1709,7 +1718,16 @@
 #define TREY_FLAG_FRLG_ITEMS_END        (TREY_FLAG_FRLG_ITEMS_START + TREY_FLAG_FRLG_ITEMS_COUNT - 1)
 #include "constants/trey_frlg_flags.h"
 
-#define TREY_FLAG_NEXT_FREE             (TREY_FLAG_FRLG_ITEMS_END + 1) // next unused TREY flag
+// Misc TREY flags (5b+), 16 reserved.
+#define TREY_FLAG_MISC_START            (TREY_FLAG_FRLG_ITEMS_END + 1)
+#define FLAG_TREY_INTRO_PENDING         (TREY_FLAG_MISC_START + 0) // 5b: set by a new game; the intro runs on the first field frame
+#define FLAG_TREY_GOT_TM39_FROM_BROCK   (TREY_FLAG_MISC_START + 1) // 5d
+#define FLAG_TREY_GOT_TM26_FROM_GIOVANNI (TREY_FLAG_MISC_START + 2) // 5d
+#define FLAG_TREY_KANTO_ROCKET_P1_DONE  (TREY_FLAG_MISC_START + 3) // 5d: Team Rocket phase 1 beaten -> Giovanni opens Viridian Gym (set by the Kanto story, or the debug menu)
+#define FLAG_TREY_KANTO_LEAGUE_BLUE_DONE (TREY_FLAG_MISC_START + 4) // 5d: Blue beaten at the Kanto League -> Blue leads Viridian Gym
+#define TREY_FLAG_MISC_END              (TREY_FLAG_MISC_START + 15)
+
+#define TREY_FLAG_NEXT_FREE             (TREY_FLAG_MISC_END + 1) // next unused TREY flag
 
 #define FLAGS_COUNT (TREY_FLAGS_END + 1) // TREY: was (DAILY_FLAGS_END + 1)
 

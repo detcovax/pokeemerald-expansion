@@ -141,7 +141,26 @@
       "dest_warp_id": "1"
     }
   ],
-  "coord_events": [],
+  "coord_events": [
+    {
+      "type": "trigger",
+      "x": 36,
+      "y": 11,
+      "elevation": 3,
+      "var": "VAR_TREY_VIRIDIAN_GYM",
+      "var_value": "VIRIDIAN_GYM_CLOSED",
+      "script": "ViridianCity_TreyEventScript_GymDoorLocked"
+    },
+    {
+      "type": "trigger",
+      "x": 36,
+      "y": 11,
+      "elevation": 3,
+      "var": "VAR_TREY_VIRIDIAN_GYM",
+      "var_value": "VIRIDIAN_GYM_EMPTY",
+      "script": "ViridianCity_TreyEventScript_GymDoorLocked"
+    }
+  ],
   "bg_events": [
     {
       "type": "sign",

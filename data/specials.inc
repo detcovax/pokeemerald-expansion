@@ -644,6 +644,9 @@ gSpecials::
 	def_special TreyLayer_StartLanding
 	def_special TreyLayer_FindSoarMon
 	def_special TreyHM_CheckPartyMove
+	def_special TreyIntro_SetGender
+	def_special TreyIntro_NamePlayer
+	def_special TreyIntro_FinishNaming
 	def_special TreyLayer_CheckSoar
 	def_special TreyLayer_StartSoarFromClearing
 	def_special TreyTransit_CheckPass

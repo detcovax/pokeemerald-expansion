@@ -1,0 +1,22 @@
+trainer,tier
+# TREY trainer tiers (TREY_PLAN.md 5.7a, D24). tools/trey/check_trainers.py (run by make) fails the build if a TREY
+# trainer (TREY_TRAINERS_START and up in include/constants/opponents.h) is missing here or its team breaks its tier:
+#
+# tier   team  level               IVs        EVs                       per Pokémon                 AI must include
+# boss   6     TREY_TRAINER_LEVEL  all 31     full spread (500-510)     nature, ability, held item  Smart Trainer, Prediction, Ace Pokemon
+# gym    2-4   TREY_TRAINER_LEVEL  all 15     light (at most 256)       nature, ability             Smart Trainer
+# route  1-3   TREY_TRAINER_LEVEL  any        none                      -                           Basic Trainer (or Smart), Energy Aware
+#
+# Boss = gym leader, Elite Four, Champion, rival, evil-team admin/boss. Gym = gym trainer, grunt.
+TRAINER_KANTO_BROCK,boss
+TRAINER_KANTO_CAMPER_LIAM,gym
+TRAINER_KANTO_GIOVANNI,boss
+TRAINER_KANTO_TAMER_JASON,gym
+TRAINER_KANTO_TAMER_COLE,gym
+TRAINER_KANTO_BLACK_BELT_ATSUSHI,gym
+TRAINER_KANTO_BLACK_BELT_KIYO,gym
+TRAINER_KANTO_BLACK_BELT_TAKASHI,gym
+TRAINER_KANTO_COOLTRAINER_SAMUEL,gym
+TRAINER_KANTO_COOLTRAINER_YUJI,gym
+TRAINER_KANTO_COOLTRAINER_WARREN,gym
+TRAINER_KANTO_BLUE_GYM,boss

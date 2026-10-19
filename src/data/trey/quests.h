@@ -2,7 +2,8 @@
 
 static const u8 *const sQuestStages_KANTO_STORY[] =
 {
-    COMPOUND_STRING("The Kanto story begins."),
+    COMPOUND_STRING("Visit PROF. OAK in his lab in\nPALLET TOWN."),
+    COMPOUND_STRING("PROF. OAK gave you a POKéDEX.\nExplore KANTO!"),
 };
 static const u8 *const sQuestStages_ORANGE_STORY[] =
 {
@@ -33,7 +34,7 @@ static const u8 *const sQuestStages_TEST_SURVEY[] =
 
 const struct TreyQuest gTreyQuests[QUEST_COUNT] =
 {
-    [QUEST_KANTO_STORY] = { .region = TREY_DEX_KANTO, .numStages = 1, .name = COMPOUND_STRING("Kanto journey"), .stages = sQuestStages_KANTO_STORY },
+    [QUEST_KANTO_STORY] = { .region = TREY_DEX_KANTO, .numStages = 2, .name = COMPOUND_STRING("Kanto journey"), .stages = sQuestStages_KANTO_STORY },
     [QUEST_ORANGE_STORY] = { .region = TREY_DEX_ORANGE, .numStages = 1, .name = COMPOUND_STRING("Orange Islands"), .stages = sQuestStages_ORANGE_STORY },
     [QUEST_JOHTO_STORY] = { .region = TREY_DEX_JOHTO, .numStages = 1, .name = COMPOUND_STRING("Johto journey"), .stages = sQuestStages_JOHTO_STORY },
     [QUEST_HOENN_STORY] = { .region = TREY_DEX_HOENN, .numStages = 1, .name = COMPOUND_STRING("Hoenn journey"), .stages = sQuestStages_HOENN_STORY },

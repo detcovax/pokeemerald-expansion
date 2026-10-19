@@ -16877,3 +16877,550 @@ Double Battle: No
 Kyogre
 Level: 5
 IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+/*
+TREY trainers (5d+). Every trainer below has a tier in docs/trey/trainer_tiers.csv, and
+tools/trey/check_trainers.py fails the build if a team breaks its tier (TREY_PLAN.md 5.7a, D24).
+All TREY trainers use the standard level TREY_TRAINER_LEVEL (100, include/config/trey.h).
+*/
+
+=== TRAINER_KANTO_BROCK ===
+Name: BROCK
+Class: Leader Frlg
+Pic: Leader Brock Frlg
+Gender: Male
+Music: Male
+Double Battle: No
+AI: Smart Trainer / Prediction / Ace Pokemon
+
+Aerodactyl @ Focus Sash
+Jolly Nature
+Level: 100
+Ability: Rock Head
+EVs: 252 Atk / 4 Def / 252 Spe
+- Stealth Rock
+- Stone Edge
+- Earthquake
+- Taunt
+
+Golem @ Leftovers
+Adamant Nature
+Level: 100
+Ability: Sturdy
+EVs: 252 HP / 252 Atk / 4 SpD
+- Earthquake
+- Stone Edge
+- Sucker Punch
+- Explosion
+
+Kabutops @ Life Orb
+Adamant Nature
+Level: 100
+Ability: Swift Swim
+EVs: 252 Atk / 4 SpD / 252 Spe
+- Swords Dance
+- Waterfall
+- Stone Edge
+- Aqua Jet
+
+Omastar @ White Herb
+Modest Nature
+Level: 100
+Ability: Swift Swim
+EVs: 252 SpA / 4 SpD / 252 Spe
+- Shell Smash
+- Hydro Pump
+- Ice Beam
+- Earth Power
+
+Rhyperior @ Choice Band
+Adamant Nature
+Level: 100
+Ability: Solid Rock
+EVs: 252 HP / 252 Atk / 4 Def
+- Stone Edge
+- Earthquake
+- Megahorn
+- Ice Punch
+
+Steelix @ Leftovers
+Impish Nature
+Level: 100
+Ability: Sturdy
+EVs: 252 HP / 4 Atk / 252 Def
+- Curse
+- Heavy Slam
+- Earthquake
+- Stone Edge
+
+=== TRAINER_KANTO_CAMPER_LIAM ===
+Name: LIAM
+Class: Camper Frlg
+Pic: Camper Frlg
+Gender: Male
+Music: Male
+Double Battle: No
+AI: Smart Trainer
+
+Sudowoodo
+Adamant Nature
+Level: 100
+Ability: Rock Head
+IVs: 15 HP / 15 Atk / 15 Def / 15 SpA / 15 SpD / 15 Spe
+EVs: 128 Atk / 128 HP
+- Wood Hammer
+- Head Smash
+- Sucker Punch
+- Low Kick
+
+Graveler
+Adamant Nature
+Level: 100
+Ability: Sturdy
+IVs: 15 HP / 15 Atk / 15 Def / 15 SpA / 15 SpD / 15 Spe
+EVs: 128 Atk / 128 Def
+- Rock Slide
+- Earthquake
+- Stealth Rock
+- Explosion
+
+Lairon
+Impish Nature
+Level: 100
+Ability: Rock Head
+IVs: 15 HP / 15 Atk / 15 Def / 15 SpA / 15 SpD / 15 Spe
+EVs: 128 HP / 128 Def
+- Iron Head
+- Rock Slide
+- Roar
+- Protect
+
+=== TRAINER_KANTO_GIOVANNI ===
+Name: GIOVANNI
+Class: Leader Frlg
+Pic: Leader Giovanni Frlg
+Gender: Male
+Music: Aqua
+Double Battle: No
+AI: Smart Trainer / Prediction / Ace Pokemon
+
+Dugtrio @ Focus Sash
+Jolly Nature
+Level: 100
+Ability: Arena Trap
+EVs: 252 Atk / 4 Def / 252 Spe
+- Earthquake
+- Stone Edge
+- Sucker Punch
+- Stealth Rock
+
+Gliscor @ Toxic Orb
+Impish Nature
+Level: 100
+Ability: Poison Heal
+EVs: 252 HP / 4 Atk / 252 Def
+- Swords Dance
+- Earthquake
+- Ice Fang
+- Roost
+
+Hippowdon @ Leftovers
+Impish Nature
+Level: 100
+Ability: Sand Stream
+EVs: 252 HP / 252 Def / 4 SpD
+- Earthquake
+- Slack Off
+- Whirlwind
+- Toxic
+
+Nidoqueen @ Black Sludge
+Modest Nature
+Level: 100
+Ability: Sheer Force
+EVs: 252 HP / 252 SpA / 4 SpD
+- Earth Power
+- Sludge Wave
+- Ice Beam
+- Toxic Spikes
+
+Nidoking @ Life Orb
+Timid Nature
+Level: 100
+Ability: Sheer Force
+EVs: 252 SpA / 4 SpD / 252 Spe
+- Earth Power
+- Sludge Wave
+- Ice Beam
+- Flamethrower
+
+Rhyperior @ Rocky Helmet
+Adamant Nature
+Level: 100
+Ability: Solid Rock
+EVs: 252 HP / 252 Atk / 4 SpD
+- Swords Dance
+- Earthquake
+- Stone Edge
+- Megahorn
+
+=== TRAINER_KANTO_TAMER_JASON ===
+Name: JASON
+Class: Tamer Frlg
+Pic: Tamer Frlg
+Gender: Male
+Music: Hiker
+Double Battle: No
+AI: Smart Trainer
+
+Sandslash
+Adamant Nature
+Level: 100
+Ability: Sand Veil
+IVs: 15 HP / 15 Atk / 15 Def / 15 SpA / 15 SpD / 15 Spe
+EVs: 128 Atk / 128 Spe
+- Earthquake
+- Knock Off
+- Rapid Spin
+- Swords Dance
+
+Rhydon
+Adamant Nature
+Level: 100
+Ability: Lightning Rod
+IVs: 15 HP / 15 Atk / 15 Def / 15 SpA / 15 SpD / 15 Spe
+EVs: 128 HP / 128 Atk
+- Earthquake
+- Rock Slide
+- Megahorn
+- Hammer Arm
+
+=== TRAINER_KANTO_TAMER_COLE ===
+Name: COLE
+Class: Tamer Frlg
+Pic: Tamer Frlg
+Gender: Male
+Music: Hiker
+Double Battle: No
+AI: Smart Trainer
+
+Arbok
+Adamant Nature
+Level: 100
+Ability: Intimidate
+IVs: 15 HP / 15 Atk / 15 Def / 15 SpA / 15 SpD / 15 Spe
+EVs: 128 Atk / 128 Spe
+- Gunk Shot
+- Earthquake
+- Glare
+- Sucker Punch
+
+Marowak @ Thick Club
+Adamant Nature
+Level: 100
+Ability: Rock Head
+IVs: 15 HP / 15 Atk / 15 Def / 15 SpA / 15 SpD / 15 Spe
+EVs: 128 HP / 128 Atk
+- Bonemerang
+- Double-Edge
+- Rock Slide
+- Fire Punch
+
+Dugtrio
+Jolly Nature
+Level: 100
+Ability: Arena Trap
+IVs: 15 HP / 15 Atk / 15 Def / 15 SpA / 15 SpD / 15 Spe
+EVs: 128 Atk / 128 Spe
+- Earthquake
+- Sucker Punch
+- Rock Slide
+- Night Slash
+
+=== TRAINER_KANTO_BLACK_BELT_ATSUSHI ===
+Name: ATSUSHI
+Class: Black Belt Frlg
+Pic: Black Belt Frlg
+Gender: Male
+Music: Intense
+Double Battle: No
+AI: Smart Trainer
+
+Hitmonlee
+Adamant Nature
+Level: 100
+Ability: Reckless
+IVs: 15 HP / 15 Atk / 15 Def / 15 SpA / 15 SpD / 15 Spe
+EVs: 128 Atk / 128 Spe
+- High Jump Kick
+- Knock Off
+- Stone Edge
+- Fake Out
+
+Hitmonchan
+Adamant Nature
+Level: 100
+Ability: Iron Fist
+IVs: 15 HP / 15 Atk / 15 Def / 15 SpA / 15 SpD / 15 Spe
+EVs: 128 HP / 128 Atk
+- Drain Punch
+- Ice Punch
+- Thunder Punch
+- Mach Punch
+
+=== TRAINER_KANTO_BLACK_BELT_KIYO ===
+Name: KIYO
+Class: Black Belt Frlg
+Pic: Black Belt Frlg
+Gender: Male
+Music: Intense
+Double Battle: No
+AI: Smart Trainer
+
+Machoke
+Adamant Nature
+Level: 100
+Ability: Guts
+IVs: 15 HP / 15 Atk / 15 Def / 15 SpA / 15 SpD / 15 Spe
+EVs: 128 HP / 128 Atk
+- Cross Chop
+- Knock Off
+- Rock Slide
+- Bullet Punch
+
+Primeape
+Jolly Nature
+Level: 100
+Ability: Vital Spirit
+IVs: 15 HP / 15 Atk / 15 Def / 15 SpA / 15 SpD / 15 Spe
+EVs: 128 Atk / 128 Spe
+- Close Combat
+- U-turn
+- Stone Edge
+- Gunk Shot
+
+Hitmontop
+Impish Nature
+Level: 100
+Ability: Intimidate
+IVs: 15 HP / 15 Atk / 15 Def / 15 SpA / 15 SpD / 15 Spe
+EVs: 128 HP / 128 Def
+- Close Combat
+- Rapid Spin
+- Sucker Punch
+- Fake Out
+
+=== TRAINER_KANTO_BLACK_BELT_TAKASHI ===
+Name: TAKASHI
+Class: Black Belt Frlg
+Pic: Black Belt Frlg
+Gender: Male
+Music: Intense
+Double Battle: No
+AI: Smart Trainer
+
+Poliwrath
+Adamant Nature
+Level: 100
+Ability: Water Absorb
+IVs: 15 HP / 15 Atk / 15 Def / 15 SpA / 15 SpD / 15 Spe
+EVs: 128 HP / 128 Atk
+- Waterfall
+- Brick Break
+- Ice Punch
+- Bulk Up
+
+Heracross
+Jolly Nature
+Level: 100
+Ability: Guts
+IVs: 15 HP / 15 Atk / 15 Def / 15 SpA / 15 SpD / 15 Spe
+EVs: 128 Atk / 128 Spe
+- Megahorn
+- Close Combat
+- Stone Edge
+- Night Slash
+
+=== TRAINER_KANTO_COOLTRAINER_SAMUEL ===
+Name: SAMUEL
+Class: Cooltrainer Frlg
+Pic: Cooltrainer M Frlg
+Gender: Male
+Music: Cool
+Double Battle: No
+AI: Smart Trainer
+
+Quagsire
+Relaxed Nature
+Level: 100
+Ability: Water Absorb
+IVs: 15 HP / 15 Atk / 15 Def / 15 SpA / 15 SpD / 15 Spe
+EVs: 128 HP / 128 Def
+- Earthquake
+- Waterfall
+- Recover
+- Toxic
+
+Donphan
+Adamant Nature
+Level: 100
+Ability: Sturdy
+IVs: 15 HP / 15 Atk / 15 Def / 15 SpA / 15 SpD / 15 Spe
+EVs: 128 HP / 128 Atk
+- Earthquake
+- Ice Shard
+- Rapid Spin
+- Knock Off
+
+=== TRAINER_KANTO_COOLTRAINER_YUJI ===
+Name: YUJI
+Class: Cooltrainer Frlg
+Pic: Cooltrainer M Frlg
+Gender: Male
+Music: Cool
+Double Battle: No
+AI: Smart Trainer
+
+Swampert
+Adamant Nature
+Level: 100
+Ability: Torrent
+IVs: 15 HP / 15 Atk / 15 Def / 15 SpA / 15 SpD / 15 Spe
+EVs: 128 HP / 128 Atk
+- Waterfall
+- Earthquake
+- Ice Punch
+- Stealth Rock
+
+Camerupt
+Quiet Nature
+Level: 100
+Ability: Solid Rock
+IVs: 15 HP / 15 Atk / 15 Def / 15 SpA / 15 SpD / 15 Spe
+EVs: 128 HP / 128 SpA
+- Earth Power
+- Flamethrower
+- Stealth Rock
+- Yawn
+
+Flygon
+Jolly Nature
+Level: 100
+Ability: Levitate
+IVs: 15 HP / 15 Atk / 15 Def / 15 SpA / 15 SpD / 15 Spe
+EVs: 128 Atk / 128 Spe
+- Earthquake
+- Dragon Claw
+- U-turn
+- Fire Punch
+
+=== TRAINER_KANTO_COOLTRAINER_WARREN ===
+Name: WARREN
+Class: Cooltrainer Frlg
+Pic: Cooltrainer M Frlg
+Gender: Male
+Music: Cool
+Double Battle: No
+AI: Smart Trainer
+
+Gastrodon
+Calm Nature
+Level: 100
+Ability: Storm Drain
+IVs: 15 HP / 15 Atk / 15 Def / 15 SpA / 15 SpD / 15 Spe
+EVs: 128 HP / 128 SpD
+- Scald
+- Earth Power
+- Recover
+- Ice Beam
+
+Whiscash
+Adamant Nature
+Level: 100
+Ability: Oblivious
+IVs: 15 HP / 15 Atk / 15 Def / 15 SpA / 15 SpD / 15 Spe
+EVs: 128 HP / 128 Atk
+- Earthquake
+- Waterfall
+- Stone Edge
+- Dragon Dance
+
+Golem
+Adamant Nature
+Level: 100
+Ability: Sturdy
+IVs: 15 HP / 15 Atk / 15 Def / 15 SpA / 15 SpD / 15 Spe
+EVs: 128 HP / 128 Atk
+- Earthquake
+- Stone Edge
+- Sucker Punch
+- Explosion
+
+=== TRAINER_KANTO_BLUE_GYM ===
+Name: BLUE
+Class: Leader Frlg
+Pic: Rival Late Frlg
+Gender: Male
+Music: Male
+Double Battle: No
+AI: Smart Trainer / Prediction / Ace Pokemon
+
+Pidgeot @ Life Orb
+Timid Nature
+Level: 100
+Ability: Keen Eye
+EVs: 252 SpA / 4 SpD / 252 Spe
+- Hurricane
+- Heat Wave
+- U-turn
+- Roost
+
+Alakazam @ Focus Sash
+Timid Nature
+Level: 100
+Ability: Magic Guard
+EVs: 252 SpA / 4 SpD / 252 Spe
+- Psychic
+- Focus Blast
+- Shadow Ball
+- Energy Ball
+
+Exeggutor @ Sitrus Berry
+Modest Nature
+Level: 100
+Ability: Chlorophyll
+EVs: 252 HP / 252 SpA / 4 SpD
+- Giga Drain
+- Psychic
+- Sleep Powder
+- Sludge Bomb
+
+Gyarados @ Leftovers
+Adamant Nature
+Level: 100
+Ability: Intimidate
+EVs: 4 HP / 252 Atk / 252 Spe
+- Dragon Dance
+- Waterfall
+- Earthquake
+- Ice Fang
+
+Machamp @ Assault Vest
+Adamant Nature
+Level: 100
+Ability: No Guard
+EVs: 252 HP / 252 Atk / 4 SpD
+- Dynamic Punch
+- Stone Edge
+- Knock Off
+- Bullet Punch
+
+Arcanine @ Choice Band
+Jolly Nature
+Level: 100
+Ability: Intimidate
+EVs: 252 Atk / 4 SpD / 252 Spe
+- Flare Blitz
+- Extreme Speed
+- Wild Charge
+- Close Combat

@@ -72,6 +72,14 @@
 // Kanto (5a, TREY_PLAN.md D25): 1 = the FRLG tilesets, overworld sprites and door animations are built into
 // the TREY (Emerald) ROM, so the FRLG Kanto/Sevii maps can be used. Upstream only builds them for FireRed.
 #define TREY_FRLG_DATA                  1
+// Vertical slice (5b, TREY_PLAN.md D27): 1 = a new game skips Birch's speech and the truck. You wake up in your room in
+// Pallet Town, pick boy/girl and a name, and get a Mew (src/trey_intro.c, data/scripts/trey_intro.inc). Placeholder until
+// the real TREY intro (D25).
+#define TREY_MINIMAL_INTRO              1
+#define TREY_INTRO_MEW_LEVEL            5
+// Battle difficulty (5d, TREY_PLAN.md 5.7a, D24): every TREY trainer (bosses, gym trainers, route trainers) is this level.
+// tools/trey/check_trainers.py reads it and fails the build if a TREY trainer's team breaks its tier.
+#define TREY_TRAINER_LEVEL              100
 #define TREY_DEBUG_ALL_DEXES            0
 
 // ---------------------------------------------------------------------------

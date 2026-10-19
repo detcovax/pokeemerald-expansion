@@ -286,6 +286,7 @@ static void DebugAction_Util_CheatStart(u8 taskId);
 static void DebugAction_Util_TreySeason(u8 taskId); // TREY (4b)
 static void DebugAction_Util_TreyQuests(u8 taskId); // TREY (4f)
 static void DebugAction_Util_TreyWarpPallet(u8 taskId); // TREY (5a)
+static void DebugAction_Util_TreyViridianGym(u8 taskId); // TREY (5d)
 extern const u8 TreyQuest_EventScript_DebugStep[]; // TREY (4f)
 
 static void DebugAction_TimeMenu_ChangeTimeOfDay(u8 taskId);
@@ -604,6 +605,7 @@ static const struct DebugMenuOption sDebugMenu_Actions_Utilities[] =
     { COMPOUND_STRING("TREY: quests"),          DebugAction_Util_TreyQuests },            // TREY (4f)
     { COMPOUND_STRING("TREY: test quest step"), DebugAction_ExecuteScript, TreyQuest_EventScript_DebugStep }, // TREY (4f)
     { COMPOUND_STRING("TREY: warp to Pallet"),  DebugAction_Util_TreyWarpPallet },        // TREY (5a)
+    { COMPOUND_STRING("TREY: Viridian Gym"),    DebugAction_Util_TreyViridianGym },       // TREY (5d)
     { NULL }
 };
 
@@ -5014,6 +5016,37 @@ static void DebugAction_Util_TreySeason(u8 taskId)
 static void DebugAction_Util_TreyWarpPallet(u8 taskId)
 {
     SetWarpDestination(MAP_GROUP(MAP_PALLET_TOWN), MAP_NUM(MAP_PALLET_TOWN), WARP_ID_NONE, 6, 8);
+    Debug_DestroyMenu_Full(taskId);
+    DoWarp();
+    ResetInitialPlayerAvatarState();
+}
+
+// TREY (5d, D29): step the Viridian Gym story state and warp to the gym door to see it:
+// closed -> Giovanni (Rocket phase 1 done) -> empty (Giovanni beaten) -> Blue (League done) -> closed (all cleared).
+static void DebugAction_Util_TreyViridianGym(u8 taskId)
+{
+    u32 giovanniFlag = TRAINER_FLAGS_START + TRAINER_KANTO_GIOVANNI;
+
+    if (!FlagGet(FLAG_TREY_KANTO_ROCKET_P1_DONE))
+    {
+        FlagSet(FLAG_TREY_KANTO_ROCKET_P1_DONE);
+    }
+    else if (!FlagGet(giovanniFlag))
+    {
+        FlagSet(giovanniFlag);
+    }
+    else if (!FlagGet(FLAG_TREY_KANTO_LEAGUE_BLUE_DONE))
+    {
+        FlagSet(FLAG_TREY_KANTO_LEAGUE_BLUE_DONE);
+    }
+    else
+    {
+        FlagClear(FLAG_TREY_KANTO_ROCKET_P1_DONE);
+        FlagClear(giovanniFlag);
+        FlagClear(FLAG_TREY_KANTO_LEAGUE_BLUE_DONE);
+    }
+    // in front of the gym door in Viridian City; the door and the gym recompute VAR_TREY_VIRIDIAN_GYM on load
+    SetWarpDestination(MAP_GROUP(MAP_VIRIDIAN_CITY), MAP_NUM(MAP_VIRIDIAN_CITY), WARP_ID_NONE, 36, 12);
     Debug_DestroyMenu_Full(taskId);
     DoWarp();
     ResetInitialPlayerAvatarState();

@@ -860,11 +860,26 @@
 #define TRAINER_BRENDAN_PLACEHOLDER         853
 #define TRAINER_MAY_PLACEHOLDER             854
 
+// TREY trainers (5d+): teams in src/data/trainers.party, tiers in docs/trey/trainer_tiers.csv. Never renumber.
+#define TREY_TRAINERS_START                 855
+#define TRAINER_KANTO_BROCK                        855
+#define TRAINER_KANTO_CAMPER_LIAM                  856
+#define TRAINER_KANTO_GIOVANNI                     857
+#define TRAINER_KANTO_TAMER_JASON                  858
+#define TRAINER_KANTO_TAMER_COLE                   859
+#define TRAINER_KANTO_BLACK_BELT_ATSUSHI           860
+#define TRAINER_KANTO_BLACK_BELT_KIYO              861
+#define TRAINER_KANTO_BLACK_BELT_TAKASHI           862
+#define TRAINER_KANTO_COOLTRAINER_SAMUEL           863
+#define TRAINER_KANTO_COOLTRAINER_YUJI             864
+#define TRAINER_KANTO_COOLTRAINER_WARREN           865
+#define TRAINER_KANTO_BLUE_GYM                     866
+
 // NOTE: Because each Trainer uses a flag to determine when they are defeated, there is only space for 9 additional trainers before trainer flag space overflows
 //       More space can be made by shifting flags around in constants/flags.h or changing how trainer flags are handled
 //       MAX_TRAINERS_COUNT can be increased but will take up additional saveblock space
 
-#define TRAINERS_COUNT_EMERALD     855
+#define TRAINERS_COUNT_EMERALD     867 // TREY: was 855
 // TREY: widened from 864 to 3008 trainers (TREY_PLAN.md E4).
 // 3008 keeps SYSTEM_FLAGS 32-aligned (0x500 + 3008 = 0x10C0). Since expansion 1.16 the special trainer IDs
 // (TRAINER_SECRET_BASE etc.) start at 0xFF00, so no IDs inside the range are reserved. src/trey_save.c checks the partners.

@@ -47,10 +47,12 @@ static const u8 *const sDexNames[TREY_DEX_COUNT] =
 
 // First arrival in a region (the professor event). NULL = nothing to run yet: each region's
 // story fills this in when its maps are built (Phase 5/6). The arrival flag is set either way.
+extern const u8 TreyKanto_EventScript_Arrival[];
+
 static const u8 *const sArrivalScripts[TREY_DEX_COUNT] =
 {
     [TREY_DEX_NATIONAL] = NULL,
-    [TREY_DEX_KANTO]    = NULL,
+    [TREY_DEX_KANTO]    = TreyKanto_EventScript_Arrival, // 5b: starts QUEST_KANTO_STORY
     [TREY_DEX_ORANGE]   = NULL,
     [TREY_DEX_JOHTO]    = NULL,
     [TREY_DEX_HOENN]    = NULL,

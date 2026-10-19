@@ -54,6 +54,7 @@
 #include "follower_npc.h"
 #include "trey_save.h" // TREY
 #include "trey_dex.h" // TREY (4d)
+#include "trey_intro.h" // TREY (5b)
 
 extern const u8 EventScript_ResetAllMapFlags[];
 extern const u8 EventScript_ResetAllMapFlagsFrlg[];
@@ -138,7 +139,7 @@ static void ClearFrontierRecord(void)
 
 static void WarpToTruck(void)
 {
-    if (IS_FRLG)
+    if (IS_FRLG || TREY_MINIMAL_INTRO) // TREY (5b): wake up in your room in Pallet Town
         SetWarpDestination(MAP_GROUP(MAP_PALLET_TOWN_PLAYERS_HOUSE_2F), MAP_NUM(MAP_PALLET_TOWN_PLAYERS_HOUSE_2F), WARP_ID_NONE, 6, 6);
     else
         SetWarpDestination(MAP_GROUP(MAP_INSIDE_OF_TRUCK), MAP_NUM(MAP_INSIDE_OF_TRUCK), WARP_ID_NONE, -1, -1);
@@ -190,6 +191,7 @@ void NewGameInitData(void)
     InitEventData();
     TreyHM_DebugUnlockAll(); // TREY: only if TREY_DEBUG_UNLOCK_ALL_HMS
     TreyDex_InitNewGame();   // TREY (4d): National dex on, discovery list cleared, debug dex unlocks
+    TreyIntro_InitNewGame(); // TREY (5b): the placeholder intro runs on the first field frame
     ClearTVShowData();
     ResetGabbyAndTy();
     ClearSecretBases();

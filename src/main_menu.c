@@ -238,6 +238,7 @@ static void SpriteCB_MovePlayerDownWhileShrinking(struct Sprite *);
 static void Task_NewGameBirchSpeech_WaitForPlayerShrink(u8);
 static void Task_NewGameBirchSpeech_FadePlayerToWhite(u8);
 static void Task_NewGameBirchSpeech_Cleanup(u8);
+static void Task_TreyNewGame(u8); // TREY (5b)
 static void SpriteCB_Null(struct Sprite *);
 static void Task_NewGameBirchSpeech_ReturnFromNamingScreenShowTextbox(u8);
 static void MainMenu_FormatSavegamePlayer(void);
@@ -1091,7 +1092,12 @@ static void Task_HandleMainMenuAPressed(u8 taskId)
 
             gPlttBufferUnfaded[0] = RGB_BLACK;
             gPlttBufferFaded[0] = RGB_BLACK;
+#if TREY_MINIMAL_INTRO
+            // TREY (5b): no Birch speech; gender and name are chosen in the field (src/trey_intro.c)
+            gTasks[taskId].func = Task_TreyNewGame;
+#else
             gTasks[taskId].func = Task_NewGameBirchSpeech_Init;
+#endif
             break;
         case ACTION_CONTINUE:
             gPlttBufferUnfaded[0] = RGB_BLACK;
@@ -1804,6 +1810,18 @@ static void Task_NewGameBirchSpeech_FadePlayerToWhite(u8 taskId)
         SetGpuReg(REG_OFFSET_DISPCNT, DISPCNT_OBJ_ON | DISPCNT_OBJ_1D_MAP);
         BeginNormalPaletteFade(PALETTES_OBJECTS, 0, 0, 16, RGB_WHITEALPHA);
         gTasks[taskId].func = Task_NewGameBirchSpeech_Cleanup;
+    }
+}
+
+// TREY (5b): start a new game straight away (TREY_MINIMAL_INTRO)
+static void Task_TreyNewGame(u8 taskId)
+{
+    if (!gPaletteFade.active)
+    {
+        FreeAllWindowBuffers();
+        ResetAllPicSprites();
+        SetMainCallback2(CB2_NewGame);
+        DestroyTask(taskId);
     }
 }
 
