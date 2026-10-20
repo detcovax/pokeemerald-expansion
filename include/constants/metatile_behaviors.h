@@ -131,8 +131,8 @@ enum {
     MB_UNUSED_BRIDGE,
     MB_BIKE_BRIDGE_OVER_BARRIER,
     MB_COUNTER,
-    MB_UNUSED_81,
-    MB_UNUSED_82,
+    MB_BOOKSHELF_GREEN, // TREY (6a): Heart & Soul behaviour, same slot (was MB_UNUSED_81)
+    MB_SHOP_SHELF_DEPARTMENT, // TREY (6a, Heart & Soul; was MB_UNUSED_82)
     MB_PC,
     MB_CABLE_BOX_RESULTS_1,
     MB_REGION_MAP,
@@ -161,7 +161,7 @@ enum {
     MB_SECRET_BASE_SPOT_TREE_RIGHT,
     MB_SECRET_BASE_SPOT_TREE_RIGHT_OPEN,
     MB_UNUSED_9E,
-    MB_UNUSED_9F,
+    MB_SHOP_SHELF_DEPARTMENT_FORWARD, // TREY (6a, Heart & Soul; was MB_UNUSED_9F)
     MB_BERRY_TREE_SOIL,
     MB_INDIGO_PLATEAU_SIGN_1,
     MB_INDIGO_PLATEAU_SIGN_2,
@@ -217,11 +217,11 @@ enum {
     MB_ISOLATED_HORIZONTAL_RAIL,
     MB_VERTICAL_RAIL,
     MB_HORIZONTAL_RAIL,
-    MB_UNUSED_D7,
-    MB_UNUSED_D8,
-    MB_UNUSED_D9,
-    MB_UNUSED_DA,
-    MB_UNUSED_DB,
+    MB_TALL_GRASS_IMPASSABLE_NORTH, // TREY (6a, Heart & Soul; was MB_UNUSED_D7): tall grass you can't leave northwards
+    MB_CAVE_IMPASSABLE_NORTH, // TREY (6a, Heart & Soul; was MB_UNUSED_D8)
+    MB_HEADBUTT_TREE, // TREY (6a, Heart & Soul; was MB_UNUSED_D9): A with a Headbutt user shakes out a wild Pokémon
+    MB_WATER_NORTH_ARROW_WARP, // TREY (6a, Heart & Soul; was MB_UNUSED_DA): surfable north arrow warp
+    MB_BRIDGE_OVER_ICE, // TREY (6a, Heart & Soul; was MB_UNUSED_DB): ice under a bridge (slippery at low elevation)
     MB_UNUSED_DC,
     MB_UNUSED_DD,
     MB_UNUSED_DE,

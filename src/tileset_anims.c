@@ -1659,3 +1659,6 @@ void InitTilesetAnim_CeladonGym(void)
     sSecondaryTilesetAnimCallback = TilesetAnim_CeladonGym;
 }
 
+
+// TREY (6a): Heart & Soul Johto tileset animations (tools/trey/import_hns.py)
+#include "data/tilesets/trey_hns_anims.h"

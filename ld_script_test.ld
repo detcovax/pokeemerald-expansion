@@ -27,6 +27,7 @@ SECTIONS {
     ALIGN(4)
     {
         src/*.o(.sbss);
+        data/*.o(.sbss); /* TREY (6a): music player tracks (sound/music_player_table.inc) */
         test/*.o(.sbss);
         . = ALIGN(4);
     } > EWRAM

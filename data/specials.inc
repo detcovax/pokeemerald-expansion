@@ -644,6 +644,8 @@ gSpecials::
 	def_special TreyLayer_StartLanding
 	def_special TreyLayer_FindSoarMon
 	def_special TreyHM_CheckPartyMove
+	def_special TreyHeadbutt_FindPartyMon
+	def_special TreyHeadbutt_WildEncounter
 	def_special TreyIntro_SetGender
 	def_special TreyIntro_NamePlayer
 	def_special TreyIntro_FinishNaming

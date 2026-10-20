@@ -133,6 +133,24 @@ u8 TreyHM_FindPartyMon(u16 move)
     return PARTY_SIZE;
 }
 
+// special (6a): VAR_RESULT = party slot of the first Pokémon that knows HEADBUTT, or PARTY_SIZE.
+void TreyHeadbutt_FindPartyMon(void)
+{
+    u8 i;
+    gSpecialVar_Result = PARTY_SIZE;
+    for (i = 0; i < PARTY_SIZE; i++)
+    {
+        struct Pokemon *mon = &gParties[B_TRAINER_PLAYER][i];
+        if (GetMonData(mon, MON_DATA_SPECIES) == SPECIES_NONE)
+            break;
+        if (!GetMonData(mon, MON_DATA_IS_EGG) && MonKnowsMove(mon, MOVE_HEADBUTT))
+        {
+            gSpecialVar_Result = i;
+            return;
+        }
+    }
+}
+
 // special for the treycheckpartymove script macro (upstream 1.16 removed checkpartymove).
 // VAR_0x8004 = move in; VAR_RESULT = party slot or PARTY_SIZE, VAR_0x8004 = that Pokémon's species.
 void TreyHM_CheckPartyMove(void)

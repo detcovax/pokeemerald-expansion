@@ -10,6 +10,7 @@
 #include "constants/songs.h"
 #include "task.h"
 #include "test_runner.h"
+#include "trey_regions.h"
 
 struct Fanfare
 {
@@ -57,7 +58,45 @@ static const struct Fanfare sFanfares[] = {
     [FANFARE_OBTAIN_B_POINTS]     = { MUS_OBTAIN_B_POINTS,     313 },
     [FANFARE_OBTAIN_SYMBOL]       = { MUS_OBTAIN_SYMBOL,       318 },
     [FANFARE_REGISTER_MATCH_CALL] = { MUS_REGISTER_MATCH_CALL, 135 },
+    [FANFARE_HG_BUG_CONTEST_1ST]  = { MUS_HG_BUG_CONTEST_1ST_PLACE, 203 },
+    [FANFARE_HG_BUG_CONTEST_2ND]  = { MUS_HG_BUG_CONTEST_2ND_PLACE, 186 },
+    [FANFARE_HG_BUG_CONTEST_3RD]  = { MUS_HG_BUG_CONTEST_3RD_PLACE,  84 },
+    [FANFARE_HG_OBTAIN_EGG]       = { MUS_HG_OBTAIN_EGG,            127 },
 };
+
+// TREY (6a): Johto plays the HGSS fanfares (durations from Heart & Soul). Same order as sFanfares.
+static const struct Fanfare sFanfaresJohto[] = {
+    [FANFARE_LEVEL_UP]            = { MUS_HG_LEVEL_UP,          80 },
+    [FANFARE_OBTAIN_ITEM]         = { MUS_HG_OBTAIN_ITEM,      160 },
+    [FANFARE_EVOLVED]             = { MUS_HG_EVOLVED,           220 },
+    [FANFARE_OBTAIN_TMHM]         = { MUS_HG_OBTAIN_TMHM,      220 },
+    [FANFARE_HEAL]                = { MUS_HG_HEAL,             160 },
+    [FANFARE_OBTAIN_BADGE]        = { MUS_HG_OBTAIN_BADGE,     340 },
+    [FANFARE_MOVE_DELETED]        = { MUS_HG_MOVE_DELETED,     180 },
+    [FANFARE_OBTAIN_BERRY]        = { MUS_HG_OBTAIN_BERRY,     120 },
+    [FANFARE_AWAKEN_LEGEND]       = { MUS_AWAKEN_LEGEND,       710 },
+    [FANFARE_SLOTS_JACKPOT]       = { MUS_SLOTS_JACKPOT,       250 },
+    [FANFARE_SLOTS_WIN]           = { MUS_SLOTS_WIN,           150 },
+    [FANFARE_TOO_BAD]             = { MUS_TOO_BAD,             160 },
+    [FANFARE_RG_POKE_FLUTE]       = { MUS_RG_POKE_FLUTE,       450 },
+    [FANFARE_RG_OBTAIN_KEY_ITEM]  = { MUS_HG_OBTAIN_KEY_ITEM,  170 },
+    [FANFARE_RG_DEX_RATING]       = { MUS_RG_DEX_RATING,       196 },
+    [FANFARE_OBTAIN_B_POINTS]     = { MUS_HG_OBTAIN_B_POINTS,  264 },
+    [FANFARE_OBTAIN_SYMBOL]       = { MUS_OBTAIN_SYMBOL,       318 },
+    [FANFARE_REGISTER_MATCH_CALL] = { MUS_HG_POKEGEAR_REGISTERED, 160 },
+    [FANFARE_HG_BUG_CONTEST_1ST]  = { MUS_HG_BUG_CONTEST_1ST_PLACE, 232 },
+    [FANFARE_HG_BUG_CONTEST_2ND]  = { MUS_HG_BUG_CONTEST_2ND_PLACE, 186 },
+    [FANFARE_HG_BUG_CONTEST_3RD]  = { MUS_HG_BUG_CONTEST_3RD_PLACE,  84 },
+    [FANFARE_HG_OBTAIN_EGG]       = { MUS_HG_OBTAIN_EGG,            131 },
+};
+STATIC_ASSERT(ARRAY_COUNT(sFanfaresJohto) == ARRAY_COUNT(sFanfares), TreyJohtoFanfaresMatch);
+
+static const struct Fanfare *GetRegionFanfares(void)
+{
+    if (TreyGetCurrentRegion() == REGION_JOHTO)
+        return sFanfaresJohto;
+    return sFanfares;
+}
 
 void InitMapMusic(void)
 {
@@ -184,9 +223,10 @@ bool8 IsNotWaitingForBGMStop(void)
 void PlayFanfareByFanfareNum(u8 fanfareNum)
 {
     u16 songNum;
+    const struct Fanfare *fanfares = GetRegionFanfares();
     m4aMPlayStop(&gMPlayInfo_BGM);
-    songNum = sFanfares[fanfareNum].songNum;
-    sFanfareCounter = sFanfares[fanfareNum].duration;
+    songNum = fanfares[fanfareNum].songNum;
+    sFanfareCounter = fanfares[fanfareNum].duration;
     m4aSongNumStart(songNum);
 }
 
@@ -211,7 +251,7 @@ bool8 WaitFanfare(bool8 stop)
 // Unused
 void StopFanfareByFanfareNum(u8 fanfareNum)
 {
-    m4aSongNumStop(sFanfares[fanfareNum].songNum);
+    m4aSongNumStop(GetRegionFanfares()[fanfareNum].songNum);
 }
 
 void PlayFanfare(u16 songNum)
@@ -219,7 +259,8 @@ void PlayFanfare(u16 songNum)
     s32 i;
     for (i = 0; (u32)i < ARRAY_COUNT(sFanfares); i++)
     {
-        if (sFanfares[i].songNum == songNum)
+        // TREY (6a): a script may name either region's song (MUS_OBTAIN_ITEM or MUS_HG_OBTAIN_ITEM)
+        if (sFanfares[i].songNum == songNum || sFanfaresJohto[i].songNum == songNum)
         {
             PlayFanfareByFanfareNum(i);
             CreateFanfareTask();

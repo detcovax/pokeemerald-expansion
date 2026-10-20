@@ -3,8 +3,8 @@
 
 	.equiv ID_NUMBER, 0x68736d53
 
-	.equiv PCM_DMA_BUF_SIZE, 1584
-	.equiv MAX_DIRECTSOUND_CHANNELS, 12
+	.equiv PCM_DMA_BUF_SIZE, 2128 @ TREY (6a): HQ mixer
+	.equiv MAX_DIRECTSOUND_CHANNELS, 15
 
 	.equiv C_V, 0x40
 

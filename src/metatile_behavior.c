@@ -137,6 +137,11 @@ static const u8 sTileBitAttributes[NUM_METATILE_BEHAVIORS] =
     [MB_CYCLING_ROAD_PULL_DOWN_GRASS]       = TILE_FLAG_UNUSED | TILE_FLAG_HAS_ENCOUNTERS,
     [MB_FAST_WATER]                         = TILE_FLAG_UNUSED | TILE_FLAG_SURFABLE,
     [MB_CYCLING_ROAD_WATER]                 = TILE_FLAG_UNUSED | TILE_FLAG_SURFABLE,
+    // TREY (6a): Heart & Soul behaviours
+    [MB_TALL_GRASS_IMPASSABLE_NORTH]        = TILE_FLAG_UNUSED | TILE_FLAG_HAS_ENCOUNTERS,
+    [MB_CAVE_IMPASSABLE_NORTH]              = TILE_FLAG_UNUSED | TILE_FLAG_HAS_ENCOUNTERS,
+    [MB_WATER_NORTH_ARROW_WARP]             = TILE_FLAG_UNUSED | TILE_FLAG_SURFABLE,
+    [MB_BRIDGE_OVER_ICE]                    = TILE_FLAG_UNUSED,
 };
 
 bool8 MetatileBehavior_IsATile(u8 metatileBehavior)
@@ -186,7 +191,7 @@ bool8 MetatileBehavior_IsJumpSouth(u8 metatileBehavior)
 
 bool8 MetatileBehavior_IsPokeGrass(u8 metatileBehavior)
 {
-    if (metatileBehavior == MB_TALL_GRASS || metatileBehavior == MB_LONG_GRASS || metatileBehavior == MB_CYCLING_ROAD_PULL_DOWN_GRASS)
+    if (metatileBehavior == MB_TALL_GRASS || metatileBehavior == MB_LONG_GRASS || metatileBehavior == MB_CYCLING_ROAD_PULL_DOWN_GRASS || metatileBehavior == MB_TALL_GRASS_IMPASSABLE_NORTH)
         return TRUE;
     else
         return FALSE;
@@ -225,8 +230,11 @@ bool8 MetatileBehavior_IsIce(u8 metatileBehavior)
 {
     if (metatileBehavior == MB_ICE)
         return TRUE;
-    else
-        return FALSE;
+    // TREY (6a, Heart & Soul): ice under a bridge is slippery when walked on at the lower level
+    if (metatileBehavior == MB_BRIDGE_OVER_ICE
+     && gObjectEvents[gPlayerAvatar.objectEventId].currentElevation <= 3)
+        return TRUE;
+    return FALSE;
 }
 
 bool8 MetatileBehavior_IsWarpDoor(u8 metatileBehavior)
@@ -316,6 +324,7 @@ bool8 MetatileBehavior_IsWestArrowWarp(u8 metatileBehavior)
 bool8 MetatileBehavior_IsNorthArrowWarp(u8 metatileBehavior)
 {
     if (metatileBehavior == MB_NORTH_ARROW_WARP
+     || metatileBehavior == MB_WATER_NORTH_ARROW_WARP // TREY (6a)
      || metatileBehavior == MB_STAIRS_OUTSIDE_ABANDONED_SHIP)
         return TRUE;
     else
@@ -372,8 +381,11 @@ bool8 MetatileBehavior_IsIce_2(u8 metatileBehavior)
 {
     if (metatileBehavior == MB_ICE)
         return TRUE;
-    else
-        return FALSE;
+    // TREY (6a, Heart & Soul): ice under a bridge is slippery when walked on at the lower level
+    if (metatileBehavior == MB_BRIDGE_OVER_ICE
+     && gObjectEvents[gPlayerAvatar.objectEventId].currentElevation <= 3)
+        return TRUE;
+    return FALSE;
 }
 
 bool8 MetatileBehavior_IsTrickHouseSlipperyFloor(u8 metatileBehavior)
@@ -761,7 +773,7 @@ bool8 MetatileBehavior_IsPuddle(u8 metatileBehavior)
 
 bool8 MetatileBehavior_IsTallGrass(u8 metatileBehavior)
 {
-    if (metatileBehavior == MB_TALL_GRASS || metatileBehavior == MB_CYCLING_ROAD_PULL_DOWN_GRASS)
+    if (metatileBehavior == MB_TALL_GRASS || metatileBehavior == MB_CYCLING_ROAD_PULL_DOWN_GRASS || metatileBehavior == MB_TALL_GRASS_IMPASSABLE_NORTH)
         return TRUE;
     else
         return FALSE;
@@ -992,7 +1004,9 @@ bool8 MetatileBehavior_IsNorthBlocked(u8 metatileBehavior)
     if (metatileBehavior == MB_IMPASSABLE_NORTH
      || metatileBehavior == MB_IMPASSABLE_NORTHEAST
      || metatileBehavior == MB_IMPASSABLE_NORTHWEST
-     || metatileBehavior == MB_IMPASSABLE_SOUTH_AND_NORTH)
+     || metatileBehavior == MB_IMPASSABLE_SOUTH_AND_NORTH
+     || metatileBehavior == MB_TALL_GRASS_IMPASSABLE_NORTH // TREY (6a)
+     || metatileBehavior == MB_CAVE_IMPASSABLE_NORTH)
         return TRUE;
     else
         return FALSE;
@@ -1350,7 +1364,7 @@ bool8 MetatileBehavior_IsPictureBookShelf(u8 metatileBehavior)
 
 bool8 MetatileBehavior_IsBookShelf(u8 metatileBehavior)
 {
-    if (metatileBehavior == MB_BOOKSHELF)
+    if (metatileBehavior == MB_BOOKSHELF || metatileBehavior == MB_BOOKSHELF_GREEN)
         return TRUE;
     else
         return FALSE;
@@ -1382,7 +1396,7 @@ bool8 MetatileBehavior_IsTrashCan(u8 metatileBehavior)
 
 bool8 MetatileBehavior_IsShopShelf(u8 metatileBehavior)
 {
-    if (metatileBehavior == MB_SHOP_SHELF)
+    if (metatileBehavior == MB_SHOP_SHELF || metatileBehavior == MB_SHOP_SHELF_DEPARTMENT || metatileBehavior == MB_SHOP_SHELF_DEPARTMENT_FORWARD)
         return TRUE;
     else
         return FALSE;
@@ -1588,6 +1602,12 @@ bool8 MetatileBehavior_IsRockStairs(u8 metatileBehavior)
         return TRUE;
     else
         return FALSE;
+}
+
+// TREY (6a, Heart & Soul): A in front of a headbutt tree
+bool8 MetatileBehavior_IsHeadbuttTree(u8 metatileBehavior)
+{
+    return metatileBehavior == MB_HEADBUTT_TREE;
 }
 
 bool8 MetatileBehavior_IsRockClimbable(u8 metatileBehavior)

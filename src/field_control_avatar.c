@@ -1,5 +1,6 @@
 #include "global.h"
 #include "trey_intro.h" // TREY (5b)
+extern const u8 EventScript_TreyHeadbutt[]; // TREY (6a): data/scripts/trey_headbutt.inc
 #include "trey_hm.h" // TREY
 #include "trey_transit.h" // TREY (4c)
 #include "trey_dex.h" // TREY (4d)
@@ -510,6 +511,8 @@ static const u8 *GetInteractedMetatileScript(struct MapPosition *position, u8 me
     }
     if (MetatileBehavior_IsPC(metatileBehavior) == TRUE)
         return EventScript_PC;
+    if (MetatileBehavior_IsHeadbuttTree(metatileBehavior) == TRUE) // TREY (6a)
+        return EventScript_TreyHeadbutt;
     if (MetatileBehavior_IsClosedSootopolisDoor(metatileBehavior) == TRUE)
         return EventScript_ClosedSootopolisDoor;
     if (MetatileBehavior_IsSkyPillarClosedDoor(metatileBehavior) == TRUE)

@@ -509,6 +509,8 @@ static bool8 MapHasSpecies(const struct WildEncounterTypes *info, u16 species)
         return TRUE;
     if (MonListHasSpecies(info->skyMonsInfo, species, NUM_SKY_MONS_ENCOUNTER_SLOTS)) // TREY: sky clouds (3e)
         return TRUE;
+    if (MonListHasSpecies(info->headbuttMonsInfo, species, NUM_HEADBUTT_MONS_ENCOUNTER_SLOTS)) // TREY (6a): headbutt trees
+        return TRUE;
     return FALSE;
 }
 

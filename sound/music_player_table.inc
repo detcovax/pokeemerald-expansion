@@ -1,10 +1,10 @@
 	.equiv TRACK_SIZE, 0x50
-	.equiv NUM_TRACKS_BGM, 10
+	.equiv NUM_TRACKS_BGM, 16 @ TREY (6a): HGSS songs use up to 16 tracks
 	.equiv NUM_TRACKS_SE1, 3
-	.equiv NUM_TRACKS_SE2, 9
+	.equiv NUM_TRACKS_SE2, 11
 	.equiv NUM_TRACKS_SE3, 1
 
-	.bss
+	.section .sbss, "aw", %nobits @ TREY (6a): tracks live in EWRAM to keep IWRAM free for the HQ mixer
 	.align 2
 
 gMPlayTrack_BGM::

@@ -397,6 +397,24 @@ static u8 ChooseWildMonIndex_Sky(void)
     return NUM_SKY_MONS_ENCOUNTER_SLOTS - 1;
 }
 
+// TREY (6a): headbutt trees. Slot chances come from the "headbutt_mons" field in wild_encounters.json.
+static u8 ChooseWildMonIndex_Headbutt(void)
+{
+    static const u8 sChances[NUM_HEADBUTT_MONS_ENCOUNTER_SLOTS] =
+    {
+        ENCOUNTER_CHANCE_HEADBUTT_MONS_SLOT_0, ENCOUNTER_CHANCE_HEADBUTT_MONS_SLOT_1, ENCOUNTER_CHANCE_HEADBUTT_MONS_SLOT_2,
+        ENCOUNTER_CHANCE_HEADBUTT_MONS_SLOT_3, ENCOUNTER_CHANCE_HEADBUTT_MONS_SLOT_4, ENCOUNTER_CHANCE_HEADBUTT_MONS_SLOT_5,
+    };
+    u32 i, rand = Random() % ENCOUNTER_CHANCE_HEADBUTT_MONS_TOTAL;
+
+    for (i = 0; i < NUM_HEADBUTT_MONS_ENCOUNTER_SLOTS - 1; i++)
+    {
+        if (rand < sChances[i])
+            return i;
+    }
+    return NUM_HEADBUTT_MONS_ENCOUNTER_SLOTS - 1;
+}
+
 u8 ChooseWildMonLevel(const struct WildPokemon *wildPokemon, u8 wildMonIndex, enum WildPokemonArea area)
 {
     u8 min;
@@ -512,6 +530,9 @@ enum TimeOfDay GetTimeOfDayForEncounters(u32 headerId, enum WildPokemonArea area
     case WILD_AREA_SKY: // TREY
         wildMonInfo = TreyWild_GetTypes(headerId, timeOfDay)[0].skyMonsInfo;
         break;
+    case WILD_AREA_HEADBUTT: // TREY (6a)
+        wildMonInfo = TreyWild_GetTypes(headerId, timeOfDay)[0].headbuttMonsInfo;
+        break;
     }
 
     if (wildMonInfo == NULL && !OW_TIME_OF_DAY_DISABLE_FALLBACK)
@@ -612,6 +633,9 @@ bool8 TryGenerateWildMon(const struct WildPokemonInfo *wildMonInfo, enum WildPok
         if (OW_FLASH_FIRE >= GEN_8 && TRY_GET_ABILITY_INFLUENCED_WILD_MON_INDEX(wildMonInfo->wildPokemon, TYPE_FIRE, ABILITY_FLASH_FIRE, &wildMonIndex, NUM_SKY_MONS_ENCOUNTER_SLOTS))
             break;
         wildMonIndex = ChooseWildMonIndex_Sky();
+        break;
+    case WILD_AREA_HEADBUTT: // TREY (6a)
+        wildMonIndex = ChooseWildMonIndex_Headbutt();
         break;
     default:
     case WILD_AREA_FISHING:
@@ -920,6 +944,27 @@ bool8 StandardWildEncounter(u16 curMetatileBehavior, u16 prevMetatileBehavior)
     }
 
     return FALSE;
+}
+
+// TREY (6a): special after a Pokémon headbutts a tree (data/scripts/trey_headbutt.inc).
+// VAR_RESULT = TRUE if a wild battle starts. Same rules as Rock Smash, with the map's "headbutt_mons" table.
+void TreyHeadbutt_WildEncounter(void)
+{
+    u32 headerId = GetCurrentMapWildMonHeaderId();
+    const struct WildPokemonInfo *info;
+
+    gSpecialVar_Result = FALSE;
+    if (headerId == HEADER_NONE)
+        return;
+    info = TreyWild_GetTypes(headerId, GetTimeOfDayForEncounters(headerId, WILD_AREA_HEADBUTT))[0].headbuttMonsInfo;
+    if (info == NULL)
+        return;
+    if (WildEncounterCheck(info->encounterRate, TRUE) == TRUE
+     && TryGenerateWildMon(info, WILD_AREA_HEADBUTT, WILD_CHECK_REPEL | WILD_CHECK_KEEN_EYE) == TRUE)
+    {
+        BattleSetup_StartWildBattle();
+        gSpecialVar_Result = TRUE;
+    }
 }
 
 void RockSmashWildEncounter(void)
@@ -1258,6 +1303,9 @@ static u8 GetMaxLevelOfSpeciesInWildTable(const struct WildPokemon *wildMon, enu
         break;
     case WILD_AREA_SKY: // TREY
         numMon = NUM_SKY_MONS_ENCOUNTER_SLOTS;
+        break;
+    case WILD_AREA_HEADBUTT: // TREY (6a)
+        numMon = NUM_HEADBUTT_MONS_ENCOUNTER_SLOTS;
         break;
     default:
     case WILD_AREA_FISHING:

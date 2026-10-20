@@ -31,7 +31,7 @@ SEASONS = ["spring", "summer", "autumn", "winter"]
 TIMES = ["morning", "day", "evening", "night"]   # enum TimeOfDay order
 WEATHERS = ["clear", "rain", "snow", "sandstorm", "fog", "sun"]
 AREAS = {"land": ("landMonsInfo", 12), "water": ("waterMonsInfo", 5), "rock": ("rockSmashMonsInfo", 5),
-         "fishing": ("fishingMonsInfo", 10), "hidden": ("hiddenMonsInfo", 3), "sky": ("skyMonsInfo", 12)}
+         "fishing": ("fishingMonsInfo", 10), "hidden": ("hiddenMonsInfo", 3), "sky": ("skyMonsInfo", 12), "headbutt": ("headbuttMonsInfo", 6)}
 
 
 def mask(text, names, where):

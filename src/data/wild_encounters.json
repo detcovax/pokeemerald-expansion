@@ -90,6 +90,17 @@
             1,
             1
           ]
+        },
+        {
+          "type": "headbutt_mons",
+          "encounter_rates": [
+            50,
+            15,
+            15,
+            10,
+            5,
+            5
+          ]
         }
       ],
       "encounters": [

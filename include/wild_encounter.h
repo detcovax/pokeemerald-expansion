@@ -14,6 +14,7 @@ enum WildPokemonArea {
     WILD_AREA_FISHING,
     WILD_AREA_HIDDEN,
     WILD_AREA_SKY, // TREY: clouds on Sky maps (3e)
+    WILD_AREA_HEADBUTT, // TREY (6a): shaking a headbutt tree
 };
 
 struct WildPokemon
@@ -37,6 +38,7 @@ struct WildEncounterTypes
     const struct WildPokemonInfo *fishingMonsInfo;
     const struct WildPokemonInfo *hiddenMonsInfo;
     const struct WildPokemonInfo *skyMonsInfo; // TREY: "sky_mons" in wild_encounters.json (3e)
+    const struct WildPokemonInfo *headbuttMonsInfo; // TREY (6a): "headbutt_mons", headbutt trees
 };
 
 struct WildPokemonHeader
@@ -79,6 +81,7 @@ bool8 CheckFeebasAtCoords(s16 x, s16 y);
 u32 ChooseWildMonIndex_Land(void);
 u32 ChooseWildMonIndex_Water(void);
 u32 ChooseWildMonIndex_Rocks(void);
+void TreyHeadbutt_WildEncounter(void); // TREY (6a) special
 u32 ChooseHiddenMonIndex(void);
 bool32 MapHasNoEncounterData(void);
 enum TimeOfDay GetTimeOfDayForEncounters(u32 headerId, enum WildPokemonArea area);

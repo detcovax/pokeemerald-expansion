@@ -92,6 +92,7 @@ const struct WildEncounterTypes *TreyWild_GetTypesFor(u32 headerId, u32 timeOfDa
         MergeArea(&sMerged.fishingMonsInfo, e->types->fishingMonsInfo);
         MergeArea(&sMerged.hiddenMonsInfo, e->types->hiddenMonsInfo);
         MergeArea(&sMerged.skyMonsInfo, e->types->skyMonsInfo);
+        MergeArea(&sMerged.headbuttMonsInfo, e->types->headbuttMonsInfo);
     }
     return &sMerged;
 }

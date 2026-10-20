@@ -1718,6 +1718,7 @@ EventScript_PalletTown_PlayersHouse_2F_TurnOnPC::
 	.include "data/scripts/trey_transit.inc" @ TREY (4c)
 	.include "data/scripts/trey_quests.inc" @ TREY (4f)
 	.include "data/scripts/trey_intro.inc" @ TREY (5b)
+	.include "data/scripts/trey_headbutt.inc" @ TREY (6a)
 	.include "data/scripts/item_ball_scripts.inc"
 	.include "data/scripts/profile_man.inc"
 	.include "data/scripts/day_care.inc"
