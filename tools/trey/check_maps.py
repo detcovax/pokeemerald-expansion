@@ -60,6 +60,9 @@ def load_mapsec_regions():
     return regions
 
 
+HISUI_TOO = {"MAPSEC_SINJOH_RUINS"}
+
+
 def regional_form_region(species):
     if species.endswith("_HISUI") or "_HISUI_" in species or species == "SPECIES_BASCULIN_WHITE_STRIPED":
         return "REGION_SINNOH"
@@ -311,6 +314,9 @@ def main():
                 for mon in table["mons"]:
                     species = mon.get("species", "")
                     needed = regional_form_region(species)
+                    # Sinjoh Ruins: a Johto place tied to ancient Sinnoh, so Hisuian forms live there too (David, 2026-10-20)
+                    if needed == "REGION_SINNOH" and entry[1].get("region_map_section") in HISUI_TOO:
+                        continue
                     if needed and needed != region:
                         error(f"wild_encounters.json {enc.get('base_label')} ({field}): {species} may only appear in {needed}, but {map_id} is in {region}.")
 

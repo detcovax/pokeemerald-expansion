@@ -13,7 +13,8 @@ Steps (run from the project root; --hns points at a Heart & Soul checkout or a c
              (tile animations, included at the end of src/tileset_anims.c).
   sprites    Johto NPC sprites (object events, palettes).
   music      HGSS/DP songs, voicegroups, key split tables and samples.
-Later steps (maps, wild) are added as 6a goes on.
+  maps       Johto/Sinjoh maps, layouts, groups, harmless events (tools/trey/hns_maps.py).
+  wild       Johto wild tables (Day/Night -> four times, Rock Smash vs Headbutt; tools/trey/hns_maps.py).
 """
 import argparse
 import json
@@ -464,7 +465,7 @@ def step_music(hns, dry):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("step", choices=["tilesets", "sprites", "music"])
+    ap.add_argument("step", choices=["tilesets", "sprites", "music", "maps", "wild"])
     ap.add_argument("--hns", default="../pokehns-expansion")
     ap.add_argument("--dry-run", action="store_true")
     a = ap.parse_args()
@@ -476,6 +477,12 @@ def main():
         step_sprites(a.hns, a.dry_run)
     elif a.step == "music":
         step_music(a.hns, a.dry_run)
+    elif a.step == "maps":
+        import hns_maps
+        hns_maps.step_maps(a.hns, a.dry_run)
+    elif a.step == "wild":
+        import hns_maps
+        hns_maps.step_wild(a.hns, a.dry_run)
 
 
 if __name__ == "__main__":

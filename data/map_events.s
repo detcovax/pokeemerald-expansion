@@ -1,3 +1,4 @@
+#include "constants/species.h" // TREY (6a-5): first, so preproc turns the species enum into symbols here (OBJ_EVENT_GFX_SPECIES on Johto maps)
 #include "constants/global.h"
 #include "constants/event_bg.h"
 #include "constants/event_object_movement.h"

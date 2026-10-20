@@ -288,6 +288,7 @@ static void DebugAction_Util_TreyQuests(u8 taskId); // TREY (4f)
 static void DebugAction_Util_TreyWarpPallet(u8 taskId); // TREY (5a)
 static void DebugAction_Util_TreyViridianGym(u8 taskId); // TREY (5d)
 static void DebugAction_Util_TreyWarpVermilion(u8 taskId); // TREY (5e)
+static void DebugAction_Util_TreyWarpNewBark(u8 taskId); // TREY (6a-5)
 extern const u8 TreyQuest_EventScript_DebugStep[]; // TREY (4f)
 
 static void DebugAction_TimeMenu_ChangeTimeOfDay(u8 taskId);
@@ -608,6 +609,7 @@ static const struct DebugMenuOption sDebugMenu_Actions_Utilities[] =
     { COMPOUND_STRING("TREY: warp to Pallet"),  DebugAction_Util_TreyWarpPallet },        // TREY (5a)
     { COMPOUND_STRING("TREY: Viridian Gym"),    DebugAction_Util_TreyViridianGym },       // TREY (5d)
     { COMPOUND_STRING("TREY: warp to Vermilion"), DebugAction_Util_TreyWarpVermilion },   // TREY (5e)
+    { COMPOUND_STRING("TREY: warp to New Bark"), DebugAction_Util_TreyWarpNewBark },      // TREY (6a-5)
     { NULL }
 };
 
@@ -5027,6 +5029,15 @@ static void DebugAction_Util_TreyWarpPallet(u8 taskId)
 static void DebugAction_Util_TreyWarpVermilion(u8 taskId)
 {
     SetWarpDestination(MAP_GROUP(MAP_VERMILION_CITY), MAP_NUM(MAP_VERMILION_CITY), WARP_ID_NONE, 15, 7);
+    Debug_DestroyMenu_Full(taskId);
+    DoWarp();
+    ResetInitialPlayerAvatarState();
+}
+
+// TREY (6a-5): jump to Johto (New Bark Town, at its heal location).
+static void DebugAction_Util_TreyWarpNewBark(u8 taskId)
+{
+    SetWarpDestination(MAP_GROUP(MAP_NEW_BARK_TOWN), MAP_NUM(MAP_NEW_BARK_TOWN), WARP_ID_NONE, 20, 12);
     Debug_DestroyMenu_Full(taskId);
     DoWarp();
     ResetInitialPlayerAvatarState();

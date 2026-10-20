@@ -1,0 +1,254 @@
+TREY (6a-5): what tools/trey/import_hns.py (maps) kept and removed on each Johto map.
+
+NewBarkTown: coord dropped 6, decoration 5, hidden item 1, npc dropped 2, npc kept 1, sign kept 5, story object dropped 1, warp removed 2
+CherrygroveCity: coord dropped 6, decoration 4, hidden item 2, npc dropped 2, npc kept 5, sign kept 1, story object dropped 3
+VioletCity: berry tree dropped (Johto berry trees come later) 1, coord dropped 3, decoration 32, item ball 3, npc dropped 1, npc kept 9, sign kept 1, story object dropped 10
+AzaleaTown: berry tree dropped (Johto berry trees come later) 1, coord dropped 2, decoration 5, hidden item 1, npc dropped 1, npc kept 2, sign kept 6, story object dropped 14
+GoldenrodCity: coord dropped 4, decoration 16, movement MOVEMENT_TYPE_TOWER_BEAM -> NONE 1, npc kept 1, sign kept 11, story object dropped 23
+EcruteakCity: coord dropped 1, decoration 20, item ball 1, npc dropped 2, npc kept 7, sign kept 5, story object dropped 19, warp removed 1
+OlivineCity: coord dropped 3, decoration 23, hidden item 1, item ball dropped (item not in TREY) 1, npc dropped 2, npc kept 5, sign kept 5, story object dropped 4
+CianwoodCity: coord dropped 1, decoration 5, hidden item 1, npc dropped 4, npc kept 9, sign kept 4, story object dropped 3
+SafariZoneGate: clerk 2, decoration 6, npc dropped 3, npc kept 6
+MahoganyTown: coord dropped 48, decoration 5, npc dropped 2, npc kept 1, sign kept 3, story object dropped 1
+BlackthornCity: coord dropped 1, decoration 18, npc dropped 3, npc kept 4, sign kept 4
+Route29: berry tree dropped (Johto berry trees come later) 1, coord dropped 1, decoration 3, item ball 1, npc dropped 3, npc kept 4, sign kept 2, story object dropped 7
+Route30: berry tree dropped (Johto berry trees come later) 2, coord dropped 3, decoration 5, hidden item 2, npc dropped 1, npc kept 2, sign kept 3, story object dropped 11, trainer 3
+Route31: berry tree dropped (Johto berry trees come later) 1, decoration 2, item ball 2, npc dropped 1, npc kept 3, sign kept 2, story object dropped 12, trainer 1
+Route32: coord dropped 12, decoration 8, hidden item 4, item ball 4, npc dropped 4, npc kept 5, sign kept 3, story object dropped 9, trainer 8
+Route33: berry tree dropped (Johto berry trees come later) 1, coord dropped 4, decoration 8, npc kept 1, trainer 1
+Route34: coord dropped 8, decoration 18, hidden item 2, item ball 2, item ball dropped (item not in TREY) 1, npc dropped 1, sign dropped 1, sign kept 3, story object dropped 4, trainer 9
+Route35: berry tree dropped (Johto berry trees come later) 1, decoration 7, item ball 2, item ball dropped (item not in TREY) 1, npc kept 1, sign kept 2, story object dropped 1, trainer 9
+Route36: berry tree dropped (Johto berry trees come later) 1, decoration 2, hidden item 1, npc dropped 3, sign kept 2, story object dropped 13, trainer 2
+Route37: berry tree dropped (Johto berry trees come later) 1, coord dropped 2, decoration 8, npc dropped 1, sign kept 1, story object dropped 5, trainer 3
+Route38: berry tree dropped (Johto berry trees come later) 1, decoration 10, hidden item 2, item ball 1, sign kept 2, story object dropped 1, trainer 6
+Route39: berry tree dropped (Johto berry trees come later) 1, coord dropped 8, decoration 2, hidden item 1, item ball 1, item ball dropped (item not in TREY) 1, npc kept 5, sign kept 3, story object dropped 5, trainer 5
+Route40: connection dropped 1, decoration 6, hidden item dropped (item not in TREY) 1, npc dropped 4, npc kept 6, trainer 4
+Route41: decoration 19, hidden item 2, movement MOVEMENT_TYPE_TOWER_BEAM -> NONE 6, npc kept 30, story object dropped 4, trainer 10
+Route42: berry tree dropped (Johto berry trees come later) 1, coord dropped 5, decoration 9, hidden item 3, item ball 2, item ball dropped (item not in TREY) 1, npc dropped 1, npc kept 1, sign kept 4, story object dropped 2, trainer 2
+Route43: berry tree dropped (Johto berry trees come later) 2, decoration 6, item ball 1, sign kept 3, story object dropped 3, trainer 6
+Route44: berry tree dropped (Johto berry trees come later) 1, decoration 7, hidden item 1, item ball 3, sign kept 2, story object dropped 9, trainer 7
+Route45: berry tree dropped (Johto berry trees come later) 1, decoration 13, hidden item 2, item ball 4, sign kept 1, trainer 8
+Route46: berry tree dropped (Johto berry trees come later) 1, decoration 4, item ball 1, sign kept 1, story object dropped 4, trainer 3
+Route47: berry tree dropped (Johto berry trees come later) 1, decoration 17, hidden item 4, item ball 5, npc dropped 1, npc kept 2, story object dropped 1, trainer 6
+Route48: coord dropped 8, decoration 6
+Route26: berry tree dropped (Johto berry trees come later) 1, decoration 6, hidden item 1, story object dropped 5, trainer 4
+Route26North: connection dropped 1, coord dropped 1, decoration 1, story object dropped 3, trainer 3
+Route27: coord dropped 4, decoration 5, hidden item 1, item ball 4, npc kept 1, sign kept 2, story object dropped 3, trainer 7
+Route28: coord dropped 5, decoration 6, item ball 1, sign kept 1, story object dropped 10
+NewBarkTown_Lab: coord dropped 9, npc dropped 2, sign dropped 2, sign kept 17, story object dropped 5
+NewBarkTown_House2: npc kept 2, sign kept 2
+NewBarkTown_House1: npc kept 1, sign kept 2, story object dropped 1
+NewBarkTown_PlayersHouse_1F: coord dropped 2, npc dropped 1, story object dropped 1
+NewBarkTown_PlayersHouse_2F: coord dropped 2, sign kept 5, var graphics 12
+CherrygroveCity_PokemonCenter: npc kept 4, nurse 1, sign kept 3
+CherrygroveCity_Mart: npc dropped 2, npc kept 1
+CherrygroveCity_House1: npc kept 2
+CherrygroveCity_House2: story object dropped 1
+CherrygroveCity_House3: npc kept 2
+VioletCity_PokemonCenter: npc dropped 1, npc kept 4, nurse 1, sign kept 3, story object dropped 1
+VioletCity_Mart: npc kept 3
+VioletCity_TrainerSchool: npc kept 6, sign kept 4, story object dropped 1
+VioletCity_House1: npc dropped 1, npc kept 1
+VioletCity_House2: npc kept 3
+VioletCity_Gym: npc dropped 1, sign dropped 2, story object dropped 1, trainer 2
+AzaleaTown_PokemonCenter: npc dropped 1, npc kept 3, nurse 1, sign kept 3
+AzaleaTown_Mart: npc dropped 1, npc kept 2
+AzaleaTown_KurtsHouse: npc dropped 1, sign kept 6, story object dropped 4
+AzaleaTown_House1: story object dropped 3
+AzaleaTown_Gym: coord dropped 12, npc dropped 2, sign dropped 2, story object dropped 6, trainer 5
+GoldenrodCity_PokemonCenter: npc dropped 3, npc kept 5, nurse 1, sign kept 3
+GoldenrodCity_UndergroundEntrance: story object dropped 2
+GoldenrodCity_UndergroundTunnel: coord dropped 2, item ball 4, sign dropped 1, story object dropped 4, trainer 4
+GoldenrodCity_UndergroundSwitches: coord dropped 47, item ball 3, sign dropped 8, story object dropped 1, trainer 6
+GoldenrodCity_UndergroundStorage: item ball 3, story object dropped 1, trainer 3
+GoldenrodCity_DepartmentStoreBasement: coord dropped 1, decoration 3, item ball 3, item ball dropped (item not in TREY) 1, npc dropped 3, npc kept 3
+GoldenrodCity_Gym: coord dropped 2, npc dropped 2, sign dropped 2, trainer 4
+GoldenrodCity_FlowerShop: clerk 1, npc dropped 3
+GoldenrodCity_House1: npc dropped 1, sign dropped 1
+GoldenrodCity_House2: npc dropped 1, npc kept 2
+GoldenrodCity_House3: npc kept 3
+GoldenrodCity_BillsHouse: npc dropped 1, npc kept 1, story object dropped 1
+GoldenrodCity_BikeShop: npc dropped 1, npc kept 1, sign kept 4
+GoldenrodCity_GameCorner: npc dropped 4, npc kept 7, sign dropped 2, sign kept 16
+GoldenrodCity_TrainStation: decoration 5, npc dropped 1, npc kept 3
+GoldenrodCity_RadioTower_1F: npc dropped 2, sign kept 2, story object dropped 4
+GoldenrodCity_RadioTower_2F: npc dropped 2, npc kept 1, sign kept 2, story object dropped 2, trainer 4
+GoldenrodCity_RadioTower_3F: npc dropped 1, sign dropped 7, sign kept 2, story object dropped 1, trainer 4
+GoldenrodCity_RadioTower_4F: coord dropped 2, npc dropped 1, npc kept 1, sign kept 2, story object dropped 1, trainer 4
+GoldenrodCity_RadioTower_5F: story object dropped 5, trainer 1
+GoldenrodCity_DepartmentStore_1F: coord dropped 1, npc kept 4, sign kept 1
+GoldenrodCity_DepartmentStore_2F: clerk 1, coord dropped 1, npc kept 3, sign dropped 3, sign kept 1
+GoldenrodCity_DepartmentStore_3F: clerk 1, coord dropped 1, npc kept 2, sign kept 1
+GoldenrodCity_DepartmentStore_4F: clerk 1, coord dropped 1, npc kept 3, sign dropped 4, sign kept 1
+GoldenrodCity_DepartmentStore_5F: clerk 1, coord dropped 1, mart item dropped (item not in TREY) 2, npc kept 3, sign kept 1, story object dropped 1
+GoldenrodCity_DepartmentStore_6F: coord dropped 1, npc dropped 1, npc kept 2, sign dropped 4, sign kept 1, story object dropped 1
+GoldenrodCity_DepartmentStore_7F: npc dropped 1, npc kept 3, sign dropped 3
+GoldenrodCity_DepartmentStore_7FNight: npc dropped 4, sign dropped 3
+GoldenrodCity_DepartmentStoreElevator: sign dropped 1
+EcruteakCity_PokemonCenter: npc dropped 1, npc kept 3, nurse 1, sign kept 3, story object dropped 1
+EcruteakCity_Mart: npc dropped 1, npc kept 2
+EcruteakCity_Theater: coord dropped 7, movement MOVEMENT_TYPE_TOWER_BEAM -> NONE 1, sign kept 2, story object dropped 12
+EcruteakCity_House1: npc kept 2
+EcruteakCity_House2: npc dropped 1, sign kept 2
+EcruteakCity_SageOffice1: npc dropped 2, npc kept 1, sign kept 1
+EcruteakCity_SageOffice2: sign dropped 5
+BellchimeTrail: coord dropped 1, decoration 31, item ball 1, sign dropped 1, story object dropped 32
+EcruteakCity_Gym: decoration 4, npc dropped 2, sign dropped 2, trainer 4
+OlivineCity_PokemonCenter: npc dropped 1, npc kept 2, nurse 1, sign kept 3
+OlivineCity_Gym: coord dropped 10, npc dropped 1, sign dropped 2, story object dropped 3
+OlivineCity_Cafe: npc dropped 1, npc kept 2, story object dropped 1
+OlivineCity_Mart: npc dropped 1, npc kept 2
+OlivineCity_House1: npc dropped 1
+OlivineCity_House2: npc kept 2
+OlivineCity_House3: npc dropped 1
+OlivineCity_PortOutside: hidden item 1, npc kept 2, story object dropped 1
+OlivineCity_PortInside: decoration 1, npc dropped 1, npc kept 4, story object dropped 1
+OlivineCity_Lighthouse: item ball 4, item ball dropped (item not in TREY) 1, npc dropped 1, npc kept 2, story object dropped 1, trainer 9
+CianwoodPokecenter: npc dropped 3, npc kept 2, nurse 1, sign kept 3
+CianwoodHouse1: npc dropped 1
+CianwoodHouse2: npc kept 3
+CianwoodHouse3: npc dropped 1
+CianwoodShop: npc dropped 1
+CianwoodGym: npc dropped 1, npc kept 5, sign dropped 2, trainer 4
+MahoganyTown_PokemonCenter: npc dropped 1, npc kept 3, nurse 1, sign kept 3
+MahoganyTown_Gym: decoration 1, npc dropped 2, sign dropped 2, trainer 5
+MahoganyTown_Shop: clerk 1, story object dropped 3
+MahoganyTown_House1: npc dropped 1, npc kept 1
+LakeOfRage_House1: npc dropped 1, sign kept 1
+LakeOfRage_House2: npc dropped 1
+BlackthornCity_PokemonCenter: npc dropped 1, npc kept 2, nurse 1, sign kept 3
+BlackthornCity_Mart: npc dropped 1, npc kept 2
+BlackthornCity_Gym: coord dropped 12, decoration 5, npc dropped 2, sign dropped 2, trainer 5
+BlackthornCity_House1: npc kept 2
+BlackthornCity_House2: npc dropped 1
+BlackthornCity_House3: npc dropped 2
+Gate_Route29_Route46: npc kept 2
+Gate_Route31_VioletCity: coord dropped 1, npc kept 2
+Gate_RuinsOfAlph_Route32: npc kept 1
+Gate_RuinsOfAlph_Route36: npc kept 3
+Gate_AzaleaTown_IlexForest: npc kept 2
+Gate_IlexForest_Route34: npc kept 2
+Gate_GoldenrodCity_Route35: npc dropped 3, npc kept 1
+Gate_NationalPark: npc dropped 2, npc kept 6
+Gate_EcruteakCity_Route38: npc kept 1
+Gate_EcruteakCity_Route42: npc kept 1
+Gate_MahoganyTown_Route43: npc dropped 1
+Gate_Route43: story object dropped 3
+Gate_Route40_TrainerHill_Courtyard: npc kept 1
+ReceptionGate: coord dropped 1, npc kept 1, story object dropped 3
+Route39_FarmHouse: npc dropped 2
+Route39_Barn: decoration 4, npc dropped 3
+Route30_House: npc dropped 1
+Route30_MrPokemonsHouse: sign kept 5, story object dropped 3
+Route32_PokemonCenter: npc dropped 2, npc kept 1, nurse 1, sign kept 3
+RuinsOfAlph_Lab: decoration 3, npc dropped 1, npc kept 2, sign dropped 3, sign kept 3
+Route34_DayCare: npc dropped 3, npc kept 1, sign dropped 4
+Route28_House: npc dropped 1
+SafariZoneGate_PokemonCenter: npc dropped 1, npc kept 3, nurse 1, sign kept 3
+SafariZoneGate_SafariZoneEntrance: coord dropped 1, npc dropped 2, npc kept 8, sign dropped 2, sign kept 3
+Route27_House: npc dropped 1
+MtSilver_PokemonCenter: npc dropped 2, nurse 1, sign kept 3
+Route26_House1: npc kept 1
+Route26_House2: sign kept 2
+DarkCave_SouthSide: decoration 7, hidden item 2, item ball 4, npc kept 4
+DarkCave_NorthSide: decoration 4, hidden item 2, item ball 2, npc dropped 1, npc kept 2, story object dropped 1
+SproutTower_1F: decoration 3, item ball 1, movement MOVEMENT_TYPE_TOWER_BEAM -> NONE 1, npc kept 4, sign dropped 2, trainer 1
+SproutTower_2F: decoration 4, item ball 1, movement MOVEMENT_TYPE_TOWER_BEAM -> NONE 1, sign kept 1, trainer 2
+SproutTower_3F: coord dropped 2, decoration 4, item ball 2, movement MOVEMENT_TYPE_TOWER_BEAM -> NONE 1, npc dropped 1, sign dropped 4, sign kept 1, story object dropped 1, trainer 3
+RuinsOfAlph_Outside: decoration 19, hidden item 2, movement MOVEMENT_TYPE_TOWER_BEAM -> NONE 5, npc dropped 1, npc kept 5, sign kept 4, story object dropped 3, trainer 2
+RuinsOfAlph_B1F: decoration 8, item ball 3, item ball dropped (item not in TREY) 1, movement MOVEMENT_TYPE_TOWER_BEAM -> NONE 8, npc kept 3, sign dropped 132
+RuinsOfAlph_PuzzleAndRewardChambers: item ball 16, npc dropped 1, sign dropped 8, sign kept 20
+UnionCave_1F: coord dropped 1, decoration 16, hidden item 1, item ball 4, trainer 5
+UnionCave_B1F: decoration 6, hidden item 1, item ball 2, npc kept 2, trainer 4
+UnionCave_B2F: decoration 5, hidden item 1, item ball 3, story object dropped 1, trainer 3
+SlowpokeWell_B1F: decoration 6, item ball 4, npc kept 1, story object dropped 13, trainer 3
+SlowpokeWell_B2F: item ball 1, npc dropped 1
+IlexForest: coord dropped 3, decoration 17, hidden item 3, item ball 3, item ball dropped (item not in TREY) 1, npc dropped 1, npc kept 3, sign dropped 1, sign kept 1, story object dropped 12, trainer 1
+NationalPark_Normal: decoration 29, hidden item 1, item ball 2, npc dropped 1, npc kept 6, sign dropped 5, story object dropped 7, trainer 4
+NationalPark_BugContest: coord dropped 4, decoration 46, npc dropped 1, npc kept 4, sign kept 5, story object dropped 2
+BurnedTower_1F: coord dropped 1, decoration 7, item ball 2, sign dropped 2, story object dropped 3, trainer 2
+BurnedTower_B1F: decoration 4, item ball 2, npc kept 1, story object dropped 4
+CliffEdgeGate: npc dropped 2, npc kept 1, sign kept 1, story object dropped 2
+MtMortar_1F_South: decoration 7, item ball 2
+MtMortar_1F_North: decoration 6, hidden item 2, item ball 7, npc kept 1, story object dropped 1, trainer 2
+MtMortar_2F: decoration 4, hidden item 2, item ball 6, story object dropped 1, trainer 1
+MtMortar_B1F: decoration 3, item ball 5, npc dropped 1, npc kept 1, story object dropped 1
+LakeOfRage: decoration 2, hidden item 5, item ball 3, npc dropped 2, npc kept 2, sign kept 2, story object dropped 4, trainer 4
+LakeOfRageLowTide: 
+IcePath_1F: coord dropped 1, hidden item 2, item ball 3, story object dropped 8
+IcePath_B1F: decoration 6, item ball 2, sign dropped 1, sign kept 1, trainer 4
+IcePath_B2F: decoration 2, item ball 3, story object dropped 4
+IcePath_B3F: coord dropped 1, decoration 2, story object dropped 4
+IcePath_B4F: hidden item 2, item ball 1, npc kept 10
+DragonsDen_Entrance: 
+DragonsDen_Cavern: coord dropped 3, decoration 14, hidden item 2, item ball 3, movement MOVEMENT_TYPE_TOWER_BEAM -> NONE 2, npc kept 10, sign dropped 6, story object dropped 4, trainer 4
+DragonsDen_Shrine: coord dropped 3, npc dropped 1, npc kept 2, sign dropped 2, story object dropped 1
+WhirlIslands_1F: decoration 9, item ball 4, story object dropped 5
+WhirlIslands_B1F: coord dropped 65, decoration 47, hidden item 2, item ball 5, npc kept 1, story object dropped 7
+WhirlIslands_B1F_Inner: decoration 9
+WhirlIslands_B2F: decoration 13, hidden item 1
+WhirlIslands_B3F: decoration 13
+WhirlIslands_Descent: coord dropped 11, decoration 44, item ball 3, story object dropped 1
+WhirlIslands_LugiaChamber: coord dropped 1, decoration 2, movement MOVEMENT_TYPE_TOWER_BEAM -> NONE 2, story object dropped 6
+TinTower_1F: decoration 1, movement MOVEMENT_TYPE_TOWER_BEAM -> NONE 1, npc dropped 3, sign dropped 8
+TinTower_2F: decoration 1, movement MOVEMENT_TYPE_TOWER_BEAM -> NONE 1, sign dropped 2
+TinTower_3F: decoration 1, item ball 1, movement MOVEMENT_TYPE_TOWER_BEAM -> NONE 1, sign dropped 2
+TinTower_4F: decoration 1, movement MOVEMENT_TYPE_TOWER_BEAM -> NONE 1, sign dropped 4, story object dropped 3
+TinTower_5F: decoration 1, movement MOVEMENT_TYPE_TOWER_BEAM -> NONE 1, story object dropped 2
+TinTower_6F: decoration 1, movement MOVEMENT_TYPE_TOWER_BEAM -> NONE 1, story object dropped 1
+TinTower_7F: decoration 1, movement MOVEMENT_TYPE_TOWER_BEAM -> NONE 1, sign dropped 2, story object dropped 1
+TinTower_8F: decoration 1, movement MOVEMENT_TYPE_TOWER_BEAM -> NONE 1, sign dropped 4, story object dropped 1
+TinTower_9F: decoration 1, movement MOVEMENT_TYPE_TOWER_BEAM -> NONE 1, sign dropped 3, story object dropped 2
+TinTower_RoofDay: coord dropped 1, story object dropped 8
+TinTower_RoofNight: coord dropped 1, story object dropped 8
+TohjoFalls_Cavern: decoration 5, item ball 1
+TohjoFalls_GiovanniRoom: coord dropped 3, npc kept 7, sign kept 1, story object dropped 1
+MtSilver_Outside: decoration 2, hidden item 2, sign kept 1, story object dropped 11
+MtSilver_1F_ItemRoom: decoration 4, story object dropped 1
+MtSilver_1F_WaterfallRoom: decoration 7, hidden item 1, item ball 4, story object dropped 8, warp removed 1
+MtSilver_1F_MoltresRoom: story object dropped 1
+MtSilver_MountainSide: decoration 14, hidden item 1, item ball dropped (item not in TREY) 1, story object dropped 8
+MtSilver_2F: decoration 12, item ball dropped (item not in TREY) 1, npc kept 5
+MtSilver_3F: 
+MtSilver_Snow: decoration 8, hidden item 2, item ball 2, story object dropped 4
+MtSilver_SummitDay: story object dropped 1
+MtSilver_SummitNight: story object dropped 1
+CliffEdgeCave: decoration 15, npc kept 11
+EmbeddedTower: story object dropped 1
+MahoganyHideout_B1F: coord dropped 29, item ball 3, sign dropped 2, sign kept 9, story object dropped 4, trainer 2
+MahoganyHideout_B2F: coord dropped 19, item ball 1, story object dropped 12, trainer 3
+MahoganyHideout_B3F: coord dropped 9, item ball 5, sign dropped 3, story object dropped 8, trainer 4
+RuinsOfAlph_WordsRoom1: 
+RuinsOfAlph_WordsRoom2: 
+RuinsOfAlph_WordsRoom3: 
+RuinsOfAlph_WordsRoom4: 
+SinjohRuins: connection dropped 1, coord dropped 2, decoration 14, sign kept 1, story object dropped 10
+SinjohRuins_Temple: sign dropped 5
+SinjohRuins_RegirockRoom: story object dropped 1
+SinjohRuins_RegiceRoom: story object dropped 1
+SinjohRuins_RegisteelRoom: story object dropped 1
+SinjohRuins_RegidracoRoom: story object dropped 1
+SinjohRuins_RegielekiRoom: story object dropped 1
+SinjohRuins_RegigigasRoom: story object dropped 1
+SinjohRuins_ArceusRoom: coord dropped 4, story object dropped 2
+SinjohRuins_House1: coord dropped 3, npc dropped 5, npc kept 2, sign dropped 2, sign kept 17, story object dropped 1
+SSAqua_1F: coord dropped 2, npc dropped 1, npc kept 2, story object dropped 1, trainer 1, warp to missing warp id fixed 1
+SSAqua_B1F: coord dropped 1, npc dropped 1, npc kept 1, sign dropped 1, sign kept 1, trainer 9
+SSAqua_CaptainsRoom: npc dropped 1, story object dropped 1
+SSAqua_PlayersRoom: sign dropped 2
+SSAqua_RoomNW: trainer 3
+SSAqua_RoomNE: trainer 2
+SSAqua_RoomNNE: trainer 2
+SSAqua_RoomSSW: trainer 2
+SSAqua_RoomSSE: npc dropped 1, story object dropped 1
+SSAqua_RoomSE: decoration 2, trainer 3
+SSAqua_RoomSW: trainer 2
+SafariZone_Top_Left: decoration 8
+SafariZone_Low_Mid: decoration 10, story object dropped 2
+SafariZone_Enterance: 
+SafariZone_Low_Left: decoration 9
+SafariZone_Low_Right: decoration 7
+SafariZone_Top_Mid: decoration 9
+SafariZone_Top_Right: decoration 4, npc dropped 4, story object dropped 3
+
+TOTAL: berry tree dropped (Johto berry trees come later) 20, clerk 8, connection dropped 3, coord dropped 424, decoration 881, hidden item 70, hidden item dropped (item not in TREY) 1, item ball 172, item ball dropped (item not in TREY) 11, mart item dropped (item not in TREY) 2, movement MOVEMENT_TYPE_TOWER_BEAM -> NONE 37, npc dropped 177, npc kept 366, nurse 12, sign dropped 274, sign kept 273, story object dropped 512, trainer 249, var graphics 12, warp removed 4, warp to missing warp id fixed 1

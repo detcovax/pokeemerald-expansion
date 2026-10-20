@@ -105,6 +105,8 @@ def is_data_block(lines):
 
 def split_cmd(code):
     parts = code.split(None, 1)
+    if not parts:
+        return "", []
     args = [a.strip() for a in parts[1].split(",")] if len(parts) > 1 else []
     return parts[0], args
 

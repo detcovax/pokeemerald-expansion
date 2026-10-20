@@ -1,0 +1,108 @@
+{
+  "id": "MAP_ICE_PATH_1F",
+  "name": "IcePath_1F",
+  "layout": "LAYOUT_ICE_PATH_1F",
+  "music": "MUS_HG_ICE_PATH",
+  "region_map_section": "MAPSEC_ICE_PATH",
+  "requires_flash": false,
+  "weather": "WEATHER_NONE",
+  "map_type": "MAP_TYPE_UNDERGROUND",
+  "allow_cycling": true,
+  "allow_escaping": true,
+  "allow_running": true,
+  "show_map_name": true,
+  "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
+  "connections": null,
+  "object_events": [
+    {
+      "graphics_id": "OBJ_EVENT_GFX_ITEM_BALL_HNS",
+      "x": 48,
+      "y": 14,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_NONE",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "IcePath_1F_EventScript_Item_PpUp",
+      "flag": "FLAG_JOHTO_ITEM_ICEPATH1_PP_UP"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_ITEM_BALL_HNS",
+      "x": 41,
+      "y": 11,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_NONE",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "IcePath_1F_EventScript_Item_HM_Waterfall",
+      "flag": "FLAG_JOHTO_ITEM_ICEPATH1_HM_WATERFALL"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_ITEM_BALL_HNS",
+      "x": 47,
+      "y": 29,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_NONE",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "IcePath_1F_EventScript_Item_Protein",
+      "flag": "FLAG_JOHTO_ITEM_ICEPATH1_PROTEIN"
+    }
+  ],
+  "warp_events": [
+    {
+      "x": 14,
+      "y": 24,
+      "elevation": 0,
+      "dest_map": "MAP_ROUTE44",
+      "dest_warp_id": "0"
+    },
+    {
+      "x": 50,
+      "y": 10,
+      "elevation": 0,
+      "dest_map": "MAP_ICE_PATH_B1F",
+      "dest_warp_id": "0"
+    },
+    {
+      "x": 50,
+      "y": 18,
+      "elevation": 0,
+      "dest_map": "MAP_ICE_PATH_B1F",
+      "dest_warp_id": "3"
+    },
+    {
+      "x": 49,
+      "y": 32,
+      "elevation": 0,
+      "dest_map": "MAP_BLACKTHORN_CITY",
+      "dest_warp_id": "0"
+    }
+  ],
+  "coord_events": [],
+  "bg_events": [
+    {
+      "type": "hidden_item",
+      "x": 12,
+      "y": 11,
+      "elevation": 0,
+      "item": "ITEM_ICE_HEAL",
+      "flag": "FLAG_JOHTO_HIDDEN_ITEM_ICEPATH_1F_ICE_HEAL"
+    },
+    {
+      "type": "hidden_item",
+      "x": 35,
+      "y": 20,
+      "elevation": 0,
+      "item": "ITEM_REVIVE",
+      "flag": "FLAG_JOHTO_HIDDEN_ITEM_ICEPATH_1F_REVIVE"
+    }
+  ],
+  "region": "REGION_JOHTO",
+  "floor_number": 0
+}

@@ -1731,7 +1731,13 @@
 #define TREY_FLAG_WORLD_MAP_START       (TREY_FLAG_MISC_END + 1)
 #define TREY_FLAG_WORLD_MAP_END         (TREY_FLAG_WORLD_MAP_START + 63)
 
-#define TREY_FLAG_NEXT_FREE             (TREY_FLAG_WORLD_MAP_END + 1) // next unused TREY flag
+// Item balls and hidden items on the Johto maps (6a-5), renamed FLAG_JOHTO_* by tools/trey/import_hns.py (maps).
+#define TREY_FLAG_JOHTO_ITEMS_START     (TREY_FLAG_WORLD_MAP_END + 1)
+#define TREY_FLAG_JOHTO_ITEMS_COUNT     512
+#define TREY_FLAG_JOHTO_ITEMS_END       (TREY_FLAG_JOHTO_ITEMS_START + TREY_FLAG_JOHTO_ITEMS_COUNT - 1)
+#include "constants/trey_johto_flags.h"
+
+#define TREY_FLAG_NEXT_FREE             (TREY_FLAG_JOHTO_ITEMS_END + 1) // next unused TREY flag
 
 #define FLAGS_COUNT (TREY_FLAGS_END + 1) // TREY: was (DAILY_FLAGS_END + 1)
 

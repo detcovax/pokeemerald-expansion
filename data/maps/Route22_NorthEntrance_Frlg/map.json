@@ -28,22 +28,22 @@
       "x": 6,
       "y": 10,
       "elevation": 3,
-      "dest_map": "MAP_ROUTE22",
-      "dest_warp_id": "0"
+      "dest_map": "MAP_RECEPTION_GATE",
+      "dest_warp_id": "1"
     },
     {
       "x": 7,
       "y": 10,
       "elevation": 3,
-      "dest_map": "MAP_ROUTE22",
-      "dest_warp_id": "0"
+      "dest_map": "MAP_RECEPTION_GATE",
+      "dest_warp_id": "1"
     },
     {
       "x": 8,
       "y": 10,
       "elevation": 3,
-      "dest_map": "MAP_ROUTE22",
-      "dest_warp_id": "0"
+      "dest_map": "MAP_RECEPTION_GATE",
+      "dest_warp_id": "1"
     }
   ],
   "coord_events": [],

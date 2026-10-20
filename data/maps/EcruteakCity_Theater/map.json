@@ -1,0 +1,47 @@
+{
+  "id": "MAP_ECRUTEAK_CITY_THEATER",
+  "name": "EcruteakCity_Theater",
+  "layout": "LAYOUT_ECRUTEAK_CITY_THEATER",
+  "music": "MUS_HG_DANCE_THEATER",
+  "region_map_section": "MAPSEC_ECRUTEAK_CITY",
+  "requires_flash": false,
+  "weather": "WEATHER_NONE",
+  "map_type": "MAP_TYPE_INDOOR",
+  "allow_cycling": false,
+  "allow_escaping": false,
+  "allow_running": false,
+  "show_map_name": false,
+  "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
+  "connections": null,
+  "object_events": [],
+  "warp_events": [
+    {
+      "x": 10,
+      "y": 17,
+      "elevation": 0,
+      "dest_map": "MAP_ECRUTEAK_CITY",
+      "dest_warp_id": "6"
+    }
+  ],
+  "coord_events": [],
+  "bg_events": [
+    {
+      "type": "sign",
+      "x": 11,
+      "y": 8,
+      "elevation": 0,
+      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
+      "script": "EcruteakCity_Theater_EventScript_FancyPanel"
+    },
+    {
+      "type": "sign",
+      "x": 10,
+      "y": 8,
+      "elevation": 0,
+      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
+      "script": "EcruteakCity_Theater_EventScript_FancyPanel"
+    }
+  ],
+  "region": "REGION_JOHTO",
+  "floor_number": 0
+}
