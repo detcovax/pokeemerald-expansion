@@ -46,7 +46,12 @@ SECTIONS {
         src/*.o(COMMON);
         *libc.a:*.o(COMMON);
         *libnosys.a:*.o(COMMON);
+        __iwram_bss_end = .;
     } > IWRAM
+
+    /* TREY (6a): the main stack grows down from IWRAM_END - 0x1C0 into this space. Battles need several KB;
+       the HQ mixer once left only 2.2 KB and battles froze. Fail the build instead of crashing at runtime. */
+    ASSERT(__iwram_bss_end <= ORIGIN(IWRAM) + LENGTH(IWRAM) - 0x1C0 - 0x1000, "TREY: less than 4 KB of IWRAM left for the stack (move something to EWRAM)")
 
     /* BEGIN ROM DATA */
 
