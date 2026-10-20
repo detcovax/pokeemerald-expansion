@@ -40,6 +40,12 @@ void TreyRegions_OnMapEnter(void)
 }
 
 #include "data/trey/frlg_world_map_flags.h"
+#include "constants/trey_johto_fly.h"
+
+// 6a-7: Johto's towns, the same way (include/constants/trey_johto_fly.h).
+#define TREY_JOHTO_WORLD_MAP_FLAG(sec, map, heal) {MAP_##map, FLAG_WORLD_MAP_JOHTO_##sec},
+static const u16 sTreyJohtoWorldMapFlags[][2] = { TREY_JOHTO_FLY(TREY_JOHTO_WORLD_MAP_FLAG) };
+#undef TREY_JOHTO_WORLD_MAP_FLAG
 
 // 5e: entering an FRLG town (or landmark) marks it visited for Fly/Teleport, as FRLG's setworldmapflag did.
 static void TreyRegions_SetWorldMapFlag(void)
@@ -51,6 +57,14 @@ static void TreyRegions_SetWorldMapFlag(void)
         if (sTreyWorldMapFlags[i][0] == map)
         {
             FlagSet(sTreyWorldMapFlags[i][1]);
+            return;
+        }
+    }
+    for (i = 0; i < ARRAY_COUNT(sTreyJohtoWorldMapFlags); i++)
+    {
+        if (sTreyJohtoWorldMapFlags[i][0] == map)
+        {
+            FlagSet(sTreyJohtoWorldMapFlags[i][1]);
             return;
         }
     }

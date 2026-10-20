@@ -145,6 +145,7 @@ static const u8 sRegionMapPlayerIcon_LeafGfx[] = INCGFX_U8("graphics/pokenav/reg
 
 #include "data/region_map/trey_layouts.h" // TREY (4a): one grid per region map page (Hoenn copied from region_map_layout.h)
 #include "data/region_map/region_map_entries.h"
+#include "constants/trey_johto_fly.h" // TREY (6a-7)
 
 static const mapsec_u16_t sRegionMap_SpecialPlaceLocations[][2] =
 {
@@ -511,6 +512,9 @@ static const u8 sMapHealLocations[][3] =
     [MAPSEC_SAFFRON_CITY] = {MAP_GROUP(MAP_SAFFRON_CITY), MAP_NUM(MAP_SAFFRON_CITY), HEAL_LOCATION_SAFFRON_CITY},
     [MAPSEC_ROUTE_4_POKECENTER] = {MAP_GROUP(MAP_ROUTE4), MAP_NUM(MAP_ROUTE4), HEAL_LOCATION_ROUTE4},
     [MAPSEC_ROUTE_10_POKECENTER] = {MAP_GROUP(MAP_ROUTE10), MAP_NUM(MAP_ROUTE10), HEAL_LOCATION_ROUTE10},
+#define TREY_JOHTO_HEAL(sec, map, heal) [MAPSEC_##sec] = {MAP_GROUP(MAP_##map), MAP_NUM(MAP_##map), HEAL_LOCATION_##heal},
+    TREY_JOHTO_FLY(TREY_JOHTO_HEAL) // TREY (6a-7)
+#undef TREY_JOHTO_HEAL
     [MAPSEC_ROUTE_1] = {MAP_GROUP(MAP_ROUTE1), MAP_NUM(MAP_ROUTE1), HEAL_LOCATION_NONE},
     [MAPSEC_ROUTE_2] = {MAP_GROUP(MAP_ROUTE2), MAP_NUM(MAP_ROUTE2), HEAL_LOCATION_NONE},
     [MAPSEC_ROUTE_3] = {MAP_GROUP(MAP_ROUTE3), MAP_NUM(MAP_ROUTE3), HEAL_LOCATION_NONE},
@@ -1558,6 +1562,9 @@ static u8 GetMapsecType(mapsec_u16_t mapSecId)
         return FlagGet(FLAG_WORLD_MAP_ROUTE4_POKEMON_CENTER_1F) ? MAPSECTYPE_CITY_CANFLY : MAPSECTYPE_CITY_CANTFLY;
     case MAPSEC_ROUTE_10_POKECENTER:
         return FlagGet(FLAG_WORLD_MAP_ROUTE10_POKEMON_CENTER_1F) ? MAPSECTYPE_CITY_CANFLY : MAPSECTYPE_CITY_CANTFLY;
+#define TREY_JOHTO_TYPE(sec, map, heal) case MAPSEC_##sec: return FlagGet(FLAG_WORLD_MAP_JOHTO_##sec) ? MAPSECTYPE_CITY_CANFLY : MAPSECTYPE_CITY_CANTFLY;
+    TREY_JOHTO_FLY(TREY_JOHTO_TYPE) // TREY (6a-7)
+#undef TREY_JOHTO_TYPE
     default:
         return MAPSECTYPE_ROUTE;
     }
@@ -2393,6 +2400,16 @@ static const struct FlyLocation sFlyLocations[] =
 };
 
 
+// TREY (6a-7): fly icons for region map pages upstream doesn't have (shown when the location is on the page).
+struct TreyFlyLocation
+{
+    u16 flag;
+    u16 mapsec;
+};
+#define TREY_JOHTO_ICON(sec, map, heal) { .flag = FLAG_WORLD_MAP_JOHTO_##sec, .mapsec = MAPSEC_##sec },
+static const struct TreyFlyLocation sTreyFlyLocations[] = { TREY_JOHTO_FLY(TREY_JOHTO_ICON) };
+#undef TREY_JOHTO_ICON
+
 // Sprite data for SpriteCB_FlyDestIcon
 #define sIconMapSec   data[0]
 #define sFlickerTimer data[1]
@@ -2436,6 +2453,33 @@ static void CreateFlyDestIcons(void)
 
             StartSpriteAnim(&gSprites[spriteId], shape);
             gSprites[spriteId].sIconMapSec = sFlyLocations[i].mapsec;
+        }
+    }
+
+    // TREY (6a-7): TREY's own pages (Johto, later Sinnoh/Orange/Kitakami)
+    for (i = 0; i < ARRAY_COUNT(sTreyFlyLocations); i++)
+    {
+        if (gRegionMapEntries[sTreyFlyLocations[i].mapsec].page != gTreyRegionMapPage)
+            continue;
+        GetMapSecDimensions(sTreyFlyLocations[i].mapsec, &x, &y, &width, &height);
+        x = (x + MAPCURSOR_X_MIN) * 8 + 4;
+        y = (y + MAPCURSOR_Y_MIN) * 8 + 4;
+        if (width == 2)
+            shape = SPRITE_SHAPE(16x8);
+        else if (height == 2)
+            shape = SPRITE_SHAPE(8x16);
+        else
+            shape = SPRITE_SHAPE(8x8);
+        spriteId = CreateSpriteUnchecked(&sFlyDestIconSpriteTemplate, x, y, 10);
+        if (spriteId != MAX_SPRITES)
+        {
+            gSprites[spriteId].oam.shape = shape;
+            if (FlagGet(sTreyFlyLocations[i].flag))
+                gSprites[spriteId].callback = SpriteCB_FlyDestIcon;
+            else
+                shape += 3;
+            StartSpriteAnim(&gSprites[spriteId], shape);
+            gSprites[spriteId].sIconMapSec = sTreyFlyLocations[i].mapsec;
         }
     }
 }
