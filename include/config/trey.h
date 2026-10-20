@@ -60,13 +60,13 @@
 // Rock Climb walls are climbed up or down only, like Gen 4. 1 = also allow sideways walls.
 #define TREY_ROCK_CLIMB_ALLOW_SIDEWAYS 0
 // Testing only: 1 = every HM is unlocked when a new game starts. Keep at 0 for real builds.
-#define TREY_DEBUG_UNLOCK_ALL_HMS      1
+#define TREY_DEBUG_UNLOCK_ALL_HMS      0
 // Debug (4a): every region map page counts as visited, so the Teleport map and the Pokédex area page
 // can flip through all regions before they have maps. Set back to 0 for real play.
 #define TREY_DEBUG_ALL_REGION_MAPS      0
 // Debug (4c): you hold the S.S. Ticket and every transit stop counts as visited, so the ferries can be tested
 // before the Kanto story exists. Set to 0 for real play.
-#define TREY_DEBUG_ALL_TRANSIT          1
+#define TREY_DEBUG_ALL_TRANSIT          0
 // Debug (4d): every regional Pokédex is unlocked when a new game starts, without meeting the professors.
 // Set to 0 for real play.
 // Kanto (5a, TREY_PLAN.md D25): 1 = the FRLG tilesets, overworld sprites and door animations are built into
