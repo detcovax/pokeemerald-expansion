@@ -320,6 +320,32 @@ def main():
                     if needed and needed != region:
                         error(f"wild_encounters.json {enc.get('base_label')} ({field}): {species} may only appear in {needed}, but {map_id} is in {region}.")
 
+    # Debug warps (rule, David 2026-10-26): every region that has maps has a debug warp to its starting town
+    # in src/data/trey/debug_region_starts.h, with a menu line, on a map of that region.
+    starts_h = "src/data/trey/debug_region_starts.h"
+    text = open(starts_h, encoding="utf-8").read() if os.path.exists(starts_h) else ""
+    starts = {r: (m, int(x), int(y)) for r, m, x, y in
+              re.findall(r"\[(REGION_\w+)\]\s*=\s*\{\s*(MAP_\w+)\s*,\s*(-?\d+)\s*,\s*(-?\d+)\s*\}", text)}
+    menu = set(re.findall(r"&sTreyRegionStarts\[(REGION_\w+)\]", text))
+    regions_with_maps = {mapsec_regions.get(d.get("region_map_section"), "REGION_HOENN") for _, d in maps_by_id.values()}
+    regions_with_maps.discard("REGION_NONE")
+    for region in sorted(regions_with_maps):
+        if region not in starts:
+            error(f"{starts_h}: {region} has maps but no debug warp to its starting town (add [{region}] and a menu line).")
+    for region, (map_id, x, y) in sorted(starts.items()):
+        if region not in menu:
+            error(f"{starts_h}: [{region}] has no menu line (&sTreyRegionStarts[{region}]).")
+        entry = maps_by_id.get(map_id)
+        if entry is None:
+            error(f"{starts_h}: [{region}] warps to {map_id}, which doesn't exist.")
+            continue
+        map_region = mapsec_regions.get(entry[1].get("region_map_section"), "REGION_HOENN")
+        if map_region != region:
+            error(f"{starts_h}: [{region}] warps to {map_id}, which is in {map_region}.")
+        lay = layouts.get(entry[1].get("layout"), {})
+        if isinstance(lay.get("width"), int) and not (0 <= x < lay["width"] and 0 <= y < lay.get("height", 0)):
+            error(f"{starts_h}: [{region}] ({x},{y}) is outside {map_id} ({lay['width']}x{lay.get('height')}).")
+
     if errors:
         print("TREY map check failed:")
         for e in errors:
