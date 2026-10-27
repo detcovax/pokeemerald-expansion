@@ -3418,8 +3418,8 @@
     {
       "id": "MAPSEC_VALENCIA_ISLAND",
       "name": "VALENCIA ISLAND",
-      "x": 2,
-      "y": 12,
+      "x": 4,
+      "y": 11,
       "width": 1,
       "height": 1,
       "trey_region": "REGION_ORANGE",
@@ -3428,7 +3428,7 @@
     {
       "id": "MAPSEC_TANGELO_ISLAND",
       "name": "TANGELO ISLAND",
-      "x": 4,
+      "x": 1,
       "y": 10,
       "width": 1,
       "height": 1,
@@ -3438,9 +3438,9 @@
     {
       "id": "MAPSEC_PINKAN_ISLAND",
       "name": "PINKAN ISLAND",
-      "x": 6,
-      "y": 12,
-      "width": 1,
+      "x": 7,
+      "y": 9,
+      "width": 2,
       "height": 1,
       "trey_region": "REGION_ORANGE",
       "trey_map": "TREY_REGION_MAP_ORANGE"
@@ -3448,8 +3448,8 @@
     {
       "id": "MAPSEC_MIKAN_ISLAND",
       "name": "MIKAN ISLAND",
-      "x": 7,
-      "y": 9,
+      "x": 1,
+      "y": 7,
       "width": 1,
       "height": 1,
       "trey_region": "REGION_ORANGE",
@@ -3458,8 +3458,8 @@
     {
       "id": "MAPSEC_SUNBURST_ISLAND",
       "name": "SUNBURST ISLAND",
-      "x": 9,
-      "y": 11,
+      "x": 4,
+      "y": 8,
       "width": 1,
       "height": 1,
       "trey_region": "REGION_ORANGE",
@@ -3468,46 +3468,6 @@
     {
       "id": "MAPSEC_GOLDEN_ISLAND",
       "name": "GOLDEN ISLAND",
-      "x": 10,
-      "y": 13,
-      "width": 1,
-      "height": 1,
-      "trey_region": "REGION_ORANGE",
-      "trey_map": "TREY_REGION_MAP_ORANGE"
-    },
-    {
-      "id": "MAPSEC_CLEOPATRA_ISLAND",
-      "name": "CLEOPATRA ISLAND",
-      "x": 11,
-      "y": 8,
-      "width": 1,
-      "height": 1,
-      "trey_region": "REGION_ORANGE",
-      "trey_map": "TREY_REGION_MAP_ORANGE"
-    },
-    {
-      "id": "MAPSEC_NAVEL_ISLAND",
-      "name": "NAVEL ISLAND",
-      "x": 12,
-      "y": 5,
-      "width": 1,
-      "height": 1,
-      "trey_region": "REGION_ORANGE",
-      "trey_map": "TREY_REGION_MAP_ORANGE"
-    },
-    {
-      "id": "MAPSEC_TROVITA_ISLAND",
-      "name": "TROVITA ISLAND",
-      "x": 14,
-      "y": 8,
-      "width": 1,
-      "height": 1,
-      "trey_region": "REGION_ORANGE",
-      "trey_map": "TREY_REGION_MAP_ORANGE"
-    },
-    {
-      "id": "MAPSEC_MORO_ISLAND",
-      "name": "MORO ISLAND",
       "x": 15,
       "y": 12,
       "width": 1,
@@ -3516,10 +3476,50 @@
       "trey_map": "TREY_REGION_MAP_ORANGE"
     },
     {
+      "id": "MAPSEC_CLEOPATRA_ISLAND",
+      "name": "CLEOPATRA ISLAND",
+      "x": 15,
+      "y": 4,
+      "width": 1,
+      "height": 1,
+      "trey_region": "REGION_ORANGE",
+      "trey_map": "TREY_REGION_MAP_ORANGE"
+    },
+    {
+      "id": "MAPSEC_NAVEL_ISLAND",
+      "name": "NAVEL ISLAND",
+      "x": 20,
+      "y": 7,
+      "width": 1,
+      "height": 1,
+      "trey_region": "REGION_ORANGE",
+      "trey_map": "TREY_REGION_MAP_ORANGE"
+    },
+    {
+      "id": "MAPSEC_TROVITA_ISLAND",
+      "name": "TROVITA ISLAND",
+      "x": 8,
+      "y": 13,
+      "width": 1,
+      "height": 1,
+      "trey_region": "REGION_ORANGE",
+      "trey_map": "TREY_REGION_MAP_ORANGE"
+    },
+    {
+      "id": "MAPSEC_MORO_ISLAND",
+      "name": "MORO ISLAND",
+      "x": 19,
+      "y": 11,
+      "width": 1,
+      "height": 1,
+      "trey_region": "REGION_ORANGE",
+      "trey_map": "TREY_REGION_MAP_ORANGE"
+    },
+    {
       "id": "MAPSEC_FAIRCHILD_ISLAND",
       "name": "FAIRCHILD ISLAND",
-      "x": 16,
-      "y": 10,
+      "x": 9,
+      "y": 7,
       "width": 1,
       "height": 1,
       "trey_region": "REGION_ORANGE",
@@ -3528,8 +3528,8 @@
     {
       "id": "MAPSEC_MANDARIN_NORTH",
       "name": "MANDARIN NORTH",
-      "x": 17,
-      "y": 4,
+      "x": 4,
+      "y": 6,
       "width": 1,
       "height": 1,
       "trey_region": "REGION_ORANGE",
@@ -3538,8 +3538,8 @@
     {
       "id": "MAPSEC_KUMQUAT_ISLAND",
       "name": "KUMQUAT ISLAND",
-      "x": 18,
-      "y": 7,
+      "x": 11,
+      "y": 2,
       "width": 1,
       "height": 1,
       "trey_region": "REGION_ORANGE",
@@ -3548,8 +3548,8 @@
     {
       "id": "MAPSEC_MANDARIN_SOUTH",
       "name": "MANDARIN SOUTH",
-      "x": 18,
-      "y": 12,
+      "x": 12,
+      "y": 14,
       "width": 1,
       "height": 1,
       "trey_region": "REGION_ORANGE",
@@ -3558,8 +3558,8 @@
     {
       "id": "MAPSEC_ASCORBIA_ISLAND",
       "name": "ASCORBIA ISLAND",
-      "x": 20,
-      "y": 10,
+      "x": 18,
+      "y": 2,
       "width": 1,
       "height": 1,
       "trey_region": "REGION_ORANGE",
@@ -3568,8 +3568,8 @@
     {
       "id": "MAPSEC_HAMLIN_ISLAND",
       "name": "HAMLIN ISLAND",
-      "x": 21,
-      "y": 5,
+      "x": 10,
+      "y": 0,
       "width": 1,
       "height": 1,
       "trey_region": "REGION_ORANGE",
@@ -3578,7 +3578,7 @@
     {
       "id": "MAPSEC_MURCOTT_ISLAND",
       "name": "MURCOTT ISLAND",
-      "x": 20,
+      "x": 17,
       "y": 13,
       "width": 1,
       "height": 1,
@@ -3588,8 +3588,8 @@
     {
       "id": "MAPSEC_GRAPEFRUIT_ISLES",
       "name": "GRAPEFRUIT ISLES",
-      "x": 22,
-      "y": 8,
+      "x": 19,
+      "y": 9,
       "width": 2,
       "height": 1,
       "trey_region": "REGION_ORANGE",
@@ -3598,7 +3598,7 @@
     {
       "id": "MAPSEC_BUTWAL_ISLAND",
       "name": "BUTWAL ISLAND",
-      "x": 19,
+      "x": 16,
       "y": 2,
       "width": 1,
       "height": 1,
@@ -3608,8 +3608,8 @@
     {
       "id": "MAPSEC_KINNOW_ISLAND",
       "name": "KINNOW ISLAND",
-      "x": 22,
-      "y": 2,
+      "x": 14,
+      "y": 8,
       "width": 1,
       "height": 1,
       "trey_region": "REGION_ORANGE",
@@ -3618,8 +3618,8 @@
     {
       "id": "MAPSEC_PUMMELO_ISLAND",
       "name": "PUMMELO ISLAND",
-      "x": 25,
-      "y": 3,
+      "x": 6,
+      "y": 1,
       "width": 1,
       "height": 1,
       "trey_region": "REGION_ORANGE",
@@ -3628,8 +3628,8 @@
     {
       "id": "MAPSEC_SHAMOUTI_ISLAND",
       "name": "SHAMOUTI ISLAND",
-      "x": 24,
-      "y": 11,
+      "x": 11,
+      "y": 4,
       "width": 1,
       "height": 1,
       "trey_region": "REGION_ORANGE",
@@ -3638,8 +3638,8 @@
     {
       "id": "MAPSEC_FIRE_ISLAND",
       "name": "FIRE ISLAND",
-      "x": 23,
-      "y": 13,
+      "x": 11,
+      "y": 4,
       "width": 1,
       "height": 1,
       "trey_region": "REGION_ORANGE",
@@ -3648,8 +3648,8 @@
     {
       "id": "MAPSEC_ICE_ISLAND",
       "name": "ICE ISLAND",
-      "x": 26,
-      "y": 9,
+      "x": 1,
+      "y": 7,
       "width": 1,
       "height": 1,
       "trey_region": "REGION_ORANGE",
@@ -3658,8 +3658,8 @@
     {
       "id": "MAPSEC_LIGHTNING_ISLAND",
       "name": "LIGHTNING ISLAND",
-      "x": 26,
-      "y": 13,
+      "x": 20,
+      "y": 7,
       "width": 1,
       "height": 1,
       "trey_region": "REGION_ORANGE",
@@ -3834,6 +3834,486 @@
       "height": 1,
       "trey_region": "REGION_KITAKAMI",
       "trey_map": "TREY_REGION_MAP_KITAKAMI"
+    },
+    {
+      "id": "MAPSEC_ORANGE_PALLET_TOWN",
+      "name": "ORANGE PALLET",
+      "x": 24,
+      "y": 8,
+      "width": 1,
+      "height": 1,
+      "trey_region": "REGION_ORANGE",
+      "trey_map": "TREY_REGION_MAP_ORANGE"
+    },
+    {
+      "id": "MAPSEC_ORANGE_ROUTE_1",
+      "name": "ORANGE ROUTE 1",
+      "x": 24,
+      "y": 9,
+      "width": 1,
+      "height": 2,
+      "trey_region": "REGION_ORANGE",
+      "trey_map": "TREY_REGION_MAP_ORANGE"
+    },
+    {
+      "id": "MAPSEC_TROVITOPOLIS",
+      "name": "TROVITOPOLIS",
+      "x": 10,
+      "y": 13,
+      "width": 1,
+      "height": 1,
+      "trey_region": "REGION_ORANGE",
+      "trey_map": "TREY_REGION_MAP_ORANGE"
+    },
+    {
+      "id": "MAPSEC_YAMBERA",
+      "name": "YAMBERA",
+      "x": 12,
+      "y": 12,
+      "width": 1,
+      "height": 1,
+      "trey_region": "REGION_ORANGE",
+      "trey_map": "TREY_REGION_MAP_ORANGE"
+    },
+    {
+      "id": "MAPSEC_FUKUHARA_ISLAND",
+      "name": "FUKUHARA ISLAND",
+      "x": 12,
+      "y": 9,
+      "width": 1,
+      "height": 1,
+      "trey_region": "REGION_ORANGE",
+      "trey_map": "TREY_REGION_MAP_ORANGE"
+    },
+    {
+      "id": "MAPSEC_VALENCIA_PARK",
+      "name": "VALENCIA PARK",
+      "x": 4,
+      "y": 11,
+      "width": 1,
+      "height": 1,
+      "trey_region": "REGION_ORANGE",
+      "trey_map": "TREY_REGION_MAP_ORANGE"
+    },
+    {
+      "id": "MAPSEC_POKEMON_PARK",
+      "name": "POKéMON PARK",
+      "x": 1,
+      "y": 10,
+      "width": 1,
+      "height": 1,
+      "trey_region": "REGION_ORANGE",
+      "trey_map": "TREY_REGION_MAP_ORANGE"
+    },
+    {
+      "id": "MAPSEC_POKEMON_SHOWBOAT",
+      "name": "POKéMON SHOWBOAT",
+      "x": 14,
+      "y": 8,
+      "width": 1,
+      "height": 1,
+      "trey_region": "REGION_ORANGE",
+      "trey_map": "TREY_REGION_MAP_ORANGE"
+    },
+    {
+      "id": "MAPSEC_ORANGE_SEWERS",
+      "name": "SEWERS",
+      "x": 10,
+      "y": 13,
+      "width": 1,
+      "height": 1,
+      "trey_region": "REGION_ORANGE",
+      "trey_map": "TREY_REGION_MAP_ORANGE"
+    },
+    {
+      "id": "MAPSEC_NAVEL_MOUNTAIN",
+      "name": "NAVEL MOUNTAIN",
+      "x": 20,
+      "y": 7,
+      "width": 1,
+      "height": 1,
+      "trey_region": "REGION_ORANGE",
+      "trey_map": "TREY_REGION_MAP_ORANGE"
+    },
+    {
+      "id": "MAPSEC_CRYSTAL_CAVE",
+      "name": "CRYSTAL CAVE",
+      "x": 4,
+      "y": 8,
+      "width": 1,
+      "height": 1,
+      "trey_region": "REGION_ORANGE",
+      "trey_map": "TREY_REGION_MAP_ORANGE"
+    },
+    {
+      "id": "MAPSEC_BAY_CAVE",
+      "name": "BAY CAVE",
+      "x": 12,
+      "y": 9,
+      "width": 1,
+      "height": 1,
+      "trey_region": "REGION_ORANGE",
+      "trey_map": "TREY_REGION_MAP_ORANGE"
+    },
+    {
+      "id": "MAPSEC_ORANGE_ROCKET_HIDEOUT",
+      "name": "ROCKET HIDEOUT",
+      "x": 4,
+      "y": 6,
+      "width": 1,
+      "height": 1,
+      "trey_region": "REGION_ORANGE",
+      "trey_map": "TREY_REGION_MAP_ORANGE"
+    },
+    {
+      "id": "MAPSEC_OLD_SILPH_CO",
+      "name": "OLD SILPH. CO",
+      "x": 11,
+      "y": 4,
+      "width": 1,
+      "height": 1,
+      "trey_region": "REGION_ORANGE",
+      "trey_map": "TREY_REGION_MAP_ORANGE"
+    },
+    {
+      "id": "MAPSEC_ORANGE_LEAGUE",
+      "name": "ORANGE LEAGUE",
+      "x": 6,
+      "y": 1,
+      "width": 1,
+      "height": 1,
+      "trey_region": "REGION_ORANGE",
+      "trey_map": "TREY_REGION_MAP_ORANGE"
+    },
+    {
+      "id": "MAPSEC_ASCORBIA_FOREST",
+      "name": "ASCORBIA FOREST",
+      "x": 18,
+      "y": 2,
+      "width": 1,
+      "height": 1,
+      "trey_region": "REGION_ORANGE",
+      "trey_map": "TREY_REGION_MAP_ORANGE"
+    },
+    {
+      "id": "MAPSEC_RIND_ISLAND",
+      "name": "RIND ISLAND",
+      "x": 6,
+      "y": 3,
+      "width": 1,
+      "height": 1,
+      "trey_region": "REGION_ORANGE",
+      "trey_map": "TREY_REGION_MAP_ORANGE"
+    },
+    {
+      "id": "MAPSEC_TARROCO_ISLAND",
+      "name": "TARROCO ISLAND",
+      "x": 8,
+      "y": 0,
+      "width": 1,
+      "height": 1,
+      "trey_region": "REGION_ORANGE",
+      "trey_map": "TREY_REGION_MAP_ORANGE"
+    },
+    {
+      "id": "MAPSEC_ORANGE_UNDERWATER",
+      "name": "UNDERWATER",
+      "x": 14,
+      "y": 7,
+      "width": 1,
+      "height": 1,
+      "trey_region": "REGION_ORANGE",
+      "trey_map": "TREY_REGION_MAP_ORANGE"
+    },
+    {
+      "id": "MAPSEC_HAMLIN_FIELDS",
+      "name": "HAMLIN FIELDS",
+      "x": 10,
+      "y": 0,
+      "width": 1,
+      "height": 1,
+      "trey_region": "REGION_ORANGE",
+      "trey_map": "TREY_REGION_MAP_ORANGE"
+    },
+    {
+      "id": "MAPSEC_NEW_ISLAND",
+      "name": "NEW ISLAND",
+      "x": 11,
+      "y": 4,
+      "width": 1,
+      "height": 1,
+      "trey_region": "REGION_ORANGE",
+      "trey_map": "TREY_REGION_MAP_ORANGE"
+    },
+    {
+      "id": "MAPSEC_SALVEYO_ISLAND",
+      "name": "SALVEYO ISLAND",
+      "x": 4,
+      "y": 2,
+      "width": 1,
+      "height": 1,
+      "trey_region": "REGION_ORANGE",
+      "trey_map": "TREY_REGION_MAP_ORANGE"
+    },
+    {
+      "id": "MAPSEC_MURCOTT_MEADOWS",
+      "name": "MURCOTT MEADOWS",
+      "x": 17,
+      "y": 13,
+      "width": 1,
+      "height": 1,
+      "trey_region": "REGION_ORANGE",
+      "trey_map": "TREY_REGION_MAP_ORANGE"
+    },
+    {
+      "id": "MAPSEC_TROVITO_DEPT",
+      "name": "TROVITO DEPT.",
+      "x": 10,
+      "y": 13,
+      "width": 1,
+      "height": 1,
+      "trey_region": "REGION_ORANGE",
+      "trey_map": "TREY_REGION_MAP_ORANGE"
+    },
+    {
+      "id": "MAPSEC_ORANGE_ROUTE_A",
+      "name": "ROUTE A",
+      "x": 1,
+      "y": 11,
+      "width": 3,
+      "height": 1,
+      "trey_region": "REGION_ORANGE",
+      "trey_map": "TREY_REGION_MAP_ORANGE"
+    },
+    {
+      "id": "MAPSEC_ORANGE_ROUTE_B",
+      "name": "ROUTE B",
+      "x": 1,
+      "y": 8,
+      "width": 1,
+      "height": 2,
+      "trey_region": "REGION_ORANGE",
+      "trey_map": "TREY_REGION_MAP_ORANGE"
+    },
+    {
+      "id": "MAPSEC_ORANGE_ROUTE_C",
+      "name": "ROUTE C",
+      "x": 1,
+      "y": 6,
+      "width": 3,
+      "height": 1,
+      "trey_region": "REGION_ORANGE",
+      "trey_map": "TREY_REGION_MAP_ORANGE"
+    },
+    {
+      "id": "MAPSEC_ORANGE_ROUTE_D",
+      "name": "ROUTE D",
+      "x": 4,
+      "y": 7,
+      "width": 1,
+      "height": 1,
+      "trey_region": "REGION_ORANGE",
+      "trey_map": "TREY_REGION_MAP_ORANGE"
+    },
+    {
+      "id": "MAPSEC_ORANGE_ROUTE_E",
+      "name": "ROUTE E",
+      "x": 4,
+      "y": 9,
+      "width": 3,
+      "height": 2,
+      "trey_region": "REGION_ORANGE",
+      "trey_map": "TREY_REGION_MAP_ORANGE"
+    },
+    {
+      "id": "MAPSEC_ORANGE_ROUTE_F",
+      "name": "ROUTE F",
+      "x": 9,
+      "y": 7,
+      "width": 3,
+      "height": 5,
+      "trey_region": "REGION_ORANGE",
+      "trey_map": "TREY_REGION_MAP_ORANGE"
+    },
+    {
+      "id": "MAPSEC_ORANGE_ROUTE_G",
+      "name": "ROUTE G",
+      "x": 13,
+      "y": 9,
+      "width": 2,
+      "height": 1,
+      "trey_region": "REGION_ORANGE",
+      "trey_map": "TREY_REGION_MAP_ORANGE"
+    },
+    {
+      "id": "MAPSEC_ORANGE_ROUTE_H",
+      "name": "ROUTE H",
+      "x": 14,
+      "y": 7,
+      "width": 6,
+      "height": 1,
+      "trey_region": "REGION_ORANGE",
+      "trey_map": "TREY_REGION_MAP_ORANGE"
+    },
+    {
+      "id": "MAPSEC_ORANGE_ROUTE_I",
+      "name": "ROUTE I",
+      "x": 19,
+      "y": 8,
+      "width": 2,
+      "height": 3,
+      "trey_region": "REGION_ORANGE",
+      "trey_map": "TREY_REGION_MAP_ORANGE"
+    },
+    {
+      "id": "MAPSEC_ORANGE_ROUTE_J",
+      "name": "ROUTE J",
+      "x": 15,
+      "y": 11,
+      "width": 4,
+      "height": 1,
+      "trey_region": "REGION_ORANGE",
+      "trey_map": "TREY_REGION_MAP_ORANGE"
+    },
+    {
+      "id": "MAPSEC_ORANGE_ROUTE_K",
+      "name": "ROUTE K",
+      "x": 15,
+      "y": 13,
+      "width": 2,
+      "height": 1,
+      "trey_region": "REGION_ORANGE",
+      "trey_map": "TREY_REGION_MAP_ORANGE"
+    },
+    {
+      "id": "MAPSEC_ORANGE_ROUTE_L",
+      "name": "ROUTE L",
+      "x": 13,
+      "y": 14,
+      "width": 5,
+      "height": 1,
+      "trey_region": "REGION_ORANGE",
+      "trey_map": "TREY_REGION_MAP_ORANGE"
+    },
+    {
+      "id": "MAPSEC_ORANGE_ROUTE_M",
+      "name": "ROUTE M",
+      "x": 12,
+      "y": 13,
+      "width": 1,
+      "height": 1,
+      "trey_region": "REGION_ORANGE",
+      "trey_map": "TREY_REGION_MAP_ORANGE"
+    },
+    {
+      "id": "MAPSEC_ORANGE_ROUTE_N",
+      "name": "ROUTE N",
+      "x": 10,
+      "y": 12,
+      "width": 2,
+      "height": 1,
+      "trey_region": "REGION_ORANGE",
+      "trey_map": "TREY_REGION_MAP_ORANGE"
+    },
+    {
+      "id": "MAPSEC_ORANGE_ROUTE_O",
+      "name": "ROUTE O",
+      "x": 9,
+      "y": 13,
+      "width": 1,
+      "height": 1,
+      "trey_region": "REGION_ORANGE",
+      "trey_map": "TREY_REGION_MAP_ORANGE"
+    },
+    {
+      "id": "MAPSEC_ORANGE_ROUTE_P",
+      "name": "ROUTE P",
+      "x": 8,
+      "y": 11,
+      "width": 1,
+      "height": 2,
+      "trey_region": "REGION_ORANGE",
+      "trey_map": "TREY_REGION_MAP_ORANGE"
+    },
+    {
+      "id": "MAPSEC_ORANGE_ROUTE_Q",
+      "name": "ROUTE Q",
+      "x": 9,
+      "y": 4,
+      "width": 4,
+      "height": 3,
+      "trey_region": "REGION_ORANGE",
+      "trey_map": "TREY_REGION_MAP_ORANGE"
+    },
+    {
+      "id": "MAPSEC_ORANGE_ROUTE_R",
+      "name": "ROUTE R",
+      "x": 13,
+      "y": 3,
+      "width": 6,
+      "height": 2,
+      "trey_region": "REGION_ORANGE",
+      "trey_map": "TREY_REGION_MAP_ORANGE"
+    },
+    {
+      "id": "MAPSEC_ORANGE_ROUTE_S",
+      "name": "ROUTE S",
+      "x": 12,
+      "y": 2,
+      "width": 6,
+      "height": 1,
+      "trey_region": "REGION_ORANGE",
+      "trey_map": "TREY_REGION_MAP_ORANGE"
+    },
+    {
+      "id": "MAPSEC_ORANGE_ROUTE_T",
+      "name": "ROUTE T",
+      "x": 9,
+      "y": 2,
+      "width": 2,
+      "height": 1,
+      "trey_region": "REGION_ORANGE",
+      "trey_map": "TREY_REGION_MAP_ORANGE"
+    },
+    {
+      "id": "MAPSEC_ORANGE_ROUTE_U",
+      "name": "ROUTE U",
+      "x": 6,
+      "y": 3,
+      "width": 4,
+      "height": 1,
+      "trey_region": "REGION_ORANGE",
+      "trey_map": "TREY_REGION_MAP_ORANGE"
+    },
+    {
+      "id": "MAPSEC_ORANGE_ROUTE_V",
+      "name": "ROUTE V",
+      "x": 4,
+      "y": 1,
+      "width": 2,
+      "height": 3,
+      "trey_region": "REGION_ORANGE",
+      "trey_map": "TREY_REGION_MAP_ORANGE"
+    },
+    {
+      "id": "MAPSEC_ORANGE_ROUTE_W",
+      "name": "ROUTE W",
+      "x": 6,
+      "y": 0,
+      "width": 2,
+      "height": 1,
+      "trey_region": "REGION_ORANGE",
+      "trey_map": "TREY_REGION_MAP_ORANGE"
+    },
+    {
+      "id": "MAPSEC_ORANGE_ROUTE_X",
+      "name": "ROUTE X",
+      "x": 9,
+      "y": 0,
+      "width": 1,
+      "height": 1,
+      "trey_region": "REGION_ORANGE",
+      "trey_map": "TREY_REGION_MAP_ORANGE"
     }
   ]
 }

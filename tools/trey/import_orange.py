@@ -472,9 +472,20 @@ def step_sprites(a):
     json.dump({str(k): v for k, v in mapping.items()}, open("docs/trey/orange_sprites.json", "w", encoding="utf-8"), indent=1)
 
 
+def step_regionmap(a):
+    """6c-4a (D41): the hack's Orange region map page (tools/trey/orange_regionmap.py)."""
+    import orange_regionmap
+    rom = Rom(a.rom)
+    report, _ = orange_regionmap.build(rom, a.dry)
+    print(f"regionmap: {report['grid_cells']} grid cells, {len(report['added'])} new locations"
+          + (f", {report['tiles']} tiles, {report['colours']} colours" if "tiles" in report else " (dry run)"))
+    if report["stale_orange_ids"]:
+        print("  Orange locations the hack doesn't use:", ", ".join(report["stale_orange_ids"]))
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("step", choices=["tilesets", "sprites"])
+    ap.add_argument("step", choices=["tilesets", "sprites", "regionmap"])
     ap.add_argument("--rom", default=DEFAULT_ROM)
     ap.add_argument("--fr", default=DEFAULT_FR)
     ap.add_argument("--pokefirered", default="../pokefirered")
@@ -482,7 +493,7 @@ def main():
     a = ap.parse_args()
     if not os.path.exists("Makefile"):
         die("run from the project root")
-    {"tilesets": step_tilesets, "sprites": step_sprites}[a.step](a)
+    {"tilesets": step_tilesets, "sprites": step_sprites, "regionmap": step_regionmap}[a.step](a)
 
 
 if __name__ == "__main__":

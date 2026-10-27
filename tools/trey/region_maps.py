@@ -10,8 +10,9 @@ Pages ("region maps") and where their art comes from:
     HOENN               ours (graphics/pokenav/region_map/map.png, graphics/pokedex/region_map.png)
     KANTO, SEVII_123/45/67, JOHTO   ../pokehns-expansion (Heart & Soul)
     SINNOH              ../Sinnoh-pokeemerald-expansion
-    ORANGE, KITAKAMI    placeholders drawn here from the location rectangles (Orange: replaced later from
-                        the Orange Islands ROM; Kitakami: in its production phase)
+    ORANGE              the Orange Islands ROM hack (tools/trey/import_orange.py regionmap, 6c-4a, D41); its grid is
+                        kept in docs/trey/orange_region_map.json and used here
+    KITAKAMI            placeholder drawn here from the location rectangles (replaced in its production phase)
 
 Every location (MAPSEC) in src/data/region_map/region_map_sections.json gets:
     "trey_region": gameplay region (REGION_*)          Sevii counts as REGION_KANTO
@@ -32,6 +33,7 @@ HOENN_LAYOUT_H = "src/data/region_map/region_map_layout.h"
 HNS = "../pokehns-expansion"
 SINNOH = "../Sinnoh-pokeemerald-expansion"
 GRID_W, GRID_H = 28, 15
+ORANGE_GRID = "docs/trey/orange_region_map.json"
 
 # Page order is also the L/R switching order on the map screens.
 PAGES = ["KANTO", "SEVII_123", "SEVII_45", "SEVII_67", "ORANGE", "JOHTO", "HOENN", "SINNOH", "KITAKAMI"]
@@ -80,7 +82,8 @@ SINNOH_EXTRA = [("MAPSEC_SINNOH_VICTORY_ROAD", "VICTORY ROAD"), ("MAPSEC_GREAT_M
                 ("MAPSEC_MANIAC_TUNNEL", "MANIAC TUNNEL"), ("MAPSEC_PAL_PARK", "PAL PARK"),
                 ("MAPSEC_BATTLE_PARK", "BATTLE PARK")]
 
-# Orange Islands: the anime's islands for now (renamed later from the Orange Islands ROM hack).
+# Orange Islands: the original placeholder list. Since 6c-4a the Orange locations, positions and art come from the
+# ROM hack (tools/trey/orange_regionmap.py); these entries only matter if region_map_sections.json is rebuilt.
 # (id, name, x, y, w, h, kind) kind: T town/island with a centre, L landmark, R sea route
 ORANGE = [
     ("VALENCIA_ISLAND", "VALENCIA ISLAND", 2, 12, 1, 1, "T"),
@@ -269,6 +272,8 @@ def import_all():
     }
     for page in ("ORANGE", "KITAKAMI"):
         grids[page] = rect_grid(secs, page)
+    if os.path.exists(ORANGE_GRID):  # TREY (6c-4a): the hack's own Orange grid
+        grids["ORANGE"] = load_json(ORANGE_GRID)["grid"]
     for page, grid in grids.items():
         for row in grid:
             for i, sec in enumerate(row):
@@ -460,6 +465,8 @@ def draw_placeholders(secs=None, grids=None):
         secs = load_json(SECTIONS_JSON)["map_sections"]
     kinds = {f"MAPSEC_{e[0]}": e[6] for e in ORANGE + KITAKAMI}
     for page in ("ORANGE", "KITAKAMI"):
+        if page == "ORANGE" and os.path.exists(ORANGE_GRID):
+            continue  # TREY (6c-4a): Orange art comes from the ROM hack
         pic = placeholder_pixels(secs, page, kinds)
         write_page_art(pic, f"graphics/pokenav/region_map/map{PAGE_FILE[page]}", f"graphics/pokedex/region_map{PAGE_FILE[page]}")
     print("region_maps.py: placeholder pages drawn (ORANGE, KITAKAMI)")
