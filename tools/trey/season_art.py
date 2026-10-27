@@ -28,8 +28,10 @@ OUTDOOR_MAP_TYPES = {"MAP_TYPE_TOWN", "MAP_TYPE_CITY", "MAP_TYPE_ROUTE", "MAP_TY
 # TREY (6-S, D33): every region gets seasons. Tileset headers and graphics live in several files (Hoenn and FRLG
 # in headers.h/graphics.h, Johto in trey_hns.h, Sinnoh in trey_sinnoh.h). Seasons recolour a tileset's PALETTE
 # folder, so tilesets that share a palette array (Sinnoh's "meta" tilesets) share one seasonal table.
-HEADER_FILES = ["src/data/tilesets/headers.h", "src/data/tilesets/trey_hns.h", "src/data/tilesets/trey_sinnoh.h"]
-GRAPHICS_FILES = ["src/data/tilesets/graphics.h", "src/graphics.c", "src/data/tilesets/trey_hns.h", "src/data/tilesets/trey_sinnoh.h"]
+HEADER_FILES = ["src/data/tilesets/headers.h", "src/data/tilesets/trey_hns.h", "src/data/tilesets/trey_sinnoh.h",
+                "src/data/tilesets/trey_orange.h"]
+GRAPHICS_FILES = ["src/data/tilesets/graphics.h", "src/graphics.c", "src/data/tilesets/trey_hns.h", "src/data/tilesets/trey_sinnoh.h",
+                  "src/data/tilesets/trey_orange.h"]
 # Tilesets snowy all year (DPPt): no seasonal art. A map whose SECONDARY tileset has no seasonal art shows the base
 # art for its primary too (src/trey_seasons.c), so Snowpoint keeps its summer = winter look.
 NO_SEASONS = {"gTileset_SinnohSnowpoint", "gTileset_MtSilverSnow_Hns"}

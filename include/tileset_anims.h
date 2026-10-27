@@ -35,6 +35,7 @@ void InitTilesetAnim_BattlePyramid(void);
 
 // FRLG
 void InitTilesetAnim_General_Frlg(void);
+void InitTilesetAnim_OrangeGeneral(void); // TREY (6c-1)
 void InitTilesetAnim_CeladonCity(void);
 void InitTilesetAnim_VermilionGym(void);
 void InitTilesetAnim_CeladonGym(void);

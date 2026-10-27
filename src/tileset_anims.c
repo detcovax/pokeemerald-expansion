@@ -1565,6 +1565,23 @@ void InitTilesetAnim_General_Frlg(void)
     sPrimaryTilesetAnimCallback = TilesetAnim_General_Frlg;
 }
 
+// TREY (6c-1): the Orange Islands' General tileset (src/data/tilesets/trey_orange.h). Its water, current and sand
+// edge tiles are FireRed's, so FireRed's frames fit; the hack repainted the flower tiles, so those stay still.
+static void TilesetAnim_OrangeGeneral(u16 timer)
+{
+    if (timer % 8 == 0)
+        QueueAnimTiles_General_SandWatersEdge(timer / 8);
+    if (timer % 16 == 1)
+        QueueAnimTiles_General_Water_Current_LandWatersEdge(timer / 16);
+}
+
+void InitTilesetAnim_OrangeGeneral(void)
+{
+    sPrimaryTilesetAnimCounter = 0;
+    sPrimaryTilesetAnimCounterMax = 640;
+    sPrimaryTilesetAnimCallback = TilesetAnim_OrangeGeneral;
+}
+
 static void QueueAnimTiles_CeladonCity_Fountain(u16 timer)
 {
     AppendTilesetAnimToBuffer(sTilesetAnims_CeladonCity_Fountain[timer % ARRAY_COUNT(sTilesetAnims_CeladonCity_Fountain)], (u16 *)(BG_VRAM + TILE_OFFSET_4BPP(744)), 8 * TILE_SIZE_4BPP);
