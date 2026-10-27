@@ -255,9 +255,226 @@ def step_tilesets(a):
           f"{sum(1 for r in report if 'shared' in r)} shared with FRLG")
 
 
+# ---------------------------------------------------------------------------------------------------
+# Sprites (6c-2): object event graphics. David: import every changed/new sprite (players and story cast too);
+# Pokemon NPCs are switched to TREY's follower sprites in the maps step when their script names the species.
+# ---------------------------------------------------------------------------------------------------
+FR_GFX_TABLE, FR_PAL_TABLE = 0x39FDB0, 0x3A5158        # FireRed 1.0
+GFX_TABLE_REF, PAL_TABLE_REF = 0x5F2F4, 0x5F4D8          # code words holding the table pointers (the hack repoints)
+ORANGE_PAL_TAG_START = 0x1500                            # free: weather 0x1200, gates 0x1300, followers 0x4000+
+SPR_MARK_BEGIN, SPR_MARK_END = "    // TREY (6c-2) BEGIN", "    // TREY (6c-2) END\n"
+
+
+def gfx_table(rom, t, limit=600):
+    out = []
+    while len(out) < limit and rom.isptr(rom.u32(t + 4 * len(out))):
+        out.append(rom.u32(t + 4 * len(out)))
+    return out
+
+
+def pal_table(rom, t, limit=400):
+    out = {}
+    for n in range(limit):
+        p, tag, pad = struct.unpack_from("<IHH", rom.d, t + 8 * n)
+        if not rom.isptr(p) or not 0x1100 <= tag < 0x1400:
+            break
+        out.setdefault(tag, p)
+    return out
+
+
+def gfx_info(rom, p):
+    o = rom.off(p)
+    tile, pal, refl, size, w, h = struct.unpack_from("<HHHHhh", rom.d, o)
+    bits, tracks = rom.d[o + 12], rom.d[o + 13]
+    oam, subs, anims, images, affine = struct.unpack_from("<IIIII", rom.d, o + 16)
+    return {"pal": pal, "refl": refl, "size": size, "w": w, "h": h, "slot": bits & 0xF, "shadow": (bits >> 4) & 3,
+            "inanimate": (bits >> 6) & 1, "tracks": tracks, "oam": oam, "subs": subs, "anims": anims, "images": images}
+
+
+def frame_pixels(rom, data_ptr, w, h):
+    d = rom.d[rom.off(data_ptr):rom.off(data_ptr) + w * h // 2]
+    tw, px = w // 8, [0] * (w * h)
+    for t in range(len(d) // 32):
+        tx, ty = (t % tw) * 8, (t // tw) * 8
+        for y in range(8):
+            for x in range(4):
+                v = d[t * 32 + y * 4 + x]
+                px[(ty + y) * w + tx + 2 * x] = v & 0xF
+                px[(ty + y) * w + tx + 2 * x + 1] = v >> 4
+    return px
+
+
+def camel_const(name):
+    return "".join(p.capitalize() for p in name.lower().split("_"))
+
+
+def step_sprites(a):
+    from PIL import Image
+    rom, fr = Rom(a.rom), Rom(a.fr)
+    fr_names = {int(v): n for n, v in re.findall(r"#define OBJ_EVENT_GFX_(\w+)\s+(\d+)",
+                open(os.path.join(a.pokefirered, "include/constants/event_objects.h"), encoding="utf-8").read())}
+    ev = open("include/constants/event_objects.h", encoding="utf-8").read()
+    ptrs = open("src/data/object_events/object_event_graphics_info_pointers.h", encoding="utf-8").read()
+    infos_c = open("src/data/object_events/object_event_graphics_info.h", encoding="utf-8").read()
+    anims_c = open("src/data/object_events/object_event_anims.h", encoding="utf-8").read()
+    fe = gfx_table(fr, FR_GFX_TABLE)
+    oe = gfx_table(rom, rom.off(rom.u32(GFX_TABLE_REF)))
+    fpal, opal = pal_table(fr, FR_PAL_TABLE), pal_table(rom, rom.off(rom.u32(PAL_TABLE_REF)))
+
+    def trey_const(i):
+        n = fr_names.get(i)
+        for c in (f"OBJ_EVENT_GFX_{n}_FRLG", f"OBJ_EVENT_GFX_{n}"):
+            if n and re.search(r"\b" + c + r"\b", ev):
+                return c
+        return None
+    # FireRed oam/subsprite/anim pointers -> TREY symbols, via TREY's own FRLG graphics infos
+    sym = {}
+    for i, p in enumerate(fe):
+        c = trey_const(i)
+        m = c and re.search(r"\[" + c + r"\]\s*=\s*&(\w+)", ptrs)
+        body = m and re.search(r"const struct ObjectEventGraphicsInfo " + m.group(1) + r"\s*=\s*\{(.*?)\};", infos_c, re.S)
+        if not body:
+            continue
+        g = gfx_info(fr, p)
+        for field, key in (("oam", "oam"), ("subspriteTables", "subs"), ("anims", "anims")):
+            fm = re.search(r"\." + field + r"\s*=\s*&?(\w+)", body.group(1))
+            if fm:
+                sym.setdefault((key, g[key]), fm.group(1))
+
+    def frames_of(anim_table):
+        m = re.search(r"\b" + anim_table + r"\[\]\s*=\s*\{(.*?)\};", anims_c, re.S)
+        nums = []
+        for seq in re.findall(r"\b(sAnim_\w+)\b", m.group(1) if m else ""):
+            sm = re.search(r"\b" + seq + r"\[\]\s*=\s*\{(.*?)\};", anims_c, re.S)
+            nums += [int(x) for x in re.findall(r"ANIMCMD_FRAME\((\d+)", sm.group(1) if sm else "")]
+        return max(nums) + 1 if nums else 1
+
+    def same_as_fr(i):
+        if i >= len(fe):
+            return False
+        A, B = gfx_info(rom, oe[i]), gfx_info(fr, fe[i])
+        if (A["w"], A["h"]) != (B["w"], B["h"]) or not (rom.isptr(A["images"]) and fr.isptr(B["images"])):
+            return False
+        fa, fb = rom.u32(rom.off(A["images"])), fr.u32(fr.off(B["images"]))
+        if not (rom.isptr(fa) and fr.isptr(fb)):
+            return False
+        pa = opal.get(A["pal"]); pb = fpal.get(B["pal"])
+        return (frame_pixels(rom, fa, A["w"], A["h"]) == frame_pixels(fr, fb, B["w"], B["h"])
+                and pa and pb and rom.d[rom.off(pa):rom.off(pa) + 32] == fr.d[fr.off(pb):fr.off(pb) + 32])
+
+    mapping, items, consts, pal_tags, notes = {}, [], [], {}, collections.Counter()
+    for i, p in enumerate(oe):
+        g = gfx_info(rom, p)
+        if not (0 < g["w"] <= 128 and 0 < g["h"] <= 128) or not rom.isptr(g["images"]):
+            notes["unreadable sprite entry skipped"] += 1
+            continue
+        if same_as_fr(i) and trey_const(i):
+            mapping[i] = trey_const(i)
+            notes["identical to FireRed (TREY's FRLG sprite)"] += 1
+            continue
+        base = fr_names.get(i) if i < len(fe) else None
+        cname = f"OBJ_EVENT_GFX_ORANGE_{base}" if base else f"OBJ_EVENT_GFX_ORANGE_{i}"
+        sname = "Orange" + (camel_const(base) if base else str(i))
+        anims = sym.get(("anims", g["anims"]))
+        guessed = anims is None
+        if guessed:
+            anims = "sAnimTable_Inanimate" if g["inanimate"] else "sAnimTable_Standard"
+        oam = sym.get(("oam", g["oam"])) or f"gObjectEventBaseOam_{g['w']}x{g['h']}"
+        subs = sym.get(("subs", g["subs"])) or f"sOamTables_{g['w']}x{g['h']}"
+        known = (open("src/data/object_events/base_oam.h", encoding="utf-8").read()
+                 + open("src/data/object_events/object_event_subsprites.h", encoding="utf-8").read())
+        if not re.search(r"\b" + oam + r"\b", known) or not re.search(r"\b" + subs + r"\b", known):
+            notes[f"{sname}: no {oam}/{subs} in TREY, skipped"] += 1
+            continue
+        nframes = frames_of(anims)
+        frames = []
+        for k in range(nframes):
+            fp = rom.u32(rom.off(g["images"]) + 8 * k)
+            if not rom.isptr(fp):
+                break
+            frames.append(frame_pixels(rom, fp, g["w"], g["h"]))
+        if len(frames) < nframes:   # fewer frames than its animation table uses (objects): show the first, still
+            anims, frames = "sAnimTable_Inanimate", frames[:1]
+            notes[f"{sname}: {len(frames)} frame(s) for an {nframes}-frame animation -> inanimate"] += 1
+        if g["pal"] not in pal_tags:
+            pal_tags[g["pal"]] = f"OBJ_EVENT_PAL_TAG_ORANGE_{g['pal']:04X}"
+        items.append((i, cname, sname, g, anims, oam, subs, frames))
+        mapping[i] = cname
+    if len(pal_tags) > 256:
+        die(f"{len(pal_tags)} palettes, but only 256 Orange palette tags (0x1500-0x15FF)")
+
+    out, ptr_lines, ext_lines, pal_lines = [], [], [], []
+    for i, cname, sname, g, anims, oam, subs, frames in items:
+        snake_name = snake(sname)
+        png = f"graphics/object_events/pics/orange/{snake_name}.png"
+        tw, th = g["w"] // 8, g["h"] // 8
+        if not a.dry:
+            os.makedirs(os.path.dirname(png), exist_ok=True)
+            img = Image.new("P", (g["w"] * len(frames), g["h"]))
+            pal = opal[g["pal"]]
+            cols = [((c & 31) << 3, ((c >> 5) & 31) << 3, ((c >> 10) & 31) << 3) for c in struct.unpack_from("<16H", rom.d, rom.off(pal))]
+            img.putpalette([v for c in cols for v in c] + [0] * (768 - 48))
+            px = img.load()
+            for k, f in enumerate(frames):
+                for y in range(g["h"]):
+                    for x in range(g["w"]):
+                        px[k * g["w"] + x, y] = f[y * g["w"] + x]
+            img.save(png)
+        out.append(f"const u32 gObjectEventPic_{sname}[] = INCGFX_U32(\"{png}\", \".4bpp\", \"-mwidth {tw} -mheight {th}\");\n\n"
+                   f"static const struct SpriteFrameImage sPicTable_{sname}[] = {{\n"
+                   + "".join(f"    overworld_frame(gObjectEventPic_{sname}, {tw}, {th}, {k}),\n" for k in range(len(frames)))
+                   + "};\n\n"
+                   f"const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_{sname} = {{TAG_NONE, {pal_tags[g['pal']]}, "
+                   f"OBJ_EVENT_PAL_TAG_NONE, {g['w'] * g['h'] // 2}, {g['w']}, {g['h']}, {g['slot']}, {g['shadow']}, "
+                   f"{'TRUE' if g['inanimate'] else 'FALSE'}, FALSE, {g['tracks']}, &{oam}, {subs}, {anims}, "
+                   f"sPicTable_{sname}, gDummySpriteAffineAnimTable}};\n")
+        ptr_lines.append(f"    [{cname}] = &gObjectEventGraphicsInfo_{sname},\n")
+        ext_lines.append(f"extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_{sname};\n")
+        consts.append(cname)
+    tag_defs = []
+    for n, (hack_tag, tag) in enumerate(sorted(pal_tags.items())):
+        path = f"graphics/object_events/palettes/orange/{hack_tag:04x}.pal"
+        cols = [((c & 31) << 3, ((c >> 5) & 31) << 3, ((c >> 10) & 31) << 3)
+                for c in struct.unpack_from("<16H", rom.d, rom.off(opal[hack_tag]))]
+        if not a.dry:
+            os.makedirs(os.path.dirname(path), exist_ok=True)
+            write_pal(path, cols)
+        out.append(f"const u16 gObjectEventPal_Orange{hack_tag:04X}[] = INCGFX_U16(\"{path}\", \".gbapal\");\n")
+        pal_lines.append(f"    {{gObjectEventPal_Orange{hack_tag:04X}, {tag}}},\n")
+        tag_defs.append(f"#define {tag:<40} 0x{ORANGE_PAL_TAG_START + n:04X}\n")
+    head = "// TREY (6c-2): generated by tools/trey/import_orange.py (sprites) from the Orange Islands ROM hack. Do not edit.\n"
+    print(f"import_orange.py sprites: {len(items)} Orange sprites, {len(pal_tags)} palettes, "
+          f"{sum(1 for v in mapping.values() if 'ORANGE' not in v)} shared with FRLG. "
+          + ", ".join(f"{k} {v}" for k, v in sorted(notes.items())))
+    if a.dry:
+        return
+    od = "src/data/object_events"
+    open(f"{od}/trey_orange_object_events.h", "w", encoding="utf-8", newline="\n").write(
+        head + "// Orange Islands sprites: pics, palettes, pic tables and graphics infos (included by event_object_movement.c).\n\n"
+        + "\n".join(out))
+    open(f"{od}/trey_orange_object_event_pointers.h", "w", encoding="utf-8", newline="\n").write(head + "".join(ptr_lines))
+    open(f"{od}/trey_orange_object_event_externs.h", "w", encoding="utf-8", newline="\n").write(head + "".join(ext_lines))
+    open(f"{od}/trey_orange_object_event_palettes.h", "w", encoding="utf-8", newline="\n").write(head + "".join(pal_lines))
+    open("include/constants/trey_orange_event_object_pals.h", "w", encoding="utf-8", newline="\n").write(head + "".join(tag_defs))
+    # enum entries go straight into event_objects.h between markers (preproc can't follow an #include in an enum)
+    text = open("include/constants/event_objects.h", encoding="utf-8").read()
+    block = (SPR_MARK_BEGIN + ": Orange Islands sprites (written by tools/trey/import_orange.py sprites)\n"
+             + "".join(f"    {c},\n" for c in consts) + SPR_MARK_END)
+    if SPR_MARK_BEGIN in text:
+        b = text.index(SPR_MARK_BEGIN)
+        e = text.index(SPR_MARK_END) + len(SPR_MARK_END)
+        text = text[:b] + block + text[e:]
+    else:
+        anchor = "    // TREY (6a) END\n"
+        text = text.replace(anchor, anchor + block, 1)
+    open("include/constants/event_objects.h", "w", encoding="utf-8", newline="\n").write(text)
+    import json
+    json.dump({str(k): v for k, v in mapping.items()}, open("docs/trey/orange_sprites.json", "w", encoding="utf-8"), indent=1)
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("step", choices=["tilesets"])
+    ap.add_argument("step", choices=["tilesets", "sprites"])
     ap.add_argument("--rom", default=DEFAULT_ROM)
     ap.add_argument("--fr", default=DEFAULT_FR)
     ap.add_argument("--pokefirered", default="../pokefirered")
@@ -265,7 +482,7 @@ def main():
     a = ap.parse_args()
     if not os.path.exists("Makefile"):
         die("run from the project root")
-    step_tilesets(a)
+    {"tilesets": step_tilesets, "sprites": step_sprites}[a.step](a)
 
 
 if __name__ == "__main__":
