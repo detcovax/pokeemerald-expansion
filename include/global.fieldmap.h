@@ -259,7 +259,7 @@ struct MapHeaderTrey
     /*0x04*/ u8 layerLinkCount;
     /*0x05*/ u8 padding;
     /*0x06*/ u16 seasonLayoutIds[TREY_SEASONS_COUNT]; // 0 = use the normal layout that season
-    /*0x0E*/ u16 padding2;
+    /*0x0E*/ u16 nightMusic;                         // TREY (6b-3): MUS_* from evening on, 0 = the map's music
     /*0x10*/ u8 seasonWeather[TREY_SEASONS_COUNT];    // TREY (4b): WEATHER_* for that season, 0 = the map's weather
 };
 

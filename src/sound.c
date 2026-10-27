@@ -93,7 +93,7 @@ STATIC_ASSERT(ARRAY_COUNT(sFanfaresJohto) == ARRAY_COUNT(sFanfares), TreyJohtoFa
 
 static const struct Fanfare *GetRegionFanfares(void)
 {
-    if (TreyGetCurrentRegion() == REGION_JOHTO)
+    if (TreyGetCurrentRegion() == REGION_JOHTO || TreyGetCurrentRegion() == REGION_SINNOH) // TREY (6b-3, D34): Sinnoh too
         return sFanfaresJohto;
     return sFanfares;
 }

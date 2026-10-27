@@ -1,5 +1,6 @@
 #include "global.h"
 #include "trey_energy.h" // TREY
+#include "trey_music.h" // TREY (6b-3)
 #include "battle.h"
 #include "battle_hold_effects.h"
 #include "battle_message.h"
@@ -4001,7 +4002,7 @@ static void Cmd_getexp(void)
                     && !gBattleStruct->wildVictorySong)
                 {
                     BattleStopLowHpSound();
-                    PlayBGM(MUS_VICTORY_WILD);
+                    PlayBGM(TreyMusic_Regional(MUS_VICTORY_WILD)); // TREY (6b-3)
                     gBattleStruct->wildVictorySong++;
                 }
 
@@ -12730,7 +12731,7 @@ void BS_SetTeleportOutcome(void)
 void BS_PlayTrainerDefeatedMusic(void)
 {
     NATIVE_ARGS();
-    BtlController_EmitPlayFanfareOrBGM(gBattlerAttacker, B_COMM_TO_CONTROLLER, MUS_VICTORY_TRAINER, TRUE);
+    BtlController_EmitPlayFanfareOrBGM(gBattlerAttacker, B_COMM_TO_CONTROLLER, TreyMusic_Regional(MUS_VICTORY_TRAINER), TRUE); // TREY (6b-3)
     MarkBattlerForControllerExec(gBattlerAttacker);
     gBattlescriptCurrInstr = cmd->nextInstr;
 }

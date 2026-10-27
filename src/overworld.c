@@ -2,6 +2,7 @@
 #include "trey_layers.h" // TREY
 #include "trey_regions.h" // TREY (4a)
 #include "trey_seasons.h" // TREY (4b)
+#include "trey_music.h" // TREY (6b-3)
 #include "overworld.h"
 #include "battle_pyramid.h"
 #include "battle_setup.h"
@@ -1251,7 +1252,7 @@ u16 GetLocationMusic(struct WarpData *warp)
     else if (IsInfiltratedWeatherInstitute(warp) == TRUE)
         return MUS_MT_CHIMNEY;
     else
-        return Overworld_GetMapHeaderByGroupAndId(warp->mapGroup, warp->mapNum)->music;
+        return TreyMusic_MapMusic(Overworld_GetMapHeaderByGroupAndId(warp->mapGroup, warp->mapNum)); // TREY (6b-3): night music
 }
 
 u16 GetCurrLocationDefaultMusic(void)

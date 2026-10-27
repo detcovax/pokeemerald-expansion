@@ -16,6 +16,7 @@ Animations: every animated Sinnoh tileset uses Hoenn's animation frames unchange
 
 Steps (run from the project root; --sinnoh points at a Sinnoh repo checkout or a copy of the needed files):
   tilesets   copy the Sinnoh tilesets, write src/data/tilesets/trey_sinnoh.h (included at the end of src/tilesets.c)
+  music      DPPt songs TREY lacks (36), the sinnoh_gm voicegroup, song ids and table rows (D34)
   preview    render maps from the repo's layouts with the imported tilesets: --maps Twinleaf,... --out DIR
 """
 import argparse
@@ -207,6 +208,62 @@ def step_tilesets(src, dry):
 
 
 # ---------------------------------------------------------------------------------------------------
+# Music (6b-3, D34)
+# ---------------------------------------------------------------------------------------------------
+# Repo songs TREY already has from Heart & Soul (kept, D33/D34): repo song -> TREY song.
+MUSIC_DUPLICATES = {"mus_dpp_mt_coronet": "MUS_DP_MT_CORONET", "mus_dpp_snowpoint": "MUS_DP_SNOWPOINT_DAY",
+                    "mus_dpp_route216": "MUS_DP_ROUTE216_DAY"}
+MUSIC_MARK = "TREY (6b-3): DPPt music from the Sinnoh repo"
+
+
+def splice_after(path, anchor, text):
+    body = read(path)
+    if MUSIC_MARK in body:
+        die(f"{path} already has the Sinnoh music (remove the block to re-import)")
+    i = body.index(anchor) + len(anchor)
+    with open(path, "w", encoding="utf-8", newline="\n") as f:
+        f.write(body[:i] + text + body[i:])
+
+
+def step_music(src, dry):
+    """Copy the repo's mus_dpp_* songs TREY lacks: midis, midi.cfg lines, the sinnoh_gm voicegroup, song ids
+    (a DPP block after DP_MUSIC_END, so no id moves) and song table rows (after mus_dp_stark_mountain).
+    Every sample and keysplit table sinnoh_gm uses is already in TREY (checked 2026-10-26)."""
+    smid, mid = os.path.join(src, "sound/songs/midi"), "sound/songs/midi"
+    table = read(os.path.join(src, "sound/song_table.inc"))
+    songs = [s for s in re.findall(r"^\s*song (mus_dpp_\w+),", table, re.M) if s not in MUSIC_DUPLICATES]
+    have = [s for s in songs if os.path.exists(f"{mid}/{s}.mid")]
+    if have:
+        die(f"already imported: {', '.join(have)}")
+    cfg = {l.split(":")[0]: l for l in read(os.path.join(smid, "midi.cfg")).splitlines() if ":" in l}
+    missing = [s for s in songs if f"{s}.mid" not in cfg]
+    if missing:
+        die(f"no midi.cfg line for {', '.join(missing)}")
+    rows = {m.group(1): m.group(0).strip() for m in re.finditer(r"^\s*song (mus_dpp_\w+),.*$", table, re.M)}
+    width = max(len(s) for s in songs) + 2
+    ids = (f"\n\n// {MUSIC_MARK} (tools/trey/import_sinnoh.py music). After the HGSS/DP blocks so no id moves.\n"
+           f"#define DPP_MUSIC_START              (DP_MUSIC_END + 1)\n"
+           + "".join(f"#define {s.upper():<{width + 2}} (DPP_MUSIC_START + 0x{i:02X})\n" for i, s in enumerate(songs))
+           + f"#define DPP_MUSIC_END                {songs[-1].upper()}")
+    rowtext = f"\n\t@ {MUSIC_MARK}\n" + "".join(f"\t{rows[s]}\n" for s in songs)
+    cfgtext = "".join(cfg[f"{s}.mid"].rstrip() + "\n" for s in songs)
+    if not dry:
+        for s in songs:
+            shutil.copy(f"{smid}/{s}.mid", f"{mid}/{s}.mid")
+        shutil.copy(os.path.join(src, "sound/voicegroups/sinnoh_gm.inc"), "sound/voicegroups/sinnoh_gm.inc")
+        with open(f"{mid}/midi.cfg", "a", encoding="utf-8", newline="\n") as f:
+            f.write(cfgtext)
+        splice_after("include/constants/songs.h", "#define DP_MUSIC_END                 MUS_DP_STARK_MOUNTAIN", ids)
+        splice_after("sound/song_table.inc", "\tsong mus_dp_stark_mountain, MUSIC_PLAYER_BGM, 0\n", rowtext)
+        vg = read("sound/voice_groups.inc").rstrip("\n").splitlines()
+        last = max(i for i, l in enumerate(vg) if l.startswith(".include \"sound/voicegroups/"))
+        vg.insert(last + 1, '.include "sound/voicegroups/sinnoh_gm.inc" @ TREY (6b-3)')
+        with open("sound/voice_groups.inc", "w", encoding="utf-8", newline="\n") as f:
+            f.write("\n".join(vg) + "\n")
+    print(f"import_sinnoh.py music: {len(songs)} songs (skipped, already in TREY: {', '.join(MUSIC_DUPLICATES)})")
+
+
+# ---------------------------------------------------------------------------------------------------
 # Preview: render maps from the repo's layouts with the imported (TREY-side) tilesets
 # ---------------------------------------------------------------------------------------------------
 def trey_tileset_files(name):
@@ -290,7 +347,7 @@ def step_preview(src, maps, outdir, seasons):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("step", choices=["tilesets", "preview"])
+    ap.add_argument("step", choices=["tilesets", "music", "preview"])
     ap.add_argument("--sinnoh", default="../Sinnoh-pokeemerald-expansion")
     ap.add_argument("--dry", action="store_true")
     ap.add_argument("--maps", default="TwinleafTown,JubilifeCity,HearthomeCity,SnowpointCity,Route210_South")
@@ -301,6 +358,8 @@ def main():
         die("run from the project's root folder")
     if a.step == "tilesets":
         step_tilesets(a.sinnoh, a.dry)
+    elif a.step == "music":
+        step_music(a.sinnoh, a.dry)
     else:
         step_preview(a.sinnoh, a.maps.split(","), a.out, a.seasons.split(","))
 

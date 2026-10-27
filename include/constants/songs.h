@@ -740,6 +740,46 @@
 #define MUS_DP_STARK_MOUNTAIN        (DP_MUSIC_START + 0x0A)  // Stark Mountain
 #define DP_MUSIC_END                 MUS_DP_STARK_MOUNTAIN
 
+// TREY (6b-3): DPPt music from the Sinnoh repo (tools/trey/import_sinnoh.py music). After the HGSS/DP blocks so no id moves.
+#define DPP_MUSIC_START              (DP_MUSIC_END + 1)
+#define MUS_DPP_TWINLEAF               (DPP_MUSIC_START + 0x00)
+#define MUS_DPP_LAKE                   (DPP_MUSIC_START + 0x01)
+#define MUS_DPP_ROUTE201               (DPP_MUSIC_START + 0x02)
+#define MUS_DPP_JUBILIFE               (DPP_MUSIC_START + 0x03)
+#define MUS_DPP_LAB                    (DPP_MUSIC_START + 0x04)
+#define MUS_DPP_POKECENTER             (DPP_MUSIC_START + 0x05)
+#define MUS_DPP_ROUTE203               (DPP_MUSIC_START + 0x06)
+#define MUS_DPP_OREBURGH               (DPP_MUSIC_START + 0x07)
+#define MUS_DPP_FLOAROMA               (DPP_MUSIC_START + 0x08)
+#define MUS_DPP_ROUTE205               (DPP_MUSIC_START + 0x09)
+#define MUS_DPP_ETERNA_FOREST          (DPP_MUSIC_START + 0x0A)
+#define MUS_DPP_ETERNA                 (DPP_MUSIC_START + 0x0B)
+#define MUS_DPP_OLD_CHATEAU            (DPP_MUSIC_START + 0x0C)
+#define MUS_DPP_HEARTHOME              (DPP_MUSIC_START + 0x0D)
+#define MUS_DPP_VEILSTONE              (DPP_MUSIC_START + 0x0E)
+#define MUS_DPP_GALACTIC_HQ            (DPP_MUSIC_START + 0x0F)
+#define MUS_DPP_CANALAVE               (DPP_MUSIC_START + 0x10)
+#define MUS_DPP_SUNYSHORE              (DPP_MUSIC_START + 0x11)
+#define MUS_DPP_ROUTE210               (DPP_MUSIC_START + 0x12)
+#define MUS_DPP_ROUTE213               (DPP_MUSIC_START + 0x13)
+#define MUS_DPP_VICTORY_ROAD           (DPP_MUSIC_START + 0x14)
+#define MUS_DPP_LEAGUE_OUTSIDE         (DPP_MUSIC_START + 0x15)
+#define MUS_DPP_LEAGUE_INSIDE          (DPP_MUSIC_START + 0x16)
+#define MUS_DPP_BATTLE_HALL            (DPP_MUSIC_START + 0x17)
+#define MUS_DPP_CYCLING                (DPP_MUSIC_START + 0x18)
+#define MUS_DPP_CREDITS                (DPP_MUSIC_START + 0x19)
+#define MUS_DPP_VS_WILD                (DPP_MUSIC_START + 0x1A)
+#define MUS_DPP_VICTORY_WILD           (DPP_MUSIC_START + 0x1B)
+#define MUS_DPP_VS_GALACTIC            (DPP_MUSIC_START + 0x1C)
+#define MUS_DPP_VICTORY_GALACTIC       (DPP_MUSIC_START + 0x1D)
+#define MUS_DPP_ENCOUNTER_GALACTIC     (DPP_MUSIC_START + 0x1E)
+#define MUS_DPP_VS_CYRUS               (DPP_MUSIC_START + 0x1F)
+#define MUS_DPP_VS_DIALGA_PALKIA       (DPP_MUSIC_START + 0x20)
+#define MUS_DPP_VS_CYNTHIA             (DPP_MUSIC_START + 0x21)
+#define MUS_DPP_SANDGEM                (DPP_MUSIC_START + 0x22)
+#define MUS_DPP_PASTORIA               (DPP_MUSIC_START + 0x23)
+#define DPP_MUSIC_END                MUS_DPP_PASTORIA
+
 
 #define MUS_ROUTE118                0x7FFF  // Map is split into 2 music sections. controlled by GetCurrLocationDefaultMusic().
 

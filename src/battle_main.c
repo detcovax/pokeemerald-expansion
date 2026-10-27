@@ -1,5 +1,6 @@
 #include "global.h"
 #include "trey_regional.h" // TREY
+#include "trey_music.h" // TREY (6b-3)
 #include "battle.h"
 #include "battle_anim.h"
 #include "battle_ai_main.h"
@@ -5360,10 +5361,10 @@ static void HandleEndTurn_BattleWon(void)
             PlayBGM(MUS_VICTORY_AQUA_MAGMA);
             break;
         case TRAINER_CLASS_LEADER:
-            PlayBGM(MUS_VICTORY_GYM_LEADER);
+            PlayBGM(TreyMusic_Regional(MUS_VICTORY_GYM_LEADER)); // TREY (6b-3)
             break;
         default:
-            PlayBGM(MUS_VICTORY_TRAINER);
+            PlayBGM(TreyMusic_Regional(MUS_VICTORY_TRAINER)); // TREY (6b-3)
             break;
         }
     }

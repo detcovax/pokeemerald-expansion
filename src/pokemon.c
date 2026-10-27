@@ -4,6 +4,7 @@
 #include "trey_energy.h" // TREY
 #include "trey_regional.h" // TREY
 #include "trey_battle.h" // TREY
+#include "trey_music.h" // TREY (6b-3)
 #include "malloc.h"
 #include "apprentice.h"
 #include "battle.h"
@@ -5316,7 +5317,7 @@ void PlayBattleBGM(void)
 {
     ResetMapMusic();
     m4aMPlayAllStop();
-    PlayBGM(GetBattleBGM());
+    PlayBGM(TreyMusic_Regional(GetBattleBGM())); // TREY (6b-3): Johto/Sinnoh battle themes
 }
 
 void PlayMapChosenOrBattleBGM(u16 songId)
@@ -5326,7 +5327,7 @@ void PlayMapChosenOrBattleBGM(u16 songId)
     if (songId)
         PlayNewMapMusic(songId);
     else
-        PlayNewMapMusic(GetBattleBGM());
+        PlayNewMapMusic(TreyMusic_Regional(GetBattleBGM())); // TREY (6b-3)
 }
 
 // Identical to PlayMapChosenOrBattleBGM, but uses a task instead
