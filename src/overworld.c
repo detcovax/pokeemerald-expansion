@@ -1173,7 +1173,7 @@ static bool16 ShouldLegendaryMusicPlayAtLocation(struct WarpData *warp)
 {
     if (!FlagGet(FLAG_SYS_WEATHER_CTRL))
         return FALSE;
-    if (warp->mapGroup == 0)
+    if (warp->mapGroup == MAP_GROUP(MAP_LILYCOVE_CITY)) // TREY (6-G): was 0 (Hoenn's outdoor group)
     {
         switch (warp->mapNum)
         {

@@ -15,7 +15,7 @@
 // A save is only loaded if its header matches these two values.
 // Bump TREY_SAVE_VERSION on ANY change to a save structure.
 #define TREY_SAVE_MAGIC    0x59455254 // "TREY"
-#define TREY_SAVE_VERSION  4 // 2: 10-bit met location + Orange variant bit (Phase 1b). 3: Energy replaces PP storage (E1). 4: Pokédex discovery order (4d)
+#define TREY_SAVE_VERSION  5 // 2: 10-bit met location + Orange variant bit (Phase 1b). 3: Energy replaces PP storage (E1). 4: Pokédex discovery order (4d). 5: compact map groups, saved map group/number values moved (6-G, D36)
 
 // Reserved bytes at the end of each save block. New save data is carved out of these.
 #define TREY_SB1_RESERVED  512

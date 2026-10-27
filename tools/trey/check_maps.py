@@ -219,18 +219,21 @@ def main():
     if len(sections) + 1 >= 0x3FD:
         error(f"region_map_sections.json has {len(sections)} locations; the limit is {0x3FD - 1}.")
 
-    # Map group scheme (4a, TREY_PLAN.md 5.1). Emerald's own groups stay as they are. New groups are named
-    # gMapGroup_<Region>_<Type>[_<Place>], e.g. gMapGroup_Kanto_Outdoor, gMapGroup_Kanto_Indoor_Pallet,
-    # and every map in them must be in that region (Sevii maps go in Kanto groups).
+    # Map group scheme (4a, TREY_PLAN.md 5.1; compact since 6-G, D36). EVERY group is named
+    # gMapGroup_<Region>_<Type>[_<Place>], e.g. gMapGroup_Kanto_Outdoor, gMapGroup_Hoenn_Indoor_West
+    # (only gMapGroup_TreyTest is exempt), and every map in it must be in that region (Sevii maps go in Kanto groups).
     GROUP_REGIONS = {"Kanto": "REGION_KANTO", "Orange": "REGION_ORANGE", "Johto": "REGION_JOHTO", "Hoenn": "REGION_HOENN",
                      "Sinnoh": "REGION_SINNOH", "Kitakami": "REGION_KITAKAMI"}
-    GROUP_TYPES = {"Outdoor", "Sky", "Underground", "Underwater", "Indoor", "Dungeon"}
+    GROUP_TYPES = {"Outdoor", "Sky", "Underground", "Underwater", "Indoor", "Dungeon", "Special"}
     section_region = {sec.get("id"): sec.get("trey_region") for sec in sections}
     for group in group_order:
         name = group[len("gMapGroup_"):] if group.startswith("gMapGroup_") else group
         parts = name.split("_")
+        if group == "gMapGroup_TreyTest":
+            continue
         if parts[0] not in GROUP_REGIONS:
-            continue  # Emerald's groups and gMapGroup_TreyTest
+            error(f"map_groups.json {group}: groups are named gMapGroup_<Region>_<Type>[_<Place>] (D36; run tools/trey/regroup_maps.py).")
+            continue
         if len(parts) < 2 or parts[1] not in GROUP_TYPES:
             error(f"map_groups.json {group}: TREY groups are named gMapGroup_<Region>_<Type>[_<Place>] with Type one of {sorted(GROUP_TYPES)}.")
             continue

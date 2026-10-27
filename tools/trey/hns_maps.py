@@ -16,6 +16,8 @@ Copies Heart & Soul's Johto and Sinjoh Ruins maps into TREY, like tools/trey/imp
   Kanto     Route 22 -> Pokemon League Reception Gate -> FRLG's Route 22 gate -> Route 23 (D32).
 
 Story scripts for Johto are written by hand later; after that, don't re-run this step over edited maps.
+6-G (D36): map groups are compact now; after a re-run, run tools/trey/regroup_maps.py (this step still writes the
+old per-town groups, which regroup_maps.py folds into gMapGroup_Johto_Indoor_West/East).
 """
 import collections
 import json
