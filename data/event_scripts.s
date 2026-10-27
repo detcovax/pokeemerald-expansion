@@ -1058,6 +1058,7 @@ gStdScripts_End::
 @ (signs, talk-only NPCs, marts, nurses and item balls; story scripts are written for TREY per map).
 	.include "data/scripts/trey_frlg_maps.inc"
 	.include "data/scripts/trey_hns_maps.inc" @ TREY (6a-5): Johto/Sinjoh maps
+	.include "data/scripts/trey_sinnoh_maps.inc" @ TREY (6b-4): Sinnoh maps
 	.include "data/scripts/trey_whirlpool.inc" @ TREY (6a-5)
 	.include "data/scripts/item_ball_scripts_frlg.inc"
 	.include "data/scripts/flavor_text.inc"

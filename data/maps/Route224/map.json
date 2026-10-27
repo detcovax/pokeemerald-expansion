@@ -1,0 +1,37 @@
+{
+  "id": "MAP_ROUTE224",
+  "name": "Route224",
+  "layout": "LAYOUT_ROUTE224",
+  "music": "MUS_DPP_ROUTE210",
+  "region_map_section": "MAPSEC_ROUTE_224",
+  "requires_flash": false,
+  "weather": "WEATHER_SUNNY",
+  "map_type": "MAP_TYPE_ROUTE",
+  "allow_cycling": true,
+  "allow_escaping": false,
+  "allow_running": true,
+  "show_map_name": true,
+  "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
+  "connections": [
+    {
+      "map": "MAP_SINNOH_POKEMON_LEAGUE",
+      "offset": 44,
+      "direction": "left"
+    }
+  ],
+  "object_events": [],
+  "warp_events": [],
+  "coord_events": [],
+  "bg_events": [
+    {
+      "type": "sign",
+      "x": 11,
+      "y": 70,
+      "elevation": 0,
+      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
+      "script": "TreySinnoh_EventScript_NotBuiltYet"
+    }
+  ],
+  "region": "REGION_SINNOH",
+  "floor_number": 0
+}

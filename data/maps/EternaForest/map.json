@@ -1,0 +1,162 @@
+{
+  "id": "MAP_ETERNA_FOREST",
+  "name": "EternaForest",
+  "layout": "LAYOUT_ETERNA_FOREST",
+  "music": "MUS_DPP_ETERNA_FOREST",
+  "region_map_section": "MAPSEC_ETERNA_FOREST",
+  "requires_flash": false,
+  "weather": "WEATHER_SHADE",
+  "map_type": "MAP_TYPE_TOWN",
+  "allow_cycling": true,
+  "allow_escaping": false,
+  "allow_running": true,
+  "show_map_name": true,
+  "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
+  "connections": null,
+  "object_events": [
+    {
+      "graphics_id": "OBJ_EVENT_GFX_BUG_CATCHER",
+      "x": 11,
+      "y": 75,
+      "elevation": 3,
+      "movement_type": "MOVEMENT_TYPE_WANDER_AROUND",
+      "movement_range_x": 1,
+      "movement_range_y": 1,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "EternaForest_EventScript_PtNpc1",
+      "flag": "0"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_ITEM_BALL",
+      "x": 55,
+      "y": 8,
+      "elevation": 3,
+      "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "ITEM_ANTIDOTE",
+      "script": "Common_EventScript_FindItem",
+      "flag": "FLAG_SINNOH_ITEM_ETERNA_FOREST_ANTIDOTE"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_ITEM_BALL",
+      "x": 61,
+      "y": 8,
+      "elevation": 3,
+      "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "ITEM_PARALYZE_HEAL",
+      "script": "Common_EventScript_FindItem",
+      "flag": "FLAG_SINNOH_ITEM_ETERNA_FOREST_PARALYZE_HEAL"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_ITEM_BALL",
+      "x": 58,
+      "y": 10,
+      "elevation": 3,
+      "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "ITEM_NET_BALL",
+      "script": "Common_EventScript_FindItem",
+      "flag": "FLAG_SINNOH_ITEM_ETERNA_FOREST_NET_BALL"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_ITEM_BALL",
+      "x": 59,
+      "y": 14,
+      "elevation": 3,
+      "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "ITEM_POTION",
+      "script": "Common_EventScript_FindItem",
+      "flag": "FLAG_SINNOH_ITEM_ETERNA_FOREST_POTION"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_ITEM_BALL",
+      "x": 58,
+      "y": 18,
+      "elevation": 3,
+      "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "ITEM_GREEN_SHARD",
+      "script": "Common_EventScript_FindItem",
+      "flag": "FLAG_SINNOH_ITEM_ETERNA_FOREST_GREEN_SHARD"
+    }
+  ],
+  "warp_events": [
+    {
+      "x": 16,
+      "y": 80,
+      "elevation": 0,
+      "dest_map": "MAP_ROUTE205_SOUTH",
+      "dest_warp_id": "0"
+    },
+    {
+      "x": 17,
+      "y": 80,
+      "elevation": 0,
+      "dest_map": "MAP_ROUTE205_SOUTH",
+      "dest_warp_id": "1"
+    },
+    {
+      "x": 70,
+      "y": 27,
+      "elevation": 0,
+      "dest_map": "MAP_ROUTE205_NORTH",
+      "dest_warp_id": "0"
+    },
+    {
+      "x": 70,
+      "y": 26,
+      "elevation": 0,
+      "dest_map": "MAP_ROUTE205_NORTH",
+      "dest_warp_id": "1"
+    },
+    {
+      "x": 59,
+      "y": 7,
+      "elevation": 0,
+      "dest_map": "MAP_OLD_CHATEAU_ENTRANCE",
+      "dest_warp_id": "0"
+    }
+  ],
+  "coord_events": [],
+  "bg_events": [
+    {
+      "type": "hidden_item",
+      "x": 59,
+      "y": 22,
+      "elevation": 3,
+      "item": "ITEM_HONEY",
+      "flag": "FLAG_SINNOH_HIDDEN_ETERNA_FOREST_HONEY"
+    },
+    {
+      "type": "sign",
+      "x": 16,
+      "y": 77,
+      "elevation": 0,
+      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
+      "script": "EternaForest_EventScript_Sign2"
+    },
+    {
+      "type": "sign",
+      "x": 64,
+      "y": 64,
+      "elevation": 0,
+      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
+      "script": "EternaForest_EventScript_Sign1"
+    }
+  ],
+  "region": "REGION_SINNOH",
+  "floor_number": 0
+}

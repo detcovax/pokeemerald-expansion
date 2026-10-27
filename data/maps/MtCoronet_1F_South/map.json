@@ -1,0 +1,46 @@
+{
+  "id": "MAP_MT_CORONET_1F_SOUTH",
+  "name": "MtCoronet_1F_South",
+  "layout": "LAYOUT_MT_CORONET_1F_SOUTH",
+  "music": "MUS_DP_MT_CORONET",
+  "region_map_section": "MAPSEC_MT_CORONET",
+  "requires_flash": false,
+  "weather": "WEATHER_NONE",
+  "map_type": "MAP_TYPE_UNDERGROUND",
+  "allow_cycling": true,
+  "allow_escaping": true,
+  "allow_running": true,
+  "show_map_name": false,
+  "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
+  "connections": null,
+  "object_events": [],
+  "warp_events": [
+    {
+      "x": 5,
+      "y": 7,
+      "elevation": 0,
+      "dest_map": "MAP_ROUTE207",
+      "dest_warp_id": "0"
+    },
+    {
+      "x": 36,
+      "y": 20,
+      "elevation": 0,
+      "dest_map": "MAP_ROUTE208",
+      "dest_warp_id": "0"
+    }
+  ],
+  "coord_events": [],
+  "bg_events": [
+    {
+      "type": "sign",
+      "x": 29,
+      "y": 2,
+      "elevation": 0,
+      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
+      "script": "TreySinnoh_EventScript_NotBuiltYet"
+    }
+  ],
+  "region": "REGION_SINNOH",
+  "floor_number": 0
+}

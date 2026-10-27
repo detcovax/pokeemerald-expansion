@@ -1737,7 +1737,13 @@
 #define TREY_FLAG_JOHTO_ITEMS_END       (TREY_FLAG_JOHTO_ITEMS_START + TREY_FLAG_JOHTO_ITEMS_COUNT - 1)
 #include "constants/trey_johto_flags.h"
 
-#define TREY_FLAG_NEXT_FREE             (TREY_FLAG_JOHTO_ITEMS_END + 1) // next unused TREY flag
+// Item balls and hidden items on the Sinnoh maps (6b-4), FLAG_SINNOH_* from tools/trey/import_sinnoh.py (maps).
+#define TREY_FLAG_SINNOH_ITEMS_START    (TREY_FLAG_JOHTO_ITEMS_END + 1)
+#define TREY_FLAG_SINNOH_ITEMS_COUNT    512
+#define TREY_FLAG_SINNOH_ITEMS_END      (TREY_FLAG_SINNOH_ITEMS_START + TREY_FLAG_SINNOH_ITEMS_COUNT - 1)
+#include "constants/trey_sinnoh_flags.h"
+
+#define TREY_FLAG_NEXT_FREE             (TREY_FLAG_SINNOH_ITEMS_END + 1) // next unused TREY flag
 
 #define FLAGS_COUNT (TREY_FLAGS_END + 1) // TREY: was (DAILY_FLAGS_END + 1)
 

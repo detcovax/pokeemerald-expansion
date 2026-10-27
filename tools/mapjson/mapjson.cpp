@@ -798,8 +798,9 @@ void process_groups(string groups_filepath, vector<string> &map_filepaths, strin
         }
         string map_name = json_to_string(map_data, "name");
 
-        // TREY (5a, 6a): the TREY (emerald) build keeps the FRLG Kanto/Sevii maps and the Johto maps as well as Hoenn.
-        if ((version == "emerald" && region != "REGION_HOENN" && region != "REGION_KANTO" && region != "REGION_JOHTO")
+        // TREY (5a, 6a, 6b-4): the TREY (emerald) build keeps the FRLG Kanto/Sevii, Johto and Sinnoh maps as well as Hoenn.
+        if ((version == "emerald" && region != "REGION_HOENN" && region != "REGION_KANTO" && region != "REGION_JOHTO"
+             && region != "REGION_SINNOH")
          || (version == "firered" && region != "REGION_KANTO")) {
             invalid_maps.push_back(map_name);
         }

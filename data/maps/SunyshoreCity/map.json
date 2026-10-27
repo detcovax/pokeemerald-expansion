@@ -1,0 +1,104 @@
+{
+  "id": "MAP_SUNYSHORE_CITY",
+  "name": "SunyshoreCity",
+  "layout": "LAYOUT_SUNYSHORE_CITY",
+  "music": "MUS_DPP_SUNYSHORE",
+  "region_map_section": "MAPSEC_SUNYSHORE_CITY",
+  "requires_flash": false,
+  "weather": "WEATHER_SUNNY",
+  "map_type": "MAP_TYPE_CITY",
+  "allow_cycling": true,
+  "allow_escaping": false,
+  "allow_running": true,
+  "show_map_name": true,
+  "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
+  "connections": [
+    {
+      "map": "MAP_ROUTE222",
+      "offset": 25,
+      "direction": "left"
+    },
+    {
+      "map": "MAP_ROUTE223",
+      "offset": -2,
+      "direction": "up"
+    }
+  ],
+  "object_events": [],
+  "warp_events": [
+    {
+      "x": 4,
+      "y": 48,
+      "elevation": 0,
+      "dest_map": "MAP_ROUTE222_ACCESS",
+      "dest_warp_id": "1"
+    },
+    {
+      "x": 32,
+      "y": 42,
+      "elevation": 0,
+      "dest_map": "MAP_SUNYSHORE_CITY_POKEMON_CENTER_1F",
+      "dest_warp_id": "0"
+    },
+    {
+      "x": 25,
+      "y": 30,
+      "elevation": 0,
+      "dest_map": "MAP_SUNYSHORE_CITY_MART",
+      "dest_warp_id": "0"
+    }
+  ],
+  "coord_events": [],
+  "bg_events": [
+    {
+      "type": "sign",
+      "x": 49,
+      "y": 6,
+      "elevation": 0,
+      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
+      "script": "TreySinnoh_EventScript_NotBuiltYet"
+    },
+    {
+      "type": "sign",
+      "x": 58,
+      "y": 6,
+      "elevation": 0,
+      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
+      "script": "TreySinnoh_EventScript_NotBuiltYet"
+    },
+    {
+      "type": "sign",
+      "x": 17,
+      "y": 9,
+      "elevation": 0,
+      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
+      "script": "TreySinnoh_EventScript_NotBuiltYet"
+    },
+    {
+      "type": "sign",
+      "x": 17,
+      "y": 30,
+      "elevation": 0,
+      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
+      "script": "TreySinnoh_EventScript_NotBuiltYet"
+    },
+    {
+      "type": "sign",
+      "x": 61,
+      "y": 30,
+      "elevation": 0,
+      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
+      "script": "TreySinnoh_EventScript_NotBuiltYet"
+    },
+    {
+      "type": "sign",
+      "x": 59,
+      "y": 44,
+      "elevation": 0,
+      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
+      "script": "TreySinnoh_EventScript_NotBuiltYet"
+    }
+  ],
+  "region": "REGION_SINNOH",
+  "floor_number": 0
+}

@@ -1,0 +1,107 @@
+{
+  "id": "MAP_FLOAROMA_MEADOW",
+  "name": "FloaromaMeadow",
+  "layout": "LAYOUT_FLOAROMA_MEADOW",
+  "music": "MUS_DPP_FLOAROMA",
+  "region_map_section": "MAPSEC_FLOAROMA_MEADOW",
+  "requires_flash": false,
+  "weather": "WEATHER_NONE",
+  "map_type": "MAP_TYPE_ROUTE",
+  "allow_cycling": false,
+  "allow_escaping": false,
+  "allow_running": false,
+  "show_map_name": true,
+  "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
+  "connections": null,
+  "object_events": [
+    {
+      "graphics_id": "OBJ_EVENT_GFX_ITEM_BALL",
+      "x": 9,
+      "y": 13,
+      "elevation": 3,
+      "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "ITEM_MIRACLE_SEED",
+      "script": "Common_EventScript_FindItem",
+      "flag": "FLAG_SINNOH_ITEM_FLOAROMA_MEADOW_MIRACLE_SEED"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_ITEM_BALL",
+      "x": 15,
+      "y": 13,
+      "elevation": 3,
+      "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "ITEM_ULTRA_BALL",
+      "script": "Common_EventScript_FindItem",
+      "flag": "FLAG_SINNOH_ITEM_FLOAROMA_MEADOW_ULTRA_BALL"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_ITEM_BALL",
+      "x": 21,
+      "y": 13,
+      "elevation": 3,
+      "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "ITEM_LEAF_STONE",
+      "script": "Common_EventScript_FindItem",
+      "flag": "FLAG_SINNOH_ITEM_FLOAROMA_MEADOW_LEAF_STONE"
+    }
+  ],
+  "warp_events": [
+    {
+      "x": 10,
+      "y": 50,
+      "elevation": 0,
+      "dest_map": "MAP_FLOAROMA_TOWN",
+      "dest_warp_id": "5"
+    },
+    {
+      "x": 11,
+      "y": 50,
+      "elevation": 0,
+      "dest_map": "MAP_FLOAROMA_TOWN",
+      "dest_warp_id": "6"
+    },
+    {
+      "x": 35,
+      "y": 41,
+      "elevation": 0,
+      "dest_map": "MAP_FLOAROMA_MEADOW_HOUSE",
+      "dest_warp_id": "0"
+    },
+    {
+      "x": 48,
+      "y": 10,
+      "elevation": 0,
+      "dest_map": "MAP_FLOAROMA_MEADOW",
+      "dest_warp_id": "0"
+    },
+    {
+      "x": 49,
+      "y": 10,
+      "elevation": 0,
+      "dest_map": "MAP_FLOAROMA_MEADOW",
+      "dest_warp_id": "0"
+    }
+  ],
+  "coord_events": [],
+  "bg_events": [
+    {
+      "type": "hidden_item",
+      "x": 27,
+      "y": 13,
+      "elevation": 3,
+      "item": "ITEM_HYPER_POTION",
+      "flag": "FLAG_SINNOH_HIDDEN_FLOAROMA_MEADOW_HYPER_POTION"
+    }
+  ],
+  "region": "REGION_SINNOH",
+  "floor_number": 0
+}

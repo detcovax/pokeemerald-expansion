@@ -1,0 +1,61 @@
+{
+  "id": "MAP_RESORT_AREA",
+  "name": "ResortArea",
+  "layout": "LAYOUT_RESORT_AREA",
+  "music": "MUS_DPP_SUNYSHORE",
+  "region_map_section": "MAPSEC_RESORT_AREA",
+  "requires_flash": false,
+  "weather": "WEATHER_SUNNY",
+  "map_type": "MAP_TYPE_TOWN",
+  "allow_cycling": true,
+  "allow_escaping": false,
+  "allow_running": true,
+  "show_map_name": true,
+  "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
+  "connections": [
+    {
+      "map": "MAP_ROUTE229",
+      "offset": -30,
+      "direction": "up"
+    }
+  ],
+  "object_events": [],
+  "warp_events": [
+    {
+      "x": 9,
+      "y": 10,
+      "elevation": 0,
+      "dest_map": "MAP_RESORT_AREA_POKEMON_CENTER_1F",
+      "dest_warp_id": "0"
+    }
+  ],
+  "coord_events": [],
+  "bg_events": [
+    {
+      "type": "sign",
+      "x": 28,
+      "y": 5,
+      "elevation": 0,
+      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
+      "script": "TreySinnoh_EventScript_NotBuiltYet"
+    },
+    {
+      "type": "sign",
+      "x": 4,
+      "y": 17,
+      "elevation": 0,
+      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
+      "script": "TreySinnoh_EventScript_NotBuiltYet"
+    },
+    {
+      "type": "sign",
+      "x": 18,
+      "y": 21,
+      "elevation": 0,
+      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
+      "script": "TreySinnoh_EventScript_NotBuiltYet"
+    }
+  ],
+  "region": "REGION_SINNOH",
+  "floor_number": 0
+}

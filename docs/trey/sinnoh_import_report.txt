@@ -1,0 +1,215 @@
+TREY (6b-4): what tools/trey/import_sinnoh.py (maps) kept, removed and added on each Sinnoh map.
+
+TwinleafTown: coord dropped 8, hidden item 1, npc kept 3, sign kept 1
+SandgemTown: closed door/ladder (Not built yet) 1, coord dropped 29, hidden item 1, npc kept 3, sign kept 6, story object dropped 2, var graphics 2, warp into Hoenn removed (door closed) 1
+JubilifeCity: coord dropped 86, hidden item 1, item ball 1, npc dropped 4, npc kept 11, sign kept 10, story object dropped 4, var graphics 1
+OreburghCity: closed door/ladder (Not built yet) 2, coord dropped 1, hidden item 1, npc kept 15, sign kept 7, warp into Hoenn removed (door closed) 1
+FloaromaTown: hidden item 1, npc kept 6, sign kept 4, story object dropped 2
+EternaCity: coord dropped 8, hidden item 1, item ball 1, npc kept 8, sign kept 4, story object dropped 4
+HearthomeCity: closed door/ladder (Not built yet) 5
+SolaceonTown: closed door/ladder (Not built yet) 2
+CelesticTown: closed door/ladder (Not built yet) 1
+VeilstoneCity: closed door/ladder (Not built yet) 11, warp into Hoenn removed (door closed) 1
+PastoriaCity: closed door/ladder (Not built yet) 7
+CanalaveCity: closed door/ladder (Not built yet) 2
+SnowpointCity: closed door/ladder (Not built yet) 3
+SunyshoreCity: closed door/ladder (Not built yet) 6
+SinnohPokemonLeague: closed door/ladder (Not built yet) 3, map type -> MAP_TYPE_TOWN 1
+Route201: coord dropped 59, hidden item 1, npc dropped 1, npc kept 3, sign kept 3, story object dropped 2, var graphics 1
+Route202: coord dropped 10, hidden item 1, item ball 1, npc kept 1, sign kept 3, trainer 3, var graphics 1
+Route203: coord dropped 4, hidden item 2, item ball 3, npc kept 1, sign kept 4, story object dropped 1, trainer 5
+Route204: hidden item 2, item ball 3, npc kept 5, sign kept 4, trainer 7
+Route205_North: hidden item 1, item ball 4, npc kept 1, sign kept 3, trainer 3
+Route205_South: coord dropped 24, hidden item 1, item ball 4, npc kept 1, sign kept 5, story object dropped 3, trainer 8
+Route206: closed door/ladder (Not built yet) 1
+Route207: 
+Route208: closed door/ladder (Not built yet) 1
+Route209: 
+Route210_North: 
+Route210_South: closed door/ladder (Not built yet) 1
+Route211_East: 
+Route211_West: 
+Route212_North: 
+Route212_South: closed door/ladder (Not built yet) 1, item ball 1
+Route213: closed door/ladder (Not built yet) 4
+Route214: closed door/ladder (Not built yet) 1
+Route215: 
+Route216: closed door/ladder (Not built yet) 1
+Route217: closed door/ladder (Not built yet) 2
+Route218: 
+Route219: 
+Route220: 
+Route221: closed door/ladder (Not built yet) 2
+Route222: closed door/ladder (Not built yet) 2
+Route223: 
+Route224: closed door/ladder (Not built yet) 1
+Route225: closed door/ladder (Not built yet) 1
+Route226: closed door/ladder (Not built yet) 1
+Route227: closed door/ladder (Not built yet) 1
+Route228: closed door/ladder (Not built yet) 2
+Route229: 
+Route230: 
+VerityLakefront: hidden item 1, sign kept 1
+ValorLakefront: closed door/ladder (Not built yet) 3
+AcuityLakefront: 
+FightArea: closed door/ladder (Not built yet) 2
+SurvivalArea: closed door/ladder (Not built yet) 3
+ResortArea: closed door/ladder (Not built yet) 3
+LakeVerity: closed door/ladder (Not built yet) 1, coord dropped 34, hidden item 1, item ball 1, story object dropped 2
+LakeValor: closed door/ladder (Not built yet) 1
+LakeAcuity: closed door/ladder (Not built yet) 1
+ValleyWindworks: coord dropped 2, hidden item 1, item ball 2, sign kept 1, story object dropped 1, trainer 1
+EternaForest: coord dropped 4, hidden item 1, item ball 5, npc kept 1, sign kept 2, story object dropped 1, trainer 8
+FloaromaMeadow: hidden item 1, item ball 3, map type -> MAP_TYPE_ROUTE 1, npc dropped 1, story object dropped 2
+OreburghGate_1F: closed door/ladder (Not built yet) 1, item ball 1, npc dropped 1, npc kept 1, trainer 2
+OreburghMine_B1F: hidden item 1, item ball 1, npc kept 2
+OreburghMine_B2F: npc kept 4, story object dropped 1, trainer 2
+RavagedPath: hidden item 1, item ball 2
+MtCoronet_B1F: 
+MtCoronet_1F_South: closed door/ladder (Not built yet) 1
+MtCoronet_1F_North_Room1: closed door/ladder (Not built yet) 1
+MtCoronet_1F_North_Room2: 
+OldChateau_Entrance: map type -> MAP_TYPE_INDOOR 1
+OldChateau_SideRoom_1: item ball 1, map type -> MAP_TYPE_INDOOR 1
+OldChateau_SideRoom_2: map type -> MAP_TYPE_INDOOR 1
+OldChateau_DiningRoom: item ball 1, map type -> MAP_TYPE_INDOOR 1
+OldChateau_2F: item ball 1, map type -> MAP_TYPE_INDOOR 1
+Route206_North: 
+Route206_South: 
+Route208_Access: 
+Route209_Access: 
+Route212_Access: 
+Route213_Access: 
+Route214_Access: 
+Route215_Access: 
+Route218_East: 
+Route218_West: 
+Route222_Access: 
+Route225_Access: 
+Route226_Access: 
+HotelGrandLake: 
+ValleyWindworks_Inside: map type -> MAP_TYPE_INDOOR 1, npc dropped 1, story object dropped 2, trainer 2
+Route205_House: map type -> MAP_TYPE_INDOOR 1, npc kept 2
+TwinleafTown_MainHouse_1F: dropped (D37) 1, story object dropped 1
+TwinleafTown_MainHouse_2F: story object dropped 1
+TwinleafTown_RivalsHouse_1F: npc kept 1
+TwinleafTown_RivalsHouse_2F: coord dropped 1, story object dropped 1
+TwinleafTown_House1: npc kept 2
+TwinleafTown_House2: npc kept 1
+SandgemTown_RivalHouse_F1: npc kept 2
+SandgemTown_RivalHouse_F2: 
+SandgemTown_House1: npc kept 2
+SandgemTown_PokemonCenter_1F: npc kept 3, nurse 1
+SandgemTown_PokemonCenter_2F: closed door/ladder (Not built yet) 5, npc kept 1
+SandgemTown_Mart: clerk 1, npc kept 2
+JubilifeCity_PokemonSchool: coord dropped 4, npc kept 6, story object dropped 1, trainer 2
+JubilifeCity_JubilifeTV_F1: closed door/ladder (Not built yet) 1, npc kept 5
+JubilifeCity_JubilifeTV_F2: closed door/ladder (Not built yet) 1, npc kept 3
+JubilifeCity_JubilifeTV_F3: closed door/ladder (Not built yet) 1, npc kept 4
+JubilifeCity_JubilifeTV_F4: closed door/ladder (Not built yet) 1, npc kept 3
+JubilifeCity_PoketchCompany_F1: npc kept 3
+JubilifeCity_PoketchCompany_F2: npc kept 4
+JubilifeCity_PoketchCompany_F3: npc kept 3
+JubilifeCity_Flat1_F1: npc kept 3
+JubilifeCity_Flat1_F2: npc kept 4
+JubilifeCity_Flat1_F3: 
+JubilifeCity_Flat2_F1: npc kept 3
+JubilifeCity_Flat2_F2: npc kept 3
+JubilifeCity_Flat2_F3: npc kept 1
+JubilifeCity_Flat3_F1: npc kept 4
+JubilifeCity_Flat3_F2: npc kept 2
+JubilifeCity_Flat3_F3: npc kept 2
+JubilifeCity_PokemonCenter_1F: npc kept 3, nurse 1
+JubilifeCity_PokemonCenter_2F: closed door/ladder (Not built yet) 5
+JubilifeCity_Mart: clerk 1, npc kept 3
+OreburghCity_Flat1_F1: npc kept 3
+OreburghCity_Flat1_F2: npc kept 4
+OreburghCity_Flat2_F1: npc kept 3
+OreburghCity_Flat2_F2: npc kept 3
+OreburghCity_Flat3_F1: closed door/ladder (Not built yet) 1, npc kept 3
+OreburghCity_Flat3_F2: closed door/ladder (Not built yet) 1, npc kept 3
+OreburghCity_House1: npc kept 2
+OreburghCity_House2: npc kept 3
+OreburghCity_House3: npc kept 1
+OreburghCity_Gym: npc dropped 1, story object dropped 1, trainer 2
+OreburghCity_PokemonCenter_1F: npc kept 6, nurse 1
+OreburghCity_PokemonCenter_2F: closed door/ladder (Not built yet) 5
+OreburghCity_Mart: clerk 1, npc kept 2
+FloaromaTown_House1: map type -> MAP_TYPE_INDOOR 1, npc dropped 1, npc kept 3
+FloaromaTown_House2: map type -> MAP_TYPE_INDOOR 1, npc kept 2
+FloaromaTown_FlowerShop: npc dropped 1
+FloaromaTown_PokemonCenter_1F: npc kept 3, nurse 1
+FloaromaTown_PokemonCenter_2F: closed door/ladder (Not built yet) 5
+FloaromaTown_Mart: clerk 1, npc kept 2
+FloaromaMeadow_House: map type -> MAP_TYPE_INDOOR 1, npc kept 2
+EternaCity_Flat1_F1: npc kept 4
+EternaCity_Flat1_F2: npc kept 3
+EternaCity_Flat1_F3: map type -> MAP_TYPE_INDOOR 1, npc kept 4
+EternaCity_HerbShop: clerk 1, npc kept 2
+EternaCity_UndergroundManHouse: npc kept 5
+EternaCity_CycleShop: npc kept 1
+EternaCity_House1: npc kept 3
+EternaCity_House2: 
+EternaCity_Gym: npc dropped 1, npc kept 1, trainer 3
+EternaCity_PokemonCenter_F1: npc kept 3, nurse 1
+EternaCity_PokemonCenter_F2: closed door/ladder (Not built yet) 5, npc kept 1
+EternaCity_Mart: clerk 1, npc kept 2
+EternaCity_GalacticBuilding_1F: 
+EternaCity_GalacticBuilding_2F: 
+EternaCity_GalacticBuilding_3F: 
+EternaCity_GalacticBuilding_4F: 
+EternaCity_GalacticBuilding_B1F: 
+HearthomeCity_PokemonCenter_1F: new (shell town) 1
+HearthomeCity_Mart: new (shell town) 1
+SolaceonTown_PokemonCenter_1F: new (shell town) 1
+SolaceonTown_Mart: new (shell town) 1
+CelesticTown_PokemonCenter_1F: new (shell town) 1
+SnowpointCity_PokemonCenter_1F: new (shell town) 1
+SnowpointCity_Mart: new (shell town) 1
+CanalaveCity_PokemonCenter_1F: new (shell town) 1
+CanalaveCity_Mart: new (shell town) 1
+VeilstoneCity_PokemonCenter_1F: new (shell town) 1
+PastoriaCity_PokemonCenter_1F: new (shell town) 1
+PastoriaCity_Mart: new (shell town) 1
+SunyshoreCity_PokemonCenter_1F: new (shell town) 1
+SunyshoreCity_Mart: new (shell town) 1
+SinnohPokemonLeague_PokemonCenter_1F: new (shell town) 1
+FightArea_PokemonCenter_1F: new (shell town) 1
+FightArea_Mart: new (shell town) 1
+SurvivalArea_PokemonCenter_1F: new (shell town) 1
+SurvivalArea_Mart: new (shell town) 1
+ResortArea_PokemonCenter_1F: new (shell town) 1
+
+TOTAL: clerk 6, closed door/ladder (Not built yet) 113, coord dropped 274, dropped (D37) 1, hidden item 21, item ball 36, map type -> MAP_TYPE_INDOOR 11, map type -> MAP_TYPE_ROUTE 1, map type -> MAP_TYPE_TOWN 1, new (shell town) 20, npc dropped 12, npc kept 215, nurse 5, sign kept 58, story object dropped 32, trainer 48, var graphics 5, warp into Hoenn removed (door closed) 3
+
+Music (D34): nearest DPPt song TREY has, where the repo borrowed a Hoenn/FRLG song or DPPt has a song
+TREY lacks (Route 206, Celestic, Battle Zone, Oreburgh Gate/Mine, Hotel Grand Lake):
+  Route206: MUS_DPP_ROUTE205
+  Route207: MUS_DPP_ROUTE205
+  Route208: MUS_DPP_ROUTE205
+  Route209: MUS_DPP_ROUTE205
+  Route212_North: MUS_DPP_ROUTE210
+  Route212_South: MUS_DPP_ROUTE210
+  Route219: MUS_DPP_ROUTE210
+  Route220: MUS_DPP_ROUTE210
+  Route221: MUS_DPP_ROUTE210
+  Route222: MUS_DPP_ROUTE210
+  Route225: MUS_DPP_ROUTE210
+  Route226: MUS_DPP_ROUTE213
+  Route227: MUS_DPP_ROUTE210
+  Route228: MUS_DPP_ROUTE210
+  Route229: MUS_DPP_ROUTE213
+  Route230: MUS_DPP_ROUTE213
+  AcuityLakefront: MUS_DP_ROUTE216_DAY
+  ValorLakefront: MUS_DPP_ROUTE213
+  CelesticTown: MUS_DPP_ETERNA
+  FightArea: MUS_DPP_SUNYSHORE
+  SurvivalArea: MUS_DPP_SUNYSHORE
+  ResortArea: MUS_DPP_SUNYSHORE
+  OreburghGate_1F: MUS_DP_MT_CORONET
+  OreburghMine_B1F: MUS_DP_MT_CORONET
+  OreburghMine_B2F: MUS_DP_MT_CORONET
+  RavagedPath: MUS_DP_MT_CORONET
+  HotelGrandLake: MUS_DPP_ROUTE213
+  ValleyWindworks_Inside: MUS_DPP_ROUTE205
+Night music: SnowpointCity MUS_DP_SNOWPOINT_NIGHT, Route216 MUS_DP_ROUTE216_NIGHT, Route217 MUS_DP_ROUTE216_NIGHT, AcuityLakefront MUS_DP_ROUTE216_NIGHT

@@ -17,6 +17,7 @@ Animations: every animated Sinnoh tileset uses Hoenn's animation frames unchange
 Steps (run from the project root; --sinnoh points at a Sinnoh repo checkout or a copy of the needed files):
   tilesets   copy the Sinnoh tilesets, write src/data/tilesets/trey_sinnoh.h (included at the end of src/tilesets.c)
   music      DPPt songs TREY lacks (36), the sinnoh_gm voicegroup, song ids and table rows (D34)
+  maps       the 159 maps + shell-town Pokemon Centers/Marts, closed doors, Canalave ferry (tools/trey/sinnoh_maps.py)
   preview    render maps from the repo's layouts with the imported tilesets: --maps Twinleaf,... --out DIR
 """
 import argparse
@@ -347,7 +348,7 @@ def step_preview(src, maps, outdir, seasons):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("step", choices=["tilesets", "music", "preview"])
+    ap.add_argument("step", choices=["tilesets", "music", "maps", "preview"])
     ap.add_argument("--sinnoh", default="../Sinnoh-pokeemerald-expansion")
     ap.add_argument("--dry", action="store_true")
     ap.add_argument("--maps", default="TwinleafTown,JubilifeCity,HearthomeCity,SnowpointCity,Route210_South")
@@ -360,6 +361,9 @@ def main():
         step_tilesets(a.sinnoh, a.dry)
     elif a.step == "music":
         step_music(a.sinnoh, a.dry)
+    elif a.step == "maps":
+        import sinnoh_maps
+        sinnoh_maps.step_maps(a.sinnoh, a.dry, TILESETS)
     else:
         step_preview(a.sinnoh, a.maps.split(","), a.out, a.seasons.split(","))
 

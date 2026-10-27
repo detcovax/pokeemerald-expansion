@@ -1,0 +1,138 @@
+{
+  "id": "MAP_ROUTE203",
+  "name": "Route203",
+  "layout": "LAYOUT_ROUTE203",
+  "music": "MUS_DPP_ROUTE203",
+  "region_map_section": "MAPSEC_ROUTE_203",
+  "requires_flash": false,
+  "weather": "WEATHER_SUNNY",
+  "map_type": "MAP_TYPE_ROUTE",
+  "allow_cycling": true,
+  "allow_escaping": false,
+  "allow_running": true,
+  "show_map_name": true,
+  "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
+  "connections": [
+    {
+      "map": "MAP_JUBILIFE_CITY",
+      "offset": 0,
+      "direction": "left"
+    }
+  ],
+  "object_events": [
+    {
+      "graphics_id": "OBJ_EVENT_GFX_ITEM_BALL",
+      "x": 3,
+      "y": 7,
+      "elevation": 3,
+      "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "ITEM_REPEL",
+      "script": "Common_EventScript_FindItem",
+      "flag": "FLAG_SINNOH_ITEM_ROUTE203_REPEL"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_ITEM_BALL",
+      "x": 8,
+      "y": 7,
+      "elevation": 3,
+      "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "ITEM_POKE_BALL",
+      "script": "Common_EventScript_FindItem",
+      "flag": "FLAG_SINNOH_ITEM_ROUTE203_POKE_BALL"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_ITEM_BALL",
+      "x": 13,
+      "y": 7,
+      "elevation": 3,
+      "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "ITEM_X_DEFENSE",
+      "script": "Common_EventScript_FindItem",
+      "flag": "FLAG_SINNOH_ITEM_ROUTE203_X_DEFENSE"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_LASS",
+      "x": 10,
+      "y": 19,
+      "elevation": 3,
+      "movement_type": "MOVEMENT_TYPE_WANDER_AROUND",
+      "movement_range_x": 1,
+      "movement_range_y": 1,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "Route203_EventScript_PtNpc1",
+      "flag": "0"
+    }
+  ],
+  "warp_events": [
+    {
+      "x": 53,
+      "y": 6,
+      "elevation": 0,
+      "dest_map": "MAP_OREBURGH_GATE_1F",
+      "dest_warp_id": "0"
+    }
+  ],
+  "coord_events": [],
+  "bg_events": [
+    {
+      "type": "sign",
+      "x": 52,
+      "y": 7,
+      "elevation": 0,
+      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
+      "script": "Route203_EventScript_Sign1"
+    },
+    {
+      "type": "sign",
+      "x": 23,
+      "y": 11,
+      "elevation": 0,
+      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
+      "script": "Route203_EventScript_Sign2"
+    },
+    {
+      "type": "sign",
+      "x": 46,
+      "y": 13,
+      "elevation": 0,
+      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
+      "script": "Route203_EventScript_Sign3"
+    },
+    {
+      "type": "hidden_item",
+      "x": 28,
+      "y": 7,
+      "elevation": 3,
+      "item": "ITEM_POTION",
+      "flag": "FLAG_SINNOH_HIDDEN_ROUTE203_POTION"
+    },
+    {
+      "type": "hidden_item",
+      "x": 35,
+      "y": 7,
+      "elevation": 3,
+      "item": "ITEM_ANTIDOTE",
+      "flag": "FLAG_SINNOH_HIDDEN_ROUTE203_ANTIDOTE"
+    },
+    {
+      "type": "sign",
+      "x": 4,
+      "y": 18,
+      "elevation": 0,
+      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
+      "script": "Route203_EventScript_Sign4"
+    }
+  ],
+  "region": "REGION_SINNOH",
+  "floor_number": 0
+}
