@@ -44,6 +44,11 @@ void TreySeason_LockForMapLoad(void)
         sIndoorArt = TRUE;
         break;
     }
+    // TREY (6-S): a map whose secondary tileset has no seasonal art (Snowpoint: snowy all year) shows the base
+    // art for its primary too, so the shared primary's grass doesn't change season around it.
+    if (gMapHeader.mapLayout != NULL && gMapHeader.mapLayout->secondaryTileset != NULL
+     && gMapHeader.mapLayout->secondaryTileset->seasonal == NULL)
+        sIndoorArt = TRUE;
 
     if (sForcedSeasonPlus1 != 0)
     {

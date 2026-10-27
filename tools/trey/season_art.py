@@ -2,8 +2,11 @@
 """TREY: seasonal tileset palettes (TREY_PLAN.md 5.5, Phase 4 chunk 4b).
 
 Run from the repo root:
-    python3 tools/trey/season_art.py --preview DIR   # render maps in all four seasons
+    python3 tools/trey/season_art.py --preview DIR [Map1,Map2]  # render maps (any region) in all four seasons
+    python3 tools/trey/season_art.py --list          # the tilesets that get seasons, with their palette folders
     python3 tools/trey/season_art.py --write         # write the seasonal palettes of every tileset in SEASONAL_TILESETS
+
+6-S (D33): every region has seasons (Hoenn, Kanto/Sevii FRLG, Johto, Sinnoh); see HEADER_FILES and NO_SEASONS.
 
 Seasons are palette recolours of the same tiles (David, 2026-10-14: "palettes + key tile swaps"). Summer is
 the base art. Each other season is generated from the base palettes by colour rules (foliage, earth, water),
@@ -22,13 +25,55 @@ SEASONS = ["spring", "summer", "autumn", "winter"]
 OUTDOOR_MAP_TYPES = {"MAP_TYPE_TOWN", "MAP_TYPE_CITY", "MAP_TYPE_ROUTE", "MAP_TYPE_OCEAN_ROUTE"}
 
 
+# TREY (6-S, D33): every region gets seasons. Tileset headers and graphics live in several files (Hoenn and FRLG
+# in headers.h/graphics.h, Johto in trey_hns.h, Sinnoh in trey_sinnoh.h). Seasons recolour a tileset's PALETTE
+# folder, so tilesets that share a palette array (Sinnoh's "meta" tilesets) share one seasonal table.
+HEADER_FILES = ["src/data/tilesets/headers.h", "src/data/tilesets/trey_hns.h", "src/data/tilesets/trey_sinnoh.h"]
+GRAPHICS_FILES = ["src/data/tilesets/graphics.h", "src/graphics.c", "src/data/tilesets/trey_hns.h", "src/data/tilesets/trey_sinnoh.h"]
+# Tilesets snowy all year (DPPt): no seasonal art. A map whose SECONDARY tileset has no seasonal art shows the base
+# art for its primary too (src/trey_seasons.c), so Snowpoint keeps its summer = winter look.
+NO_SEASONS = {"gTileset_SinnohSnowpoint", "gTileset_MtSilverSnow_Hns"}
+# Sinnoh's outdoor tilesets, until its maps are in data/maps (6b-4); harmless afterwards.
+EXTRA_OUTDOOR = {"gTileset_SinnohGeneral", "gTileset_SinnohTwinleaf", "gTileset_SinnohJubilife", "gTileset_SinnohOreburgh",
+                 "gTileset_SinnohFloaroma", "gTileset_SinnohPastoria", "gTileset_SinnohLeague", "gTileset_SinnohStark",
+                 "gTileset_SinnohCanalave", "gTileset_SinnohCelestic", "gTileset_SinnohHearthome",
+                 "gTileset_SinnohSunyshore", "gTileset_SinnohValor", "gTileset_SinnohVeilstone"}
+
+
+def _read(path):
+    return open(path, encoding="utf-8").read() if os.path.exists(path) else ""
+
+
+def tileset_headers():
+    """tileset name -> (header file, palettes symbol)."""
+    import re
+    out = {}
+    for hf in HEADER_FILES:
+        for m in re.finditer(r"const struct Tileset (\w+)\s*=\s*\{(.*?)\};", _read(hf), re.S):
+            p = re.search(r"\.palettes\s*=\s*(\w+)", m.group(2))
+            if p:
+                out.setdefault(m.group(1), (hf, p.group(1)))
+    return out
+
+
+def palette_dirs():
+    """palettes symbol -> (folder, number of palettes)."""
+    import re
+    out = {}
+    for gf in GRAPHICS_FILES:
+        for m in re.finditer(r"(gTilesetPalettes_\w+)\[\]\[16\]\s*=\s*\{(.*?)\};", _read(gf), re.S):
+            paths = re.findall(r'INC\w+\("([^"]+)/palettes/\d\d\.(?:pal|gbapal)"', m.group(2))
+            if paths:
+                out.setdefault(m.group(1), (paths[0], len(paths)))
+    return out
+
+
 def find_seasonal_tilesets():
-    """Every tileset used by an outdoor map (town, city, route, ocean route), with its folder."""
-    import json, re
+    """Every tileset used by an outdoor map (town, city, route, ocean route), with its palette folder."""
+    import json
     groups = json.load(open("data/maps/map_groups.json", encoding="utf-8"))
     layouts = {l["id"]: l for l in json.load(open("data/layouts/layouts.json", encoding="utf-8"))["layouts"] if "id" in l}
-    graphics = open("src/data/tilesets/graphics.h", encoding="utf-8").read() + open("src/graphics.c", encoding="utf-8").read()
-    names = set()
+    names = set(EXTRA_OUTDOOR)
     for g in groups["group_order"]:
         for m in groups[g]:
             path = f"data/maps/{m}/map.json"
@@ -39,21 +84,29 @@ def find_seasonal_tilesets():
             if d.get("map_type") in OUTDOOR_MAP_TYPES and lay:
                 names.add(lay["primary_tileset"])
                 names.add(lay["secondary_tileset"])
+    heads, pdirs = tileset_headers(), palette_dirs()
     out = {}
-    for name in sorted(names):
-        short = name.replace("gTileset_", "")
-        m = re.search(r'gTilesetTiles_%s\[\] = INCBIN_U32\("([^"]+)/tiles' % short, graphics)
-        if m and os.path.exists(f"{m.group(1)}/palettes/00.pal"):
-            out[name] = m.group(1)
+    for name in sorted(names - NO_SEASONS):
+        if name in heads and heads[name][1] in pdirs:
+            folder, count = pdirs[heads[name][1]]
+            if os.path.exists(f"{folder}/palettes/00.pal"):
+                out[name] = folder
+                PAL_COUNT[folder] = count
+                HEADER_OF[name] = heads[name][0]
     return out
 
 
+PAL_COUNT = {}   # palette folder -> number of palettes in its C array (13 or 16)
+HEADER_OF = {}   # tileset -> the file that defines its struct Tileset
 # Tilesets that get seasonal palettes: every tileset an outdoor map uses (the recolours apply wherever
 # that tileset is drawn on an outdoor map; indoor and cave maps always show the base art).
 SEASONAL_TILESETS = find_seasonal_tilesets()
-PREVIEW_MAPS = {"Route101": ("data/layouts/Route101/map.bin", 20, 20, "gTileset_General", "gTileset_Petalburg")}
+PREVIEW_MAPS = ["Route101"]
 NUM_PALS_IN_PRIMARY = 6
 NUM_PALS_TOTAL = 13
+NUM_PALS_IN_PRIMARY_FRLG = 7
+NUM_TILES_IN_PRIMARY_FRLG = 640
+NUM_METATILES_IN_PRIMARY_FRLG = 640
 
 
 def read_pal(path):
@@ -65,6 +118,7 @@ def read_pal(path):
 
 def write_pal(path, colors):
     os.makedirs(os.path.dirname(path), exist_ok=True)
+    colors = list(colors)[:16] + [(0, 0, 0)] * (16 - len(colors))  # 6-S: some Heart & Soul palettes list only 15 colours
     with open(path, "w", newline="\r\n") as f:
         f.write("JASC-PAL\n0100\n16\n")
         for r, g, b in colors:
@@ -163,39 +217,97 @@ def load_tileset(path, secondary):
     for ty in range(h // 8):
         for tx in range(w // 8):
             tiles.append([px[tx * 8 + x, ty * 8 + y] & 0xF for y in range(8) for x in range(8)])
-    pals = [read_pal(f"{path}/palettes/{i:02d}.pal") for i in range(16)]
+    pals = [read_pal(f"{path}/palettes/{i:02d}.pal") if os.path.exists(f"{path}/palettes/{i:02d}.pal") else [(0, 0, 0)] * 16
+            for i in range(16)]
     with open(f"{path}/metatiles.bin", "rb") as f:
         data = f.read()
     metatiles = [struct.unpack_from("<8H", data, i * 16) for i in range(len(data) // 16)]
     return {"tiles": tiles, "pals": pals, "metatiles": metatiles, "secondary": secondary}
 
 
+def pal_count(path):
+    return PAL_COUNT.get(path) or sum(1 for i in range(16) if os.path.exists(f"{path}/palettes/{i:02d}.pal"))
+
+
+# Hoenn's seasonal palettes from 4b (approved 2026-10-14): never re-tuned by the 6-S rules below.
+HOENN_4B = {"primary/general", "secondary/battle_frontier_outside_east", "secondary/battle_frontier_outside_west",
+            "secondary/cave", "secondary/dewford", "secondary/ever_grande", "secondary/facility", "secondary/fallarbor",
+            "secondary/fortree", "secondary/lavaridge", "secondary/lilycove", "secondary/mauville", "secondary/mossdeep",
+            "secondary/pacifidlog", "secondary/petalburg", "secondary/rustboro", "secondary/slateport", "secondary/sootopolis"}
+_BUILDING_PALS = {}
+# Building palettes the door rule misses (doors without a door behaviour, walls in a palette of their own).
+KEEP_PALETTES = {"secondary/sinnoh_hearthome": {8, 10, 11}, "secondary/celadon_city_frlg": {12}}
+
+
+def building_palettes(path):
+    """6-S: palettes of a SECONDARY tileset that its door metatiles use. Those hold the roofs and walls (green roofs
+    would otherwise turn orange in autumn), so they keep their base colours in every season."""
+    import re
+    if path in _BUILDING_PALS:
+        return _BUILDING_PALS[path]
+    keep = set()
+    if "/secondary/" in path and path.split("data/tilesets/", 1)[-1] not in HOENN_4B \
+            and os.path.exists(f"{path}/metatiles.bin") and os.path.exists(f"{path}/metatile_attributes.bin"):
+        text = open("include/constants/metatile_behaviors.h", encoding="utf-8").read()
+        names = re.findall(r"^\s*(MB_\w+)", text[text.index("enum"):], re.M)
+        mts = open(f"{path}/metatiles.bin", "rb").read()
+        attrs = open(f"{path}/metatile_attributes.bin", "rb").read()
+        count = len(mts) // 16
+        wide = count and len(attrs) >= count * 4          # FRLG 32-bit attributes (Kanto, Johto)
+        for i in range(count):
+            a = struct.unpack_from("<I" if wide else "<H", attrs, i * (4 if wide else 2))[0] & (0x1FF if wide else 0xFF)
+            if a < len(names) and "DOOR" in names[a]:
+                first = NUM_PALS_IN_PRIMARY_FRLG if wide else NUM_PALS_IN_PRIMARY   # only the tileset's own palettes
+                keep.update(e >> 12 for e in struct.unpack_from("<8H", mts, i * 16) if e >> 12 >= first)
+    keep |= KEEP_PALETTES.get(path.split("data/tilesets/", 1)[-1], set())
+    _BUILDING_PALS[path] = keep
+    return keep
+
+
 def season_pals_for(path, season):
-    base = [read_pal(f"{path}/palettes/{i:02d}.pal") for i in range(16)]
+    n = pal_count(path)
+    base = [read_pal(f"{path}/palettes/{i:02d}.pal") for i in range(n)]
     out = season_palettes(base, season)
-    for i in range(16):
+    for i in building_palettes(path):
+        if i < n:
+            out[i] = [gba(c) if k else c for k, c in enumerate(base[i])]
+    for i in range(n):
         hand = f"{path}/seasons/{season}/{i:02d}.pal"
         if os.path.exists(hand) and open(hand).readline().startswith("HANDMADE"):
             out[i] = read_pal(hand)
     return out
 
 
-def render_map(mapbin, w, h, prim, sec, season):
+def render_map(mapbin, w, h, prim, sec, season, frlg=False):
     with open(mapbin, "rb") as f:
         blocks = struct.unpack(f"<{w * h}H", f.read(w * h * 2))
-    pals = season_pals_for(SEASONAL_TILESETS[prim[0]], season)[:NUM_PALS_IN_PRIMARY] + \
-        season_pals_for(SEASONAL_TILESETS[sec[0]], season)[NUM_PALS_IN_PRIMARY:NUM_PALS_TOTAL]
+    npp = NUM_PALS_IN_PRIMARY_FRLG if frlg else NUM_PALS_IN_PRIMARY
+    ntp = NUM_TILES_IN_PRIMARY_FRLG if frlg else 512
+    nmp = NUM_METATILES_IN_PRIMARY_FRLG if frlg else 512
+    def pals_of(ts):
+        if season == "summer" or ts[0] not in SEASONAL_TILESETS:
+            return ts[1]["pals"]
+        p = season_pals_for(SEASONAL_TILESETS[ts[0]], season)
+        return p + ts[1]["pals"][len(p):]
+    if sec[0] not in SEASONAL_TILESETS:   # same rule as src/trey_seasons.c: base art all over
+        pals = prim[1]["pals"][:npp] + sec[1]["pals"][npp:NUM_PALS_TOTAL]
+    else:
+        pals = pals_of(prim)[:npp] + pals_of(sec)[npp:NUM_PALS_TOTAL]
     img = Image.new("RGB", (w * 16, h * 16))
     out = img.load()
     for i, block in enumerate(blocks):
         mid = block & 0x3FF
-        mt = prim[1]["metatiles"][mid] if mid < 512 else sec[1]["metatiles"][mid - 512]
+        mtl, j = (prim[1]["metatiles"], mid) if mid < nmp else (sec[1]["metatiles"], mid - nmp)
+        if j >= len(mtl):
+            continue
+        mt = mtl[j]
         bx, by = (i % w) * 16, (i // w) * 16
         for layer in range(2):
             for k in range(4):
                 e = mt[layer * 4 + k]
                 t, hf, vf, p = e & 0x3FF, (e >> 10) & 1, (e >> 11) & 1, e >> 12
-                tile = prim[1]["tiles"][t] if t < 512 else (sec[1]["tiles"][t - 512] if t - 512 < len(sec[1]["tiles"]) else [0] * 64)
+                tl, j = (prim[1]["tiles"], t) if t < ntp else (sec[1]["tiles"], t - ntp)
+                tile = tl[j] if j < len(tl) else [0] * 64
                 ox, oy = bx + (k % 2) * 8, by + (k // 2) * 8
                 for y in range(8):
                     for x in range(8):
@@ -207,12 +319,45 @@ def render_map(mapbin, w, h, prim, sec, season):
     return img
 
 
-def preview(outdir):
+def tileset_files(name):
+    """(tiles folder, palette folder, metatiles folder) of any tileset, from the C files."""
+    import re
+    heads = tileset_headers()
+    body = re.search(r"const struct Tileset " + name + r"\s*=\s*\{(.*?)\};", _read(heads[name][0]), re.S).group(1)
+    field = lambda k: re.search(r"\." + k + r"\s*=\s*(\w+)", body).group(1)
+    c = "".join(_read(f) for f in GRAPHICS_FILES + ["src/data/tilesets/metatiles.h"])
+    find = lambda sym, what: re.search(re.escape(sym) + r"\[\](?:\[16\])?\s*=\s*\{?\s*INC\w+\(\"([^\"]+)/" + what, c).group(1)
+    return find(field("tiles"), "tiles.png"), find(field("palettes"), "palettes/"), find(field("metatiles"), "metatiles.bin")
+
+
+def load_any_tileset(name):
+    tdir, pdir, mdir = tileset_files(name)
+    ts = load_tileset(tdir, False) if tdir == mdir else None
+    if ts is None:   # Sinnoh "meta"/"pal" tilesets: tiles, palettes and metatiles in different folders
+        img = Image.open(f"{tdir}/tiles.png")
+        px, (w, h) = img.load(), img.size
+        data = open(f"{mdir}/metatiles.bin", "rb").read()
+        ts = {"tiles": [[px[tx * 8 + x, ty * 8 + y] & 0xF for y in range(8) for x in range(8)]
+                        for ty in range(h // 8) for tx in range(w // 8)],
+              "metatiles": [struct.unpack_from("<8H", data, i * 16) for i in range(len(data) // 16)]}
+    ts["pals"] = [read_pal(f"{pdir}/palettes/{i:02d}.pal") if os.path.exists(f"{pdir}/palettes/{i:02d}.pal") else [(0, 0, 0)] * 16
+                  for i in range(16)]
+    return ts
+
+
+def preview(outdir, maps=None):
+    """Four-season sheets of maps (any region; FRLG-format layouts are read as such)."""
+    import json
     os.makedirs(outdir, exist_ok=True)
-    for name, (mapbin, w, h, pn, sn) in PREVIEW_MAPS.items():
-        prim = (pn, load_tileset(SEASONAL_TILESETS[pn], False))
-        sec = (sn, load_tileset(SEASONAL_TILESETS[sn], True))
-        frames = [render_map(mapbin, w, h, prim, sec, s) for s in SEASONS]
+    layouts = {l["id"]: l for l in json.load(open("data/layouts/layouts.json", encoding="utf-8"))["layouts"] if "id" in l}
+    for name in maps or PREVIEW_MAPS:
+        lay = layouts[json.load(open(f"data/maps/{name}/map.json", encoding="utf-8"))["layout"]]
+        mapbin, w, h = lay["blockdata_filepath"], lay["width"], lay["height"]
+        pn, sn = lay["primary_tileset"], lay["secondary_tileset"]
+        prim = (pn, load_any_tileset(pn))
+        sec = (sn, load_any_tileset(sn))
+        frlg = lay.get("layout_version") == "frlg"
+        frames = [render_map(mapbin, w, h, prim, sec, s, frlg) for s in SEASONS]
         sheet = Image.new("RGB", (w * 16 * 2 + 12, h * 16 * 2 + 12), (40, 44, 60))
         for k, fr in enumerate(frames):
             sheet.paste(fr, ((k % 2) * (w * 16 + 12), (k // 2) * (h * 16 + 12)))
@@ -359,16 +504,20 @@ HEADERS_H = "src/data/tilesets/headers.h"
 
 def write_c_tables():
     """Palette arrays and TilesetSeasonGfx tables for every seasonal tileset, and the .seasonal pointers."""
+    table_of = {}   # palette folder -> seasonal table (tilesets sharing a palette folder share the table)
     with open(SEASONAL_H, "w", encoding="utf-8", newline="\n") as f:
-        f.write("// TREY (4b): seasonal tileset palettes. Generated by tools/trey/season_art.py; do not edit.\n")
+        f.write("// TREY (4b, 6-S): seasonal tileset palettes for every region. Generated by tools/trey/season_art.py; do not edit.\n")
         f.write("// Summer uses the base art (NULL). Tiles are shared in every season for now (NULL).\n\n")
         for name, path in SEASONAL_TILESETS.items():
+            if path in table_of:
+                continue
             short = name.replace("gTileset_", "")
+            table_of[path] = f"gTilesetSeasonal_{short}"
             for season in SEASONS:
                 if season == "summer":
                     continue
                 f.write(f"const u16 ALIGNED(4) gTilesetPalettes_{short}_{season.capitalize()}[][16] =\n{{\n")
-                for i in range(16):
+                for i in range(pal_count(path)):
                     f.write(f'    INCBIN_U16("{path}/seasons/{season}/{i:02d}.gbapal"),\n')
                 f.write("};\n\n")
             f.write(f"const struct TilesetSeasonGfx gTilesetSeasonal_{short}[TREY_SEASONS_COUNT] =\n{{\n")
@@ -376,17 +525,19 @@ def write_c_tables():
                 pal = "NULL" if season == "summer" else f"gTilesetPalettes_{short}_{season.capitalize()}"
                 f.write(f"    [SEASON_{season.upper()}] = {{ .tiles = NULL, .palettes = {pal} }},\n")
             f.write("};\n\n")
-    text = open(HEADERS_H, encoding="utf-8").read()
-    for name in SEASONAL_TILESETS:
-        short = name.replace("gTileset_", "")
-        start = text.index(f"const struct Tileset {name} =")
-        end = text.index("};", start)
-        block = text[start:end]
-        if ".seasonal" not in block:
-            block = block.rstrip() + f"\n    .seasonal = gTilesetSeasonal_{short}, // TREY (4b)\n"
-            text = text[:start] + block + text[end:]
-    open(HEADERS_H, "w", encoding="utf-8", newline="\n").write(text)
-    print("season_art.py: wrote", SEASONAL_H)
+    for hf in sorted(set(HEADER_OF.values())):
+        text = open(hf, encoding="utf-8").read()
+        for name in SEASONAL_TILESETS:
+            if HEADER_OF[name] != hf:
+                continue
+            start = text.index(f"const struct Tileset {name} =")
+            end = text.index("};", start)
+            block = text[start:end]
+            if ".seasonal" not in block:
+                block = block.rstrip() + f"\n    .seasonal = {table_of[SEASONAL_TILESETS[name]]}, // TREY (6-S)\n"
+                text = text[:start] + block + text[end:]
+        open(hf, "w", encoding="utf-8", newline="\n").write(text)
+    print("season_art.py: wrote", SEASONAL_H, f"({len(table_of)} palette folders, {len(SEASONAL_TILESETS)} tilesets)")
 
 
 if __name__ == "__main__":
@@ -394,7 +545,10 @@ if __name__ == "__main__":
         print("Run from the project's root folder.")
         sys.exit(1)
     if len(sys.argv) >= 3 and sys.argv[1] == "--preview":
-        preview(sys.argv[2])
+        preview(sys.argv[2], sys.argv[3].split(",") if len(sys.argv) >= 4 else None)
+    elif len(sys.argv) >= 2 and sys.argv[1] == "--list":
+        for name, path in SEASONAL_TILESETS.items():
+            print(f"{name:40} {path} ({pal_count(path)} palettes, {HEADER_OF[name]})")
     elif len(sys.argv) >= 2 and sys.argv[1] == "--write":
         write_all()
         write_winter_layout()

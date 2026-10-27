@@ -887,6 +887,7 @@ const struct Tileset gTileset_General_Frlg =
     .metatiles = gMetatiles_General_Frlg,
     .metatileAttributes = gMetatileAttributes_General_Frlg,
     .callback = InitTilesetAnim_General_Frlg,
+    .seasonal = gTilesetSeasonal_General_Frlg, // TREY (6-S)
 };
 
 const struct Tileset gTileset_PalletTown =
@@ -898,6 +899,7 @@ const struct Tileset gTileset_PalletTown =
     .metatiles = gMetatiles_PalletTown,
     .metatileAttributes = gMetatileAttributes_PalletTown,
     .callback = NULL,
+    .seasonal = gTilesetSeasonal_PalletTown, // TREY (6-S)
 };
 
 const struct Tileset gTileset_ViridianCity =
@@ -909,6 +911,7 @@ const struct Tileset gTileset_ViridianCity =
     .metatiles = gMetatiles_ViridianCity,
     .metatileAttributes = gMetatileAttributes_ViridianCity,
     .callback = NULL,
+    .seasonal = gTilesetSeasonal_ViridianCity, // TREY (6-S)
 };
 
 const struct Tileset gTileset_PewterCity =
@@ -920,6 +923,7 @@ const struct Tileset gTileset_PewterCity =
     .metatiles = gMetatiles_PewterCity,
     .metatileAttributes = gMetatileAttributes_PewterCity,
     .callback = NULL,
+    .seasonal = gTilesetSeasonal_PewterCity, // TREY (6-S)
 };
 
 const struct Tileset gTileset_CeruleanCity =
@@ -931,6 +935,7 @@ const struct Tileset gTileset_CeruleanCity =
     .metatiles = gMetatiles_CeruleanCity,
     .metatileAttributes = gMetatileAttributes_CeruleanCity,
     .callback = NULL,
+    .seasonal = gTilesetSeasonal_CeruleanCity, // TREY (6-S)
 };
 
 const struct Tileset gTileset_LavenderTown =
@@ -942,6 +947,7 @@ const struct Tileset gTileset_LavenderTown =
     .metatiles = gMetatiles_LavenderTown,
     .metatileAttributes = gMetatileAttributes_LavenderTown,
     .callback = NULL,
+    .seasonal = gTilesetSeasonal_LavenderTown, // TREY (6-S)
 };
 
 const struct Tileset gTileset_VermilionCity =
@@ -953,6 +959,7 @@ const struct Tileset gTileset_VermilionCity =
     .metatiles = gMetatiles_VermilionCity,
     .metatileAttributes = gMetatileAttributes_VermilionCity,
     .callback = NULL,
+    .seasonal = gTilesetSeasonal_VermilionCity, // TREY (6-S)
 };
 
 const struct Tileset gTileset_CeladonCity =
@@ -964,6 +971,7 @@ const struct Tileset gTileset_CeladonCity =
     .metatiles = gMetatiles_CeladonCity,
     .metatileAttributes = gMetatileAttributes_CeladonCity,
     .callback = InitTilesetAnim_CeladonCity,
+    .seasonal = gTilesetSeasonal_CeladonCity, // TREY (6-S)
 };
 
 const struct Tileset gTileset_FuchsiaCity =
@@ -975,6 +983,7 @@ const struct Tileset gTileset_FuchsiaCity =
     .metatiles = gMetatiles_FuchsiaCity,
     .metatileAttributes = gMetatileAttributes_FuchsiaCity,
     .callback = NULL,
+    .seasonal = gTilesetSeasonal_FuchsiaCity, // TREY (6-S)
 };
 
 const struct Tileset gTileset_CinnabarIsland =
@@ -986,6 +995,7 @@ const struct Tileset gTileset_CinnabarIsland =
     .metatiles = gMetatiles_CinnabarIsland,
     .metatileAttributes = gMetatileAttributes_CinnabarIsland,
     .callback = NULL,
+    .seasonal = gTilesetSeasonal_CinnabarIsland, // TREY (6-S)
 };
 
 const struct Tileset gTileset_IndigoPlateau =
@@ -997,6 +1007,7 @@ const struct Tileset gTileset_IndigoPlateau =
     .metatiles = gMetatiles_IndigoPlateau,
     .metatileAttributes = gMetatileAttributes_IndigoPlateau,
     .callback = NULL,
+    .seasonal = gTilesetSeasonal_IndigoPlateau, // TREY (6-S)
 };
 
 const struct Tileset gTileset_SaffronCity =
@@ -1008,6 +1019,7 @@ const struct Tileset gTileset_SaffronCity =
     .metatiles = gMetatiles_SaffronCity,
     .metatileAttributes = gMetatileAttributes_SaffronCity,
     .callback = NULL,
+    .seasonal = gTilesetSeasonal_SaffronCity, // TREY (6-S)
 };
 
 const struct Tileset gTileset_Mart =
@@ -1228,6 +1240,7 @@ const struct Tileset gTileset_ViridianForest =
     .metatiles = gMetatiles_ViridianForest,
     .metatileAttributes = gMetatileAttributes_ViridianForest,
     .callback = NULL,
+    .seasonal = gTilesetSeasonal_ViridianForest, // TREY (6-S)
 };
 
 const struct Tileset gTileset_UnusedGatehouse1 =
@@ -1470,6 +1483,7 @@ const struct Tileset gTileset_BerryForest =
     .metatiles = gMetatiles_BerryForest,
     .metatileAttributes = gMetatileAttributes_BerryForest,
     .callback = NULL,
+    .seasonal = gTilesetSeasonal_BerryForest, // TREY (6-S)
 };
 
 const struct Tileset gTileset_NavelRock_Frlg =
@@ -1503,6 +1517,7 @@ const struct Tileset gTileset_SeviiIslands123 =
     .metatiles = gMetatiles_SeviiIslands123,
     .metatileAttributes = gMetatileAttributes_SeviiIslands123,
     .callback = NULL,
+    .seasonal = gTilesetSeasonal_SeviiIslands123, // TREY (6-S)
 };
 
 const struct Tileset gTileset_SeviiIslands45 =
@@ -1514,6 +1529,7 @@ const struct Tileset gTileset_SeviiIslands45 =
     .metatiles = gMetatiles_SeviiIslands45,
     .metatileAttributes = gMetatileAttributes_SeviiIslands45,
     .callback = NULL,
+    .seasonal = gTilesetSeasonal_SeviiIslands45, // TREY (6-S)
 };
 
 const struct Tileset gTileset_SeviiIslands67 =
@@ -1525,6 +1541,7 @@ const struct Tileset gTileset_SeviiIslands67 =
     .metatiles = gMetatiles_SeviiIslands67,
     .metatileAttributes = gMetatileAttributes_SeviiIslands67,
     .callback = NULL,
+    .seasonal = gTilesetSeasonal_SeviiIslands67, // TREY (6-S)
 };
 
 const struct Tileset gTileset_TrainerTower =

@@ -60,13 +60,13 @@
 // Rock Climb walls are climbed up or down only, like Gen 4. 1 = also allow sideways walls.
 #define TREY_ROCK_CLIMB_ALLOW_SIDEWAYS 0
 // Testing only: 1 = every HM is unlocked when a new game starts. Keep at 0 for real builds.
-#define TREY_DEBUG_UNLOCK_ALL_HMS      0
+#define TREY_DEBUG_UNLOCK_ALL_HMS      1
 // Debug (4a): every region map page counts as visited, so the Teleport map and the Pokédex area page
 // can flip through all regions before they have maps. Set back to 0 for real play.
-#define TREY_DEBUG_ALL_REGION_MAPS      0
+#define TREY_DEBUG_ALL_REGION_MAPS      1
 // Debug (4c): you hold the S.S. Ticket and every transit stop counts as visited, so the ferries can be tested
 // before the Kanto story exists. Set to 0 for real play.
-#define TREY_DEBUG_ALL_TRANSIT          0
+#define TREY_DEBUG_ALL_TRANSIT          1
 // Debug (4d): every regional Pokédex is unlocked when a new game starts, without meeting the professors.
 // Set to 0 for real play.
 // Kanto (5a, TREY_PLAN.md D25): 1 = the FRLG tilesets, overworld sprites and door animations are built into
@@ -80,7 +80,7 @@
 // Battle difficulty (5d, TREY_PLAN.md 5.7a, D24): every TREY trainer (bosses, gym trainers, route trainers) is this level.
 // tools/trey/check_trainers.py reads it and fails the build if a TREY trainer's team breaks its tier.
 #define TREY_TRAINER_LEVEL              100
-#define TREY_DEBUG_ALL_DEXES            0
+#define TREY_DEBUG_ALL_DEXES            1
 
 // ---------------------------------------------------------------------------
 // Energy, replaces PP (TREY_PLAN.md 5.6, D23)
@@ -103,7 +103,7 @@
 #define TREY_AI_ETHER_ENERGY_PERCENT        25   // use an Ether once Energy is at or below this % and a damaging move is unaffordable
 // Display (step E4).
 // Testing only: 1 = the summary screen's skills page can cycle through IVs and EVs (Energy included).
-#define TREY_DEBUG_SHOW_IVS_EVS         0
+#define TREY_DEBUG_SHOW_IVS_EVS         1
 
 // Settings are added here phase by phase as each system is built:
 //   Phase 4: seasons, transit, quests

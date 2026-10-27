@@ -1696,6 +1696,7 @@ const struct Tileset gTileset_AzaleaTown_Hns =
     .metatiles = gMetatiles_AzaleaTown_Hns,
     .metatileAttributes = gMetatileAttributes_AzaleaTown_Hns,
     .callback = NULL,
+    .seasonal = gTilesetSeasonal_AzaleaTown_Hns, // TREY (6-S)
 };
 
 const struct Tileset gTileset_Barn_Hns =
@@ -1718,6 +1719,7 @@ const struct Tileset gTileset_BellchimeTrail_Hns =
     .metatiles = gMetatiles_BellchimeTrail_Hns,
     .metatileAttributes = gMetatileAttributes_BellchimeTrail_Hns,
     .callback = NULL,
+    .seasonal = gTilesetSeasonal_BellchimeTrail_Hns, // TREY (6-S)
 };
 
 const struct Tileset gTileset_BikeShop_Hns =
@@ -1751,6 +1753,7 @@ const struct Tileset gTileset_Blackthorn_Hns =
     .metatiles = gMetatiles_Blackthorn_Hns,
     .metatileAttributes = gMetatileAttributes_Blackthorn_Hns,
     .callback = NULL,
+    .seasonal = gTilesetSeasonal_Blackthorn_Hns, // TREY (6-S)
 };
 
 const struct Tileset gTileset_BurnedTower_Hns =
@@ -1828,6 +1831,7 @@ const struct Tileset gTileset_CherrygroveCity_Hns =
     .metatiles = gMetatiles_CherrygroveCity_Hns,
     .metatileAttributes = gMetatileAttributes_CherrygroveCity_Hns,
     .callback = NULL,
+    .seasonal = gTilesetSeasonal_CherrygroveCity_Hns, // TREY (6-S)
 };
 
 const struct Tileset gTileset_CianwoodCity_Gym_Hns =
@@ -1850,6 +1854,7 @@ const struct Tileset gTileset_CianwoodCity_Hns =
     .metatiles = gMetatiles_CianwoodCity_Hns,
     .metatileAttributes = gMetatileAttributes_CianwoodCity_Hns,
     .callback = NULL,
+    .seasonal = gTilesetSeasonal_CianwoodCity_Hns, // TREY (6-S)
 };
 
 const struct Tileset gTileset_DepartmentStore_Hns =
@@ -1905,6 +1910,7 @@ const struct Tileset gTileset_Ecruteak_City_Hns =
     .metatiles = gMetatiles_Ecruteak_City_Hns,
     .metatileAttributes = gMetatileAttributes_Ecruteak_City_Hns,
     .callback = NULL,
+    .seasonal = gTilesetSeasonal_Ecruteak_City_Hns, // TREY (6-S)
 };
 
 const struct Tileset gTileset_GameCorner_Hns =
@@ -1971,6 +1977,7 @@ const struct Tileset gTileset_Goldenrod_Hns =
     .metatiles = gMetatiles_Goldenrod_Hns,
     .metatileAttributes = gMetatileAttributes_Goldenrod_Hns,
     .callback = NULL,
+    .seasonal = gTilesetSeasonal_Goldenrod_Hns, // TREY (6-S)
 };
 
 const struct Tileset gTileset_Goldenrod_Underground_Storage_Hns =
@@ -2026,6 +2033,7 @@ const struct Tileset gTileset_IlexForest_Hns =
     .metatiles = gMetatiles_IlexForest_Hns,
     .metatileAttributes = gMetatileAttributes_IlexForest_Hns,
     .callback = NULL,
+    .seasonal = gTilesetSeasonal_IlexForest_Hns, // TREY (6-S)
 };
 
 const struct Tileset gTileset_IndigoPlateau_Hns =
@@ -2070,6 +2078,7 @@ const struct Tileset gTileset_Johto_Building_Hns =
     .metatiles = gMetatiles_Johto_Building_Hns,
     .metatileAttributes = gMetatileAttributes_Johto_Building_Hns,
     .callback = NULL,
+    .seasonal = gTilesetSeasonal_Johto_Building_Hns, // TREY (6-S)
 };
 
 const struct Tileset gTileset_Johto_General_Hns =
@@ -2081,6 +2090,7 @@ const struct Tileset gTileset_Johto_General_Hns =
     .metatiles = gMetatiles_Johto_General_Hns,
     .metatileAttributes = gMetatileAttributes_Johto_General_Hns,
     .callback = InitTilesetAnim_JohtoGeneral,
+    .seasonal = gTilesetSeasonal_Johto_General_Hns, // TREY (6-S)
 };
 
 const struct Tileset gTileset_Johto_NorthEast_Hns =
@@ -2092,6 +2102,7 @@ const struct Tileset gTileset_Johto_NorthEast_Hns =
     .metatiles = gMetatiles_Johto_NorthEast_Hns,
     .metatileAttributes = gMetatileAttributes_Johto_NorthEast_Hns,
     .callback = InitTilesetAnim_JohtoGeneral,
+    .seasonal = gTilesetSeasonal_Johto_NorthEast_Hns, // TREY (6-S)
 };
 
 const struct Tileset gTileset_Johto_NorthWest_Hns =
@@ -2103,6 +2114,7 @@ const struct Tileset gTileset_Johto_NorthWest_Hns =
     .metatiles = gMetatiles_Johto_NorthWest_Hns,
     .metatileAttributes = gMetatileAttributes_Johto_NorthWest_Hns,
     .callback = InitTilesetAnim_JohtoGeneral,
+    .seasonal = gTilesetSeasonal_Johto_NorthWest_Hns, // TREY (6-S)
 };
 
 const struct Tileset gTileset_Johto_South_Hns =
@@ -2114,6 +2126,7 @@ const struct Tileset gTileset_Johto_South_Hns =
     .metatiles = gMetatiles_Johto_South_Hns,
     .metatileAttributes = gMetatileAttributes_Johto_South_Hns,
     .callback = InitTilesetAnim_JohtoGeneral,
+    .seasonal = gTilesetSeasonal_Johto_South_Hns, // TREY (6-S)
 };
 
 const struct Tileset gTileset_Kanto_General_Hns =
@@ -2169,6 +2182,7 @@ const struct Tileset gTileset_MahoganyTown_Hns =
     .metatiles = gMetatiles_MahoganyTown_Hns,
     .metatileAttributes = gMetatileAttributes_MahoganyTown_Hns,
     .callback = NULL,
+    .seasonal = gTilesetSeasonal_MahoganyTown_Hns, // TREY (6-S)
 };
 
 const struct Tileset gTileset_MtEmber_Hns =
@@ -2202,6 +2216,7 @@ const struct Tileset gTileset_MtSilver_Ancient_Hns =
     .metatiles = gMetatiles_MtSilver_Ancient_Hns,
     .metatileAttributes = gMetatileAttributes_MtSilver_Ancient_Hns,
     .callback = NULL,
+    .seasonal = gTilesetSeasonal_MtSilver_Ancient_Hns, // TREY (6-S)
 };
 
 const struct Tileset gTileset_MtSilver_Exp_Hns =
@@ -2213,6 +2228,7 @@ const struct Tileset gTileset_MtSilver_Exp_Hns =
     .metatiles = gMetatiles_MtSilver_Exp_Hns,
     .metatileAttributes = gMetatileAttributes_MtSilver_Exp_Hns,
     .callback = InitTilesetAnim_MtSilverExp,
+    .seasonal = gTilesetSeasonal_MtSilver_Exp_Hns, // TREY (6-S)
 };
 
 const struct Tileset gTileset_MtSilver_NewSinjoh_Hns =
@@ -2235,6 +2251,7 @@ const struct Tileset gTileset_NationalPark_Hns =
     .metatiles = gMetatiles_NationalPark_Hns,
     .metatileAttributes = gMetatileAttributes_NationalPark_Hns,
     .callback = InitTilesetAnim_NationalPark,
+    .seasonal = gTilesetSeasonal_NationalPark_Hns, // TREY (6-S)
 };
 
 const struct Tileset gTileset_NewBarkTown_Hns =
@@ -2246,6 +2263,7 @@ const struct Tileset gTileset_NewBarkTown_Hns =
     .metatiles = gMetatiles_NewBarkTown_Hns,
     .metatileAttributes = gMetatileAttributes_NewBarkTown_Hns,
     .callback = NULL,
+    .seasonal = gTilesetSeasonal_NewBarkTown_Hns, // TREY (6-S)
 };
 
 const struct Tileset gTileset_OlivineCity_Hns =
@@ -2257,6 +2275,7 @@ const struct Tileset gTileset_OlivineCity_Hns =
     .metatiles = gMetatiles_OlivineCity_Hns,
     .metatileAttributes = gMetatileAttributes_OlivineCity_Hns,
     .callback = NULL,
+    .seasonal = gTilesetSeasonal_OlivineCity_Hns, // TREY (6-S)
 };
 
 const struct Tileset gTileset_PlayersHouse_Hns =
@@ -2312,6 +2331,7 @@ const struct Tileset gTileset_PortIndoor_Hns =
     .metatiles = gMetatiles_PortIndoor_Hns,
     .metatileAttributes = gMetatileAttributes_PortIndoor_Hns,
     .callback = NULL,
+    .seasonal = gTilesetSeasonal_PortIndoor_Hns, // TREY (6-S)
 };
 
 const struct Tileset gTileset_PowerPlant_GeneratorRoom_Hns =
@@ -2323,6 +2343,7 @@ const struct Tileset gTileset_PowerPlant_GeneratorRoom_Hns =
     .metatiles = gMetatiles_PowerPlant_GeneratorRoom_Hns,
     .metatileAttributes = gMetatileAttributes_PowerPlant_GeneratorRoom_Hns,
     .callback = NULL,
+    .seasonal = gTilesetSeasonal_PowerPlant_GeneratorRoom_Hns, // TREY (6-S)
 };
 
 const struct Tileset gTileset_Route32_Hns =
@@ -2334,6 +2355,7 @@ const struct Tileset gTileset_Route32_Hns =
     .metatiles = gMetatiles_Route32_Hns,
     .metatileAttributes = gMetatileAttributes_Route32_Hns,
     .callback = NULL,
+    .seasonal = gTilesetSeasonal_Route32_Hns, // TREY (6-S)
 };
 
 const struct Tileset gTileset_Route38_Farmland_Hns =
@@ -2345,6 +2367,7 @@ const struct Tileset gTileset_Route38_Farmland_Hns =
     .metatiles = gMetatiles_Route38_Farmland_Hns,
     .metatileAttributes = gMetatileAttributes_Route38_Farmland_Hns,
     .callback = NULL,
+    .seasonal = gTilesetSeasonal_Route38_Farmland_Hns, // TREY (6-S)
 };
 
 const struct Tileset gTileset_Route40_Hns =
@@ -2356,6 +2379,7 @@ const struct Tileset gTileset_Route40_Hns =
     .metatiles = gMetatiles_Route40_Hns,
     .metatileAttributes = gMetatileAttributes_Route40_Hns,
     .callback = NULL,
+    .seasonal = gTilesetSeasonal_Route40_Hns, // TREY (6-S)
 };
 
 const struct Tileset gTileset_RuinsOfAlphWriting_Hns =
@@ -2389,6 +2413,7 @@ const struct Tileset gTileset_RuinsOfAlph_Outside_Hns =
     .metatiles = gMetatiles_RuinsOfAlph_Outside_Hns,
     .metatileAttributes = gMetatileAttributes_RuinsOfAlph_Outside_Hns,
     .callback = NULL,
+    .seasonal = gTilesetSeasonal_RuinsOfAlph_Outside_Hns, // TREY (6-S)
 };
 
 const struct Tileset gTileset_SafariZoneJohto_Hns =
@@ -2400,6 +2425,7 @@ const struct Tileset gTileset_SafariZoneJohto_Hns =
     .metatiles = gMetatiles_SafariZoneJohto_Hns,
     .metatileAttributes = gMetatileAttributes_SafariZoneJohto_Hns,
     .callback = NULL,
+    .seasonal = gTilesetSeasonal_SafariZoneJohto_Hns, // TREY (6-S)
 };
 
 const struct Tileset gTileset_SafariZone_Entrance_Hns =
@@ -2433,6 +2459,7 @@ const struct Tileset gTileset_ShopRooftop_Hns =
     .metatiles = gMetatiles_ShopRooftop_Hns,
     .metatileAttributes = gMetatileAttributes_ShopRooftop_Hns,
     .callback = NULL,
+    .seasonal = gTilesetSeasonal_ShopRooftop_Hns, // TREY (6-S)
 };
 
 const struct Tileset gTileset_SootopolisGym_Hns =
@@ -2488,6 +2515,7 @@ const struct Tileset gTileset_VioletCity_Hns =
     .metatiles = gMetatiles_VioletCity_Hns,
     .metatileAttributes = gMetatileAttributes_VioletCity_Hns,
     .callback = NULL,
+    .seasonal = gTilesetSeasonal_VioletCity_Hns, // TREY (6-S)
 };
 
 const struct Tileset gTileset_ViridianCity_Hns =
@@ -2499,6 +2527,7 @@ const struct Tileset gTileset_ViridianCity_Hns =
     .metatiles = gMetatiles_ViridianCity_Hns,
     .metatileAttributes = gMetatileAttributes_ViridianCity_Hns,
     .callback = NULL,
+    .seasonal = gTilesetSeasonal_ViridianCity_Hns, // TREY (6-S)
 };
 
 const struct Tileset gTileset_WhirlIslands_Hns =
@@ -2510,6 +2539,7 @@ const struct Tileset gTileset_WhirlIslands_Hns =
     .metatiles = gMetatiles_WhirlIslands_Hns,
     .metatileAttributes = gMetatileAttributes_WhirlIslands_Hns,
     .callback = NULL,
+    .seasonal = gTilesetSeasonal_WhirlIslands_Hns, // TREY (6-S)
 };
 
 const struct Tileset gTileset_ssaqua_Hns =
