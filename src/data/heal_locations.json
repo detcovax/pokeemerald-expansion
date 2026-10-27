@@ -483,6 +483,12 @@
       "respawn_npc": "LOCALID_JUBILIFE_CITY_POKEMON_CENTER_1F_JUBILIFE_NURSE"
     },
     {
+      "id": "HEAL_LOCATION_TWINLEAF_TOWN",
+      "map": "MAP_TWINLEAF_TOWN",
+      "x": 16,
+      "y": 19
+    },
+    {
       "id": "HEAL_LOCATION_OREBURGH_CITY",
       "map": "MAP_OREBURGH_CITY",
       "x": 51,

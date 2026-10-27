@@ -146,6 +146,7 @@ static const u8 sRegionMapPlayerIcon_LeafGfx[] = INCGFX_U8("graphics/pokenav/reg
 #include "data/region_map/trey_layouts.h" // TREY (4a): one grid per region map page (Hoenn copied from region_map_layout.h)
 #include "data/region_map/region_map_entries.h"
 #include "constants/trey_johto_fly.h" // TREY (6a-7)
+#include "constants/trey_sinnoh_fly.h" // TREY (6b-6)
 
 static const mapsec_u16_t sRegionMap_SpecialPlaceLocations[][2] =
 {
@@ -514,6 +515,7 @@ static const u8 sMapHealLocations[][3] =
     [MAPSEC_ROUTE_10_POKECENTER] = {MAP_GROUP(MAP_ROUTE10), MAP_NUM(MAP_ROUTE10), HEAL_LOCATION_ROUTE10},
 #define TREY_JOHTO_HEAL(sec, map, heal) [MAPSEC_##sec] = {MAP_GROUP(MAP_##map), MAP_NUM(MAP_##map), HEAL_LOCATION_##heal},
     TREY_JOHTO_FLY(TREY_JOHTO_HEAL) // TREY (6a-7)
+    TREY_SINNOH_FLY(TREY_JOHTO_HEAL) // TREY (6b-6)
 #undef TREY_JOHTO_HEAL
     [MAPSEC_ROUTE_1] = {MAP_GROUP(MAP_ROUTE1), MAP_NUM(MAP_ROUTE1), HEAL_LOCATION_NONE},
     [MAPSEC_ROUTE_2] = {MAP_GROUP(MAP_ROUTE2), MAP_NUM(MAP_ROUTE2), HEAL_LOCATION_NONE},
@@ -1565,6 +1567,9 @@ static u8 GetMapsecType(mapsec_u16_t mapSecId)
 #define TREY_JOHTO_TYPE(sec, map, heal) case MAPSEC_##sec: return FlagGet(FLAG_WORLD_MAP_JOHTO_##sec) ? MAPSECTYPE_CITY_CANFLY : MAPSECTYPE_CITY_CANTFLY;
     TREY_JOHTO_FLY(TREY_JOHTO_TYPE) // TREY (6a-7)
 #undef TREY_JOHTO_TYPE
+#define TREY_SINNOH_TYPE(sec, map, heal) case MAPSEC_##sec: return FlagGet(FLAG_WORLD_MAP_SINNOH_##sec) ? MAPSECTYPE_CITY_CANFLY : MAPSECTYPE_CITY_CANTFLY;
+    TREY_SINNOH_FLY(TREY_SINNOH_TYPE) // TREY (6b-6)
+#undef TREY_SINNOH_TYPE
     default:
         return MAPSECTYPE_ROUTE;
     }
@@ -2407,8 +2412,10 @@ struct TreyFlyLocation
     u16 mapsec;
 };
 #define TREY_JOHTO_ICON(sec, map, heal) { .flag = FLAG_WORLD_MAP_JOHTO_##sec, .mapsec = MAPSEC_##sec },
-static const struct TreyFlyLocation sTreyFlyLocations[] = { TREY_JOHTO_FLY(TREY_JOHTO_ICON) };
+#define TREY_SINNOH_ICON(sec, map, heal) { .flag = FLAG_WORLD_MAP_SINNOH_##sec, .mapsec = MAPSEC_##sec },
+static const struct TreyFlyLocation sTreyFlyLocations[] = { TREY_JOHTO_FLY(TREY_JOHTO_ICON) TREY_SINNOH_FLY(TREY_SINNOH_ICON) }; // TREY (6b-6): + Sinnoh
 #undef TREY_JOHTO_ICON
+#undef TREY_SINNOH_ICON
 
 // Sprite data for SpriteCB_FlyDestIcon
 #define sIconMapSec   data[0]
