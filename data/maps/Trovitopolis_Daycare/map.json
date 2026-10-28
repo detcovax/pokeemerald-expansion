@@ -1,0 +1,44 @@
+{
+  "id": "MAP_TROVITOPOLIS_DAYCARE",
+  "name": "Trovitopolis_Daycare",
+  "layout": "LAYOUT_TROVITOPOLIS_DAYCARE",
+  "music": "MUS_RG_CELADON",
+  "region": "REGION_ORANGE",
+  "region_map_section": "MAPSEC_TROVITOPOLIS",
+  "requires_flash": false,
+  "weather": "WEATHER_NONE",
+  "map_type": "MAP_TYPE_INDOOR",
+  "allow_cycling": false,
+  "allow_escaping": false,
+  "allow_running": false,
+  "show_map_name": false,
+  "floor_number": 0,
+  "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
+  "connections": null,
+  "object_events": [],
+  "warp_events": [
+    {
+      "x": 6,
+      "y": 9,
+      "elevation": 3,
+      "dest_map": "MAP_TROVITOPOLIS",
+      "dest_warp_id": "3"
+    },
+    {
+      "x": 7,
+      "y": 9,
+      "elevation": 3,
+      "dest_map": "MAP_TROVITOPOLIS",
+      "dest_warp_id": "3"
+    },
+    {
+      "x": 8,
+      "y": 9,
+      "elevation": 3,
+      "dest_map": "MAP_TROVITOPOLIS",
+      "dest_warp_id": "3"
+    }
+  ],
+  "coord_events": [],
+  "bg_events": []
+}

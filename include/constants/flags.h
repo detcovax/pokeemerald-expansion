@@ -1765,7 +1765,17 @@
 #define FLAG_WORLD_MAP_SINNOH_SURVIVAL_AREA         (TREY_FLAG_WORLD_MAP_SINNOH_START + 16)
 #define FLAG_WORLD_MAP_SINNOH_RESORT_AREA           (TREY_FLAG_WORLD_MAP_SINNOH_START + 17)
 
-#define TREY_FLAG_NEXT_FREE             (TREY_FLAG_WORLD_MAP_SINNOH_END + 1) // next unused TREY flag
+// TREY (6c-4b): item balls and hidden items on the Orange maps (FLAG_ORANGE_*), and Orange's Fly/Teleport
+// destinations (FLAG_WORLD_MAP_ORANGE_*, one per entry of include/constants/trey_orange_fly.h). Both are written by
+// tools/trey/import_orange.py (maps) into include/constants/trey_orange_flags.h.
+#define TREY_FLAG_ORANGE_ITEMS_START     (TREY_FLAG_WORLD_MAP_SINNOH_END + 1)
+#define TREY_FLAG_ORANGE_ITEMS_COUNT     256
+#define TREY_FLAG_ORANGE_ITEMS_END       (TREY_FLAG_ORANGE_ITEMS_START + TREY_FLAG_ORANGE_ITEMS_COUNT - 1)
+#define TREY_FLAG_WORLD_MAP_ORANGE_START (TREY_FLAG_ORANGE_ITEMS_END + 1)
+#define TREY_FLAG_WORLD_MAP_ORANGE_END   (TREY_FLAG_WORLD_MAP_ORANGE_START + 63)
+#include "constants/trey_orange_flags.h"
+
+#define TREY_FLAG_NEXT_FREE             (TREY_FLAG_WORLD_MAP_ORANGE_END + 1) // next unused TREY flag
 
 #define FLAGS_COUNT (TREY_FLAGS_END + 1) // TREY: was (DAILY_FLAGS_END + 1)
 

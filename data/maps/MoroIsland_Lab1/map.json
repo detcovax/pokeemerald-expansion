@@ -1,0 +1,30 @@
+{
+  "id": "MAP_MORO_ISLAND_LAB_1",
+  "name": "MoroIsland_Lab1",
+  "layout": "LAYOUT_MORO_ISLAND_LAB_1",
+  "music": "MUS_RG_CINNABAR",
+  "region": "REGION_ORANGE",
+  "region_map_section": "MAPSEC_MORO_ISLAND",
+  "requires_flash": false,
+  "weather": "WEATHER_NONE",
+  "map_type": "MAP_TYPE_INDOOR",
+  "allow_cycling": false,
+  "allow_escaping": false,
+  "allow_running": false,
+  "show_map_name": false,
+  "floor_number": 0,
+  "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
+  "connections": null,
+  "object_events": [],
+  "warp_events": [
+    {
+      "x": 5,
+      "y": 7,
+      "elevation": 0,
+      "dest_map": "MAP_MORO_ISLAND",
+      "dest_warp_id": "0"
+    }
+  ],
+  "coord_events": [],
+  "bg_events": []
+}

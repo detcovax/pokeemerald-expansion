@@ -88,7 +88,7 @@ def find_seasonal_tilesets():
                 names.add(lay["secondary_tileset"])
     heads, pdirs = tileset_headers(), palette_dirs()
     out = {}
-    for name in sorted(names - NO_SEASONS):
+    for name in sorted(n for n in names - NO_SEASONS if not n.startswith("gTileset_Orange")):  # TREY (6c-4b, D42): Orange is always summer
         if name in heads and heads[name][1] in pdirs:
             folder, count = pdirs[heads[name][1]]
             if os.path.exists(f"{folder}/palettes/00.pal"):

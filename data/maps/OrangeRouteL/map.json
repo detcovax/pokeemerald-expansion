@@ -1,0 +1,161 @@
+{
+  "id": "MAP_ORANGE_ROUTE_L",
+  "name": "OrangeRouteL",
+  "layout": "LAYOUT_ORANGE_ROUTE_L",
+  "music": "MUS_RG_ROUTE3",
+  "region": "REGION_ORANGE",
+  "region_map_section": "MAPSEC_ORANGE_ROUTE_L",
+  "requires_flash": false,
+  "weather": "WEATHER_SUNNY",
+  "map_type": "MAP_TYPE_ROUTE",
+  "allow_cycling": true,
+  "allow_escaping": false,
+  "allow_running": true,
+  "show_map_name": true,
+  "floor_number": 0,
+  "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
+  "connections": [
+    {
+      "map": "MAP_MURCOTT_ISLAND",
+      "offset": 56,
+      "direction": "up"
+    },
+    {
+      "map": "MAP_MANDARIN_SOUTH",
+      "offset": -20,
+      "direction": "left"
+    }
+  ],
+  "object_events": [
+    {
+      "type": "object",
+      "graphics_id": "OBJ_EVENT_GFX_ORANGE_MISTY",
+      "x": 63,
+      "y": 36,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_FACE_LEFT",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "OrangeRouteL_EventScript_Talk1",
+      "flag": "0"
+    },
+    {
+      "type": "object",
+      "graphics_id": "OBJ_EVENT_GFX_ORANGE_BILL",
+      "x": 63,
+      "y": 35,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_FACE_LEFT",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "OrangeRouteL_EventScript_Talk2",
+      "flag": "0"
+    }
+  ],
+  "warp_events": [],
+  "coord_events": [],
+  "bg_events": [
+    {
+      "type": "sign",
+      "x": 89,
+      "y": 29,
+      "elevation": 0,
+      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
+      "script": "OrangeRouteL_EventScript_Sign1"
+    },
+    {
+      "type": "hidden_item",
+      "x": 91,
+      "y": 25,
+      "elevation": 0,
+      "item": "ITEM_STARDUST",
+      "flag": "FLAG_ORANGE_HIDDEN_ORANGE_ROUTE_L_STARDUST",
+      "quantity": 1,
+      "underfoot": false
+    },
+    {
+      "type": "hidden_item",
+      "x": 32,
+      "y": 26,
+      "elevation": 0,
+      "item": "ITEM_ASPEAR_BERRY",
+      "flag": "FLAG_ORANGE_HIDDEN_ORANGE_ROUTE_L_ASPEAR_BERRY",
+      "quantity": 1,
+      "underfoot": false
+    },
+    {
+      "type": "hidden_item",
+      "x": 32,
+      "y": 27,
+      "elevation": 0,
+      "item": "ITEM_LEPPA_BERRY",
+      "flag": "FLAG_ORANGE_HIDDEN_ORANGE_ROUTE_L_LEPPA_BERRY",
+      "quantity": 1,
+      "underfoot": false
+    },
+    {
+      "type": "hidden_item",
+      "x": 56,
+      "y": 30,
+      "elevation": 0,
+      "item": "ITEM_ORAN_BERRY",
+      "flag": "FLAG_ORANGE_HIDDEN_ORANGE_ROUTE_L_ORAN_BERRY",
+      "quantity": 1,
+      "underfoot": false
+    },
+    {
+      "type": "hidden_item",
+      "x": 57,
+      "y": 30,
+      "elevation": 0,
+      "item": "ITEM_PERSIM_BERRY",
+      "flag": "FLAG_ORANGE_HIDDEN_ORANGE_ROUTE_L_PERSIM_BERRY",
+      "quantity": 1,
+      "underfoot": false
+    },
+    {
+      "type": "hidden_item",
+      "x": 58,
+      "y": 41,
+      "elevation": 0,
+      "item": "ITEM_LUM_BERRY",
+      "flag": "FLAG_ORANGE_HIDDEN_ORANGE_ROUTE_L_LUM_BERRY",
+      "quantity": 1,
+      "underfoot": false
+    },
+    {
+      "type": "hidden_item",
+      "x": 59,
+      "y": 41,
+      "elevation": 0,
+      "item": "ITEM_SITRUS_BERRY",
+      "flag": "FLAG_ORANGE_HIDDEN_ORANGE_ROUTE_L_SITRUS_BERRY",
+      "quantity": 1,
+      "underfoot": false
+    },
+    {
+      "type": "hidden_item",
+      "x": 55,
+      "y": 37,
+      "elevation": 0,
+      "item": "ITEM_FIGY_BERRY",
+      "flag": "FLAG_ORANGE_HIDDEN_ORANGE_ROUTE_L_FIGY_BERRY",
+      "quantity": 1,
+      "underfoot": false
+    },
+    {
+      "type": "hidden_item",
+      "x": 56,
+      "y": 37,
+      "elevation": 0,
+      "item": "ITEM_WIKI_BERRY",
+      "flag": "FLAG_ORANGE_HIDDEN_ORANGE_ROUTE_L_WIKI_BERRY",
+      "quantity": 1,
+      "underfoot": false
+    }
+  ]
+}

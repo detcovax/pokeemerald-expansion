@@ -1,0 +1,369 @@
+TREY (6c-4b): what tools/trey/import_orange.py (maps) kept and dropped on each Orange map.
+
+AscorbiaForest (hack map 1.38): hidden item 4, item ball 3, sign 1, story/branching script dropped 2, trainer dropped 3
+AscorbiaIsland (hack map 3.15): hidden item 1, hidden on a new game, dropped 5, item ball 1, sign 2, story/branching script dropped 3, talker 2, trigger dropped 8
+ButwalIsland (hack map 1.39): hidden item 2, hidden on a new game, dropped 1, item ball 2, obstacle 2, sign 1, story/branching script dropped 1, talker 2, trigger dropped 3
+CleopatraIsland (hack map 1.37): hidden item 2, item ball 3, sign 1, trainer dropped 2
+FairchildIsland (hack map 1.36): hidden item 3, hidden on a new game, dropped 4, item ball 3, sign 1, trigger dropped 4
+FukuharaIsland (hack map 3.30): Pokemon (follower sprite) 3, hidden item 2, item ball 2, sign 2, story/branching script dropped 1, talker 5, trainer dropped 2
+GoldenIsland (hack map 3.37): hidden on a new game, dropped 1, sign 1, talker 5, trigger dropped 3
+GrapefruitIsles (hack map 3.34): hidden item 4, hidden on a new game, dropped 2, sign 7, story/branching script dropped 1, trainer dropped 2, trigger dropped 3
+HamlinFields (hack map 3.57): hidden item 3, hidden on a new game, dropped 14, item ball 2, object without script dropped 1, obstacle 1, trigger dropped 5
+HamlinIsland (hack map 3.19): hidden item 1, hidden on a new game, dropped 14, sign 2, trigger dropped 4
+KinnowIsland (hack map 3.6): hidden item 1, sign 2, story/branching script dropped 2, talker 8, trigger dropped 6
+KumquatIsland (hack map 3.16): hidden item 3, hidden on a new game, dropped 1, sign 2, story/branching script dropped 3, talker 4, trainer dropped 4
+LightningIsland (hack map 1.65): 
+LightningIsland_2 (hack map 1.64): 
+LightningIsland_3 (hack map 1.63): 
+LightningIsland_4 (hack map 1.66): 
+MandarinNorth (hack map 3.4): hidden item 1, hidden on a new game, dropped 6, sign 4, story/branching script dropped 3, talker 3, trainer dropped 1, trigger dropped 11
+MandarinSouth (hack map 3.10): hidden item 1, hidden on a new game, dropped 2, item ball 1, sign 2, talker 5, trigger dropped 3
+MikanIsland (hack map 3.3): sign 3, story/branching script dropped 1, talker 3
+MoroIsland (hack map 3.8): hidden item 1, item ball 1, sign 3, story/branching script dropped 4, talker 2
+MurcottIsland (hack map 3.9): hidden item 1, sign 2, story/branching script dropped 2, talker 1
+MurcottMeadows (hack map 1.4): hidden item 2, hidden on a new game, dropped 12, item ball 4, sign 1, talker 1, trainer dropped 6, trigger dropped 8
+NavelIsland (hack map 3.7): hidden item 2, sign 1, story/branching script dropped 1, talker 3
+NavelMountain (hack map 3.56): hidden item 2, hidden on a new game, dropped 2, item ball 3, sign 4, talker 3, trainer dropped 5, trigger dropped 9
+NewIsland (hack map 1.121): 
+NewIsland_2 (hack map 1.62): hidden on a new game, dropped 1, trigger dropped 4
+NewIsland_3 (hack map 3.59): hidden item 1, item ball 1, obstacle 3, story/branching script dropped 2
+OrangeLeague (hack map 3.58): hidden on a new game, dropped 1, object without script 12, story/branching script dropped 2
+OrangePalletTown (hack map 3.0): Pokemon (follower sprite) 4, sign 6, story/branching script dropped 5, talker 7, trigger dropped 6
+OrangeRoute1 (hack map 3.20): hidden item 1, hidden on a new game, dropped 2, object without script 1, sign 4, story/branching script dropped 3, talker 1, trigger dropped 5
+OrangeRouteA (hack map 3.21): hidden item 1, sign 1, trainer dropped 5
+OrangeRouteB (hack map 3.22): hidden item 1, sign 1, trainer dropped 4
+OrangeRouteC (hack map 3.23): hidden item 1, sign 1, trainer dropped 7
+OrangeRouteD (hack map 3.24): hidden item 1, sign 1, trainer dropped 5
+OrangeRouteE (hack map 3.26): hidden item 1, hidden on a new game, dropped 3, trainer dropped 3, trigger dropped 8
+OrangeRouteE_2 (hack map 3.25): sign 1, trainer dropped 4, trigger dropped 9
+OrangeRouteF (hack map 3.28): hidden item 2, sign 2, trainer dropped 3
+OrangeRouteF_2 (hack map 3.29): hidden item 1, trainer dropped 3
+OrangeRouteG (hack map 3.31): hidden item 1, hidden on a new game, dropped 1, item ball 1, object without script dropped 3, sign 1, story/branching script dropped 1, trainer dropped 4, trigger dropped 3
+OrangeRouteH (hack map 3.32): Pokemon (follower sprite) 2, hidden item 2, hidden on a new game, dropped 4, sign 2, talker 2, trainer dropped 9
+OrangeRouteI (hack map 3.33): sign 1, trainer dropped 1
+OrangeRouteI_2 (hack map 3.35): sign 1, trainer dropped 1
+OrangeRouteJ (hack map 3.36): hidden item 2, sign 1, trainer dropped 6
+OrangeRouteK (hack map 3.38): hidden item 1, sign 1, trainer dropped 4
+OrangeRouteL (hack map 3.39): hidden item 9, sign 1, story/branching script dropped 1, talker 2, trainer dropped 6
+OrangeRouteM (hack map 3.40): hidden item 1, hidden on a new game, dropped 4, item ball 3, sign 3, trainer dropped 5, trigger dropped 3
+OrangeRouteN (hack map 3.41): Pokemon (follower sprite) 8, hidden item 1, hidden on a new game, dropped 6, item ball 4, object without script 1, sign 2, story/branching script dropped 1, talker 11, trainer dropped 4, trigger dropped 9
+OrangeRouteO (hack map 3.42): hidden item 2, sign 1, trainer dropped 4
+OrangeRouteP (hack map 3.43): hidden item 1, sign 1, trainer dropped 4
+OrangeRouteQ (hack map 3.44): hidden item 1, hidden on a new game, dropped 3, sign 1, trainer dropped 5, trigger dropped 8
+OrangeRouteQ_2 (hack map 3.45): hidden item 1, sign 1, trainer dropped 4
+OrangeRouteR (hack map 3.46): Pokemon (follower sprite) 1, hidden item 3, item ball 1, sign 1, story/branching script dropped 1, talker 1, trainer dropped 6
+OrangeRouteR_2 (hack map 3.47): sign 1, trainer dropped 2
+OrangeRouteS (hack map 3.48): hidden item 2, sign 2, talker 2, trainer dropped 6
+OrangeRouteT (hack map 3.49): hidden item 1, sign 2, story/branching script dropped 5, trainer dropped 3
+OrangeRouteU (hack map 3.50): hidden on a new game, dropped 8, sign 2, trainer dropped 4, trigger dropped 8
+OrangeRouteV (hack map 3.51): hidden item 1, sign 2, talker 1, trainer dropped 6
+OrangeRouteW (hack map 3.52): hidden item 1, sign 1, trainer dropped 6
+OrangeRouteX (hack map 3.53): hidden item 1, sign 1, trainer dropped 4
+PinkanIsland (hack map 3.27): hidden item 2, hidden on a new game, dropped 9, item ball 2, object without script dropped 1, sign 3, story/branching script dropped 1, trigger dropped 8
+PokemonPark (hack map 1.1): hidden item 2, hidden on a new game, dropped 10, item ball 1, sign 1, trigger dropped 3
+PummeloIsland (hack map 3.62): closed door (map not in the hack) 1
+PummeloIsland_2 (hack map 3.17): hidden item 2, hidden on a new game, dropped 5, sign 3, story/branching script dropped 3, talker 6, trigger dropped 6
+RindIsland (hack map 1.40): hidden item 4, hidden on a new game, dropped 11, item ball 2, object without script dropped 3, obstacle 1, sign 1, story/branching script dropped 1, trigger dropped 6
+SalveyoIsland (hack map 1.41): hidden item 2, hidden on a new game, dropped 2, item ball 3, sign 1, trigger dropped 4
+ShamoutiIsland (hack map 3.14): hidden item 1, hidden on a new game, dropped 12, sign 4, sign script dropped 3, story/branching script dropped 6, talker 3, trigger dropped 9
+ShamoutiIsland_2 (hack map 3.61): 
+SunburstIsland (hack map 3.5): hidden on a new game, dropped 1, sign 2, story/branching script dropped 1, talker 2, trainer dropped 5, trigger dropped 3
+TangeloIsland (hack map 3.2): hidden on a new game, dropped 11, item ball 1, sign 3, story/branching script dropped 3, talker 1, trigger dropped 11
+TarrocoIsland (hack map 3.18): hidden item 3, item ball 1, obstacle 1, sign 1, talker 3
+TrovitaIsland (hack map 3.13): hidden item 1, hidden on a new game, dropped 4, item ball 1, sign 3, story/branching script dropped 2, talker 1
+Trovitopolis (hack map 3.12): hidden item 3, sign 3, story/branching script dropped 4, talker 4, trigger dropped 2
+ValenciaIsland (hack map 3.1): hidden on a new game, dropped 6, sign 4, story/branching script dropped 1, talker 3
+ValenciaIsland_2 (hack map 2.0): object without script 1, sign 1, story/branching script dropped 4, trigger dropped 5
+ValenciaPark (hack map 1.0): hidden item 2, hidden on a new game, dropped 2, item ball 1, object without script dropped 5, sign 2, story/branching script dropped 1
+Yambera (hack map 3.11): hidden item 1, hidden on a new game, dropped 6, sign 3, story/branching script dropped 2, talker 4
+AscorbiaForest_Cave1 (hack map 1.83): closed door (map not in the hack) 2
+AscorbiaForest_Cave2 (hack map 1.84): 
+AscorbiaForest_Cave3 (hack map 1.85): 
+AscorbiaForest_Cave4 (hack map 1.86): 
+AscorbiaForest_Cave5 (hack map 1.87): 
+BayCave (hack map 1.3): hidden item 3, item ball 2, obstacle 12, trainer dropped 2
+CrystalCave (hack map 1.2): hidden item 2, hidden on a new game, dropped 4, item ball 2, trainer dropped 3, trigger dropped 4
+FireIsland_Cave1 (hack map 1.97): item ball 1, sign script dropped 4
+FireIsland_Cave2 (hack map 1.98): 
+FireIsland_Cave3 (hack map 1.99): hidden on a new game, dropped 3, story/branching script dropped 2, trigger dropped 5
+IceIsland_Cave1 (hack map 1.72): 
+IceIsland_Cave2 (hack map 1.73): 
+IceIsland_Cave3 (hack map 1.74): 
+IceIsland_Cave4 (hack map 1.109): item ball 1
+IceIsland_Cave5 (hack map 1.110): story/branching script dropped 2
+LightningIsland_Cave1 (hack map 1.81): hidden on a new game, dropped 6, item ball 1, sign script dropped 3
+LightningIsland_Cave2 (hack map 1.82): hidden on a new game, dropped 4, story/branching script dropped 2, trigger dropped 1
+MurcottMeadows_Cave1 (hack map 1.111): 
+MurcottMeadows_Cave2 (hack map 1.112): 
+MurcottMeadows_Cave3 (hack map 1.113): 
+OrangeLeague_Cave (hack map 1.122): 
+OrangeSewers1 (hack map 1.30): item ball 1
+OrangeSewers2 (hack map 1.31): hidden item 2, item ball 1, trainer dropped 1
+OrangeSewers3 (hack map 1.32): item ball 1
+OrangeSewers4 (hack map 1.33): trainer dropped 1
+OrangeSewers5 (hack map 1.34): hidden item 1, story/branching script dropped 1
+OrangeSewers6 (hack map 1.35): story/branching script dropped 1
+SalveyoIsland_Cave1 (hack map 1.100): 
+SalveyoIsland_Cave2 (hack map 1.101): 
+SalveyoIsland_Cave3 (hack map 1.102): closed door (map not in the hack) 1
+SalveyoIsland_Cave4 (hack map 1.103): 
+SalveyoIsland_Cave5 (hack map 1.104): 
+SalveyoIsland_Cave6 (hack map 1.105): 
+SalveyoIsland_Cave7 (hack map 1.106): closed door (map not in the hack) 1
+SalveyoIsland_Cave8 (hack map 1.107): 
+SalveyoIsland_Cave9 (hack map 1.108): 
+ShamoutiIsland_Cave1 (hack map 1.115): 
+ShamoutiIsland_Cave2 (hack map 1.116): 
+ShamoutiIsland_Cave3 (hack map 1.117): 
+ShamoutiIsland_Cave4 (hack map 1.118): 
+ShamoutiIsland_Cave5 (hack map 1.119): 
+ShamoutiIsland_Cave6 (hack map 1.120): 
+OrangeUnderwater1 (hack map 3.54): Pokemon (follower sprite) 1, hidden item 4, item ball 1, story/branching script dropped 1, talker 1
+OrangeUnderwater2 (hack map 3.55): hidden item 1
+OrangeUnderwater3 (hack map 6.0): hidden item 2, item ball 1
+MandarinNorth_Daycare (hack map 8.2): story/branching script dropped 2, talker 1
+MandarinNorth_House1 (hack map 8.3): hidden on a new game, dropped 2
+MandarinNorth_House2 (hack map 8.4): talker 2
+MandarinNorth_Mart (hack map 8.5): mart clerk 1, talker 2
+MandarinNorth_PokemonCenter_1F (hack map 8.0): Pokemon (follower sprite) 1, nurse 1, story/branching script dropped 1, talker 3
+MandarinNorth_PokemonCenter_2F (hack map 8.1): cable club attendant 3
+MikanIsland_Gym (hack map 7.5): trainer dropped 5
+MikanIsland_House1 (hack map 7.0): talker 1
+MikanIsland_House2 (hack map 7.1): talker 2
+MikanIsland_Mart (hack map 7.7): mart clerk 1, talker 2
+MikanIsland_PokemonCenter_1F (hack map 7.3): Pokemon (follower sprite) 1, nurse 1, talker 4
+MikanIsland_PokemonCenter_2F (hack map 7.4): cable club attendant 3
+MikanIsland_Shop (hack map 7.6): 
+OrangeLeague1 (hack map 1.75): 
+OrangeLeague2 (hack map 1.76): 
+OrangeLeague3 (hack map 1.77): 
+OrangeLeague4 (hack map 1.78): 
+OrangeLeague5 (hack map 1.79): 
+OrangeLeague_HallOfFame (hack map 1.80): 
+OrangeLeague_Harbor (hack map 25.2): 
+OrangeLeague_PokemonCenter_2F (hack map 25.1): closed door (map not in the hack) 1, sign 2, story/branching script dropped 2, talker 3, trigger dropped 4
+OrangeRocketHideout_Floor1 (hack map 1.42): hidden on a new game, dropped 8, item ball 5
+OrangeRocketHideout_Floor2 (hack map 1.43): hidden on a new game, dropped 10, item ball 2, trigger dropped 3
+OrangeRocketHideout_Floor3 (hack map 1.44): hidden on a new game, dropped 6, item ball 1
+OrangeRocketHideout_Floor4 (hack map 1.45): hidden on a new game, dropped 8, trigger dropped 4
+OrangeRocketHideout_Floor5 (hack map 1.46): sign script dropped 1
+OrangeRouteE_House (hack map 18.1): 
+OrangeRouteE_Mart (hack map 19.0): closed door (map not in the hack) 2
+OrangeRouteE_Shop (hack map 18.0): closed door (map not in the hack) 2
+PinkanIsland_Daycare (hack map 9.6): story/branching script dropped 1, talker 2
+PummeloIsland_House1 (hack map 36.3): talker 2
+PummeloIsland_House2 (hack map 36.4): story/branching script dropped 1
+PummeloIsland_Mart (hack map 11.1): mart clerk 1, talker 2
+PummeloIsland_PokemonCenter_1F (hack map 36.0): Pokemon (follower sprite) 1, nurse 1, talker 3
+PummeloIsland_PokemonCenter_2F1 (hack map 31.6): 
+PummeloIsland_PokemonCenter_2F2 (hack map 36.1): cable club attendant 3
+PummeloIsland_PokemonCenter_2F3 (hack map 36.2): story/branching script dropped 5
+PummeloIsland_PokemonCenter_2F4 (hack map 38.0): story/branching script dropped 1
+PummeloIsland_Shop (hack map 17.1): sign 5, story/branching script dropped 1, talker 3
+RindIsland_PowerPlant (hack map 1.95): 
+SalveyoIsland_Hall (hack map 7.9): story/branching script dropped 1, talker 1
+SalveyoIsland_Harbor1 (hack map 26.0): closed door (map not in the hack) 2
+SalveyoIsland_Harbor2 (hack map 26.1): 
+SunburstIsland_Daycare (hack map 9.3): story/branching script dropped 1
+SunburstIsland_Hall1 (hack map 9.0): story/branching script dropped 1
+SunburstIsland_Hall2 (hack map 9.4): story/branching script dropped 2
+SunburstIsland_Hall3 (hack map 9.7): story/branching script dropped 1
+SunburstIsland_PokemonCenter_1F (hack map 9.1): Pokemon (follower sprite) 1, nurse 1, talker 3
+SunburstIsland_PokemonCenter_2F (hack map 9.2): cable club attendant 3
+TangeloIsland_Gym (hack map 6.2): talker 1
+TangeloIsland_House1 (hack map 6.4): story/branching script dropped 1
+TangeloIsland_House2 (hack map 6.7): talker 1
+TangeloIsland_Mart (hack map 6.3): mart clerk 1, talker 2
+TangeloIsland_Museum (hack map 6.1): talker 2
+TangeloIsland_PokemonCenter_1F (hack map 6.5): Pokemon (follower sprite) 1, hidden on a new game, dropped 2, nurse 1, talker 3
+TangeloIsland_PokemonCenter_2F (hack map 6.6): cable club attendant 3
+ValenciaIsland_House1 (hack map 5.0): sign 1, talker 1
+ValenciaIsland_House2 (hack map 5.6): talker 1
+ValenciaIsland_Lab (hack map 5.7): hidden on a new game, dropped 6
+ValenciaIsland_PokemonCenter_1F (hack map 5.4): Pokemon (follower sprite) 1, nurse 1, object without script dropped 2, talker 3
+ValenciaIsland_PokemonCenter_2F (hack map 5.5): cable club attendant 3
+ValenciaIsland_PowerPlant (hack map 5.8): story/branching script dropped 1, talker 1
+ValenciaIsland_School (hack map 5.2): sign script dropped 2, story/branching script dropped 1, talker 1
+FireIsland_Gym (hack map 1.96): hidden on a new game, dropped 1, object without script 2, story/branching script dropped 1
+FukuharaIsland_Harbor (hack map 22.1): 
+HamlinIsland_Harbor (hack map 22.0): ferry sailor (D43) 1, object without script 1, talker 1
+HamlinIsland_Mart (hack map 20.0): mart clerk 1, talker 1
+HamlinIsland_PokemonCenter_1F (hack map 21.0): Pokemon (follower sprite) 1, nurse 1, talker 2
+HamlinIsland_PokemonCenter_2F (hack map 21.1): cable club attendant 3
+KinnowIsland_Hotel (hack map 10.19): story/branching script dropped 1, talker 3
+KinnowIsland_House (hack map 10.18): story/branching script dropped 1
+KinnowIsland_Mart (hack map 9.5): mart clerk 1, talker 2
+KinnowIsland_PokemonCenter_1F (hack map 10.12): Pokemon (follower sprite) 1, nurse 1, story/branching script dropped 1, talker 2
+KinnowIsland_PokemonCenter_2F (hack map 10.13): cable club attendant 3
+KinnowIsland_School (hack map 10.11): story/branching script dropped 1, talker 1
+KumquatIsland_Floor (hack map 39.0): story/branching script dropped 1
+KumquatIsland_Gym1 (hack map 28.0): story/branching script dropped 1
+KumquatIsland_Gym2 (hack map 35.0): hidden on a new game, dropped 1, story/branching script dropped 4, talker 2
+KumquatIsland_Gym3 (hack map 41.0): 
+KumquatIsland_Hall (hack map 35.4): story/branching script dropped 1, talker 1
+KumquatIsland_House1 (hack map 35.3): talker 1
+KumquatIsland_House2 (hack map 35.6): story/branching script dropped 2
+KumquatIsland_Mart (hack map 35.7): mart clerk 1, talker 2
+KumquatIsland_PokemonCenter_1F (hack map 35.1): Pokemon (follower sprite) 1, nurse 1, talker 3
+KumquatIsland_PokemonCenter_2F1 (hack map 35.2): cable club attendant 3
+KumquatIsland_PokemonCenter_2F2 (hack map 35.5): 
+MandarinSouth_Hotel (hack map 14.1): talker 5
+MandarinSouth_House1 (hack map 14.0): hidden on a new game, dropped 1
+MandarinSouth_House2 (hack map 14.4): talker 1
+MandarinSouth_House3 (hack map 14.8): story/branching script dropped 1
+MandarinSouth_Mart (hack map 14.5): mart clerk 1, talker 2
+MandarinSouth_PokemonCenter_1F (hack map 14.6): Pokemon (follower sprite) 1, nurse 1, talker 3
+MandarinSouth_PokemonCenter_2F (hack map 14.7): cable club attendant 3
+NewIsland_Lab1 (hack map 1.59): hidden item 2, item ball 3, sign script dropped 1
+NewIsland_Lab2 (hack map 1.60): hidden item 2, item ball 3, sign script dropped 1
+NewIsland_Lab3 (hack map 1.61): item ball 1, sign script dropped 1, story/branching script dropped 1
+OldSilphCo_Floor1 (hack map 1.48): 
+OldSilphCo_Floor10 (hack map 1.57): 
+OldSilphCo_Floor11 (hack map 1.58): 
+OldSilphCo_Floor2 (hack map 1.49): 
+OldSilphCo_Floor3 (hack map 1.50): 
+OldSilphCo_Floor4 (hack map 1.51): 
+OldSilphCo_Floor5 (hack map 1.52): 
+OldSilphCo_Floor6 (hack map 1.53): 
+OldSilphCo_Floor7 (hack map 1.54): 
+OldSilphCo_Floor8 (hack map 1.55): 
+OldSilphCo_Floor9 (hack map 1.56): 
+OrangeRouteG_Gym (hack map 23.2): 
+OrangeRouteG_Harbor (hack map 23.1): 
+OrangeRouteG_House (hack map 23.0): 
+OrangeRouteH_PokemonCenter_1F (hack map 10.14): hidden on a new game, dropped 2, story/branching script dropped 1, talker 1
+OrangeRouteN_House1 (hack map 10.15): talker 1
+OrangeRouteN_House2 (hack map 15.1): story/branching script dropped 1
+OrangeRouteN_PokemonCenter_1F (hack map 10.7): Pokemon (follower sprite) 1, nurse 1, talker 3
+OrangeRouteR_House (hack map 40.0): closed door (map not in the hack) 1
+PokemonShowboat_Deck1 (hack map 1.5): talker 3
+PokemonShowboat_Deck10 (hack map 1.14): trainer dropped 1
+PokemonShowboat_Deck11 (hack map 1.15): trainer dropped 1
+PokemonShowboat_Deck12 (hack map 1.16): item ball 1, trainer dropped 2
+PokemonShowboat_Deck13 (hack map 1.17): 
+PokemonShowboat_Deck14 (hack map 1.18): item ball 1, trainer dropped 2
+PokemonShowboat_Deck15 (hack map 1.19): trainer dropped 1
+PokemonShowboat_Deck16 (hack map 1.20): trainer dropped 1
+PokemonShowboat_Deck17 (hack map 1.21): item ball 1, trainer dropped 2
+PokemonShowboat_Deck18 (hack map 1.22): 
+PokemonShowboat_Deck19 (hack map 1.23): 
+PokemonShowboat_Deck2 (hack map 1.6): hidden on a new game, dropped 4, talker 11, trigger dropped 3
+PokemonShowboat_Deck20 (hack map 1.24): 
+PokemonShowboat_Deck21 (hack map 1.25): 
+PokemonShowboat_Deck22 (hack map 1.26): 
+PokemonShowboat_Deck23 (hack map 1.27): 
+PokemonShowboat_Deck24 (hack map 1.28): 
+PokemonShowboat_Deck25 (hack map 1.29): 
+PokemonShowboat_Deck3 (hack map 1.7): talker 1
+PokemonShowboat_Deck4 (hack map 1.8): 
+PokemonShowboat_Deck5 (hack map 1.9): 
+PokemonShowboat_Deck6 (hack map 1.10): 
+PokemonShowboat_Deck7 (hack map 1.11): story/branching script dropped 4, trainer dropped 1
+PokemonShowboat_Deck8 (hack map 1.12): talker 1
+PokemonShowboat_Deck9 (hack map 1.13): talker 2
+ShamoutiIsland_GameCorner (hack map 33.0): story/branching script dropped 1
+ShamoutiIsland_House1 (hack map 33.1): talker 2
+ShamoutiIsland_House2 (hack map 34.7): story/branching script dropped 1
+ShamoutiIsland_House3 (hack map 41.1): 
+ShamoutiIsland_Mart1 (hack map 31.2): object without script 2, story/branching script dropped 1
+ShamoutiIsland_Mart2 (hack map 37.4): mart clerk 1, talker 2
+ShamoutiIsland_Path (hack map 1.47): hidden on a new game, dropped 2, story/branching script dropped 2, talker 7
+ShamoutiIsland_PokemonCenter_1F (hack map 33.2): Pokemon (follower sprite) 1, nurse 1, story/branching script dropped 1, talker 2
+ShamoutiIsland_PokemonCenter_2F (hack map 33.3): cable club attendant 3
+ShamoutiIsland_Room (hack map 3.60): hidden on a new game, dropped 9, sign 3, sign script dropped 3, story/branching script dropped 3, talker 9
+TarrocoIsland_House (hack map 37.3): story/branching script dropped 2
+TarrocoIsland_PokemonCenter_1F (hack map 37.0): Pokemon (follower sprite) 1, nurse 1, talker 3
+TarrocoIsland_PokemonCenter_2F1 (hack map 37.1): cable club attendant 3
+TarrocoIsland_PokemonCenter_2F2 (hack map 37.2): talker 1
+TrovitaIsland_Gym (hack map 10.8): hidden on a new game, dropped 1, story/branching script dropped 1, trainer dropped 2
+TrovitaIsland_House (hack map 31.1): story/branching script dropped 1
+TrovitaIsland_PokemonCenter_1F (hack map 31.3): Pokemon (follower sprite) 1, nurse 1, talker 3
+TrovitaIsland_PokemonCenter_2F1 (hack map 31.4): cable club attendant 3
+TrovitaIsland_PokemonCenter_2F2 (hack map 33.4): 
+TrovitaIsland_Room (hack map 31.0): story/branching script dropped 1
+TrovitoDept_CableClub1 (hack map 0.0): story/branching script dropped 1, trigger dropped 2
+TrovitoDept_CableClub2 (hack map 0.1): story/branching script dropped 1, trigger dropped 2
+TrovitoDept_CableClub3 (hack map 0.2): story/branching script dropped 1, trigger dropped 4
+TrovitoDept_CableClub4 (hack map 0.3): trigger dropped 4
+TrovitoDept_HallOfFame (hack map 0.4): story/branching script dropped 9
+Trovitopolis_Daycare (hack map 30.0): hidden on a new game, dropped 3, story/branching script dropped 2
+Trovitopolis_Floor1 (hack map 10.0): sign 2, talker 1
+Trovitopolis_Floor2 (hack map 10.1): sign 1, story/branching script dropped 2, talker 2
+Trovitopolis_Floor3 (hack map 10.2): sign 11, talker 5
+Trovitopolis_Floor4 (hack map 10.3): sign 1, story/branching script dropped 1, talker 2
+Trovitopolis_Floor5 (hack map 10.4): sign 1, story/branching script dropped 2, talker 2
+Trovitopolis_Floor6 (hack map 10.5): 
+Trovitopolis_Floor7 (hack map 10.6): sign script dropped 1
+Trovitopolis_House1 (hack map 32.2): story/branching script dropped 2
+Trovitopolis_House2 (hack map 32.3): talker 1
+Trovitopolis_PokemonCenter_1F (hack map 32.0): Pokemon (follower sprite) 1, nurse 1, story/branching script dropped 1, talker 2
+Trovitopolis_PokemonCenter_2F1 (hack map 32.1): cable club attendant 3
+Trovitopolis_PokemonCenter_2F2 (hack map 32.4): 
+Yambera_House1 (hack map 10.16): story/branching script dropped 1, talker 1
+Yambera_House2 (hack map 10.17): story/branching script dropped 1
+Yambera_House3 (hack map 14.9): talker 2
+Yambera_PokemonCenter_1F (hack map 14.2): Pokemon (follower sprite) 1, nurse 1, talker 3
+Yambera_PokemonCenter_2F (hack map 14.3): cable club attendant 3
+AscorbiaForest_Floor (hack map 1.114): hidden on a new game, dropped 8, item ball 2, object without script 1, object without script dropped 2, talker 1, trainer dropped 6, trigger dropped 6
+AscorbiaIsland_House1 (hack map 34.4): talker 1
+AscorbiaIsland_House2 (hack map 34.5): story/branching script dropped 1, talker 1
+AscorbiaIsland_House3 (hack map 34.6): story/branching script dropped 1
+AscorbiaIsland_Lab (hack map 34.0): hidden on a new game, dropped 1
+AscorbiaIsland_Mart (hack map 34.3): mart clerk 1, talker 2
+AscorbiaIsland_PokemonCenter_1F (hack map 34.1): Pokemon (follower sprite) 1, nurse 1, talker 3
+AscorbiaIsland_PokemonCenter_2F (hack map 34.2): cable club attendant 3
+ButwalIsland_Hall1 (hack map 15.3): talker 1
+ButwalIsland_Hall2 (hack map 17.0): story/branching script dropped 1
+ButwalIsland_PokemonCenter_1F (hack map 16.0): Pokemon (follower sprite) 1, nurse 1, talker 3
+ButwalIsland_PokemonCenter_2F1 (hack map 10.9): 
+ButwalIsland_PokemonCenter_2F2 (hack map 10.10): 
+ButwalIsland_PokemonCenter_2F3 (hack map 16.1): cable club attendant 3
+ButwalIsland_Tower1 (hack map 1.88): 
+ButwalIsland_Tower2 (hack map 1.89): 
+ButwalIsland_Tower3 (hack map 1.90): 
+ButwalIsland_Tower4 (hack map 1.91): 
+ButwalIsland_Tower5 (hack map 1.92): 
+ButwalIsland_Tower6 (hack map 1.93): 
+ButwalIsland_Tower7 (hack map 1.94): 
+GoldenIsland_Hall1 (hack map 15.0): talker 1
+GoldenIsland_Hall2 (hack map 15.2): story/branching script dropped 1
+GrapefruitIsles_Hall (hack map 25.0): 
+GrapefruitIsles_PowerPlant (hack map 11.3): story/branching script dropped 3
+LightningIsland_Hall1 (hack map 1.67): 
+LightningIsland_Hall2 (hack map 1.68): 
+LightningIsland_Hall3 (hack map 1.69): 
+LightningIsland_Hall4 (hack map 1.70): 
+LightningIsland_Hall5 (hack map 1.71): 
+MoroIsland_Lab1 (hack map 12.2): story/branching script dropped 1
+MoroIsland_Lab2 (hack map 12.3): story/branching script dropped 1
+MoroIsland_Lab3 (hack map 12.4): talker 2
+MoroIsland_Mart (hack map 12.7): mart clerk 1, talker 2
+MoroIsland_Museum1 (hack map 12.0): sign script dropped 2, talker 4, trigger dropped 3
+MoroIsland_Museum2 (hack map 12.1): sign 3, story/branching script dropped 1, talker 5
+MoroIsland_PokemonCenter_1F (hack map 12.5): Pokemon (follower sprite) 1, nurse 1, talker 3
+MoroIsland_PokemonCenter_2F (hack map 12.6): cable club attendant 3
+MurcottIsland_Hall1 (hack map 7.2): story/branching script dropped 1
+MurcottIsland_Hall2 (hack map 7.8): talker 1
+MurcottIsland_PokemonCenter_1F (hack map 13.0): Pokemon (follower sprite) 1, hidden on a new game, dropped 1, nurse 1, talker 3
+MurcottIsland_PokemonCenter_2F (hack map 13.1): cable club attendant 3
+NavelIsland_Hall1 (hack map 11.0): 
+NavelIsland_Hall2 (hack map 11.4): talker 2
+NavelIsland_Hall3 (hack map 11.9): story/branching script dropped 1
+NavelIsland_Museum (hack map 11.8): talker 1
+NavelIsland_PokemonCenter_1F (hack map 11.5): Pokemon (follower sprite) 1, nurse 1, talker 3
+NavelIsland_PokemonCenter_2F (hack map 11.6): cable club attendant 3
+NavelMountain_Hall1 (hack map 11.2): object without script 1, story/branching script dropped 1
+NavelMountain_Hall2 (hack map 11.7): object without script 1, story/branching script dropped 1
+OrangePalletTown_House1 (hack map 4.0): Pokemon (follower sprite) 1, story/branching script dropped 1, talker 1
+OrangePalletTown_House2 (hack map 4.1): sign 4, sign script dropped 1
+OrangePalletTown_House3 (hack map 4.2): story/branching script dropped 1, talker 1
+OrangePalletTown_House4 (hack map 4.5): story/branching script dropped 1
+OrangePalletTown_Lab1 (hack map 4.3): story/branching script dropped 2
+OrangePalletTown_Lab2 (hack map 4.4): Pokemon (follower sprite) 1, sign 2, sign script dropped 1, story/branching script dropped 1, talker 1
+OrangeRoute1_Mart (hack map 5.3): mart clerk 1, story/branching script dropped 1, talker 1
+OrangeRoute1_PowerPlant (hack map 5.1): talker 2
+OrangeRouteI_Harbor1 (hack map 24.0): closed door (map not in the hack) 4
+OrangeRouteI_Harbor2 (hack map 24.1): 
+OrangeRouteK_House (hack map 27.0): 
+
+TOTAL: Pokemon (follower sprite) 42, cable club attendant 60, closed door (map not in the hack) 17, ferry sailor (D43) 1, hidden item 119, hidden on a new game, dropped 269, item ball 79, mart clerk 12, nurse 21, object without script 23, object without script dropped 17, obstacle 20, sign 159, sign script dropped 24, story/branching script dropped 187, talker 304, trainer dropped 189, trigger dropped 232

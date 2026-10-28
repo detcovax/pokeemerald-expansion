@@ -607,6 +607,174 @@
       "y": 11,
       "respawn_map": "MAP_RESORT_AREA_POKEMON_CENTER_1F",
       "respawn_npc": "LOCALID_RESORT_AREA_POKEMON_CENTER_1F_NURSE"
+    },
+    {
+      "id": "HEAL_LOCATION_MANDARIN_NORTH",
+      "map": "MAP_MANDARIN_NORTH",
+      "x": 27,
+      "y": 33,
+      "respawn_map": "MAP_MANDARIN_NORTH_POKEMON_CENTER_1F",
+      "respawn_npc": "LOCALID_MANDARIN_NORTH_POKEMON_CENTER_1F_NURSE"
+    },
+    {
+      "id": "HEAL_LOCATION_MIKAN_ISLAND",
+      "map": "MAP_MIKAN_ISLAND",
+      "x": 15,
+      "y": 26,
+      "respawn_map": "MAP_MIKAN_ISLAND_POKEMON_CENTER_1F",
+      "respawn_npc": "LOCALID_MIKAN_ISLAND_POKEMON_CENTER_1F_NURSE"
+    },
+    {
+      "id": "HEAL_LOCATION_PUMMELO_ISLAND",
+      "map": "MAP_PUMMELO_ISLAND_2",
+      "x": 14,
+      "y": 25,
+      "respawn_map": "MAP_PUMMELO_ISLAND_POKEMON_CENTER_1F",
+      "respawn_npc": "LOCALID_PUMMELO_ISLAND_POKEMON_CENTER_1F_NURSE"
+    },
+    {
+      "id": "HEAL_LOCATION_SUNBURST_ISLAND",
+      "map": "MAP_SUNBURST_ISLAND",
+      "x": 14,
+      "y": 24,
+      "respawn_map": "MAP_SUNBURST_ISLAND_POKEMON_CENTER_1F",
+      "respawn_npc": "LOCALID_SUNBURST_ISLAND_POKEMON_CENTER_1F_NURSE"
+    },
+    {
+      "id": "HEAL_LOCATION_TANGELO_ISLAND",
+      "map": "MAP_TANGELO_ISLAND",
+      "x": 24,
+      "y": 20,
+      "respawn_map": "MAP_TANGELO_ISLAND_POKEMON_CENTER_1F",
+      "respawn_npc": "LOCALID_TANGELO_ISLAND_POKEMON_CENTER_1F_NURSE"
+    },
+    {
+      "id": "HEAL_LOCATION_VALENCIA_ISLAND",
+      "map": "MAP_VALENCIA_ISLAND",
+      "x": 27,
+      "y": 16,
+      "respawn_map": "MAP_VALENCIA_ISLAND_POKEMON_CENTER_1F",
+      "respawn_npc": "LOCALID_VALENCIA_ISLAND_POKEMON_CENTER_1F_NURSE"
+    },
+    {
+      "id": "HEAL_LOCATION_HAMLIN_ISLAND",
+      "map": "MAP_HAMLIN_ISLAND",
+      "x": 17,
+      "y": 30,
+      "respawn_map": "MAP_HAMLIN_ISLAND_POKEMON_CENTER_1F",
+      "respawn_npc": "LOCALID_HAMLIN_ISLAND_POKEMON_CENTER_1F_NURSE"
+    },
+    {
+      "id": "HEAL_LOCATION_KINNOW_ISLAND",
+      "map": "MAP_KINNOW_ISLAND",
+      "x": 16,
+      "y": 13,
+      "respawn_map": "MAP_KINNOW_ISLAND_POKEMON_CENTER_1F",
+      "respawn_npc": "LOCALID_KINNOW_ISLAND_POKEMON_CENTER_1F_NURSE"
+    },
+    {
+      "id": "HEAL_LOCATION_KUMQUAT_ISLAND",
+      "map": "MAP_KUMQUAT_ISLAND",
+      "x": 35,
+      "y": 13,
+      "respawn_map": "MAP_KUMQUAT_ISLAND_POKEMON_CENTER_1F",
+      "respawn_npc": "LOCALID_KUMQUAT_ISLAND_POKEMON_CENTER_1F_NURSE"
+    },
+    {
+      "id": "HEAL_LOCATION_MANDARIN_SOUTH",
+      "map": "MAP_MANDARIN_SOUTH",
+      "x": 31,
+      "y": 11,
+      "respawn_map": "MAP_MANDARIN_SOUTH_POKEMON_CENTER_1F",
+      "respawn_npc": "LOCALID_MANDARIN_SOUTH_POKEMON_CENTER_1F_NURSE"
+    },
+    {
+      "id": "HEAL_LOCATION_ORANGE_ROUTE_N",
+      "map": "MAP_ORANGE_ROUTE_N",
+      "x": 17,
+      "y": 10,
+      "respawn_map": "MAP_ORANGE_ROUTE_N_POKEMON_CENTER_1F",
+      "respawn_npc": "LOCALID_ORANGE_ROUTE_N_POKEMON_CENTER_1F_NURSE"
+    },
+    {
+      "id": "HEAL_LOCATION_SHAMOUTI_ISLAND",
+      "map": "MAP_SHAMOUTI_ISLAND",
+      "x": 20,
+      "y": 19,
+      "respawn_map": "MAP_SHAMOUTI_ISLAND_POKEMON_CENTER_1F",
+      "respawn_npc": "LOCALID_SHAMOUTI_ISLAND_POKEMON_CENTER_1F_NURSE"
+    },
+    {
+      "id": "HEAL_LOCATION_TARROCO_ISLAND",
+      "map": "MAP_TARROCO_ISLAND",
+      "x": 29,
+      "y": 21,
+      "respawn_map": "MAP_TARROCO_ISLAND_POKEMON_CENTER_1F",
+      "respawn_npc": "LOCALID_TARROCO_ISLAND_POKEMON_CENTER_1F_NURSE"
+    },
+    {
+      "id": "HEAL_LOCATION_TROVITA_ISLAND",
+      "map": "MAP_TROVITA_ISLAND",
+      "x": 8,
+      "y": 27,
+      "respawn_map": "MAP_TROVITA_ISLAND_POKEMON_CENTER_1F",
+      "respawn_npc": "LOCALID_TROVITA_ISLAND_POKEMON_CENTER_1F_NURSE"
+    },
+    {
+      "id": "HEAL_LOCATION_TROVITOPOLIS",
+      "map": "MAP_TROVITOPOLIS",
+      "x": 11,
+      "y": 27,
+      "respawn_map": "MAP_TROVITOPOLIS_POKEMON_CENTER_1F",
+      "respawn_npc": "LOCALID_TROVITOPOLIS_POKEMON_CENTER_1F_NURSE"
+    },
+    {
+      "id": "HEAL_LOCATION_YAMBERA",
+      "map": "MAP_YAMBERA",
+      "x": 31,
+      "y": 22,
+      "respawn_map": "MAP_YAMBERA_POKEMON_CENTER_1F",
+      "respawn_npc": "LOCALID_YAMBERA_POKEMON_CENTER_1F_NURSE"
+    },
+    {
+      "id": "HEAL_LOCATION_ASCORBIA_ISLAND",
+      "map": "MAP_ASCORBIA_ISLAND",
+      "x": 21,
+      "y": 30,
+      "respawn_map": "MAP_ASCORBIA_ISLAND_POKEMON_CENTER_1F",
+      "respawn_npc": "LOCALID_ASCORBIA_ISLAND_POKEMON_CENTER_1F_NURSE"
+    },
+    {
+      "id": "HEAL_LOCATION_BUTWAL_ISLAND",
+      "map": "MAP_BUTWAL_ISLAND",
+      "x": 15,
+      "y": 26,
+      "respawn_map": "MAP_BUTWAL_ISLAND_POKEMON_CENTER_1F",
+      "respawn_npc": "LOCALID_BUTWAL_ISLAND_POKEMON_CENTER_1F_NURSE"
+    },
+    {
+      "id": "HEAL_LOCATION_MORO_ISLAND",
+      "map": "MAP_MORO_ISLAND",
+      "x": 37,
+      "y": 15,
+      "respawn_map": "MAP_MORO_ISLAND_POKEMON_CENTER_1F",
+      "respawn_npc": "LOCALID_MORO_ISLAND_POKEMON_CENTER_1F_NURSE"
+    },
+    {
+      "id": "HEAL_LOCATION_MURCOTT_ISLAND",
+      "map": "MAP_MURCOTT_ISLAND",
+      "x": 25,
+      "y": 27,
+      "respawn_map": "MAP_MURCOTT_ISLAND_POKEMON_CENTER_1F",
+      "respawn_npc": "LOCALID_MURCOTT_ISLAND_POKEMON_CENTER_1F_NURSE"
+    },
+    {
+      "id": "HEAL_LOCATION_NAVEL_ISLAND",
+      "map": "MAP_NAVEL_ISLAND",
+      "x": 34,
+      "y": 21,
+      "respawn_map": "MAP_NAVEL_ISLAND_POKEMON_CENTER_1F",
+      "respawn_npc": "LOCALID_NAVEL_ISLAND_POKEMON_CENTER_1F_NURSE"
     }
   ]
 }

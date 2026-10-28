@@ -1,0 +1,30 @@
+{
+  "id": "MAP_KUMQUAT_ISLAND_GYM_1",
+  "name": "KumquatIsland_Gym1",
+  "layout": "LAYOUT_KUMQUAT_ISLAND_GYM_1",
+  "music": "MUS_RG_GYM",
+  "region": "REGION_ORANGE",
+  "region_map_section": "MAPSEC_KUMQUAT_ISLAND",
+  "requires_flash": false,
+  "weather": "WEATHER_NONE",
+  "map_type": "MAP_TYPE_INDOOR",
+  "allow_cycling": false,
+  "allow_escaping": false,
+  "allow_running": false,
+  "show_map_name": false,
+  "floor_number": 0,
+  "battle_scene": "MAP_BATTLE_SCENE_GYM",
+  "connections": null,
+  "object_events": [],
+  "warp_events": [
+    {
+      "x": 9,
+      "y": 18,
+      "elevation": 3,
+      "dest_map": "MAP_KUMQUAT_ISLAND_GYM_3",
+      "dest_warp_id": "1"
+    }
+  ],
+  "coord_events": [],
+  "bg_events": []
+}

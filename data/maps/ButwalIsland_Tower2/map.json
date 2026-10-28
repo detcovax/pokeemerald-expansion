@@ -1,0 +1,37 @@
+{
+  "id": "MAP_BUTWAL_ISLAND_TOWER_2",
+  "name": "ButwalIsland_Tower2",
+  "layout": "LAYOUT_BUTWAL_ISLAND_TOWER_2",
+  "music": "MUS_RG_POKE_TOWER",
+  "region": "REGION_ORANGE",
+  "region_map_section": "MAPSEC_BUTWAL_ISLAND",
+  "requires_flash": false,
+  "weather": "WEATHER_NONE",
+  "map_type": "MAP_TYPE_INDOOR",
+  "allow_cycling": false,
+  "allow_escaping": true,
+  "allow_running": false,
+  "show_map_name": true,
+  "floor_number": 0,
+  "battle_scene": "MAP_BATTLE_SCENE_INDOOR_1",
+  "connections": null,
+  "object_events": [],
+  "warp_events": [
+    {
+      "x": 4,
+      "y": 10,
+      "elevation": 3,
+      "dest_map": "MAP_BUTWAL_ISLAND_TOWER_3",
+      "dest_warp_id": "0"
+    },
+    {
+      "x": 18,
+      "y": 10,
+      "elevation": 3,
+      "dest_map": "MAP_BUTWAL_ISLAND_TOWER_1",
+      "dest_warp_id": "3"
+    }
+  ],
+  "coord_events": [],
+  "bg_events": []
+}

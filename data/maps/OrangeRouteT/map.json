@@ -1,0 +1,60 @@
+{
+  "id": "MAP_ORANGE_ROUTE_T",
+  "name": "OrangeRouteT",
+  "layout": "LAYOUT_ORANGE_ROUTE_T",
+  "music": "MUS_RG_ROUTE11",
+  "region": "REGION_ORANGE",
+  "region_map_section": "MAPSEC_ORANGE_ROUTE_T",
+  "requires_flash": false,
+  "weather": "WEATHER_SUNNY",
+  "map_type": "MAP_TYPE_ROUTE",
+  "allow_cycling": true,
+  "allow_escaping": false,
+  "allow_running": true,
+  "show_map_name": true,
+  "floor_number": 0,
+  "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
+  "connections": [
+    {
+      "map": "MAP_KUMQUAT_ISLAND",
+      "offset": 0,
+      "direction": "right"
+    },
+    {
+      "map": "MAP_ORANGE_ROUTE_U",
+      "offset": -61,
+      "direction": "down"
+    }
+  ],
+  "object_events": [],
+  "warp_events": [],
+  "coord_events": [],
+  "bg_events": [
+    {
+      "type": "sign",
+      "x": 50,
+      "y": 14,
+      "elevation": 0,
+      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
+      "script": "OrangeRouteT_EventScript_Sign1"
+    },
+    {
+      "type": "sign",
+      "x": 9,
+      "y": 15,
+      "elevation": 0,
+      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
+      "script": "OrangeRouteT_EventScript_Sign2"
+    },
+    {
+      "type": "hidden_item",
+      "x": 40,
+      "y": 21,
+      "elevation": 0,
+      "item": "ITEM_HEART_SCALE",
+      "flag": "FLAG_ORANGE_HIDDEN_ORANGE_ROUTE_T_HEART_SCALE",
+      "quantity": 1,
+      "underfoot": false
+    }
+  ]
+}

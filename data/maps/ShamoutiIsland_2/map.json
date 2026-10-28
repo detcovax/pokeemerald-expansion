@@ -1,0 +1,36 @@
+{
+  "id": "MAP_SHAMOUTI_ISLAND_2",
+  "name": "ShamoutiIsland_2",
+  "layout": "LAYOUT_SHAMOUTI_ISLAND_2",
+  "music": "MUS_RG_SEVII_ROUTE",
+  "region": "REGION_ORANGE",
+  "region_map_section": "MAPSEC_SHAMOUTI_ISLAND",
+  "requires_flash": false,
+  "weather": "WEATHER_SUNNY",
+  "map_type": "MAP_TYPE_ROUTE",
+  "allow_cycling": true,
+  "allow_escaping": false,
+  "allow_running": true,
+  "show_map_name": true,
+  "floor_number": 0,
+  "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
+  "connections": [
+    {
+      "map": "MAP_SHAMOUTI_ISLAND_ROOM",
+      "offset": -80,
+      "direction": "right"
+    }
+  ],
+  "object_events": [],
+  "warp_events": [
+    {
+      "x": 24,
+      "y": 24,
+      "elevation": 3,
+      "dest_map": "MAP_SHAMOUTI_ISLAND_CAVE_1",
+      "dest_warp_id": "0"
+    }
+  ],
+  "coord_events": [],
+  "bg_events": []
+}

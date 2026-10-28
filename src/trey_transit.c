@@ -30,7 +30,7 @@ static const u8 sText_Lilycove[] = _("LILYCOVE CITY");
 static const u8 sText_BattleFrontier[] = _("BATTLE FRONTIER");
 static const u8 sText_Vermilion[] = _("VERMILION CITY");
 static const u8 sText_Olivine[] = _("OLIVINE CITY");
-static const u8 sText_Valencia[] = _("VALENCIA ISLAND");
+static const u8 sText_Hamlin[] = _("HAMLIN ISLAND"); // TREY (6c-4b, D43)
 static const u8 sText_OneIsland[] = _("ONE ISLAND");
 static const u8 sText_Canalave[] = _("CANALAVE CITY");
 static const u8 sText_Mossui[] = _("MOSSUI TOWN");
@@ -46,7 +46,7 @@ static const struct TreyTransitStop sStops[TRANSIT_STOP_COUNT] =
     // Other regions: filled in as their harbours and stations are built (Phase 5/6).
     [TRANSIT_STOP_VERMILION]       = {sText_Vermilion,      TRANSIT_SHIP,  HEAL_LOCATION_VERMILION_CITY, MAP_VERMILION_CITY, 23, 33}, // 5e: the S.S. Anne dock
     [TRANSIT_STOP_OLIVINE]         = {sText_Olivine,        TRANSIT_SHIP,  0, MAP_UNDEFINED, 0, 0},
-    [TRANSIT_STOP_VALENCIA]        = {sText_Valencia,       TRANSIT_SHIP,  0, MAP_UNDEFINED, 0, 0},
+    [TRANSIT_STOP_HAMLIN]          = {sText_Hamlin,         TRANSIT_SHIP,  HEAL_LOCATION_HAMLIN_ISLAND, MAP_HAMLIN_ISLAND_HARBOR, 6, 9}, // 6c-4b: Hamlin Harbor (D43)
     [TRANSIT_STOP_ONE_ISLAND]      = {sText_OneIsland,      TRANSIT_SHIP,  0, MAP_UNDEFINED, 0, 0},
     [TRANSIT_STOP_CANALAVE]        = {sText_Canalave,       TRANSIT_SHIP,  HEAL_LOCATION_CANALAVE_CITY, MAP_CANALAVE_CITY, 13, 46}, // 6b-4: the canal pier
     [TRANSIT_STOP_MOSSUI]          = {sText_Mossui,         TRANSIT_SHIP,  0, MAP_UNDEFINED, 0, 0},

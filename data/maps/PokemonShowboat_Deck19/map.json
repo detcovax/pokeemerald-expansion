@@ -1,0 +1,30 @@
+{
+  "id": "MAP_POKEMON_SHOWBOAT_DECK_19",
+  "name": "PokemonShowboat_Deck19",
+  "layout": "LAYOUT_ORANGE_DECK_319F04",
+  "music": "MUS_RG_SS_ANNE",
+  "region": "REGION_ORANGE",
+  "region_map_section": "MAPSEC_POKEMON_SHOWBOAT",
+  "requires_flash": false,
+  "weather": "WEATHER_NONE",
+  "map_type": "MAP_TYPE_INDOOR",
+  "allow_cycling": false,
+  "allow_escaping": false,
+  "allow_running": true,
+  "show_map_name": true,
+  "floor_number": 0,
+  "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
+  "connections": null,
+  "object_events": [],
+  "warp_events": [
+    {
+      "x": 4,
+      "y": 7,
+      "elevation": 3,
+      "dest_map": "MAP_POKEMON_SHOWBOAT_DECK_2",
+      "dest_warp_id": "0"
+    }
+  ],
+  "coord_events": [],
+  "bg_events": []
+}

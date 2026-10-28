@@ -1,0 +1,80 @@
+{
+  "id": "MAP_CRYSTAL_CAVE",
+  "name": "CrystalCave",
+  "layout": "LAYOUT_CRYSTAL_CAVE",
+  "music": "MUS_RG_MT_MOON",
+  "region": "REGION_ORANGE",
+  "region_map_section": "MAPSEC_CRYSTAL_CAVE",
+  "requires_flash": false,
+  "weather": "WEATHER_NONE",
+  "map_type": "MAP_TYPE_UNDERGROUND",
+  "allow_cycling": true,
+  "allow_escaping": true,
+  "allow_running": true,
+  "show_map_name": true,
+  "floor_number": 0,
+  "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
+  "connections": null,
+  "object_events": [
+    {
+      "type": "object",
+      "graphics_id": "OBJ_EVENT_GFX_ITEM_BALL",
+      "x": 46,
+      "y": 33,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_LOOK_AROUND",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "ITEM_HARD_STONE",
+      "script": "Common_EventScript_FindItem",
+      "flag": "FLAG_ORANGE_ITEM_CRYSTAL_CAVE_HARD_STONE"
+    },
+    {
+      "type": "object",
+      "graphics_id": "OBJ_EVENT_GFX_ITEM_BALL",
+      "x": 5,
+      "y": 26,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_LOOK_AROUND",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "ITEM_TM28",
+      "script": "Common_EventScript_FindItem",
+      "flag": "FLAG_ORANGE_ITEM_CRYSTAL_CAVE_TM28"
+    }
+  ],
+  "warp_events": [
+    {
+      "x": 7,
+      "y": 37,
+      "elevation": 3,
+      "dest_map": "MAP_SUNBURST_ISLAND",
+      "dest_warp_id": "5"
+    }
+  ],
+  "coord_events": [],
+  "bg_events": [
+    {
+      "type": "hidden_item",
+      "x": 6,
+      "y": 34,
+      "elevation": 0,
+      "item": "ITEM_BERRY_JUICE",
+      "flag": "FLAG_ORANGE_HIDDEN_CRYSTAL_CAVE_BERRY_JUICE",
+      "quantity": 1,
+      "underfoot": false
+    },
+    {
+      "type": "hidden_item",
+      "x": 43,
+      "y": 9,
+      "elevation": 0,
+      "item": "ITEM_ELIXIR",
+      "flag": "FLAG_ORANGE_HIDDEN_CRYSTAL_CAVE_ELIXIR",
+      "quantity": 1,
+      "underfoot": false
+    }
+  ]
+}

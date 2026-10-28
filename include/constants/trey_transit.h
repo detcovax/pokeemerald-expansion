@@ -11,7 +11,7 @@
 #define TRANSIT_STOP_BATTLE_FRONTIER  2
 #define TRANSIT_STOP_VERMILION        3
 #define TRANSIT_STOP_OLIVINE          4
-#define TRANSIT_STOP_VALENCIA         5
+#define TRANSIT_STOP_HAMLIN           5  // TREY (6c-4b, D43): Orange stop, was VALENCIA
 #define TRANSIT_STOP_ONE_ISLAND       6
 #define TRANSIT_STOP_CANALAVE         7
 #define TRANSIT_STOP_MOSSUI           8

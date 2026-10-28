@@ -1,0 +1,75 @@
+{
+  "id": "MAP_ASCORBIA_FOREST_CAVE_1",
+  "name": "AscorbiaForest_Cave1",
+  "layout": "LAYOUT_ASCORBIA_FOREST_CAVE_1",
+  "music": "MUS_RG_VIRIDIAN_FOREST",
+  "region": "REGION_ORANGE",
+  "region_map_section": "MAPSEC_ASCORBIA_FOREST",
+  "requires_flash": false,
+  "weather": "WEATHER_NONE",
+  "map_type": "MAP_TYPE_UNDERGROUND",
+  "allow_cycling": true,
+  "allow_escaping": true,
+  "allow_running": true,
+  "show_map_name": true,
+  "floor_number": 0,
+  "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
+  "connections": null,
+  "object_events": [],
+  "warp_events": [
+    {
+      "x": 10,
+      "y": 6,
+      "elevation": 3,
+      "dest_map": "MAP_ASCORBIA_FOREST_CAVE_2",
+      "dest_warp_id": "0"
+    },
+    {
+      "x": 31,
+      "y": 4,
+      "elevation": 3,
+      "dest_map": "MAP_ASCORBIA_FOREST_CAVE_2",
+      "dest_warp_id": "1"
+    },
+    {
+      "x": 28,
+      "y": 19,
+      "elevation": 3,
+      "dest_map": "MAP_ASCORBIA_FOREST_CAVE_2",
+      "dest_warp_id": "2"
+    },
+    {
+      "x": 21,
+      "y": 8,
+      "elevation": 3,
+      "dest_map": "MAP_ASCORBIA_FOREST_CAVE_2",
+      "dest_warp_id": "9"
+    },
+    {
+      "x": 30,
+      "y": 8,
+      "elevation": 3,
+      "dest_map": "MAP_ASCORBIA_FOREST_CAVE_2",
+      "dest_warp_id": "10"
+    }
+  ],
+  "coord_events": [],
+  "bg_events": [
+    {
+      "type": "sign",
+      "x": 6,
+      "y": 21,
+      "elevation": 0,
+      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
+      "script": "TreyOrange_EventScript_NotBuiltYet"
+    },
+    {
+      "type": "sign",
+      "x": 32,
+      "y": 21,
+      "elevation": 0,
+      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
+      "script": "TreyOrange_EventScript_NotBuiltYet"
+    }
+  ]
+}

@@ -53,6 +53,12 @@ static const u16 sTreyJohtoWorldMapFlags[][2] = { TREY_JOHTO_FLY(TREY_JOHTO_WORL
 static const u16 sTreySinnohWorldMapFlags[][2] = { TREY_SINNOH_FLY(TREY_SINNOH_WORLD_MAP_FLAG) };
 #undef TREY_SINNOH_WORLD_MAP_FLAG
 
+// 6c-4b: Orange's towns (include/constants/trey_orange_fly.h, every place with a Pokemon Center).
+#include "constants/trey_orange_fly.h"
+#define TREY_ORANGE_WORLD_MAP_FLAG(sec, map, heal) {MAP_##map, FLAG_WORLD_MAP_ORANGE_##sec},
+static const u16 sTreyOrangeWorldMapFlags[][2] = { TREY_ORANGE_FLY(TREY_ORANGE_WORLD_MAP_FLAG) };
+#undef TREY_ORANGE_WORLD_MAP_FLAG
+
 // 5e: entering an FRLG town (or landmark) marks it visited for Fly/Teleport, as FRLG's setworldmapflag did.
 static void TreyRegions_SetWorldMapFlag(void)
 {
@@ -79,6 +85,14 @@ static void TreyRegions_SetWorldMapFlag(void)
         if (sTreySinnohWorldMapFlags[i][0] == map)
         {
             FlagSet(sTreySinnohWorldMapFlags[i][1]);
+            return;
+        }
+    }
+    for (i = 0; i < ARRAY_COUNT(sTreyOrangeWorldMapFlags); i++) // TREY (6c-4b)
+    {
+        if (sTreyOrangeWorldMapFlags[i][0] == map)
+        {
+            FlagSet(sTreyOrangeWorldMapFlags[i][1]);
             return;
         }
     }

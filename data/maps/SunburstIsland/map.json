@@ -1,0 +1,122 @@
+{
+  "id": "MAP_SUNBURST_ISLAND",
+  "name": "SunburstIsland",
+  "layout": "LAYOUT_SUNBURST_ISLAND",
+  "music": "MUS_RG_VERMILLION",
+  "region": "REGION_ORANGE",
+  "region_map_section": "MAPSEC_SUNBURST_ISLAND",
+  "requires_flash": false,
+  "weather": "WEATHER_SUNNY",
+  "map_type": "MAP_TYPE_TOWN",
+  "allow_cycling": true,
+  "allow_escaping": false,
+  "allow_running": true,
+  "show_map_name": true,
+  "floor_number": 0,
+  "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
+  "connections": [
+    {
+      "map": "MAP_ORANGE_ROUTE_D",
+      "offset": 0,
+      "direction": "up"
+    },
+    {
+      "map": "MAP_ORANGE_ROUTE_E_2",
+      "offset": 0,
+      "direction": "down"
+    }
+  ],
+  "object_events": [
+    {
+      "type": "object",
+      "graphics_id": "OBJ_EVENT_GFX_ORANGE_COOLTRAINER_M",
+      "x": 8,
+      "y": 19,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_WANDER_AROUND",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "SunburstIsland_EventScript_Talk1",
+      "flag": "0"
+    },
+    {
+      "type": "object",
+      "graphics_id": "OBJ_EVENT_GFX_BEAUTY_FRLG",
+      "x": 17,
+      "y": 32,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_WANDER_AROUND",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "SunburstIsland_EventScript_Talk2",
+      "flag": "0"
+    }
+  ],
+  "warp_events": [
+    {
+      "x": 18,
+      "y": 14,
+      "elevation": 0,
+      "dest_map": "MAP_SUNBURST_ISLAND_HALL_1",
+      "dest_warp_id": "1"
+    },
+    {
+      "x": 22,
+      "y": 20,
+      "elevation": 0,
+      "dest_map": "MAP_SUNBURST_ISLAND_DAYCARE",
+      "dest_warp_id": "1"
+    },
+    {
+      "x": 5,
+      "y": 27,
+      "elevation": 0,
+      "dest_map": "MAP_SUNBURST_ISLAND_HALL_2",
+      "dest_warp_id": "1"
+    },
+    {
+      "x": 6,
+      "y": 17,
+      "elevation": 0,
+      "dest_map": "MAP_SUNBURST_ISLAND_HALL_3",
+      "dest_warp_id": "1"
+    },
+    {
+      "x": 14,
+      "y": 23,
+      "elevation": 0,
+      "dest_map": "MAP_SUNBURST_ISLAND_POKEMON_CENTER_1F",
+      "dest_warp_id": "1"
+    },
+    {
+      "x": 79,
+      "y": 10,
+      "elevation": 0,
+      "dest_map": "MAP_CRYSTAL_CAVE",
+      "dest_warp_id": "0"
+    }
+  ],
+  "coord_events": [],
+  "bg_events": [
+    {
+      "type": "sign",
+      "x": 14,
+      "y": 29,
+      "elevation": 0,
+      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
+      "script": "SunburstIsland_EventScript_Sign1"
+    },
+    {
+      "type": "sign",
+      "x": 15,
+      "y": 14,
+      "elevation": 0,
+      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
+      "script": "SunburstIsland_EventScript_Sign2"
+    }
+  ]
+}

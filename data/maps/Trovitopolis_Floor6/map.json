@@ -1,0 +1,30 @@
+{
+  "id": "MAP_TROVITOPOLIS_FLOOR_6",
+  "name": "Trovitopolis_Floor6",
+  "layout": "LAYOUT_TROVITOPOLIS_FLOOR_6",
+  "music": "MUS_RG_POKE_CENTER",
+  "region": "REGION_ORANGE",
+  "region_map_section": "MAPSEC_TROVITOPOLIS",
+  "requires_flash": false,
+  "weather": "WEATHER_NONE",
+  "map_type": "MAP_TYPE_INDOOR",
+  "allow_cycling": false,
+  "allow_escaping": false,
+  "allow_running": false,
+  "show_map_name": true,
+  "floor_number": 127,
+  "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
+  "connections": null,
+  "object_events": [],
+  "warp_events": [
+    {
+      "x": 15,
+      "y": 6,
+      "elevation": 3,
+      "dest_map": "MAP_TROVITOPOLIS_FLOOR_5",
+      "dest_warp_id": "2"
+    }
+  ],
+  "coord_events": [],
+  "bg_events": []
+}

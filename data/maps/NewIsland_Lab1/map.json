@@ -1,0 +1,115 @@
+{
+  "id": "MAP_NEW_ISLAND_LAB_1",
+  "name": "NewIsland_Lab1",
+  "layout": "LAYOUT_NEW_ISLAND_LAB_1",
+  "music": "MUS_RG_POKE_MANSION",
+  "region": "REGION_ORANGE",
+  "region_map_section": "MAPSEC_NEW_ISLAND",
+  "requires_flash": false,
+  "weather": "WEATHER_SHADE",
+  "map_type": "MAP_TYPE_INDOOR",
+  "allow_cycling": false,
+  "allow_escaping": true,
+  "allow_running": true,
+  "show_map_name": true,
+  "floor_number": 0,
+  "battle_scene": "MAP_BATTLE_SCENE_INDOOR_2",
+  "connections": null,
+  "object_events": [
+    {
+      "type": "object",
+      "graphics_id": "OBJ_EVENT_GFX_ITEM_BALL",
+      "x": 35,
+      "y": 6,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_LOOK_AROUND",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "ITEM_CALCIUM",
+      "script": "Common_EventScript_FindItem",
+      "flag": "FLAG_ORANGE_ITEM_NEW_ISLAND_LAB_1_CALCIUM"
+    },
+    {
+      "type": "object",
+      "graphics_id": "OBJ_EVENT_GFX_ITEM_BALL",
+      "x": 6,
+      "y": 6,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_LOOK_AROUND",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "ITEM_TM30",
+      "script": "Common_EventScript_FindItem",
+      "flag": "FLAG_ORANGE_ITEM_NEW_ISLAND_LAB_1_TM30"
+    },
+    {
+      "type": "object",
+      "graphics_id": "OBJ_EVENT_GFX_ITEM_BALL",
+      "x": 3,
+      "y": 33,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_LOOK_AROUND",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "ITEM_IRON",
+      "script": "Common_EventScript_FindItem",
+      "flag": "FLAG_ORANGE_ITEM_NEW_ISLAND_LAB_1_IRON"
+    }
+  ],
+  "warp_events": [
+    {
+      "x": 18,
+      "y": 33,
+      "elevation": 3,
+      "dest_map": "MAP_NEW_ISLAND_3",
+      "dest_warp_id": "0"
+    },
+    {
+      "x": 20,
+      "y": 12,
+      "elevation": 3,
+      "dest_map": "MAP_NEW_ISLAND_LAB_2",
+      "dest_warp_id": "0"
+    },
+    {
+      "x": 6,
+      "y": 26,
+      "elevation": 3,
+      "dest_map": "MAP_NEW_ISLAND_LAB_3",
+      "dest_warp_id": "0"
+    },
+    {
+      "x": 9,
+      "y": 3,
+      "elevation": 3,
+      "dest_map": "MAP_NEW_ISLAND_LAB_2",
+      "dest_warp_id": "1"
+    }
+  ],
+  "coord_events": [],
+  "bg_events": [
+    {
+      "type": "hidden_item",
+      "x": 27,
+      "y": 17,
+      "elevation": 0,
+      "item": "ITEM_RARE_CANDY",
+      "flag": "FLAG_ORANGE_HIDDEN_NEW_ISLAND_LAB_1_RARE_CANDY",
+      "quantity": 1,
+      "underfoot": false
+    },
+    {
+      "type": "hidden_item",
+      "x": 17,
+      "y": 5,
+      "elevation": 0,
+      "item": "ITEM_CARBOS",
+      "flag": "FLAG_ORANGE_HIDDEN_NEW_ISLAND_LAB_1_CARBOS",
+      "quantity": 1,
+      "underfoot": false
+    }
+  ]
+}

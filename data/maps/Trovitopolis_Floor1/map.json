@@ -1,0 +1,111 @@
+{
+  "id": "MAP_TROVITOPOLIS_FLOOR_1",
+  "name": "Trovitopolis_Floor1",
+  "layout": "LAYOUT_TROVITOPOLIS_FLOOR_1",
+  "music": "MUS_RG_POKE_CENTER",
+  "region": "REGION_ORANGE",
+  "region_map_section": "MAPSEC_TROVITOPOLIS",
+  "requires_flash": false,
+  "weather": "WEATHER_NONE",
+  "map_type": "MAP_TYPE_INDOOR",
+  "allow_cycling": false,
+  "allow_escaping": false,
+  "allow_running": false,
+  "show_map_name": true,
+  "floor_number": 1,
+  "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
+  "connections": null,
+  "object_events": [
+    {
+      "type": "object",
+      "graphics_id": "OBJ_EVENT_GFX_ORANGE_WORKER_F",
+      "x": 6,
+      "y": 10,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
+      "movement_range_x": 1,
+      "movement_range_y": 1,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "Trovitopolis_Floor1_EventScript_Talk1",
+      "flag": "0"
+    }
+  ],
+  "warp_events": [
+    {
+      "x": 1,
+      "y": 15,
+      "elevation": 0,
+      "dest_map": "MAP_TROVITOPOLIS",
+      "dest_warp_id": "1"
+    },
+    {
+      "x": 2,
+      "y": 14,
+      "elevation": 3,
+      "dest_map": "MAP_TROVITOPOLIS",
+      "dest_warp_id": "1"
+    },
+    {
+      "x": 3,
+      "y": 15,
+      "elevation": 0,
+      "dest_map": "MAP_TROVITOPOLIS",
+      "dest_warp_id": "1"
+    },
+    {
+      "x": 9,
+      "y": 15,
+      "elevation": 0,
+      "dest_map": "MAP_TROVITOPOLIS",
+      "dest_warp_id": "2"
+    },
+    {
+      "x": 10,
+      "y": 14,
+      "elevation": 3,
+      "dest_map": "MAP_TROVITOPOLIS",
+      "dest_warp_id": "2"
+    },
+    {
+      "x": 11,
+      "y": 15,
+      "elevation": 0,
+      "dest_map": "MAP_TROVITOPOLIS",
+      "dest_warp_id": "2"
+    },
+    {
+      "x": 6,
+      "y": 1,
+      "elevation": 0,
+      "dest_map": "MAP_TROVITOPOLIS_FLOOR_7",
+      "dest_warp_id": "0"
+    },
+    {
+      "x": 4,
+      "y": 2,
+      "elevation": 3,
+      "dest_map": "MAP_TROVITOPOLIS_FLOOR_2",
+      "dest_warp_id": "1"
+    }
+  ],
+  "coord_events": [],
+  "bg_events": [
+    {
+      "type": "sign",
+      "x": 9,
+      "y": 11,
+      "elevation": 0,
+      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
+      "script": "Trovitopolis_Floor1_EventScript_Sign1"
+    },
+    {
+      "type": "sign",
+      "x": 8,
+      "y": 1,
+      "elevation": 0,
+      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
+      "script": "Trovitopolis_Floor1_EventScript_Sign2"
+    }
+  ]
+}
