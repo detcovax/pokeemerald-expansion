@@ -555,6 +555,7 @@ static const struct SpritePalette sObjectEventSpritePalettes[] = {
     {gObjectEventPal_Seagallop,             OBJ_EVENT_PAL_TAG_SEAGALLOP},
 #endif // IS_FRLG
     {gObjectEventPal_TreyStormPuff,         OBJ_EVENT_PAL_TAG_TREY_STORM_PUFF}, // TREY (3f)
+    {gObjectEventPal_TreyBus,               OBJ_EVENT_PAL_TAG_TREY_BUS},        // TREY (6d-2)
 #include "data/object_events/trey_hns_object_event_palettes.h" // TREY (6a)
 #include "data/object_events/trey_orange_object_event_palettes.h" // TREY (6c-2)
 #if OW_FOLLOWERS_POKEBALLS

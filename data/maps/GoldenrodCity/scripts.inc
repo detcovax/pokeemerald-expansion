@@ -4,6 +4,18 @@
 GoldenrodCity_MapScripts::
 	.byte 0
 
+@ TREY (6d-2, D48/D50): the Kitakami bus stop on the west pier plaza (data/scripts/trey_transit.inc).
+@ Hand-edited (events, collision under the bus): don't re-run import_hns.py maps for this map.
+GoldenrodCity_TreyEventScript_BusDriver::
+	lock
+	faceplayer
+	setvar VAR_0x8004, TRANSIT_BUS
+	setvar VAR_0x8005, TRANSIT_STOP_GOLDENROD_BUS
+	setvar VAR_0x8007, 0
+	setvar VAR_0x8009, LOCALID_GOLDENROD_CITY_BUS
+	setvar VAR_0x800A, LOCALID_GOLDENROD_CITY_BUS_DRIVER
+	goto TreyTransit_EventScript_BusDriver
+
 GoldenrodCity_EventScript_NameRaterSign::
 	msgbox GoldenrodCity_Text_NameRaterSign, MSGBOX_SIGN
 	end

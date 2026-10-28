@@ -86,6 +86,8 @@ extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Teala;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_BreakableRock;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_PushableBoulder;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_TreyStormPuff;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_TreyBus;     // TREY (6d-2)
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_TreyBusStop; // TREY (6d-2)
 #include "trey_hns_object_event_externs.h" // TREY (6a)
 #include "trey_orange_object_event_externs.h" // TREY (6c-2)
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_MrBrineysBoat;
@@ -797,6 +799,8 @@ const struct ObjectEventGraphicsInfo *const gObjectEventGraphicsInfoPointers[NUM
     [OBJ_EVENT_GFX_TREY_STORM_PUFF] =          &gObjectEventGraphicsInfo_TreyStormPuff,
 #include "trey_hns_object_event_pointers.h" // TREY (6a)
 #include "trey_orange_object_event_pointers.h" // TREY (6c-2)
+    [OBJ_EVENT_GFX_TREY_BUS] =                 &gObjectEventGraphicsInfo_TreyBus,     // TREY (6d-2)
+    [OBJ_EVENT_GFX_TREY_BUS_STOP] =            &gObjectEventGraphicsInfo_TreyBusStop, // TREY (6d-2)
 };
 
 const struct ObjectEventGraphicsInfo *const gMauvilleOldManGraphicsInfoPointers[] = {

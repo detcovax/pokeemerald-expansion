@@ -1564,6 +1564,46 @@ const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_PushableBoulder = 
     .images = sPicTable_PushableBoulder,
 };
 
+// TREY (6d-2, D50): the Kitakami bus. Faces west; driven east by its stop's script (east = the west frame flipped).
+const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_TreyBus = {
+    .tileTag = TAG_NONE,
+    .paletteTag = OBJ_EVENT_PAL_TAG_TREY_BUS,
+    .reflectionPaletteTag = OBJ_EVENT_PAL_TAG_NONE,
+    .size = 2048,
+    .width = 64,
+    .height = 64,
+    .paletteSlot = PALSLOT_NPC_SPECIAL,
+    .shadowSize = SHADOW_SIZE_M,
+    .inanimate = FALSE,
+    .compressed = FALSE,
+    .tracks = TRACKS_NONE,
+    .oam = &gObjectEventBaseOam_64x64,
+    .subspriteTables = sOamTables_64x64,
+    .anims = sAnimTable_Standard,
+    .images = sPicTable_TreyBus,
+    .affineAnims = gDummySpriteAffineAnimTable,
+};
+
+// TREY (6d-2, D50): bus stop pole (read like a sign).
+const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_TreyBusStop = {
+    .tileTag = TAG_NONE,
+    .paletteTag = OBJ_EVENT_PAL_TAG_TREY_BUS,
+    .reflectionPaletteTag = OBJ_EVENT_PAL_TAG_NONE,
+    .size = 256,
+    .width = 16,
+    .height = 32,
+    .paletteSlot = PALSLOT_NPC_SPECIAL,
+    .shadowSize = SHADOW_SIZE_S,
+    .inanimate = TRUE,
+    .compressed = FALSE,
+    .tracks = TRACKS_NONE,
+    .oam = &gObjectEventBaseOam_16x32,
+    .subspriteTables = sOamTables_16x32,
+    .anims = sAnimTable_Inanimate,
+    .images = sPicTable_TreyBusStop,
+    .affineAnims = gDummySpriteAffineAnimTable,
+};
+
 // TREY (3f): storm puff, pushed with Gust on Sky maps. Strength boulder rules.
 const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_TreyStormPuff = {
     .tileTag = TAG_NONE,

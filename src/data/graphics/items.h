@@ -1887,6 +1887,8 @@ const u16 gItemIconPalette_TeachyTV[] = INCGFX_U16("graphics/items/icon_palettes
 
 const u32 gItemIcon_SSTicket[] = INCGFX_U32("graphics/items/icons/ss_ticket.png", ".4bpp.smol");
 const u16 gItemIconPalette_SSTicket[] = INCGFX_U16("graphics/items/icon_palettes/ss_ticket.pal", ".gbapal");
+const u32 gItemIcon_BusPass[] = INCGFX_U32("graphics/items/icons/trey_bus_pass.png", ".4bpp.smol"); // TREY (6d-2)
+const u16 gItemIconPalette_BusPass[] = INCGFX_U16("graphics/items/icon_palettes/trey_bus_pass.pal", ".gbapal");
 
 const u32 gItemIcon_EonTicket[] = INCGFX_U32("graphics/items/icons/eon_ticket.png", ".4bpp.smol");
 const u16 gItemIconPalette_EonTicket[] = INCGFX_U16("graphics/items/icon_palettes/eon_ticket.pal", ".gbapal");

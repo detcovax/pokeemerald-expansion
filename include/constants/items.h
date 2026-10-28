@@ -1052,6 +1052,9 @@ enum __attribute__((packed)) Item
     ITEM_TATSUGIRINITE = 872,
     ITEM_GLIMMORANITE = 873,
 
+    // TREY items
+    ITEM_BUS_PASS = 874, // TREY (6d-2, D48): rides the Kitakami bus
+
     ITEMS_COUNT,
     ITEM_FIELD_ARROW = ITEMS_COUNT,
 };

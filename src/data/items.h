@@ -14178,6 +14178,22 @@ const struct ItemInfo gItemsInfo[] =
         .iconPalette = gItemIconPalette_SSTicket,
     },
 
+    [ITEM_BUS_PASS] = // TREY (6d-2, D48/D50)
+    {
+        .name = ITEM_NAME("Bus Pass"),
+        .price = 0,
+        .description = COMPOUND_STRING(
+            "A pass for the bus\n"
+            "that runs to and\n"
+            "from Kitakami."),
+        .importance = 1,
+        .pocket = POCKET_KEY_ITEMS,
+        .type = ITEM_USE_BAG_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+        .iconPic = gItemIcon_BusPass,
+        .iconPalette = gItemIconPalette_BusPass,
+    },
+
     [ITEM_EON_TICKET] =
     {
         .name = ITEM_NAME("Eon Ticket"),

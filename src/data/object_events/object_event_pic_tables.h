@@ -362,6 +362,24 @@ static const struct SpriteFrameImage sPicTable_TreyStormPuff[] = { // TREY (3f)
     obj_frame_tiles(gObjectEventPic_TreyStormPuff),
 };
 
+// TREY (6d-2): the bus has one picture (facing west); all nine standard frames use it, so facing/walking east
+// shows it flipped (sAnimTable_Standard flips the west frames for east).
+static const struct SpriteFrameImage sPicTable_TreyBus[] = {
+    obj_frame_tiles(gObjectEventPic_TreyBus),
+    obj_frame_tiles(gObjectEventPic_TreyBus),
+    obj_frame_tiles(gObjectEventPic_TreyBus),
+    obj_frame_tiles(gObjectEventPic_TreyBus),
+    obj_frame_tiles(gObjectEventPic_TreyBus),
+    obj_frame_tiles(gObjectEventPic_TreyBus),
+    obj_frame_tiles(gObjectEventPic_TreyBus),
+    obj_frame_tiles(gObjectEventPic_TreyBus),
+    obj_frame_tiles(gObjectEventPic_TreyBus),
+};
+
+static const struct SpriteFrameImage sPicTable_TreyBusStop[] = { // TREY (6d-2)
+    obj_frame_tiles(gObjectEventPic_TreyBusStop),
+};
+
 static const struct SpriteFrameImage sPicTable_MrBrineysBoat[] = {
     overworld_frame(gObjectEventPic_MrBrineysBoat, 4, 4, 0),
     overworld_frame(gObjectEventPic_MrBrineysBoat, 4, 4, 1),

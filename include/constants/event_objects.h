@@ -651,6 +651,8 @@ enum
     OBJ_EVENT_GFX_ORANGE_225,
     OBJ_EVENT_GFX_ORANGE_226,
     // TREY (6c-2) END
+    OBJ_EVENT_GFX_TREY_BUS,      // TREY (6d-2, D50): the Kitakami bus (64x64, faces west)
+    OBJ_EVENT_GFX_TREY_BUS_STOP, // TREY (6d-2, D50): bus stop pole
     NUM_OBJ_EVENT_GFX,
 };
 
@@ -807,6 +809,7 @@ enum
 #define OBJ_EVENT_PAL_TAG_SEAGALLOP               0x1132
 #define OBJ_EVENT_PAL_TAG_SS_ANNE                 0x1133
 #define OBJ_EVENT_PAL_TAG_TREY_STORM_PUFF         0x1134 // TREY (3f): was 0x1125 before the 1.16 merge
+#define OBJ_EVENT_PAL_TAG_TREY_BUS                0x1135 // TREY (6d-2): bus and bus stop pole
 #include "constants/trey_hns_event_object_pals.h" // TREY (6a): Heart & Soul palette tags (0x1170-)
 #include "constants/trey_orange_event_object_pals.h" // TREY (6c-2): Orange Islands palette tags (0x1500-)
 

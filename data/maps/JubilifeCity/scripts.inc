@@ -4,6 +4,18 @@
 JubilifeCity_MapScripts::
 	.byte 0
 
+@ TREY (6d-2, D48/D50): the Kitakami bus stop in front of the long building (data/scripts/trey_transit.inc).
+@ Hand-edited (events, collision under the bus): don't re-run import_sinnoh.py maps for this map.
+JubilifeCity_TreyEventScript_BusDriver::
+	lock
+	faceplayer
+	setvar VAR_0x8004, TRANSIT_BUS
+	setvar VAR_0x8005, TRANSIT_STOP_JUBILIFE_BUS
+	setvar VAR_0x8007, 0
+	setvar VAR_0x8009, LOCALID_JUBILIFE_CITY_BUS
+	setvar VAR_0x800A, LOCALID_JUBILIFE_CITY_BUS_DRIVER
+	goto TreyTransit_EventScript_BusDriver
+
 JubilifeCity_EventScript_Sign10::
 	msgbox JubilifeCity_Text_Sign10, MSGBOX_SIGN
 	end

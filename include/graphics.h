@@ -1609,6 +1609,8 @@ extern const u16 gItemIconPalette_TeachyTV[];
 // Story Key Items
 extern const u32 gItemIcon_SSTicket[];
 extern const u16 gItemIconPalette_SSTicket[];
+extern const u32 gItemIcon_BusPass[]; // TREY (6d-2)
+extern const u16 gItemIconPalette_BusPass[];
 extern const u32 gItemIcon_EonTicket[];
 extern const u16 gItemIconPalette_EonTicket[];
 extern const u32 gItemIcon_MysticTicket[];

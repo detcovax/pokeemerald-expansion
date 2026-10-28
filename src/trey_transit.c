@@ -19,7 +19,7 @@
 struct TreyTransitStop
 {
     const u8 *name;
-    u8 mode;          // TRANSIT_SHIP / TRANSIT_TRAIN
+    u8 mode;          // TRANSIT_SHIP / TRANSIT_TRAIN / TRANSIT_BUS
     u8 healLocation;  // respawn point after arriving (0 = keep the old one)
     u16 map;          // where you arrive (MAP_UNDEFINED until the map exists)
     s8 x, y;
@@ -49,10 +49,13 @@ static const struct TreyTransitStop sStops[TRANSIT_STOP_COUNT] =
     [TRANSIT_STOP_HAMLIN]          = {sText_Hamlin,         TRANSIT_SHIP,  HEAL_LOCATION_HAMLIN_ISLAND, MAP_HAMLIN_ISLAND_HARBOR, 6, 9}, // 6c-4b: Hamlin Harbor (D43)
     [TRANSIT_STOP_ONE_ISLAND]      = {sText_OneIsland,      TRANSIT_SHIP,  0, MAP_UNDEFINED, 0, 0},
     [TRANSIT_STOP_CANALAVE]        = {sText_Canalave,       TRANSIT_SHIP,  HEAL_LOCATION_CANALAVE_CITY, MAP_CANALAVE_CITY, 13, 46}, // 6b-4: the canal pier
-    [TRANSIT_STOP_MOSSUI]          = {sText_Mossui,         TRANSIT_SHIP,  0, MAP_UNDEFINED, 0, 0},
+    [TRANSIT_STOP_MOSSUI]          = {sText_Mossui,         TRANSIT_BUS,   0, MAP_UNDEFINED, 0, 0}, // 6d-2: bus (D48); map in 6d-3
     [TRANSIT_STOP_GOLDENROD]       = {sText_Goldenrod,      TRANSIT_TRAIN, 0, MAP_UNDEFINED, 0, 0},
     [TRANSIT_STOP_SAFFRON]         = {sText_Saffron,        TRANSIT_TRAIN, 0, MAP_UNDEFINED, 0, 0},
     [TRANSIT_STOP_JUBILIFE]        = {sText_Jubilife,       TRANSIT_TRAIN, 0, MAP_UNDEFINED, 0, 0},
+    // TREY (6d-2, D50): bus stops; you arrive beside the parked bus.
+    [TRANSIT_STOP_GOLDENROD_BUS]   = {sText_Goldenrod,      TRANSIT_BUS,   HEAL_LOCATION_GOLDENROD_CITY, MAP_GOLDENROD_CITY, 9, 24},
+    [TRANSIT_STOP_JUBILIFE_BUS]    = {sText_Jubilife,       TRANSIT_BUS,   HEAL_LOCATION_JUBILIFE_CITY,  MAP_JUBILIFE_CITY, 24, 39},
 };
 
 #define TRIP_FROM(trip) (((trip) >> 8) - 1)
@@ -60,6 +63,9 @@ static const struct TreyTransitStop sStops[TRANSIT_STOP_COUNT] =
 
 static bool32 IsStopVisited(u32 stop)
 {
+    // TREY (6d-2, D50): the Bus Pass is the invitation to Kitakami, so Mossui is known as soon as you hold it.
+    if (stop == TRANSIT_STOP_MOSSUI && CheckBagHasItem(ITEM_BUS_PASS, 1))
+        return TRUE;
     return TREY_DEBUG_ALL_TRANSIT || FlagGet(TREY_FLAG_TRANSIT_STOP_START + stop);
 }
 
@@ -84,11 +90,14 @@ u16 TreyTransit_GetFromStopMapsec(void)
 
 void TreyTransit_CheckPass(void)
 {
-    // The ship needs the S.S. Ticket (Vermilion story). The Rail Pass arrives with the first station.
+    // The ship needs the S.S. Ticket (Vermilion story), the bus the Bus Pass (Kitakami story). The Rail Pass arrives
+    // with the first station.
     if (TREY_DEBUG_ALL_TRANSIT)
         gSpecialVar_Result = TRUE;
     else if (gSpecialVar_0x8004 == TRANSIT_SHIP)
         gSpecialVar_Result = CheckBagHasItem(ITEM_SS_TICKET, 1);
+    else if (gSpecialVar_0x8004 == TRANSIT_BUS) // TREY (6d-2): the Bus Pass comes from the Kitakami story
+        gSpecialVar_Result = CheckBagHasItem(ITEM_BUS_PASS, 1);
     else
         gSpecialVar_Result = FALSE;
 }

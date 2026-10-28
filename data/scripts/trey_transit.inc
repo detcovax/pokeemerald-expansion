@@ -16,7 +16,8 @@
 TreyTransit_EventScript_ChooseDestination::
 	special TreyTransit_CheckPass
 	goto_if_eq VAR_RESULT, FALSE, TreyTransit_EventScript_NoPass
-	msgbox TreyTransit_Text_MayISeeYourTicket, MSGBOX_DEFAULT
+	call_if_ne VAR_0x8004, TRANSIT_BUS, TreyTransit_EventScript_AskTicket
+	call_if_eq VAR_0x8004, TRANSIT_BUS, TreyTransit_EventScript_AskBusPass   @ TREY (6d-2)
 TreyTransit_EventScript_ChooseAgain::
 	special TreyTransit_PushDestinations
 	copyvar VAR_0x8008, VAR_RESULT
@@ -63,14 +64,40 @@ TreyTransit_EventScript_PushFarawayIsland::
 	addvar VAR_0x8008, 1
 	return
 
+TreyTransit_EventScript_AskTicket::
+	msgbox TreyTransit_Text_MayISeeYourTicket, MSGBOX_DEFAULT
+	return
+
+TreyTransit_EventScript_AskBusPass::
+	msgbox TreyTransit_Text_MayISeeYourBusPass, MSGBOX_DEFAULT
+	return
+
 TreyTransit_EventScript_NoPass::
-	msgbox TreyTransit_Text_NeedTicket, MSGBOX_DEFAULT
+	call_if_ne VAR_0x8004, TRANSIT_BUS, TreyTransit_EventScript_NeedTicket
+	call_if_eq VAR_0x8004, TRANSIT_BUS, TreyTransit_EventScript_NeedBusPass
 	setvar VAR_0x8006, TRANSIT_STOP_NONE
 	return
 
+TreyTransit_EventScript_NeedTicket::
+	msgbox TreyTransit_Text_NeedTicket, MSGBOX_DEFAULT
+	return
+
+TreyTransit_EventScript_NeedBusPass::
+	msgbox TreyTransit_Text_NeedBusPass, MSGBOX_DEFAULT
+	return
+
 TreyTransit_EventScript_NoDestinations::
-	msgbox TreyTransit_Text_NoOtherPorts, MSGBOX_DEFAULT
+	call_if_ne VAR_0x8004, TRANSIT_BUS, TreyTransit_EventScript_NoOtherPorts
+	call_if_eq VAR_0x8004, TRANSIT_BUS, TreyTransit_EventScript_NoOtherStops
 	setvar VAR_0x8006, TRANSIT_STOP_NONE
+	return
+
+TreyTransit_EventScript_NoOtherPorts::
+	msgbox TreyTransit_Text_NoOtherPorts, MSGBOX_DEFAULT
+	return
+
+TreyTransit_EventScript_NoOtherStops::
+	msgbox TreyTransit_Text_NoOtherStops, MSGBOX_DEFAULT
 	return
 
 TreyTransit_EventScript_Cancelled::
@@ -119,6 +146,97 @@ TreyTransit_EventScript_NotYet::
 	msgbox TreyTransit_Text_NotYet, MSGBOX_DEFAULT
 	release
 	end
+
+@ ------------------------------------------------------------------------------------------------------------
+@ TREY (6d-2, D48/D50): the Kitakami bus. No on-board map: the driver's map script sets VAR_0x8004 = TRANSIT_BUS,
+@ VAR_0x8005 = its stop, VAR_0x8009 = the bus's local id, VAR_0x800A = the driver's local id, and jumps here.
+@ The player and the driver step aboard, the bus drives off east, a line of text, then the warp.
+TreyTransit_EventScript_BusDriver::
+	call TreyTransit_EventScript_ChooseDestination
+	goto_if_eq VAR_0x8006, TRANSIT_STOP_NONE, TreyTransit_EventScript_BusEnd
+	special TreyTransit_Board
+	msgbox TreyTransit_Text_BusAllAboard, MSGBOX_DEFAULT
+	closemessage
+	hidefollower
+	applymovement VAR_0x800A, TreyTransit_Movement_BoardBus
+	waitmovement 0
+	playse SE_TRUCK_DOOR
+	applymovement OBJ_EVENT_ID_PLAYER, TreyTransit_Movement_BoardBus
+	waitmovement 0
+	delay 20
+	playse SE_TRUCK_MOVE
+	applymovement VAR_0x8009, TreyTransit_Movement_BusDriveOff
+	waitmovement 0
+	special TreyTransit_BufferDestinationName
+	msgbox TreyTransit_Text_BusRide, MSGBOX_DEFAULT
+	closemessage
+	special TreyTransit_WarpToDestination
+	waitstate
+	release
+	end
+
+TreyTransit_EventScript_BusEnd::
+	release
+	end
+
+@ Talking to the parked bus.
+TreyTransit_EventScript_Bus::
+	msgbox TreyTransit_Text_Bus, MSGBOX_SIGN
+	end
+
+@ The bus stop pole.
+TreyTransit_EventScript_BusStopSign::
+	msgbox TreyTransit_Text_BusStopSign, MSGBOX_SIGN
+	end
+
+TreyTransit_Movement_BoardBus:
+	face_up
+	delay_8
+	set_invisible
+	step_end
+
+TreyTransit_Movement_BusDriveOff:
+	face_right
+	walk_right
+	walk_fast_right
+	walk_fast_right
+	walk_fast_right
+	walk_fast_right
+	walk_fast_right
+	walk_fast_right
+	walk_fast_right
+	walk_fast_right
+	step_end
+
+TreyTransit_Text_MayISeeYourBusPass:
+	.string "Bus Pass? Thank you!\n"
+	.string "Where are we headed today?$"
+
+TreyTransit_Text_NeedBusPass:
+	.string "This is the bus for Kitakami.\p"
+	.string "I'm sorry, you need a BUS PASS\n"
+	.string "to ride.$"
+
+TreyTransit_Text_NoOtherStops:
+	.string "Hmm... You haven't been to any of\n"
+	.string "our other stops yet.$"
+
+TreyTransit_Text_BusAllAboard:
+	.string "All aboard! Please take a seat.$"
+
+TreyTransit_Text_BusRide:
+	.string "The bus rattled along the winding\n"
+	.string "country roads to {STR_VAR_1}...$"
+
+TreyTransit_Text_Bus:
+	.string "It's a country bus. The sign above\n"
+	.string "the windshield reads “KITAKAMI.”$"
+
+TreyTransit_Text_BusStopSign:
+	.string "BUS STOP\p"
+	.string "GOLDENROD - JUBILIFE -\n"
+	.string "MOSSUI TOWN (KITAKAMI)\p"
+	.string "Riders need a BUS PASS.$"
 
 TreyTransit_Text_MayISeeYourTicket:
 	.string "May I see your ticket, please?\p"

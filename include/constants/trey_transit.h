@@ -4,6 +4,7 @@
 // TREY (TREY_PLAN.md 5.4, Phase 4 chunk 4c): ships and trains. #defines only (read by scripts too).
 #define TRANSIT_SHIP    0
 #define TRANSIT_TRAIN   1
+#define TRANSIT_BUS     2 // TREY (6d-2, D48/D50): Goldenrod/Jubilife <-> Mossui; ridden without an on-board map
 
 // Stops. The table is src/trey_transit.c. Stops whose map doesn't exist yet are never offered.
 #define TRANSIT_STOP_SLATEPORT        0
@@ -14,11 +15,13 @@
 #define TRANSIT_STOP_HAMLIN           5  // TREY (6c-4b, D43): Orange stop, was VALENCIA
 #define TRANSIT_STOP_ONE_ISLAND       6
 #define TRANSIT_STOP_CANALAVE         7
-#define TRANSIT_STOP_MOSSUI           8
+#define TRANSIT_STOP_MOSSUI           8  // bus (6d-2, D48); was a ship stop
 #define TRANSIT_STOP_GOLDENROD        9  // train
 #define TRANSIT_STOP_SAFFRON          10 // train
 #define TRANSIT_STOP_JUBILIFE         11 // train
-#define TRANSIT_STOP_COUNT            12 // up to 32 (visited flags reserved)
+#define TRANSIT_STOP_GOLDENROD_BUS    12 // bus (6d-2)
+#define TRANSIT_STOP_JUBILIFE_BUS     13 // bus (6d-2)
+#define TRANSIT_STOP_COUNT            14 // up to 32 (visited flags reserved)
 #define TRANSIT_STOP_NONE             0xFF
 
 // VAR_TREY_TRANSIT_STATE
