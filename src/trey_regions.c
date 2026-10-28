@@ -2,6 +2,7 @@
 
 #include "global.h"
 #include "event_data.h"
+#include "fieldmap.h" // TREY (6c-6): gMapHeader
 #include "region_map.h"
 #include "trey_regions.h"
 #include "trey_dex.h"
@@ -53,9 +54,10 @@ static const u16 sTreyJohtoWorldMapFlags[][2] = { TREY_JOHTO_FLY(TREY_JOHTO_WORL
 static const u16 sTreySinnohWorldMapFlags[][2] = { TREY_SINNOH_FLY(TREY_SINNOH_WORLD_MAP_FLAG) };
 #undef TREY_SINNOH_WORLD_MAP_FLAG
 
-// 6c-4b: Orange's towns (include/constants/trey_orange_fly.h, every place with a Pokemon Center).
+// 6c-4b: Orange's towns (include/constants/trey_orange_fly.h, every place with a Pokemon Center + Orange Pallet).
+// 6c-6: by location, not map: an island can be several maps (Pummelo's Pokemon Center is on its second one).
 #include "constants/trey_orange_fly.h"
-#define TREY_ORANGE_WORLD_MAP_FLAG(sec, map, heal) {MAP_##map, FLAG_WORLD_MAP_ORANGE_##sec},
+#define TREY_ORANGE_WORLD_MAP_FLAG(sec, map, heal) {MAPSEC_##sec, FLAG_WORLD_MAP_ORANGE_##sec},
 static const u16 sTreyOrangeWorldMapFlags[][2] = { TREY_ORANGE_FLY(TREY_ORANGE_WORLD_MAP_FLAG) };
 #undef TREY_ORANGE_WORLD_MAP_FLAG
 
@@ -90,7 +92,7 @@ static void TreyRegions_SetWorldMapFlag(void)
     }
     for (i = 0; i < ARRAY_COUNT(sTreyOrangeWorldMapFlags); i++) // TREY (6c-4b)
     {
-        if (sTreyOrangeWorldMapFlags[i][0] == map)
+        if (sTreyOrangeWorldMapFlags[i][0] == gMapHeader.regionMapSectionId)
         {
             FlagSet(sTreyOrangeWorldMapFlags[i][1]);
             return;

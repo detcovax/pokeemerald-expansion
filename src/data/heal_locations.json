@@ -775,6 +775,12 @@
       "y": 21,
       "respawn_map": "MAP_NAVEL_ISLAND_POKEMON_CENTER_1F",
       "respawn_npc": "LOCALID_NAVEL_ISLAND_POKEMON_CENTER_1F_NURSE"
+    },
+    {
+      "id": "HEAL_LOCATION_ORANGE_PALLET_TOWN",
+      "map": "MAP_ORANGE_PALLET_TOWN",
+      "x": 43,
+      "y": 34
     }
   ]
 }
