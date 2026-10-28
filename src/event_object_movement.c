@@ -1,5 +1,6 @@
 #include "global.h"
 #include "trey_sky.h" // TREY
+#include "trey_regional.h" // TREY (6-T): Orange-variant followers
 #include "malloc.h"
 #include "battle_anim.h"
 #include "battle_pyramid.h"
@@ -203,6 +204,7 @@ static void InitSpriteForFigure8Anim(struct Sprite *);
 static bool8 AnimateSpriteInFigure8(struct Sprite *);
 enum Direction GetDirectionToFace(s16 x1, s16 y1, s16 x2, s16 y2);
 static u32 LoadDynamicFollowerPalette(enum Species species, bool32 shiny, bool32 female);
+static u32 TreyFollowerPalette(struct ObjectEvent *objEvent, u32 paletteNum); // TREY (6-T)
 static void FollowerSetGraphics(struct ObjectEvent *objEvent, enum Species species, bool32 shiny, bool32 female);
 static void ObjectEventSetGraphics(struct ObjectEvent *, const struct ObjectEventGraphicsInfo *);
 static void SpriteCB_VirtualObject(struct Sprite *);
@@ -1881,7 +1883,7 @@ static u8 TrySetupObjectEventSprite(const struct ObjectEventTemplate *objectEven
     sprite = &gSprites[spriteId];
     // Use palette from species palette table
     if (spriteTemplate->paletteTag == OBJ_EVENT_PAL_TAG_DYNAMIC)
-        sprite->oam.paletteNum = LoadDynamicFollowerPalette(OW_SPECIES(objectEvent), OW_SHINY(objectEvent), OW_FEMALE(objectEvent));
+        sprite->oam.paletteNum = TreyFollowerPalette(objectEvent, LoadDynamicFollowerPalette(OW_SPECIES(objectEvent), OW_SHINY(objectEvent), OW_FEMALE(objectEvent))); // TREY (6-T)
     if (OW_GFX_COMPRESS && sprite->usingSheet)
         sprite->sheetSpan = GetSpanPerImage(sprite->oam.shape, sprite->oam.size);
     GetMapCoordsFromSpritePos(objectEvent->currentCoords.x + cameraX, objectEvent->currentCoords.y + cameraY, &sprite->x, &sprite->y);
@@ -2185,6 +2187,34 @@ const struct ObjectEventGraphicsInfo *SpeciesToGraphicsInfo(enum Species species
     return graphicsInfo;
 }
 
+// TREY (6-T, D46): an Orange-variant follower walks in its tinted colours. The tinted copy gets its own tag
+// (species tag | 0x8000), so wild and NPC sprites of the same species keep theirs.
+#define TREY_ORANGE_FOLLOWER_PAL_TAG_BIT 0x8000
+static u32 TreyFollowerPalette(struct ObjectEvent *objEvent, u32 paletteNum)
+{
+    struct Pokemon *mon;
+    struct SpritePalette pal;
+    u16 tinted;
+    u32 slot;
+
+    if (objEvent->localId != OBJ_EVENT_ID_FOLLOWER || paletteNum >= 16)
+        return paletteNum;
+    mon = GetFirstLiveMon();
+    if (mon == NULL || !GetMonData(mon, MON_DATA_ORANGE_VARIANT, NULL))
+        return paletteNum;
+    tinted = GetSpritePaletteTagByPaletteNum(paletteNum) | TREY_ORANGE_FOLLOWER_PAL_TAG_BIT;
+    if ((slot = IndexOfSpritePaletteTag(tinted)) < 16)
+        return slot;
+    pal.data = TreyOrange_GetMonPalette(mon, &gPlttBufferUnfaded[OBJ_PLTT_ID(paletteNum)]);
+    pal.tag = tinted;
+    slot = LoadSpritePalette(&pal);
+    if (slot >= 16)
+        return paletteNum;
+    if (gWeatherPtr->currWeather != WEATHER_FOG_HORIZONTAL)
+        UpdateSpritePaletteWithWeather(slot, FALSE);
+    return slot;
+}
+
 // Find, or load, the palette for the specified Pokémon info
 static u32 LoadDynamicFollowerPalette(enum Species species, bool32 shiny, bool32 female)
 {
@@ -2256,7 +2286,7 @@ static void FollowerSetGraphics(struct ObjectEvent *objEvent, enum Species speci
         sprite->inUse = FALSE;
         FieldEffectFreePaletteIfUnused(sprite->oam.paletteNum);
         sprite->inUse = TRUE;
-        sprite->oam.paletteNum = LoadDynamicFollowerPalette(species, shiny, female);
+        sprite->oam.paletteNum = TreyFollowerPalette(objEvent, LoadDynamicFollowerPalette(species, shiny, female)); // TREY (6-T)
     }
 }
 
@@ -2296,7 +2326,7 @@ static void RefreshFollowerGraphics(struct ObjectEvent *objEvent)
         sprite->inUse = FALSE;
         FieldEffectFreePaletteIfUnused(sprite->oam.paletteNum);
         sprite->inUse = TRUE;
-        sprite->oam.paletteNum = LoadDynamicFollowerPalette(species, shiny, female);
+        sprite->oam.paletteNum = TreyFollowerPalette(objEvent, LoadDynamicFollowerPalette(species, shiny, female)); // TREY (6-T)
     }
     else if (i != OBJ_EVENT_PAL_INDEX_NONE) // TREY (6c-4b)
     {
@@ -3023,7 +3053,7 @@ static void SpawnObjectEventOnReturnToField(u8 objectEventId, s16 x, s16 y)
 
     if (spriteTemplate.paletteTag == OBJ_EVENT_PAL_TAG_DYNAMIC)
     {
-        u32 paletteNum = LoadDynamicFollowerPalette(OW_SPECIES(objectEvent), OW_SHINY(objectEvent), OW_FEMALE(objectEvent));
+        u32 paletteNum = TreyFollowerPalette(objectEvent, LoadDynamicFollowerPalette(OW_SPECIES(objectEvent), OW_SHINY(objectEvent), OW_FEMALE(objectEvent))); // TREY (6-T)
         spriteTemplate.paletteTag = GetSpritePaletteTagByPaletteNum(paletteNum);
     }
     else if (spriteTemplate.paletteTag != TAG_NONE)

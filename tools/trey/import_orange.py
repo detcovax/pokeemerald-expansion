@@ -363,6 +363,8 @@ def step_sprites(a):
                 and pa and pb and rom.d[rom.off(pa):rom.off(pa) + 32] == fr.d[fr.off(pb):fr.off(pb) + 32])
 
     mapping, items, consts, pal_tags, notes = {}, [], [], {}, collections.Counter()
+    trim_path = "docs/trey/orange_sprite_trim.json"
+    trim = set(__import__("json").load(open(trim_path, encoding="utf-8"))) if os.path.exists(trim_path) else set()
     for i, p in enumerate(oe):
         g = gfx_info(rom, p)
         if not (0 < g["w"] <= 128 and 0 < g["h"] <= 128) or not rom.isptr(g["images"]):
@@ -374,6 +376,9 @@ def step_sprites(a):
             continue
         base = fr_names.get(i) if i < len(fe) else None
         cname = f"OBJ_EVENT_GFX_ORANGE_{base}" if base else f"OBJ_EVENT_GFX_ORANGE_{i}"
+        if cname in trim:   # 6c-trim (D46): Pokemon NPC sprites the Orange maps don't use (followers show them)
+            notes["trimmed (6c-trim)"] += 1
+            continue
         sname = "Orange" + (camel_const(base) if base else str(i))
         anims = sym.get(("anims", g["anims"]))
         guessed = anims is None
