@@ -17964,6 +17964,45 @@
       "border_filepath": "data/layouts/KumquatIsland_Floor/border.bin",
       "blockdata_filepath": "data/layouts/KumquatIsland_Floor/map.bin",
       "layout_version": "frlg"
+    },
+    {
+      "id": "LAYOUT_MOSSUI_TOWN",
+      "name": "MossuiTown_Layout",
+      "width": 40,
+      "height": 32,
+      "border_width": 2,
+      "border_height": 2,
+      "primary_tileset": "gTileset_Johto_NorthWest_Hns",
+      "secondary_tileset": "gTileset_KitakamiMossui",
+      "border_filepath": "data/layouts/MossuiTown/border.bin",
+      "blockdata_filepath": "data/layouts/MossuiTown/map.bin",
+      "layout_version": "frlg"
+    },
+    {
+      "id": "LAYOUT_KITAKAMI_ROAD",
+      "name": "KitakamiRoad_Layout",
+      "width": 28,
+      "height": 48,
+      "border_width": 2,
+      "border_height": 2,
+      "primary_tileset": "gTileset_Johto_General_Hns",
+      "secondary_tileset": "gTileset_KitakamiFields",
+      "border_filepath": "data/layouts/KitakamiRoad/border.bin",
+      "blockdata_filepath": "data/layouts/KitakamiRoad/map.bin",
+      "layout_version": "frlg"
+    },
+    {
+      "id": "LAYOUT_ONI_MOUNTAIN_WEST_SLOPE",
+      "name": "OniMountain_WestSlope_Layout",
+      "width": 46,
+      "height": 40,
+      "border_width": 2,
+      "border_height": 2,
+      "primary_tileset": "gTileset_Johto_NorthEast_Hns",
+      "secondary_tileset": "gTileset_KitakamiMountain",
+      "border_filepath": "data/layouts/OniMountain_WestSlope/border.bin",
+      "blockdata_filepath": "data/layouts/OniMountain_WestSlope/map.bin",
+      "layout_version": "frlg"
     }
   ]
 }

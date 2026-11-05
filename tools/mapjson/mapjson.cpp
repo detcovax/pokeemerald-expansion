@@ -800,7 +800,8 @@ void process_groups(string groups_filepath, vector<string> &map_filepaths, strin
 
         // TREY (5a, 6a, 6b-4): the TREY (emerald) build keeps the FRLG Kanto/Sevii, Johto and Sinnoh maps as well as Hoenn.
         if ((version == "emerald" && region != "REGION_HOENN" && region != "REGION_KANTO" && region != "REGION_JOHTO"
-             && region != "REGION_SINNOH" && region != "REGION_ORANGE") // TREY (6c-4b): + Orange
+             && region != "REGION_SINNOH" && region != "REGION_ORANGE" // TREY (6c-4b): + Orange
+             && region != "REGION_KITAKAMI") // TREY (6d-3): + Kitakami
          || (version == "firered" && region != "REGION_KANTO")) {
             invalid_maps.push_back(map_name);
         }

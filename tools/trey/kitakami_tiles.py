@@ -375,6 +375,8 @@ RECIPES = {
             ("forest_edge_south", "nature", [("EcruteakCity", 10, 51, 32, 61)]),
             ("pond", "nature", [("EcruteakCity", 28, 13, 36, 23)]),
             ("street", "nature", [("EcruteakCity", 14, 22, 30, 30)]),
+            # TREY (6d-3): the house stamps above have no door; Ecruteak's house door, put over a front wall tile.
+            ("house_door", "building", [("EcruteakCity", 19, 40, 20, 41)]),
         ],
         "art": [(n, k, snapped(m, "gTileset_Ecruteak_City_Hns", "gTileset_Johto_NorthWest_Hns"), a, c) for (n, k, m, a, c) in [
             ("paddy", "nature", art_paddy, 0, 1),

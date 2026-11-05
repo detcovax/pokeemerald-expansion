@@ -27,7 +27,8 @@
     "gMapGroup_Orange_Underwater",
     "gMapGroup_Orange_Indoor_West",
     "gMapGroup_Orange_Indoor_Central",
-    "gMapGroup_Orange_Indoor_East"
+    "gMapGroup_Orange_Indoor_East",
+    "gMapGroup_Kitakami_Outdoor"
   ],
   "gMapGroup_Hoenn_Outdoor": [
     "PetalburgCity",
@@ -1815,5 +1816,10 @@
     "OrangeRouteI_Harbor1",
     "OrangeRouteI_Harbor2",
     "OrangeRouteK_House"
+  ],
+  "gMapGroup_Kitakami_Outdoor": [
+    "MossuiTown",
+    "KitakamiRoad",
+    "OniMountain_WestSlope"
   ]
 }

@@ -16,6 +16,7 @@ static const struct TreyDebugWarp sTreyRegionStarts[REGIONS_COUNT] =
     [REGION_HOENN] = { MAP_LITTLEROOT_TOWN, 5, 9 },    // in front of the player's house
     [REGION_SINNOH] = { MAP_TWINLEAF_TOWN, 16, 19 },   // in front of the DPPt player's house (6b-4)
     [REGION_ORANGE] = { MAP_VALENCIA_ISLAND, 27, 16 }, // in front of the Pokemon Center (6c-4b, D40)
+    [REGION_KITAKAMI] = { MAP_MOSSUI_TOWN, 27, 14 },   // in front of the Pokemon Center (6d-3, D51)
 };
 
 static void Debug_DestroyMenu_Full(u8 taskId);
@@ -37,5 +38,6 @@ static const struct DebugMenuOption sDebugMenu_Actions_TreyRegionStarts[] =
     { COMPOUND_STRING("Hoenn: Littleroot"),    DebugAction_Util_TreyWarpRegionStart, &sTreyRegionStarts[REGION_HOENN] },
     { COMPOUND_STRING("Sinnoh: Twinleaf Town"), DebugAction_Util_TreyWarpRegionStart, &sTreyRegionStarts[REGION_SINNOH] },
     { COMPOUND_STRING("Orange: Valencia Island"), DebugAction_Util_TreyWarpRegionStart, &sTreyRegionStarts[REGION_ORANGE] },
+    { COMPOUND_STRING("Kitakami: Mossui Town"), DebugAction_Util_TreyWarpRegionStart, &sTreyRegionStarts[REGION_KITAKAMI] },
     { NULL }
 };
