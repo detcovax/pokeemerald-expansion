@@ -12,13 +12,7 @@
   "allow_running": true,
   "show_map_name": true,
   "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
-  "connections": [
-    {
-      "map": "MAP_MOSSUI_TOWN",
-      "offset": -6,
-      "direction": "up"
-    }
-  ],
+  "connections": [],
   "object_events": [
     {
       "local_id": "LOCALID_KITAKAMI_ROAD_BUS",
@@ -62,7 +56,22 @@
       "flag": "0"
     }
   ],
-  "warp_events": [],
+  "warp_events": [
+    {
+      "x": 13,
+      "y": 0,
+      "elevation": 0,
+      "dest_map": "MAP_MOSSUI_TOWN",
+      "dest_warp_id": "3"
+    },
+    {
+      "x": 14,
+      "y": 0,
+      "elevation": 0,
+      "dest_map": "MAP_MOSSUI_TOWN",
+      "dest_warp_id": "4"
+    }
+  ],
   "coord_events": [],
   "bg_events": [
     {

@@ -241,6 +241,12 @@ MAPS["MossuiTown"] = {
         ("stamp", "lantern", 2, 12), ("stamp", "lantern", 2, 18), ("stamp", "lantern", 37, 12), ("stamp", "lantern", 37, 18),
         ("stamp", "sign", 17, 25),
         ("stamp", "signboard", 22, 4),              # signboard 3, "at the base of Oni Mountain"
+        # D52: maps on other tilesets are reached by warps, not connections (the GBA draws a connected map with
+        # this map's tiles). North: torii gate up Oni Mountain (walk north on its inner top row); south: street edge.
+        ("stamp", "gate", 18, 0), ("put", ("gate_warp_north_l", 0, 0), 19, 1), ("put", ("gate_warp_north_r", 0, 0), 20, 1),
+        ("rect", STONE, 19, 3, 2, 1),               # Ecruteak's gate sill is a south arrow warp: plain stone here
+
+        ("rect", ("street_warp_south", 0, 0), 18, 31, 4, 1),
     ],
     "marks": [(8, 12, "D", (255, 0, 255)), (27, 12, "D", (255, 0, 255)), (10, 23, "D", (255, 0, 255)),
               (24, 22, "D", (255, 0, 255)), (17, 25, "S", (0, 255, 255)), (22, 5, "SB3", (0, 255, 255))],
@@ -287,6 +293,7 @@ MAPS["KitakamiRoad"] = {
         ("rect", TALL, 17, 20, 5, 8), ("rect", TALL, 17, 35, 4, 2),
         ("put", ("route39_all", 25, 17), 11, 36),
         ("col", 13, 40, 4, 2, 1),                   # under the parked bus picture (bus object at (14,41), D50)
+        ("rect", ("path_warp_north", 0, 0), 13, 0, 2, 1),   # D52: edge warp north to Mossui
     ],
     "marks": [(14, 41, "BUS", (255, 255, 0)), (14, 0, "N", (255, 255, 255)), (27, 31, "E", (255, 255, 255)), (13, 42, "drv", (0, 255, 255)), (18, 40, "pol", (0, 255, 255)),
               (14, 42, "arr", (255, 0, 255)), (11, 36, "S", (0, 255, 255))],
@@ -312,6 +319,7 @@ MAPS["OniMountain_WestSlope"] = {
         ("rect", GRASS, 21, 34, 10, 6),
         ("stamp", "ogerpon_hut", 21, 35, (0, 1, 9, 3)),     # the mound without Ecruteak's tree rows
         ("col", 14, 4, 1, 1, 1), ("col", 28, 37, 1, 1, 1),  # Den and hut doors closed until built (D37)
+        ("rect", ("path_warp_south", 0, 0), 10, 39, 4, 1),  # D52: edge warp south to Mossui's torii gate
     ],
     "marks": [(14, 4, "Den", (255, 0, 255)), (28, 37, "Hut", (255, 0, 255)), (29, 0, "N", (255, 255, 255)),
               (11, 39, "S", (255, 255, 255))],

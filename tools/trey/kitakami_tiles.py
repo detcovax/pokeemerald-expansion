@@ -60,6 +60,12 @@ def tileset(name):
     return _ts_cache[name]
 
 
+def behaviour_id(name):
+    """MB_* value from include/constants/metatile_behaviors.h (an enum counted from 0)."""
+    names = re.findall(r"^\s+(MB_\w+)\s*,", open("include/constants/metatile_behaviors.h", encoding="utf-8").read(), re.M)
+    return names.index(name)
+
+
 def map_blocks(mapname):
     lay = layouts()[mapname + "_Layout"]
     w, h = lay["width"], lay["height"]
@@ -386,6 +392,12 @@ RECIPES = {
             ("signboard", "building", over_ground(art_signboard()), 0, 1),
             ("pedestal", "building", over_ground(art_pedestal()), 0, 1),
         ]],
+        # TREY (6d-3, D52): arrow-warp copies for edge warps between maps on different tilesets (stone street) and
+        # the torii gate up Oni Mountain (the gate's inner top row, walking north).
+        "warps": [("street_warp_" + d.lower(), "EcruteakCity", 15, 27, f"MB_{d}_ARROW_WARP")
+                  for d in ("NORTH", "SOUTH", "EAST", "WEST")]
+                 + [("gate_warp_north_l", "EcruteakCity", 33, 53, "MB_NORTH_ARROW_WARP"),
+                    ("gate_warp_north_r", "EcruteakCity", 34, 53, "MB_NORTH_ARROW_WARP")],
     },
     "KitakamiFields": {
         "primary": "gTileset_Johto_General_Hns",
@@ -406,6 +418,9 @@ RECIPES = {
             ("paddy", "nature", art_paddy, 0, 1),
             ("flowers", "nature", art_flowers, 0, 0),
         ]],
+        # TREY (6d-3, D52): arrow-warp copies of the dirt path centre (edge warps).
+        "warps": [("path_warp_" + d.lower(), "Route39", 16, 23, f"MB_{d}_ARROW_WARP")
+                  for d in ("NORTH", "SOUTH", "EAST", "WEST")],
     },
     "KitakamiMountain": {
         "primary": "gTileset_Johto_NorthEast_Hns",
@@ -415,6 +430,9 @@ RECIPES = {
             ("dense_forest", "nature", [("IlexForest", 0, 0, 16, 16)]),
             ("ogerpon_hut", "building", [("EcruteakCity", 1, 51, 10, 56)]),
         ],
+        # TREY (6d-3, D52): arrow-warp copies of the sand path centre (edge warps).
+        "warps": [("path_warp_" + d.lower(), "Route45", 8, 30, f"MB_{d}_ARROW_WARP")
+                  for d in ("NORTH", "SOUTH", "EAST", "WEST")],
     },
     "KitakamiCave": {
         "primary": "gTileset_Johto_General_Hns",
@@ -520,7 +538,20 @@ class Builder:
         ground = self.ground_image() if "ground" in self.recipe else None
         for (sname, kind, make, attr, collision) in self.recipe.get("art", []):
             self.add_art_stamp(sname, kind, make, attr, collision, ground)
+        for (sname, mapname, x, y, behaviour) in self.recipe.get("warps", []):   # TREY (6d-3, D52), after the art
+            self.add_behaviour_stamp(sname, mapname, x, y, behaviour)            # so earlier ids don't move
         self.pack()
+
+    def add_behaviour_stamp(self, sname, mapname, x, y, behaviour):
+        """1x1 stamp: a source map block with another metatile behaviour (same tiles, so no tile/palette cost)."""
+        lay, w, blocks = map_blocks(mapname)
+        prim, sec = tileset(lay["primary_tileset"]), tileset(lay["secondary_tileset"])
+        b = blocks[y * w + x]
+        layers, attr = metatile_layers(prim, sec, b & 0x3FF)
+        for t in layers:
+            self.tile_group.setdefault(t, (lay["primary_tileset"], 0, ""))
+        attr = (attr & ~0x1FF) | behaviour_id(behaviour)
+        self.stamps[sname] = [[self.add_metatile(layers, attr, "nature") | (b & 0xFC00)]]
 
     # -- tiles and palettes ------------------------------------------------------------------------------------------
     def pack(self):

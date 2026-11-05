@@ -1485,6 +1485,60 @@
       1854
      ]
     ]
+   },
+   "street_warp_north": {
+    "w": 1,
+    "h": 1,
+    "blocks": [
+     [
+      13119
+     ]
+    ]
+   },
+   "street_warp_south": {
+    "w": 1,
+    "h": 1,
+    "blocks": [
+     [
+      12973
+     ]
+    ]
+   },
+   "street_warp_east": {
+    "w": 1,
+    "h": 1,
+    "blocks": [
+     [
+      13120
+     ]
+    ]
+   },
+   "street_warp_west": {
+    "w": 1,
+    "h": 1,
+    "blocks": [
+     [
+      13121
+     ]
+    ]
+   },
+   "gate_warp_north_l": {
+    "w": 1,
+    "h": 1,
+    "blocks": [
+     [
+      13122
+     ]
+    ]
+   },
+   "gate_warp_north_r": {
+    "w": 1,
+    "h": 1,
+    "blocks": [
+     [
+      13123
+     ]
+    ]
    }
   }
  },
@@ -7181,6 +7235,42 @@
       779
      ]
     ]
+   },
+   "path_warp_north": {
+    "w": 1,
+    "h": 1,
+    "blocks": [
+     [
+      13068
+     ]
+    ]
+   },
+   "path_warp_south": {
+    "w": 1,
+    "h": 1,
+    "blocks": [
+     [
+      13069
+     ]
+    ]
+   },
+   "path_warp_east": {
+    "w": 1,
+    "h": 1,
+    "blocks": [
+     [
+      13070
+     ]
+    ]
+   },
+   "path_warp_west": {
+    "w": 1,
+    "h": 1,
+    "blocks": [
+     [
+      13071
+     ]
+    ]
    }
   }
  },
@@ -12345,6 +12435,42 @@
       17078,
       17077,
       17078
+     ]
+    ]
+   },
+   "path_warp_north": {
+    "w": 1,
+    "h": 1,
+    "blocks": [
+     [
+      12983
+     ]
+    ]
+   },
+   "path_warp_south": {
+    "w": 1,
+    "h": 1,
+    "blocks": [
+     [
+      12984
+     ]
+    ]
+   },
+   "path_warp_east": {
+    "w": 1,
+    "h": 1,
+    "blocks": [
+     [
+      12985
+     ]
+    ]
+   },
+   "path_warp_west": {
+    "w": 1,
+    "h": 1,
+    "blocks": [
+     [
+      12986
      ]
     ]
    }

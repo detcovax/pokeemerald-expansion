@@ -12,20 +12,52 @@
   "allow_running": true,
   "show_map_name": true,
   "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
-  "connections": [
+  "connections": [],
+  "object_events": [],
+  "warp_events": [
     {
-      "map": "MAP_KITAKAMI_ROAD",
-      "offset": 6,
-      "direction": "down"
+      "x": 19,
+      "y": 1,
+      "elevation": 0,
+      "dest_map": "MAP_ONI_MOUNTAIN_WEST_SLOPE",
+      "dest_warp_id": "1"
     },
     {
-      "map": "MAP_ONI_MOUNTAIN_WEST_SLOPE",
-      "offset": 8,
-      "direction": "up"
+      "x": 20,
+      "y": 1,
+      "elevation": 0,
+      "dest_map": "MAP_ONI_MOUNTAIN_WEST_SLOPE",
+      "dest_warp_id": "2"
+    },
+    {
+      "x": 18,
+      "y": 31,
+      "elevation": 0,
+      "dest_map": "MAP_KITAKAMI_ROAD",
+      "dest_warp_id": "0"
+    },
+    {
+      "x": 19,
+      "y": 31,
+      "elevation": 0,
+      "dest_map": "MAP_KITAKAMI_ROAD",
+      "dest_warp_id": "0"
+    },
+    {
+      "x": 20,
+      "y": 31,
+      "elevation": 0,
+      "dest_map": "MAP_KITAKAMI_ROAD",
+      "dest_warp_id": "1"
+    },
+    {
+      "x": 21,
+      "y": 31,
+      "elevation": 0,
+      "dest_map": "MAP_KITAKAMI_ROAD",
+      "dest_warp_id": "1"
     }
   ],
-  "object_events": [],
-  "warp_events": [],
   "coord_events": [],
   "bg_events": [
     {

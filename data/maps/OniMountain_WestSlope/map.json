@@ -12,15 +12,38 @@
   "allow_running": true,
   "show_map_name": true,
   "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
-  "connections": [
+  "connections": [],
+  "object_events": [],
+  "warp_events": [
     {
-      "map": "MAP_MOSSUI_TOWN",
-      "offset": -8,
-      "direction": "down"
+      "x": 10,
+      "y": 39,
+      "elevation": 0,
+      "dest_map": "MAP_MOSSUI_TOWN",
+      "dest_warp_id": "0"
+    },
+    {
+      "x": 11,
+      "y": 39,
+      "elevation": 0,
+      "dest_map": "MAP_MOSSUI_TOWN",
+      "dest_warp_id": "0"
+    },
+    {
+      "x": 12,
+      "y": 39,
+      "elevation": 0,
+      "dest_map": "MAP_MOSSUI_TOWN",
+      "dest_warp_id": "1"
+    },
+    {
+      "x": 13,
+      "y": 39,
+      "elevation": 0,
+      "dest_map": "MAP_MOSSUI_TOWN",
+      "dest_warp_id": "1"
     }
   ],
-  "object_events": [],
-  "warp_events": [],
   "coord_events": [],
   "bg_events": [
     {
