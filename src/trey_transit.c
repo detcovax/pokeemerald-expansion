@@ -54,7 +54,7 @@ static const struct TreyTransitStop sStops[TRANSIT_STOP_COUNT] =
     [TRANSIT_STOP_SAFFRON]         = {sText_Saffron,        TRANSIT_TRAIN, 0, MAP_UNDEFINED, 0, 0},
     [TRANSIT_STOP_JUBILIFE]        = {sText_Jubilife,       TRANSIT_TRAIN, 0, MAP_UNDEFINED, 0, 0},
     // TREY (6d-2, D50): bus stops; you arrive beside the parked bus.
-    [TRANSIT_STOP_GOLDENROD_BUS]   = {sText_Goldenrod,      TRANSIT_BUS,   HEAL_LOCATION_GOLDENROD_CITY, MAP_GOLDENROD_CITY, 9, 24},
+    [TRANSIT_STOP_GOLDENROD_BUS]   = {sText_Goldenrod,      TRANSIT_BUS,   HEAL_LOCATION_GOLDENROD_CITY, MAP_GOLDENROD_CITY, 8, 24},
     [TRANSIT_STOP_JUBILIFE_BUS]    = {sText_Jubilife,       TRANSIT_BUS,   HEAL_LOCATION_JUBILIFE_CITY,  MAP_JUBILIFE_CITY, 24, 39},
 };
 
