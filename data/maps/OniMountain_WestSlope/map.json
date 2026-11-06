@@ -12,7 +12,18 @@
   "allow_running": true,
   "show_map_name": true,
   "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
-  "connections": [],
+  "connections": [
+    {
+      "map": "MAP_ONI_MOUNTAIN_SUMMIT",
+      "offset": 0,
+      "direction": "up"
+    },
+    {
+      "map": "MAP_ONI_MOUNTAIN_EAST_SLOPE",
+      "offset": 0,
+      "direction": "right"
+    }
+  ],
   "object_events": [],
   "warp_events": [
     {
@@ -27,7 +38,7 @@
       "y": 39,
       "elevation": 0,
       "dest_map": "MAP_MOSSUI_TOWN",
-      "dest_warp_id": "0"
+      "dest_warp_id": "1"
     },
     {
       "x": 12,
@@ -42,6 +53,13 @@
       "elevation": 0,
       "dest_map": "MAP_MOSSUI_TOWN",
       "dest_warp_id": "1"
+    },
+    {
+      "x": 28,
+      "y": 37,
+      "elevation": 0,
+      "dest_map": "MAP_ONI_MOUNTAIN_OGERPONS_HUT",
+      "dest_warp_id": "0"
     }
   ],
   "coord_events": [],
@@ -52,20 +70,12 @@
       "y": 4,
       "elevation": 0,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
-      "script": "OniMountain_WestSlope_EventScript_Sign"
+      "script": "OniMountain_WestSlope_EventScript_Sign0"
     },
     {
       "type": "sign",
       "x": 14,
       "y": 4,
-      "elevation": 0,
-      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
-      "script": "TreyKitakami_EventScript_NotBuiltYet"
-    },
-    {
-      "type": "sign",
-      "x": 28,
-      "y": 37,
       "elevation": 0,
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
       "script": "TreyKitakami_EventScript_NotBuiltYet"

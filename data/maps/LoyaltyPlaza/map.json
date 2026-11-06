@@ -1,0 +1,79 @@
+{
+  "id": "MAP_LOYALTY_PLAZA",
+  "name": "LoyaltyPlaza",
+  "layout": "LAYOUT_LOYALTY_PLAZA",
+  "music": "MUS_HG_ECRUTEAK",
+  "region_map_section": "MAPSEC_LOYALTY_PLAZA",
+  "requires_flash": false,
+  "weather": "WEATHER_NONE",
+  "map_type": "MAP_TYPE_TOWN",
+  "allow_cycling": true,
+  "allow_escaping": false,
+  "allow_running": true,
+  "show_map_name": true,
+  "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
+  "connections": [
+    {
+      "map": "MAP_REVELERS_ROAD",
+      "offset": 2,
+      "direction": "left"
+    },
+    {
+      "map": "MAP_KITAKAMI_HALL",
+      "offset": -2,
+      "direction": "up"
+    }
+  ],
+  "object_events": [],
+  "warp_events": [
+    {
+      "x": 27,
+      "y": 10,
+      "elevation": 0,
+      "dest_map": "MAP_WISTFUL_FIELDS",
+      "dest_warp_id": "0"
+    },
+    {
+      "x": 27,
+      "y": 11,
+      "elevation": 0,
+      "dest_map": "MAP_WISTFUL_FIELDS",
+      "dest_warp_id": "1"
+    },
+    {
+      "x": 27,
+      "y": 12,
+      "elevation": 0,
+      "dest_map": "MAP_WISTFUL_FIELDS",
+      "dest_warp_id": "1"
+    },
+    {
+      "x": 27,
+      "y": 13,
+      "elevation": 0,
+      "dest_map": "MAP_WISTFUL_FIELDS",
+      "dest_warp_id": "1"
+    }
+  ],
+  "coord_events": [],
+  "bg_events": [
+    {
+      "type": "sign",
+      "x": 18,
+      "y": 16,
+      "elevation": 0,
+      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
+      "script": "LoyaltyPlaza_EventScript_Sign0"
+    },
+    {
+      "type": "sign",
+      "x": 19,
+      "y": 16,
+      "elevation": 0,
+      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
+      "script": "LoyaltyPlaza_EventScript_Sign1"
+    }
+  ],
+  "region": "REGION_KITAKAMI",
+  "floor_number": 0
+}

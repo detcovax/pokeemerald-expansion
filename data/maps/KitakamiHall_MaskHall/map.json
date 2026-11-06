@@ -1,0 +1,30 @@
+{
+  "id": "MAP_KITAKAMI_HALL_MASK_HALL",
+  "name": "KitakamiHall_MaskHall",
+  "layout": "LAYOUT_ECRUTEAK_CITY_THEATER",
+  "music": "MUS_HG_ECRUTEAK",
+  "region_map_section": "MAPSEC_KITAKAMI_HALL",
+  "requires_flash": false,
+  "weather": "WEATHER_NONE",
+  "map_type": "MAP_TYPE_INDOOR",
+  "allow_cycling": false,
+  "allow_escaping": false,
+  "allow_running": true,
+  "show_map_name": false,
+  "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
+  "connections": [],
+  "object_events": [],
+  "warp_events": [
+    {
+      "x": 10,
+      "y": 17,
+      "elevation": 0,
+      "dest_map": "MAP_KITAKAMI_HALL",
+      "dest_warp_id": "4"
+    }
+  ],
+  "coord_events": [],
+  "bg_events": [],
+  "region": "REGION_KITAKAMI",
+  "floor_number": 0
+}

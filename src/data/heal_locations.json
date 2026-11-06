@@ -781,6 +781,14 @@
       "map": "MAP_ORANGE_PALLET_TOWN",
       "x": 43,
       "y": 34
+    },
+    {
+      "id": "HEAL_LOCATION_MOSSUI_TOWN",
+      "map": "MAP_MOSSUI_TOWN",
+      "x": 27,
+      "y": 13,
+      "respawn_map": "MAP_MOSSUI_TOWN_POKEMON_CENTER",
+      "respawn_npc": "LOCALID_MOSSUI_TOWN_POKEMON_CENTER_NURSE"
     }
   ]
 }

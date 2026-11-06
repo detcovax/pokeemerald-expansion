@@ -1,0 +1,81 @@
+{
+  "id": "MAP_KITAKAMI_HALL",
+  "name": "KitakamiHall",
+  "layout": "LAYOUT_KITAKAMI_HALL",
+  "music": "MUS_HG_ECRUTEAK",
+  "region_map_section": "MAPSEC_KITAKAMI_HALL",
+  "requires_flash": false,
+  "weather": "WEATHER_NONE",
+  "map_type": "MAP_TYPE_TOWN",
+  "allow_cycling": true,
+  "allow_escaping": false,
+  "allow_running": true,
+  "show_map_name": true,
+  "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
+  "connections": [
+    {
+      "map": "MAP_LOYALTY_PLAZA",
+      "offset": 2,
+      "direction": "down"
+    }
+  ],
+  "object_events": [],
+  "warp_events": [
+    {
+      "x": 0,
+      "y": 18,
+      "elevation": 0,
+      "dest_map": "MAP_ONI_MOUNTAIN_EAST_SLOPE",
+      "dest_warp_id": "0"
+    },
+    {
+      "x": 0,
+      "y": 19,
+      "elevation": 0,
+      "dest_map": "MAP_ONI_MOUNTAIN_EAST_SLOPE",
+      "dest_warp_id": "1"
+    },
+    {
+      "x": 0,
+      "y": 20,
+      "elevation": 0,
+      "dest_map": "MAP_ONI_MOUNTAIN_EAST_SLOPE",
+      "dest_warp_id": "1"
+    },
+    {
+      "x": 0,
+      "y": 21,
+      "elevation": 0,
+      "dest_map": "MAP_ONI_MOUNTAIN_EAST_SLOPE",
+      "dest_warp_id": "1"
+    },
+    {
+      "x": 15,
+      "y": 11,
+      "elevation": 0,
+      "dest_map": "MAP_KITAKAMI_HALL_MASK_HALL",
+      "dest_warp_id": "0"
+    }
+  ],
+  "coord_events": [],
+  "bg_events": [
+    {
+      "type": "sign",
+      "x": 11,
+      "y": 16,
+      "elevation": 0,
+      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
+      "script": "KitakamiHall_EventScript_Sign0"
+    },
+    {
+      "type": "sign",
+      "x": 12,
+      "y": 16,
+      "elevation": 0,
+      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
+      "script": "KitakamiHall_EventScript_Sign1"
+    }
+  ],
+  "region": "REGION_KITAKAMI",
+  "floor_number": 0
+}

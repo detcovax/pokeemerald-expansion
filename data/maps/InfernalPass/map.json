@@ -1,0 +1,38 @@
+{
+  "id": "MAP_INFERNAL_PASS",
+  "name": "InfernalPass",
+  "layout": "LAYOUT_INFERNAL_PASS",
+  "music": "MUS_DP_STARK_MOUNTAIN",
+  "region_map_section": "MAPSEC_INFERNAL_PASS",
+  "requires_flash": false,
+  "weather": "WEATHER_NONE",
+  "map_type": "MAP_TYPE_ROUTE",
+  "allow_cycling": true,
+  "allow_escaping": false,
+  "allow_running": true,
+  "show_map_name": true,
+  "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
+  "connections": [
+    {
+      "map": "MAP_ONI_MOUNTAIN_SUMMIT",
+      "offset": -36,
+      "direction": "down"
+    },
+    {
+      "map": "MAP_DREAMING_POND",
+      "offset": 40,
+      "direction": "down"
+    },
+    {
+      "map": "MAP_PARADISE_BARRENS",
+      "offset": -16,
+      "direction": "left"
+    }
+  ],
+  "object_events": [],
+  "warp_events": [],
+  "coord_events": [],
+  "bg_events": [],
+  "region": "REGION_KITAKAMI",
+  "floor_number": 0
+}

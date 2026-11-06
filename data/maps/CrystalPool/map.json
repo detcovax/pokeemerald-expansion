@@ -1,0 +1,30 @@
+{
+  "id": "MAP_CRYSTAL_POOL",
+  "name": "CrystalPool",
+  "layout": "LAYOUT_CRYSTAL_POOL",
+  "music": "MUS_DP_LAKE_CAVERNS",
+  "region_map_section": "MAPSEC_CRYSTAL_POOL",
+  "requires_flash": false,
+  "weather": "WEATHER_NONE",
+  "map_type": "MAP_TYPE_UNDERGROUND",
+  "allow_cycling": true,
+  "allow_escaping": true,
+  "allow_running": true,
+  "show_map_name": true,
+  "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
+  "connections": [],
+  "object_events": [],
+  "warp_events": [
+    {
+      "x": 49,
+      "y": 32,
+      "elevation": 0,
+      "dest_map": "MAP_ONI_MOUNTAIN_SUMMIT",
+      "dest_warp_id": "0"
+    }
+  ],
+  "coord_events": [],
+  "bg_events": [],
+  "region": "REGION_KITAKAMI",
+  "floor_number": 0
+}

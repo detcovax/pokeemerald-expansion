@@ -28,7 +28,9 @@
     "gMapGroup_Orange_Indoor_West",
     "gMapGroup_Orange_Indoor_Central",
     "gMapGroup_Orange_Indoor_East",
-    "gMapGroup_Kitakami_Outdoor"
+    "gMapGroup_Kitakami_Outdoor",
+    "gMapGroup_Kitakami_Dungeon",
+    "gMapGroup_Kitakami_Indoor"
   ],
   "gMapGroup_Hoenn_Outdoor": [
     "PetalburgCity",
@@ -1820,6 +1822,34 @@
   "gMapGroup_Kitakami_Outdoor": [
     "MossuiTown",
     "KitakamiRoad",
-    "OniMountain_WestSlope"
+    "OniMountain_WestSlope",
+    "RevelersRoad",
+    "LoyaltyPlaza",
+    "KitakamiHall",
+    "AppleHills",
+    "WistfulFields",
+    "MossfellConfluence",
+    "OniMountain_Summit",
+    "OniMountain_EastSlope",
+    "InfernalPass",
+    "ParadiseBarrens",
+    "DreamingPond",
+    "TimelessWoods",
+    "TimelessWoods_Deep",
+    "FellhornGorge"
+  ],
+  "gMapGroup_Kitakami_Dungeon": [
+    "OnisMaw",
+    "CrystalPool",
+    "ChillingWaterhead"
+  ],
+  "gMapGroup_Kitakami_Indoor": [
+    "MossuiTown_PokemonCenter",
+    "MossuiTown_YukitosHouse",
+    "MossuiTown_CommunityCenter",
+    "MossuiTown_Peachys",
+    "KitakamiHall_MaskHall",
+    "AppleHills_FarmHouse",
+    "OniMountain_OgerponsHut"
   ]
 }

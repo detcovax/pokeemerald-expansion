@@ -1,0 +1,30 @@
+{
+  "id": "MAP_ONIS_MAW",
+  "name": "OnisMaw",
+  "layout": "LAYOUT_ONIS_MAW",
+  "music": "MUS_HG_UNION_CAVE",
+  "region_map_section": "MAPSEC_ONIS_MAW",
+  "requires_flash": false,
+  "weather": "WEATHER_NONE",
+  "map_type": "MAP_TYPE_UNDERGROUND",
+  "allow_cycling": true,
+  "allow_escaping": true,
+  "allow_running": true,
+  "show_map_name": true,
+  "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
+  "connections": [],
+  "object_events": [],
+  "warp_events": [
+    {
+      "x": 26,
+      "y": 29,
+      "elevation": 0,
+      "dest_map": "MAP_ONI_MOUNTAIN_EAST_SLOPE",
+      "dest_warp_id": "2"
+    }
+  ],
+  "coord_events": [],
+  "bg_events": [],
+  "region": "REGION_KITAKAMI",
+  "floor_number": 0
+}

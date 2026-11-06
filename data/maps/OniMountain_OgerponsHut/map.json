@@ -1,0 +1,30 @@
+{
+  "id": "MAP_ONI_MOUNTAIN_OGERPONS_HUT",
+  "name": "OniMountain_OgerponsHut",
+  "layout": "LAYOUT_ECRUTEAK_CITY_HOUSE2",
+  "music": "MUS_DP_MT_CORONET",
+  "region_map_section": "MAPSEC_ONI_MOUNTAIN",
+  "requires_flash": false,
+  "weather": "WEATHER_NONE",
+  "map_type": "MAP_TYPE_INDOOR",
+  "allow_cycling": false,
+  "allow_escaping": false,
+  "allow_running": true,
+  "show_map_name": false,
+  "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
+  "connections": [],
+  "object_events": [],
+  "warp_events": [
+    {
+      "x": 4,
+      "y": 8,
+      "elevation": 0,
+      "dest_map": "MAP_ONI_MOUNTAIN_WEST_SLOPE",
+      "dest_warp_id": "4"
+    }
+  ],
+  "coord_events": [],
+  "bg_events": [],
+  "region": "REGION_KITAKAMI",
+  "floor_number": 0
+}

@@ -1,0 +1,33 @@
+{
+  "id": "MAP_DREAMING_POND",
+  "name": "DreamingPond",
+  "layout": "LAYOUT_DREAMING_POND",
+  "music": "MUS_DPP_LAKE",
+  "region_map_section": "MAPSEC_DREAMING_POND",
+  "requires_flash": false,
+  "weather": "WEATHER_NONE",
+  "map_type": "MAP_TYPE_ROUTE",
+  "allow_cycling": true,
+  "allow_escaping": false,
+  "allow_running": true,
+  "show_map_name": true,
+  "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
+  "connections": [
+    {
+      "map": "MAP_INFERNAL_PASS",
+      "offset": -40,
+      "direction": "up"
+    },
+    {
+      "map": "MAP_TIMELESS_WOODS",
+      "offset": 0,
+      "direction": "right"
+    }
+  ],
+  "object_events": [],
+  "warp_events": [],
+  "coord_events": [],
+  "bg_events": [],
+  "region": "REGION_KITAKAMI",
+  "floor_number": 0
+}

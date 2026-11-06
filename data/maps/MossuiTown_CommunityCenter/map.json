@@ -1,0 +1,30 @@
+{
+  "id": "MAP_MOSSUI_TOWN_COMMUNITY_CENTER",
+  "name": "MossuiTown_CommunityCenter",
+  "layout": "LAYOUT_ECRUTEAK_CITY_SAGE_OFFICE1",
+  "music": "MUS_HG_AZALEA",
+  "region_map_section": "MAPSEC_MOSSUI_TOWN",
+  "requires_flash": false,
+  "weather": "WEATHER_NONE",
+  "map_type": "MAP_TYPE_INDOOR",
+  "allow_cycling": false,
+  "allow_escaping": false,
+  "allow_running": true,
+  "show_map_name": false,
+  "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
+  "connections": [],
+  "object_events": [],
+  "warp_events": [
+    {
+      "x": 13,
+      "y": 8,
+      "elevation": 0,
+      "dest_map": "MAP_MOSSUI_TOWN",
+      "dest_warp_id": "12"
+    }
+  ],
+  "coord_events": [],
+  "bg_events": [],
+  "region": "REGION_KITAKAMI",
+  "floor_number": 0
+}
